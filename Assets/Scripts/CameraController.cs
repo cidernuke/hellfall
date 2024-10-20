@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private float speed;
-    private float currentPosX;
-    private Vector3 velocity = Vector3.zero;
+    //Sets the distance for how far the camera looks ahead, configurable in the editor
     [SerializeField] private float aheadDistance;
+    //Sets the speed at which the camera will adjust its position, configurable in the Editor
     [SerializeField] private float cameraSpeed;
+    //tracks how far ahead the camera is looking currently
     private float lookAhead;
+    //Sets the player which the camera tracks, configurable in the editor
     [SerializeField] private Transform player;
-
+    //Check Doc for more info
     private void Update()
     {
         transform.position = new Vector3(player.position.x + lookAhead, player.position.y, transform.position.z);
