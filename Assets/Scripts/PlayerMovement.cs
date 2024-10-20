@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections; // Wichtig für Coroutinen
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -7,29 +8,23 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float jumpPower;
 
-    //Dash variables
-    [SerializeField] float dashSpeed;
-    [SerializeField] float dashDuration;
-    [SerializeField] float dashCooldown;
+    // Dash variables
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashDuration;
+    [SerializeField] private float dashCooldown;
 
     private bool isDashing;
-
-    // Indicates if the player can dash (not on cooldown).
     private bool canDash = true;
-    private float dashTime;
     private float dashDirection;
 
-    // Awake is called when the script instance is being loaded.
     private void Awake()
     {
         // Get and store the Rigidbody2D component for efficiency
         body = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame.
     private void Update()
     {
-        // If the player is dashing, skip the rest of the Update to prevent normal movement.
         if (isDashing)
         {
             return;
@@ -50,48 +45,26 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(-1, 1, 1);
         }
 
-        //Handle jump input
+        // Handle jump input
         if (Input.GetKey(KeyCode.Space) && grounded)
         {
             Jump();
         }
 
-        // Handle dash input.
+        // Handle dash input
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && horizontalInput != 0)
         {
             StartDash(horizontalInput);
         }
     }
 
-
-    // FixedUpdate is called at fixed intervals and is used for physics updates.
-    private void FixedUpdate()
-    {
-        // Apply dash velocity
-        if (isDashing)
-        {
-            body.velocity = new Vector2(dashDirection * dashSpeed, body.velocity.y);
-        }
-    }
-
-    // LateUpdate is called after all Update methods have been called.
-    private void LateUpdate()
-    {
-        // Check if dash duration has passed
-        if (isDashing && Time.time - dashTime >= dashDuration)
-        {
-            EndDash();
-        }
-    }
-
     private void Jump()
     {
-        //Apply vertical velocity to make the player jump
+        // Apply vertical velocity to make the player jump
         body.velocity = new Vector2(body.velocity.x, jumpPower);
         grounded = false;
     }
 
-    // Method called when the player starts colliding with another object.
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // Check if the player has landed on the ground
@@ -103,30 +76,35 @@ public class PlayerMovement : MonoBehaviour
 
     private void StartDash(float direction)
     {
-        // Set isDashing to true to indicate the player is dashing.
-        isDashing = true;
-        // The player cannot dash again until the cooldown is over.
-        canDash = false;
-        // Determine the dash direction based on the player's input.
         dashDirection = Mathf.Sign(direction);
-        // Record the time when the dash started.
-        dashTime = Time.time;
-
-        //Add dash effects here (e.g., particles, animation)
+        StartCoroutine(DashCoroutine());
     }
 
-    private void EndDash()
+    //Generall explanation IEnumerator in Unity:
+    //https://docs.unity3d.com/ScriptReference/MonoBehaviour.StartCoroutine.html
+    private IEnumerator DashCoroutine()
     {
-        // Set isDashing to false since the dash is over.
+        isDashing = true;
+        canDash = false;
+
+        //Disable gravity during dash for consistent movement
+        float originalGravity = body.gravityScale;
+        body.gravityScale = 0;
+
+        float dashEndTime = Time.time + dashDuration;
+
+        while (Time.time < dashEndTime)
+        {
+            body.velocity = new Vector2(dashDirection * dashSpeed, 0);
+            yield return null; // Wait for the next frame
+        }
+
         isDashing = false;
-        // Start the cooldown timer before the player can dash again.
-        Invoke(nameof(ResetDash), dashCooldown);
-    }
+        body.gravityScale = originalGravity;
 
-    // Method to reset the ability to dash after the cooldown.
-    private void ResetDash()
-    {
-        // Allow the player to dash again.
+        // Wait for the dash cooldown
+        yield return new WaitForSeconds(dashCooldown);
+
         canDash = true;
     }
 }
