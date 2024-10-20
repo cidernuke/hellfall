@@ -80,8 +80,7 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(DashCoroutine());
     }
 
-    //Generall explanation IEnumerator in Unity:
-    //https://docs.unity3d.com/ScriptReference/MonoBehaviour.StartCoroutine.html
+    //Generall Explanation of Coroutine (IEnumerator): https://learn.unity.com/tutorial/coroutines#
     public IEnumerator DashCoroutine()
     {
         isDashing = true;

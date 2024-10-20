@@ -168,7 +168,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &69732189
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -295,6 +295,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   jumpPower: 5
+  dashSpeed: 30
+  dashDuration: 0.2
+  dashCooldown: 1
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,7 +448,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ceaffaeeb053bf478cab5c00d7165d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.5
   aheadDistance: 1
   cameraSpeed: 1.75
   player: {fileID: 69732191}
