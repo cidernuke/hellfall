@@ -17,13 +17,13 @@ public class PlayerMovement : MonoBehaviour
     private bool canDash = true;
     private float dashDirection;
 
-    private void Awake()
+    public void Awake()
     {
         // Get and store the Rigidbody2D component for efficiency
         body = GetComponent<Rigidbody2D>();
     }
 
-    private void Update()
+    public void Update()
     {
         if (isDashing)
         {
@@ -58,14 +58,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void Jump()
+    public void Jump()
     {
         // Apply vertical velocity to make the player jump
         body.velocity = new Vector2(body.velocity.x, jumpPower);
         grounded = false;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
         // Check if the player has landed on the ground
         if (collision.gameObject.CompareTag("Ground"))
@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void StartDash(float direction)
+    public void StartDash(float direction)
     {
         dashDirection = Mathf.Sign(direction);
         StartCoroutine(DashCoroutine());
@@ -82,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
 
     //Generall explanation IEnumerator in Unity:
     //https://docs.unity3d.com/ScriptReference/MonoBehaviour.StartCoroutine.html
-    private IEnumerator DashCoroutine()
+    public IEnumerator DashCoroutine()
     {
         isDashing = true;
         canDash = false;
