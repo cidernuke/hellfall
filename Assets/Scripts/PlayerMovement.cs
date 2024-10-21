@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float jumpPower;
 
+
     // Dash variables
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashDuration;
@@ -17,10 +18,18 @@ public class PlayerMovement : MonoBehaviour
     private bool canDash = true;
     private float dashDirection;
 
+
+    // Crouch variables
+    [SerializeField] private float crouchSpeedReduction = 0.5f; // Reduce speed while crouching
+    [SerializeField] private Vector3 crouchScale = new Vector3(1, 0.5f, 1); // Player becomes smaller
+    private Vector3 originalScale;
+    private bool isCrouching;
+
     public void Awake()
     {
         // Get and store the Rigidbody2D component for efficiency
         body = GetComponent<Rigidbody2D>();
+        originalScale = transform.localScale; // Store the original scale of the player
     }
 
     public void Update()
@@ -33,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
         HandleMovementInput();
         HandleJumpInput();
         HandleDashInput();
+        HandleCrouchInput();
     }
 
     // Handle the horizontal movment of the player
@@ -40,24 +50,29 @@ public class PlayerMovement : MonoBehaviour
     {
         float horizontalInput = GetHorizontalInput();
 
+        // Adjust speed if crouching
+        float currentSpeed = isCrouching ? speed * crouchSpeedReduction : speed;
+
         // Move the player horizontally
-        body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
+        body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
 
         // Flip the player's sprite based on movement direction
         if (horizontalInput > 0.01f)
         {
-            transform.localScale = Vector3.one;
+            //transform.localScale = isCrouching ? crouchScale : Vector3.one;
+            transform.localScale = new Vector3(Mathf.Abs(originalScale.x), isCrouching ? crouchScale.y : originalScale.y, originalScale.z);
         }
         else if (horizontalInput < -0.01f)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            //transform.localScale = isCrouching ? new Vector3(-crouchScale.x, crouchScale.y, crouchScale.z) : new Vector3(-1, 1, 1);
+            transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), isCrouching ? crouchScale.y : originalScale.y, originalScale.z);
         }
     }
 
     // Handle the player's jumping
     public void HandleJumpInput()
     {
-        if (GetJumpInput() && grounded)
+        if (GetJumpInput() && grounded && !isCrouching)
         {
             // Apply vertical velocity to make the player jump
             body.velocity = new Vector2(body.velocity.x, jumpPower);
@@ -69,9 +84,32 @@ public class PlayerMovement : MonoBehaviour
     public void HandleDashInput()
     {
         float horizontalInput = GetHorizontalInput();
-        if (GetDashInput() && canDash && horizontalInput != 0) 
+        if (GetDashInput() && canDash && horizontalInput != 0 && !isCrouching) 
         {
             StartDash(horizontalInput);
+        }
+    }
+
+    // Handle the player's crouch input
+    public void HandleCrouchInput()
+    {
+        if (GetCrouchInput()) // If crouch key is pressed
+        {
+            if (!isCrouching)
+            {
+                isCrouching = true;
+                transform.localScale = new Vector3(transform.localScale.x, crouchScale.y, crouchScale.z); //Reduce player's size and maintain X direction while crouching
+                //transform.localScale = crouchScale; // Reduce player's size
+            }
+        }
+        else
+        {
+            if (isCrouching)
+            {
+                isCrouching = false;
+                transform.localScale =new Vector3(transform.localScale.x, originalScale.y, originalScale.z); // Restore original size and maintain direction
+                //transform.localScale = originalScale; // Reset player's size
+            }
         }
     }
 
@@ -135,4 +173,11 @@ public class PlayerMovement : MonoBehaviour
     {
         return Input.GetKeyDown(KeyCode.LeftShift);
     }
+
+    // Method to get crouch input
+    public virtual bool GetCrouchInput()
+    {
+        return Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.S);
+    }
 }
+
