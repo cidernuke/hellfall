@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections; // Wichtig für Coroutinen
+using System.Collections; // Important for Coroutinen
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -30,7 +30,15 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        float horizontalInput = Input.GetAxis("Horizontal");
+        HandleMovementInput();
+        HandleJumpInput();
+        HandleDashInput();
+    }
+
+    // Handle the horizontal movment of the player
+    public void HandleMovementInput()
+    {
+        float horizontalInput = GetHorizontalInput();
 
         // Move the player horizontally
         body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
@@ -44,25 +52,27 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.localScale = new Vector3(-1, 1, 1);
         }
+    }
 
-        // Handle jump input
-        if (Input.GetKey(KeyCode.Space) && grounded)
+    // Handle the player's jumping
+    public void HandleJumpInput()
+    {
+        if (GetJumpInput() && grounded)
         {
-            Jump();
-        }
-
-        // Handle dash input
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && horizontalInput != 0)
-        {
-            StartDash(horizontalInput);
+            // Apply vertical velocity to make the player jump
+            body.velocity = new Vector2(body.velocity.x, jumpPower);
+            grounded = false;
         }
     }
 
-    public void Jump()
+    // Handle the player's dash
+    public void HandleDashInput()
     {
-        // Apply vertical velocity to make the player jump
-        body.velocity = new Vector2(body.velocity.x, jumpPower);
-        grounded = false;
+        float horizontalInput = GetHorizontalInput();
+        if (GetDashInput() && canDash && horizontalInput != 0) 
+        {
+            StartDash(horizontalInput);
+        }
     }
 
     public void OnCollisionEnter2D(Collision2D collision)
@@ -80,13 +90,12 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(DashCoroutine());
     }
 
-    //Generall Explanation of Coroutine (IEnumerator): https://learn.unity.com/tutorial/coroutines#
     public IEnumerator DashCoroutine()
     {
         isDashing = true;
         canDash = false;
 
-        //Disable gravity during dash for consistent movement
+        // Disable gravity during dash for consistent movement
         float originalGravity = body.gravityScale;
         body.gravityScale = 0;
 
@@ -105,5 +114,25 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
 
         canDash = true;
+    }
+
+
+    // Abstracted input methods to simulate in tests easily
+    // Method to get horizontal input
+    public virtual float GetHorizontalInput()
+    {
+        return Input.GetAxis("Horizontal");
+    }
+
+    // Method to get jump input
+    public virtual bool GetJumpInput()
+    {
+        return Input.GetKey(KeyCode.Space);
+    }
+
+    // Method to get dash input
+    public virtual bool GetDashInput()
+    {
+        return Input.GetKeyDown(KeyCode.LeftShift);
     }
 }
