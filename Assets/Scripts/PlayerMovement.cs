@@ -26,7 +26,13 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 standingSize;
     private Vector2 crouchingSize;
+    private Vector2 standingOffset;
+    private Vector2 crouchingOffset;
     private bool isCrouching = false;
+
+    // Sprite positions
+    private Vector3 standingSpritePosition;
+    private Vector3 crouchingSpritePosition;
 
 
     public void Awake()
@@ -43,14 +49,30 @@ public class PlayerMovement : MonoBehaviour
         // Get the default size from the existing collider
         standingSize = boxCollider.size;
 
-        //Make sure the coruch size is set
-        if (crouchingSize == Vector2.zero)
-        {
-            crouchingSize = new Vector2(standingSize.x, standingSize.y * 0.5f); // Crouch size = 1/2
-        }
+        standingOffset = boxCollider.offset;
 
-        // Set initial sprite
+        // Crouch-Größe und Offset einstellen
+        float crouchHeight = standingSize.y * 0.5f; // Beispiel: halbe Höhe
+        float sizeDifference = standingSize.y - crouchHeight;
+
+        crouchingSize = new Vector2(standingSize.x, crouchHeight);
+        // Offset so anpassen, dass die Unterkante des Colliders gleich bleibt
+        crouchingOffset = new Vector2(standingOffset.x, standingOffset.y - sizeDifference / 2f);
+
+        // Initiale Einstellungen
         spriteRenderer.sprite = standing;
+        boxCollider.size = standingSize;
+        boxCollider.offset = standingOffset;
+
+
+        // //Make sure the coruch size is set
+        // if (crouchingSize == Vector2.zero)
+        // {
+        //     crouchingSize = new Vector2(standingSize.x, standingSize.y * 0.5f); // Crouch size = 1/2
+        // }
+
+        // // Set initial sprite
+        // spriteRenderer.sprite = standing;
     }
 
     public void Update()
@@ -111,6 +133,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 spriteRenderer.sprite = crouching;
                 boxCollider.size = crouchingSize;
+                boxCollider.offset = crouchingOffset;
                 isCrouching = true;
             }
         }
@@ -120,6 +143,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 spriteRenderer.sprite = standing;
                 boxCollider.size = standingSize;
+                boxCollider.offset = standingOffset;
                 isCrouching = false;
             }
         }
