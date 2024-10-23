@@ -4,32 +4,53 @@ using System.Collections; // Important for Coroutinen
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D body;
+    private SpriteRenderer spriteRenderer;
+    private BoxCollider2D boxCollider;
     private bool grounded;
     [SerializeField] private float speed;
     [SerializeField] private float jumpPower;
 
-
     // Dash variables
-    [SerializeField] private float dashSpeed;
-    [SerializeField] private float dashDuration;
-    [SerializeField] private float dashCooldown;
+    [SerializeField] private float dashSpeed = 30f;
+    [SerializeField] private float dashDuration = 0.2f;
+    [SerializeField] private float dashCooldown = 1f;
 
     private bool isDashing;
     private bool canDash = true;
     private float dashDirection;
 
 
-    // Crouch variables
-    [SerializeField] private float crouchSpeedReduction = 0.5f; // Reduce speed while crouching
-    [SerializeField] private Vector3 crouchScale = new Vector3(1, 0.5f, 1); // Player becomes smaller
-    private Vector3 originalScale;
-    private bool isCrouching;
+    //Crouch variables
+    [SerializeField] private Sprite standing;
+    [SerializeField] private Sprite crouching;
+
+    private Vector2 standingSize;
+    private Vector2 crouchingSize;
+    private bool isCrouching = false;
+
 
     public void Awake()
     {
-        // Get and store the Rigidbody2D component for efficiency
+        // Get the Rigidbody2D component for efficiency
         body = GetComponent<Rigidbody2D>();
-        originalScale = transform.localScale; // Store the original scale of the player
+
+        // Get the BoxCollider component for efficiency
+        boxCollider = GetComponent<BoxCollider2D>();
+
+        // Get the SpriteRenderer component for efficiency
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // Get the default size from the existing collider
+        standingSize = boxCollider.size;
+
+        //Make sure the coruch size is set
+        if (crouchingSize == Vector2.zero)
+        {
+            crouchingSize = new Vector2(standingSize.x, standingSize.y * 0.5f); // Crouch size = 1/2
+        }
+
+        // Set initial sprite
+        spriteRenderer.sprite = standing;
     }
 
     public void Update()
@@ -50,22 +71,23 @@ public class PlayerMovement : MonoBehaviour
     {
         float horizontalInput = GetHorizontalInput();
 
-        // Adjust speed if crouching
-        float currentSpeed = isCrouching ? speed * crouchSpeedReduction : speed;
+        float initialSpeed = speed;
+        if (isCrouching)
+        {
+            initialSpeed *= 0.5f; // Half the speed while crouching
+        }
 
         // Move the player horizontally
-        body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
+        body.velocity = new Vector2(horizontalInput * initialSpeed, body.velocity.y);
 
         // Flip the player's sprite based on movement direction
         if (horizontalInput > 0.01f)
         {
-            //transform.localScale = isCrouching ? crouchScale : Vector3.one;
-            transform.localScale = new Vector3(Mathf.Abs(originalScale.x), isCrouching ? crouchScale.y : originalScale.y, originalScale.z);
+            transform.localScale = Vector3.one;
         }
         else if (horizontalInput < -0.01f)
         {
-            //transform.localScale = isCrouching ? new Vector3(-crouchScale.x, crouchScale.y, crouchScale.z) : new Vector3(-1, 1, 1);
-            transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), isCrouching ? crouchScale.y : originalScale.y, originalScale.z);
+            transform.localScale = new Vector3(-1, 1, 1);
         }
     }
 
@@ -80,36 +102,36 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // Handle the player's dash
-    public void HandleDashInput()
-    {
-        float horizontalInput = GetHorizontalInput();
-        if (GetDashInput() && canDash && horizontalInput != 0 && !isCrouching) 
-        {
-            StartDash(horizontalInput);
-        }
-    }
-
-    // Handle the player's crouch input
+    //Handle the player's crouch
     public void HandleCrouchInput()
     {
-        if (GetCrouchInput()) // If crouch key is pressed
+        if (GetCrouchInput())
         {
             if (!isCrouching)
             {
+                spriteRenderer.sprite = crouching;
+                boxCollider.size = crouchingSize;
                 isCrouching = true;
-                transform.localScale = new Vector3(transform.localScale.x, crouchScale.y, crouchScale.z); //Reduce player's size and maintain X direction while crouching
-                //transform.localScale = crouchScale; // Reduce player's size
             }
         }
         else
         {
             if (isCrouching)
             {
+                spriteRenderer.sprite = standing;
+                boxCollider.size = standingSize;
                 isCrouching = false;
-                transform.localScale =new Vector3(transform.localScale.x, originalScale.y, originalScale.z); // Restore original size and maintain direction
-                //transform.localScale = originalScale; // Reset player's size
             }
+        }
+    }
+
+    // Handle the player's dash
+    public void HandleDashInput()
+    {
+        float horizontalInput = GetHorizontalInput();
+        if (GetDashInput() && canDash && horizontalInput != 0 && !isCrouching)
+        {
+            StartDash(horizontalInput);
         }
     }
 
@@ -174,10 +196,9 @@ public class PlayerMovement : MonoBehaviour
         return Input.GetKeyDown(KeyCode.LeftShift);
     }
 
-    // Method to get crouch input
+    //Method to get crouch input
     public virtual bool GetCrouchInput()
     {
-        return Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.S);
+        return Input.GetKey(KeyCode.S);
     }
 }
-
