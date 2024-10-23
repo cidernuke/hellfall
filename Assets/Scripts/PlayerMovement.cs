@@ -1,16 +1,16 @@
 using UnityEngine;
-using System.Collections; // Important for Coroutinen
+using System.Collections; // Important for Coroutines
 
 public class PlayerMovement : MonoBehaviour
 {
+    #region Movement Variables
     private Rigidbody2D body;
-    private SpriteRenderer spriteRenderer;
-    private BoxCollider2D boxCollider;
     private bool grounded;
     [SerializeField] private float speed;
     [SerializeField] private float jumpPower;
+    #endregion
 
-    // Dash variables
+    #region Dash Variables
     [SerializeField] private float dashSpeed = 30f;
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
@@ -18,9 +18,12 @@ public class PlayerMovement : MonoBehaviour
     private bool isDashing;
     private bool canDash = true;
     private float dashDirection;
+    #endregion
 
+    #region Crouch Variables
+    private SpriteRenderer spriteRenderer;
+    private BoxCollider2D boxCollider;
 
-    //Crouch variables
     [SerializeField] private Sprite standing;
     [SerializeField] private Sprite crouching;
 
@@ -29,50 +32,14 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 standingOffset;
     private Vector2 crouchingOffset;
     private bool isCrouching = false;
+    #endregion
 
-    // Sprite positions
-    private Vector3 standingSpritePosition;
-    private Vector3 crouchingSpritePosition;
-
-
+    #region Unity Methods
     public void Awake()
     {
-        // Get the Rigidbody2D component for efficiency
-        body = GetComponent<Rigidbody2D>();
-
-        // Get the BoxCollider component for efficiency
-        boxCollider = GetComponent<BoxCollider2D>();
-
-        // Get the SpriteRenderer component for efficiency
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
-        // Get the default size from the existing collider
-        standingSize = boxCollider.size;
-
-        standingOffset = boxCollider.offset;
-
-        // Crouch-Größe und Offset einstellen
-        float crouchHeight = standingSize.y * 0.5f; // Beispiel: halbe Höhe
-        float sizeDifference = standingSize.y - crouchHeight;
-
-        crouchingSize = new Vector2(standingSize.x, crouchHeight);
-        // Offset so anpassen, dass die Unterkante des Colliders gleich bleibt
-        crouchingOffset = new Vector2(standingOffset.x, standingOffset.y - sizeDifference / 2f);
-
-        // Initiale Einstellungen
-        spriteRenderer.sprite = standing;
-        boxCollider.size = standingSize;
-        boxCollider.offset = standingOffset;
-
-
-        // //Make sure the coruch size is set
-        // if (crouchingSize == Vector2.zero)
-        // {
-        //     crouchingSize = new Vector2(standingSize.x, standingSize.y * 0.5f); // Crouch size = 1/2
-        // }
-
-        // // Set initial sprite
-        // spriteRenderer.sprite = standing;
+        InitializeComponents();
+        InitializeCrouchVariables();
+        InitializeDashVariables();
     }
 
     public void Update()
@@ -87,20 +54,67 @@ public class PlayerMovement : MonoBehaviour
         HandleDashInput();
         HandleCrouchInput();
     }
+    #endregion
 
-    // Handle the horizontal movment of the player
+    #region Initialization Methods
+    private void InitializeComponents()
+    {
+        // Get and store the Rigidbody2D component for efficiency
+        body = GetComponent<Rigidbody2D>();
+        // Get the BoxCollider component for efficiency
+        boxCollider = GetComponent<BoxCollider2D>();
+        // Get the SpriteRenderer component for efficiency
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // Error checking
+        if (body == null)
+            Debug.LogError("Rigidbody2D not found!");
+        if (boxCollider == null)
+            Debug.LogError("BoxCollider2D not found!");
+        if (spriteRenderer == null)
+            Debug.LogError("SpriteRenderer not found!");
+    }
+
+    private void InitializeCrouchVariables()
+    {
+        // Get the default size from the existing collider
+        standingSize = boxCollider.size;
+        standingOffset = boxCollider.offset;
+
+        // Calculate crouch size and offset
+        float crouchHeight = standingSize.y * 0.5f; // Crouch size = 1/2 of standing size
+        float sizeDifference = standingSize.y - crouchHeight;
+
+        crouchingSize = new Vector2(standingSize.x, crouchHeight);
+        // Adjust offset so that the bottom of the collider remains the same
+        crouchingOffset = new Vector2(standingOffset.x, standingOffset.y - sizeDifference / 2f);
+
+        // Set initial sprite
+        spriteRenderer.sprite = standing;
+        boxCollider.size = standingSize;
+        boxCollider.offset = standingOffset;
+    }
+
+    private void InitializeDashVariables()
+    {
+        isDashing = false;
+        canDash = true;
+    }
+    #endregion
+
+    #region Input Handling Methods
+    // Handle the horizontal movement of the player
     public void HandleMovementInput()
     {
         float horizontalInput = GetHorizontalInput();
 
-        float initialSpeed = speed;
+        // Adjust speed if crouching
+        float currentSpeed = speed;
         if (isCrouching)
-        {
-            initialSpeed *= 0.5f; // Half the speed while crouching
-        }
+            currentSpeed *= 0.5f; // Half the speed while crouching
 
         // Move the player horizontally
-        body.velocity = new Vector2(horizontalInput * initialSpeed, body.velocity.y);
+        body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
 
         // Flip the player's sprite based on movement direction
         if (horizontalInput > 0.01f)
@@ -124,7 +138,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    //Handle the player's crouch
+    // Handle the player's dash
+    public void HandleDashInput()
+    {
+        float horizontalInput = GetHorizontalInput();
+        if (GetDashInput() && canDash && horizontalInput != 0 && !isCrouching)
+        {
+            StartDash(horizontalInput);
+        }
+    }
+
+    // Handle the player's crouch
     public void HandleCrouchInput()
     {
         if (GetCrouchInput())
@@ -148,17 +172,9 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    // Handle the player's dash
-    public void HandleDashInput()
-    {
-        float horizontalInput = GetHorizontalInput();
-        if (GetDashInput() && canDash && horizontalInput != 0 && !isCrouching)
-        {
-            StartDash(horizontalInput);
-        }
-    }
-
+    #region Collision Methods
     public void OnCollisionEnter2D(Collision2D collision)
     {
         // Check if the player has landed on the ground
@@ -167,7 +183,9 @@ public class PlayerMovement : MonoBehaviour
             grounded = true;
         }
     }
+    #endregion
 
+    #region Dash Coroutine
     public void StartDash(float direction)
     {
         dashDirection = Mathf.Sign(direction);
@@ -199,8 +217,9 @@ public class PlayerMovement : MonoBehaviour
 
         canDash = true;
     }
+    #endregion
 
-
+    #region Input Methods
     // Abstracted input methods to simulate in tests easily
     // Method to get horizontal input
     public virtual float GetHorizontalInput()
@@ -220,9 +239,10 @@ public class PlayerMovement : MonoBehaviour
         return Input.GetKeyDown(KeyCode.LeftShift);
     }
 
-    //Method to get crouch input
+    // Method to get crouch input
     public virtual bool GetCrouchInput()
     {
         return Input.GetKey(KeyCode.S);
     }
+    #endregion
 }
