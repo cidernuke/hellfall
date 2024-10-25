@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
 {
     #region Movement Variables
     private Rigidbody2D body;
+    private Animator animator;
     private bool grounded;
     [SerializeField] private float speed;
     [SerializeField] private float jumpPower;
@@ -40,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
         InitializeComponents();
         InitializeCrouchVariables();
         InitializeDashVariables();
+           
     }
 
     public void Update()
@@ -65,6 +67,8 @@ public class PlayerMovement : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         // Get the SpriteRenderer component for efficiency
         spriteRenderer = GetComponent<SpriteRenderer>();
+        // Get reference to the Animator component
+        animator = GetComponent<Animator>(); 
 
         // Error checking
         if (body == null)
@@ -73,6 +77,8 @@ public class PlayerMovement : MonoBehaviour
             Debug.LogError("BoxCollider2D not found!");
         if (spriteRenderer == null)
             Debug.LogError("SpriteRenderer not found!");
+        if (animator == null)
+            Debug.LogError("Animator not found!");
     }
 
     private void InitializeCrouchVariables()
@@ -125,6 +131,9 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.localScale = new Vector3(-1, 1, 1);
         }
+
+        // Update the animator's parameters
+        animator.SetBool("run", horizontalInput != 0);
     }
 
     // Handle the player's jumping
