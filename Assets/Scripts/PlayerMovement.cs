@@ -156,6 +156,7 @@ public class PlayerMovement : MonoBehaviour
         if (GetDashInput() && canDash && horizontalInput != 0 && !isCrouching)
         {
             StartDash(horizontalInput);
+            animator.SetTrigger("dash");
         }
     }
 
