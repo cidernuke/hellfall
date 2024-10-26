@@ -143,8 +143,10 @@ public class PlayerMovement : MonoBehaviour
         {
             // Apply vertical velocity to make the player jump
             body.velocity = new Vector2(body.velocity.x, jumpPower);
+            animator.SetTrigger("jump");                 
             grounded = false;
         }
+        animator.SetBool("grounded", grounded);
     }
 
     // Handle the player's dash
