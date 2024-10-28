@@ -171,6 +171,7 @@ public class PlayerMovement : MonoBehaviour
                 boxCollider.size = crouchingSize;
                 boxCollider.offset = crouchingOffset;
                 isCrouching = true;
+                animator.SetBool("crouch", true);
             }
         }
         else
@@ -181,6 +182,7 @@ public class PlayerMovement : MonoBehaviour
                 boxCollider.size = standingSize;
                 boxCollider.offset = standingOffset;
                 isCrouching = false;
+                animator.SetBool("crouch", false);
             }
         }
     }

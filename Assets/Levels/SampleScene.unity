@@ -300,7 +300,7 @@ MonoBehaviour:
   dashDuration: 0.2
   dashCooldown: 1
   standing: {fileID: 691704114, guid: 22a836ecf58efa24f8d6db5ebc1c5eeb, type: 3}
-  crouching: {fileID: 21300000, guid: dc1e79f767bdddf40b6f16203fe6ddba, type: 3}
+  crouching: {fileID: 21300000, guid: adf511fbe02c3784e8780b1b89e29439, type: 3}
 --- !u!95 &69732193
 Animator:
   serializedVersion: 5
