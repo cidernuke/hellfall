@@ -8,6 +8,10 @@ public class PlayerMovement : MonoBehaviour
     private bool grounded;
     [SerializeField] private float speed;
     [SerializeField] private float jumpPower;
+
+    //Multiple Jumps
+    [SerializeField] private int jumps = 2;
+    private int jumpCounter;
     #endregion
 
     #region Dash Variables
@@ -40,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
         InitializeComponents();
         InitializeCrouchVariables();
         InitializeDashVariables();
+        jumpCounter = jumps;
     }
 
     public void Update()
@@ -130,11 +135,12 @@ public class PlayerMovement : MonoBehaviour
     // Handle the player's jumping
     public void HandleJumpInput()
     {
-        if (GetJumpInput() && grounded && !isCrouching)
+        if (GetJumpInput() && (grounded || jumpCounter > 0) && !isCrouching)
         {
             // Apply vertical velocity to make the player jump
             body.velocity = new Vector2(body.velocity.x, jumpPower);
             grounded = false;
+            jumpCounter--;
         }
     }
 
@@ -181,6 +187,15 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             grounded = true;
+            jumpCounter = jumps; //Reset the jump counter
+        }
+    }
+
+    public void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            grounded = false;
         }
     }
     #endregion
@@ -222,6 +237,9 @@ public class PlayerMovement : MonoBehaviour
     #region Input Methods
     // Abstracted input methods to simulate in tests easily
     // Method to get horizontal input
+
+
+
     public virtual float GetHorizontalInput()
     {
         return Input.GetAxis("Horizontal");
@@ -230,7 +248,10 @@ public class PlayerMovement : MonoBehaviour
     // Method to get jump input
     public virtual bool GetJumpInput()
     {
-        return Input.GetKey(KeyCode.Space);
+        //getKey vs getKeyDown
+        // GetKey remains true as long as the key is held down
+        // GetKeyDown is true only in the single frame when the key is initially pressed
+        return Input.GetKeyDown(KeyCode.Space);
     }
 
     // Method to get dash input
