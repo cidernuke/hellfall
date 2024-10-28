@@ -116,8 +116,13 @@ public class PlayerMovement : MonoBehaviour
 
         // Adjust speed if crouching
         float currentSpeed = speed;
+        
         if (isCrouching)
+        {
             currentSpeed *= 0.5f; // Half the speed while crouching
+
+        }
+        //animator.SetBool("crouch_walking", false);
 
         // Move the player horizontally
         body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
@@ -133,7 +138,15 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Update the animator's parameters
-        animator.SetBool("run", horizontalInput != 0);
+        animator.SetBool("run", horizontalInput != 0);       
+        animator.SetBool("crouch_walking", isCrouching && horizontalInput != 0);
+        if(horizontalInput != 0 && isCrouching){
+            animator.SetBool("crouch", false);
+        }
+
+        
+          
+        
     }
 
     // Handle the player's jumping
@@ -163,6 +176,8 @@ public class PlayerMovement : MonoBehaviour
     // Handle the player's crouch
     public void HandleCrouchInput()
     {
+        float horizontalInput = GetHorizontalInput();
+
         if (GetCrouchInput())
         {
             if (!isCrouching)
@@ -172,6 +187,7 @@ public class PlayerMovement : MonoBehaviour
                 boxCollider.offset = crouchingOffset;
                 isCrouching = true;
                 animator.SetBool("crouch", true);
+               
             }
         }
         else
@@ -183,8 +199,10 @@ public class PlayerMovement : MonoBehaviour
                 boxCollider.offset = standingOffset;
                 isCrouching = false;
                 animator.SetBool("crouch", false);
+                
             }
         }
+        
     }
     #endregion
 
