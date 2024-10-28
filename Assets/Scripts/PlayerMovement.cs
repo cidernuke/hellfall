@@ -41,7 +41,7 @@ public class PlayerMovement : MonoBehaviour
         InitializeComponents();
         InitializeCrouchVariables();
         InitializeDashVariables();
-           
+
     }
 
     public void Update()
@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
         // Get the SpriteRenderer component for efficiency
         spriteRenderer = GetComponent<SpriteRenderer>();
         // Get reference to the Animator component
-        animator = GetComponent<Animator>(); 
+        animator = GetComponent<Animator>();
 
         // Error checking
         if (body == null)
@@ -116,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Adjust speed if crouching
         float currentSpeed = speed;
-        
+
         if (isCrouching)
         {
             currentSpeed *= 0.5f; // Half the speed while crouching
@@ -138,15 +138,17 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Update the animator's parameters
-        animator.SetBool("run", horizontalInput != 0);       
-        animator.SetBool("crouch_walking", isCrouching && horizontalInput != 0);
-        if(horizontalInput != 0 && isCrouching){
-            animator.SetBool("crouch", false);
-        }
+        bool isWalking = horizontalInput != 0;
+        bool isCrouchWalking = isCrouching && isWalking;
 
-        
-          
-        
+        // Update the animator's parameters
+        animator.SetBool("run", horizontalInput != 0);        
+        animator.SetBool("crouch_walking", isCrouchWalking);
+        animator.SetBool("crouch", isCrouching && !isWalking);
+
+
+
+
     }
 
     // Handle the player's jumping
@@ -156,7 +158,7 @@ public class PlayerMovement : MonoBehaviour
         {
             // Apply vertical velocity to make the player jump
             body.velocity = new Vector2(body.velocity.x, jumpPower);
-            animator.SetTrigger("jump");                 
+            animator.SetTrigger("jump");
             grounded = false;
         }
         animator.SetBool("grounded", grounded);
@@ -187,7 +189,7 @@ public class PlayerMovement : MonoBehaviour
                 boxCollider.offset = crouchingOffset;
                 isCrouching = true;
                 animator.SetBool("crouch", true);
-               
+
             }
         }
         else
@@ -199,10 +201,11 @@ public class PlayerMovement : MonoBehaviour
                 boxCollider.offset = standingOffset;
                 isCrouching = false;
                 animator.SetBool("crouch", false);
-                
+
             }
-        }
-        
+        }        
+
+
     }
     #endregion
 
