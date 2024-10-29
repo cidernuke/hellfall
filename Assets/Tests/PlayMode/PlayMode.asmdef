@@ -4,14 +4,17 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "ScriptsAssemblyDef"
+        "ScriptsAssemblyDef",
+        ""
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll"
+        "nunit.framework.dll",
+        "moq.dll",
+        "castle.core.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

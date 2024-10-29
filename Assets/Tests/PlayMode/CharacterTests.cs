@@ -4,6 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using Moq;
 
 public class CharacterTests
 {
@@ -28,8 +29,8 @@ public class CharacterTests
         playerMovement.isCrouching = false;
 
         // Mock the input to simulate jump input
-        //var mockPlayerMovement = new Mock<PlayerMovement>();
-        //mockPlayerMovement.Setup(m => m.GetJumpInput()).Returns(true);
+        var mockPlayerMovement = new Mock<PlayerMovement>();
+        mockPlayerMovement.Setup(m => m.GetJumpInput()).Returns(true);
 
         // Make the player jump
         playerMovement.HandleJumpInput();

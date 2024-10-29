@@ -1,3 +1,8 @@
 {
-	"name": "ScriptsAssemblyDef"
+	"name": "ScriptsAssemblyDef",
+	"precompiledReferences": [
+        "nunit.framework.dll",
+        "moq.dll",
+        "castle.core.dll"
+    ]
 }
