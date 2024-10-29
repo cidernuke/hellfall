@@ -11,35 +11,47 @@ public class CharacterTests
    [UnityTest]
    public IEnumerator PlayerCanJump()
    {
-        // Load the scene
+            // Load the scene
         SceneManager.LoadScene("SampleScene");
         // Wait for 3 seconds to allow the player to load and hit the ground
         yield return new WaitForSeconds(3);
         // Find the player GameObject
         GameObject player = GameObject.Find("Player");
-
-        // Get the PlayerMovment component attached to the player GameObject
-        PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+        //add the movement
+        var playerMovement = player.AddComponent<PlayerMovement>();
 
         // Get the initial position of the player
         Vector3 initialPosition = player.transform.position;
 
-        //set grounded = true and crouching = false, so the player can jump
-        playerMovement.grounded = true;
-        playerMovement.isCrouching = false;
-
         // Mock the input to simulate jump input
         var mockPlayerMovement = new Mock<PlayerMovement>();
         mockPlayerMovement.Setup(m => m.GetJumpInput()).Returns(true);
+        
+        // Replace the original PlayerMovement component with the mocked one
+        player.AddComponent<PlayerMovement>();
+        playerMovement = mockPlayerMovement.Object;
 
-        // Make the player jump
+        // Set the grounded status to true to allow jumping
+        mockPlayerMovement.Object.grounded = true;
+
+        // Capture the initial vertical velocity
+        var initialVelocity = mockPlayerMovement.Object.GetComponent<Rigidbody2D>().velocity;
+
+        // Call HandleJumpInput to simulate the jump
         playerMovement.HandleJumpInput();
-
+        
         // Wait for 1 second to allow the jump to occur
         yield return new WaitForSeconds(0.2f);
 
-        // Assert that the player's y position has increased, indicating a jump
-        Assert.Greater(player.transform.position.y, initialPosition.y);
+        // Get the new vertical velocity after calling HandleJumpInput
+        var newVelocity = mockPlayerMovement.Object.GetComponent<Rigidbody2D>().velocity;
+
+        // Assert that the vertical velocity has increased by jumpPower
+        Assert.AreEqual(initialVelocity.x, newVelocity.x, "Horizontal velocity should not change.");
+        Assert.Greater(newVelocity.y, initialVelocity.y, "Vertical velocity should increase due to jump.");
+
+
+        yield return null;
 
    }
    /*[UnityTest]

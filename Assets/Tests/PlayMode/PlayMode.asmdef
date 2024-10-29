@@ -4,8 +4,7 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "ScriptsAssemblyDef",
-        ""
+        "ScriptsAssemblyDef"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -13,8 +12,8 @@
     "overrideReferences": true,
     "precompiledReferences": [
         "nunit.framework.dll",
-        "moq.dll",
-        "castle.core.dll"
+        "Castle.Core.dll",
+        "Moq.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [
