@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Handles player movement, including walking, jumping, wall jumping, dashing, and crouching.
-/// This script should be attached to a player GameObject with a Rigidbody2D and BoxCollider2D component.
+/// Handles player movement, including walking, jumping, double jumping, wall jumping, wall sliding, dashing, and crouching.
+/// This script should be attached to a player GameObject with a Rigidbody2D, BoxCollider2D, and SpriteRenderer component.
 /// </summary>
 public class PlayerMovement : MonoBehaviour
 {
@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
     private int facingDirection = 1; // 1 for facing right, -1 for facing left
     #endregion
 
-    #region Advanced Jumping Variables
+    #region Jumping Variables
     // Multiple jumps (e.g., double jump)
     [SerializeField] private int possibleJumps = 2; // Total number of jumps allowed before landing
     private int jumpCounter;                        // Tracks remaining jumps
@@ -36,10 +36,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float wallSlideSpeed = 2f; // Speed at which the player slides down a wall
     [SerializeField] private float wallJumpX = 10f;     // Horizontal force applied during a wall jump
 
-    private bool isTouchingWall = false;
-    private bool isTouchingWallLeft = false;
-    private bool isTouchingWallRight = false;
-    private bool hasWallJumped = false;
+    // Wall colliders
+    private Collider2D wallColliderLeft = null;
+    private Collider2D wallColliderRight = null;
+    private Collider2D lastWallJumpedFrom = null;
 
     private bool isWallJumping = false;
     private float wallJumpDuration = 0.2f;  // Duration during which horizontal input is ignored after a wall jump
@@ -188,13 +188,13 @@ public class PlayerMovement : MonoBehaviour
                 isWallJumping = false;
             }
         }
-        else if (isTouchingWall && !grounded && body.velocity.y < 0)
+        else if ((wallColliderLeft != null || wallColliderRight != null) && !grounded && body.velocity.y < 0)
         {
             // Player is wall sliding
             body.velocity = new Vector2(body.velocity.x, -wallSlideSpeed);
 
             // Allow player to move away from the wall
-            if ((isTouchingWallLeft && horizontalInput > 0) || (isTouchingWallRight && horizontalInput < 0))
+            if ((wallColliderLeft != null && horizontalInput > 0) || (wallColliderRight != null && horizontalInput < 0))
             {
                 // Player moves away from the wall
                 body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
@@ -239,14 +239,21 @@ public class PlayerMovement : MonoBehaviour
                 // Perform a regular jump
                 body.velocity = new Vector2(body.velocity.x, jumpPower);
                 grounded = false;
-                jumpCounter--;
-                hasWallJumped = false;
+                jumpCounter = possibleJumps - 1; // Decrease jump counter
+                isWallJumping = false;
+                lastWallJumpedFrom = null;
             }
-            else if (isTouchingWall && !hasWallJumped && !isWallJumping)
+            else if ((wallColliderLeft != null || wallColliderRight != null) && !isWallJumping)
             {
-                // Perform a wall jump
-                WallJump();
-                hasWallJumped = true;
+                // Determine current wall collider
+                Collider2D currentWall = wallColliderLeft != null ? wallColliderLeft : wallColliderRight;
+
+                // Check if the current wall is different from the last wall jumped from
+                if (currentWall != null && currentWall != lastWallJumpedFrom)
+                {
+                    // Perform a wall jump
+                    WallJump(currentWall);
+                }
             }
             else if (jumpCounter > 0)
             {
@@ -315,8 +322,8 @@ public class PlayerMovement : MonoBehaviour
             // Player has landed on the ground
             grounded = true;
             jumpCounter = possibleJumps; // Reset jump counter
-            hasWallJumped = false;       // Reset wall jump flag
-            isWallJumping = false;       // Reset wall jumping status
+            isWallJumping = false;
+            lastWallJumpedFrom = null;
         }
     }
 
@@ -335,7 +342,7 @@ public class PlayerMovement : MonoBehaviour
             // Player has left the ground
             grounded = false;
         }
-        // Note: We do not reset hasWallJumped when leaving the wall to prevent infinite wall jumps
+        // Note: We do not reset lastWallJumpedFrom when leaving the wall to prevent infinite wall jumps
     }
     #endregion
 
@@ -384,11 +391,11 @@ public class PlayerMovement : MonoBehaviour
     #region Wall Methods
     /// <summary>
     /// Checks if the player is touching a wall on the left or right side.
-    /// Updates wall touch flags accordingly.
+    /// Updates wall colliders accordingly.
     /// </summary>
     private void CheckWallTouch()
     {
-        // Cast a box collider to the left and right to detect walls
+        // Cast a box collider to the left to detect walls
         RaycastHit2D raycastHitLeft = Physics2D.BoxCast(
             boxCollider.bounds.center,
             boxCollider.bounds.size,
@@ -397,6 +404,7 @@ public class PlayerMovement : MonoBehaviour
             0.1f,
             wallLayer);
 
+        // Cast a box collider to the right to detect walls
         RaycastHit2D raycastHitRight = Physics2D.BoxCast(
             boxCollider.bounds.center,
             boxCollider.bounds.size,
@@ -405,17 +413,16 @@ public class PlayerMovement : MonoBehaviour
             0.1f,
             wallLayer);
 
-        // Update wall touch flags based on collision results
-        isTouchingWallLeft = raycastHitLeft.collider != null;
-        isTouchingWallRight = raycastHitRight.collider != null;
-
-        isTouchingWall = isTouchingWallLeft || isTouchingWallRight;
+        // Update wall colliders based on collision results
+        wallColliderLeft = raycastHitLeft.collider;
+        wallColliderRight = raycastHitRight.collider;
     }
 
     /// <summary>
     /// Performs a wall jump by applying a force away from the wall and flipping the player's direction.
     /// </summary>
-    private void WallJump()
+    /// <param name="currentWall">The wall collider from which the player is jumping.</param>
+    private void WallJump(Collider2D currentWall)
     {
         // Apply a force away from the wall
         float horizontalForce = -facingDirection * wallJumpX;
@@ -424,12 +431,16 @@ public class PlayerMovement : MonoBehaviour
         body.AddForce(force, ForceMode2D.Impulse);
 
         // Immediately flip the player's facing direction
-        FlipPlayer();
+        //FlipPlayer();
 
         grounded = false;
         isWallJumping = true;
         wallJumpStartTime = Time.time;
-        hasWallJumped = true; // Ensure hasWallJumped is set to prevent immediate re-jumping
+
+        lastWallJumpedFrom = currentWall; // Store the wall we just jumped from
+
+        // Reset jump counter after wall jump to allow double jump
+        jumpCounter = possibleJumps - 1;
     }
 
     /// <summary>
@@ -483,7 +494,7 @@ public class PlayerMovement : MonoBehaviour
     /// <returns>True if crouch input is held down.</returns>
     public virtual bool GetCrouchInput()
     {
-        return Input.GetKey(KeyCode.C);
+        return Input.GetKey(KeyCode.S);
     }
     #endregion
 }
