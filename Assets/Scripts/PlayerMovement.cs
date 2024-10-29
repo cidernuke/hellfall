@@ -5,7 +5,7 @@ public class PlayerMovement : MonoBehaviour
 {
     #region Movement Variables
     private Rigidbody2D body;
-    private bool grounded;
+    public bool grounded;
     [SerializeField] private float speed;
     [SerializeField] private float jumpPower;
     #endregion
@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 crouchingSize;
     private Vector2 standingOffset;
     private Vector2 crouchingOffset;
-    private bool isCrouching = false;
+    public bool isCrouching = false;
     #endregion
 
     #region Unity Methods
