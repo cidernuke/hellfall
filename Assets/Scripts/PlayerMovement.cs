@@ -483,7 +483,7 @@ public class PlayerMovement : MonoBehaviour
     /// <returns>True if crouch input is held down.</returns>
     public virtual bool GetCrouchInput()
     {
-        return Input.GetKey(KeyCode.S);
+        return Input.GetKey(KeyCode.C);
     }
     #endregion
 }
