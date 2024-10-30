@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     #region Movement Variables
     // Components
     private Rigidbody2D body;
+    private Animator animator;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider;
 
@@ -114,13 +115,17 @@ public class PlayerMovement : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        // Get reference to the Animator component
+        animator = GetComponent<Animator>();
 
         if (body == null)
             Debug.LogError("Rigidbody2D component not found!");
         if (boxCollider == null)
             Debug.LogError("BoxCollider2D component not found!");
         if (spriteRenderer == null)
-            Debug.LogError("SpriteRenderer component not found!");
+            Debug.LogError("SpriteRenderer not found!");
+        if (animator == null)
+            Debug.LogError("Animator not found!");
     }
 
     /// <summary>
@@ -175,6 +180,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Adjust speed if crouching
         float currentSpeed = speed;
+
         if (isCrouching)
         {
             currentSpeed *= 0.5f; // Half speed when crouching
@@ -225,6 +231,15 @@ public class PlayerMovement : MonoBehaviour
                 FlipPlayer();
             }
         }
+
+        // Update the animator's parameters
+        bool isWalking = horizontalInput != 0;
+        bool isCrouchWalking = isCrouching && isWalking;
+
+        // Update the animator's parameters
+        animator.SetBool("run", horizontalInput != 0);        
+        animator.SetBool("crouch_walking", isCrouchWalking);
+        animator.SetBool("crouch", isCrouching && !isWalking);
     }
 
     /// <summary>
@@ -273,6 +288,7 @@ public class PlayerMovement : MonoBehaviour
         if (GetDashInput() && canDash && horizontalInput != 0 && !isCrouching)
         {
             StartDash(horizontalInput);
+            animator.SetTrigger("dash");
         }
     }
 
@@ -281,6 +297,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleCrouchInput()
     {
+        float horizontalInput = GetHorizontalInput();
+
         if (GetCrouchInput())
         {
             if (!isCrouching)
@@ -290,6 +308,8 @@ public class PlayerMovement : MonoBehaviour
                 boxCollider.size = crouchingSize;
                 boxCollider.offset = crouchingOffset;
                 isCrouching = true;
+                animator.SetBool("crouch", true);
+
             }
         }
         else
@@ -301,8 +321,12 @@ public class PlayerMovement : MonoBehaviour
                 boxCollider.size = standingSize;
                 boxCollider.offset = standingOffset;
                 isCrouching = false;
+                animator.SetBool("crouch", false);
+
             }
-        }
+        }        
+
+
     }
     #endregion
 
