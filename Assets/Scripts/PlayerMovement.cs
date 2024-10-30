@@ -177,6 +177,9 @@ public class PlayerMovement : MonoBehaviour
     public void HandleMovementInput()
     {
         float horizontalInput = GetHorizontalInput();
+        // Update the animator's parameters
+        bool isWalking = horizontalInput != 0;
+        bool isCrouchWalking = isCrouching && isWalking;
 
         // Adjust speed if crouching
         float currentSpeed = speed;
@@ -184,6 +187,8 @@ public class PlayerMovement : MonoBehaviour
         if (isCrouching)
         {
             currentSpeed *= 0.5f; // Half speed when crouching
+            animator.SetBool("crouch_walking", isCrouchWalking);
+            animator.SetBool("crouch", isCrouching && !isWalking);
         }
 
         if (isWallJumping)
@@ -233,13 +238,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Update the animator's parameters
-        bool isWalking = horizontalInput != 0;
-        bool isCrouchWalking = isCrouching && isWalking;
-
-        // Update the animator's parameters
-        animator.SetBool("run", horizontalInput != 0);        
-        animator.SetBool("crouch_walking", isCrouchWalking);
-        animator.SetBool("crouch", isCrouching && !isWalking);
+        animator.SetBool("run", horizontalInput != 0);
     }
 
     /// <summary>
@@ -253,6 +252,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 // Perform a regular jump
                 body.velocity = new Vector2(body.velocity.x, jumpPower);
+                animator.SetTrigger("jump");
                 grounded = false;
                 jumpCounter = possibleJumps - 1; // Decrease jump counter
                 isWallJumping = false;
@@ -268,6 +268,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     // Perform a wall jump
                     WallJump(currentWall);
+                    animator.SetTrigger("jump");
                 }
             }
             else if (jumpCounter > 0)
@@ -275,8 +276,10 @@ public class PlayerMovement : MonoBehaviour
                 // Perform a double jump
                 body.velocity = new Vector2(body.velocity.x, jumpPower);
                 jumpCounter--;
+                animator.SetTrigger("jump");
             }
         }
+        animator.SetBool("grounded", grounded);
     }
 
     /// <summary>
