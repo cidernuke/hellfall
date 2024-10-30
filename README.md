@@ -1,4 +1,17 @@
 # Git
+
+## First time set-up
+- Clone the project from gitlab
+- If you haven't installed Git LFS already:
+    - go to https://git-lfs.com/ and install it
+    - Go to your local repo (root hellfall folder) via the terminal or VS-Code
+    - Make sure you are on the main branch
+    - Run: 
+        - `git lfs install`
+        - `git pull`
+- Open project in Unity
+- Finally, create a new branch for the new feature
+
 ## Creating new Branch for a feature
 - On gitlab, create new branch with meaningful name
 - In vs-code, fetch from main
