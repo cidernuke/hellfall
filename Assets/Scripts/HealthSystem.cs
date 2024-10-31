@@ -15,9 +15,14 @@ public class HealthSystem : MonoBehaviour
         currentHealth = startingHealth;
     }   
 
-    //beim Aufruf von TakeDamage wird der Schaden abgezogen und geprüft ob der Spieler noch lebt
+    /// <summary>
+    /// Reduces the current health by the specified damage amount, updates the health UI, 
+    /// and checks if the health has dropped to zero or below.
+    /// </summary>
+    /// <param name="damage">The amount of damage to take.</param>
     public void TakeDamage(float damage)
     {
+
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
         Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
         UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
