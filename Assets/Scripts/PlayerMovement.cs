@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     private BoxCollider2D boxCollider;
 
     // Movement flags and variables
-    private bool grounded;
+    public bool grounded;
     [SerializeField] private float speed;       // Horizontal movement speed
     [SerializeField] private float jumpPower;   // Vertical jump force
 
@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 crouchingSize;   // Collider size when crouching
     private Vector2 standingOffset;  // Collider offset when standing
     private Vector2 crouchingOffset; // Collider offset when crouching
-    private bool isCrouching = false;
+    public bool isCrouching = false;
     #endregion
 
     #region Unity Methods

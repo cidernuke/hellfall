@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 69732188}
   - component: {fileID: 69732192}
   - component: {fileID: 69732193}
+  - component: {fileID: 69732194}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -294,6 +295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cc5e789df8f0f142bcb48afaea422a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grounded: 0
   speed: 10
   jumpPower: 5
   possibleJumps: 2
@@ -304,6 +306,7 @@ MonoBehaviour:
   dashCooldown: 1
   standing: {fileID: 691704114, guid: 22a836ecf58efa24f8d6db5ebc1c5eeb, type: 3}
   crouching: {fileID: 21300000, guid: adf511fbe02c3784e8780b1b89e29439, type: 3}
+  isCrouching: 0
 --- !u!95 &69732193
 Animator:
   serializedVersion: 5
@@ -325,6 +328,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &69732194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 69732187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bbbdafceb1d62046b87c955a0d68953, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingHealth: 0
+  currentHealth: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +493,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aheadDistance: 1
-  cameraSpeed: 1.75
+  cameraSpeed: 2.4
   player: {fileID: 69732191}
 --- !u!1 &619394800
 GameObject:
