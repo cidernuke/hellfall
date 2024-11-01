@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using UnityEditor.Callbacks;
+using UnityEditor.ShaderGraph.Drawing.Inspector.PropertyDrawers;
 
 /// <summary>
 /// Handles player movement, including walking, jumping, double jumping, wall jumping, wall sliding, dashing, and crouching.
@@ -9,12 +11,13 @@ public class PlayerMovement : MonoBehaviour
 {
     #region Layer Masks
     // Layer masks to identify ground and wall layers for collision detection
-    private LayerMask wallLayer;
+    [SerializeField] private LayerMask wallLayer;
     private LayerMask groundLayer;
     #endregion
 
     #region Movement Variables
     // Components
+    private float horizontal;
     private Rigidbody2D body;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -26,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpPower;   // Vertical jump force
 
     private int facingDirection = 1; // 1 for facing right, -1 for facing left
+    private bool isFacingRight = true;
     #endregion
 
     #region Jumping Variables
@@ -34,16 +38,24 @@ public class PlayerMovement : MonoBehaviour
     private int jumpCounter;                        // Tracks remaining jumps
 
     // Wall jumping
+    private bool isWallSliding;
     [SerializeField] private float wallSlideSpeed = 2f; // Speed at which the player slides down a wall
     [SerializeField] private float wallJumpX = 10f;     // Horizontal force applied during a wall jump
+    [SerializeField] private Transform wallCheck;
 
     // Wall colliders
     private Collider2D wallColliderLeft = null;
     private Collider2D wallColliderRight = null;
     private Collider2D lastWallJumpedFrom = null;
 
-    private bool isWallJumping = false;
-    private float wallJumpDuration = 0.2f;  // Duration during which horizontal input is ignored after a wall jump
+    // private bool isWallJumping = false;
+    private bool isWallJumping;
+    private float wallJumpDirection;
+    private float wallJumpingTime = 0.2f;
+    private float wallJumpingCounter;
+    private float wallJumpDuration = 0.4f;  // Duration during which horizontal input is ignored after a wall jump
+    // private float wallJumpDuration = 0.2f;  // Duration during which horizontal input is ignored after a wall jump
+    private Vector2 wallJumpingPower = new Vector2(8f, 16f);
     private float wallJumpStartTime;         // Time when the wall jump started
     #endregion
 
@@ -90,20 +102,97 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void Update()
     {
+        horizontal = Input.GetAxisRaw("Horizontal");
         if (isDashing)
         {
             // Skip the rest of the update while dashing
             return;
         }
 
-        CheckWallTouch();
+        // CheckWallTouch();
+
+        WallSlide();
+        WallJump();
 
         HandleMovementInput();
         HandleJumpInput();
         HandleDashInput();
         HandleCrouchInput();
+
+        if (!isWallJumping)
+        {
+            Flip();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (!isWallJumping)
+        {
+            body.velocity = new Vector2(horizontal * speed, body.velocity.y);
+        }
     }
     #endregion
+
+    private bool IsWalled()
+    {
+        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
+    }
+
+    private void WallSlide()
+    {
+        if (IsWalled() && !grounded && GetHorizontalInput() != 0f)
+        {
+            // print("isWallSliding = true");
+            isWallSliding = true;
+            body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlideSpeed, float.MaxValue));
+        } else
+        {
+            // print("isWallSliding = false");
+            isWallSliding = false;
+        }
+    }
+
+    private void WallJump()
+    {
+        // print("wallJumpingCounter on entering: "+wallJumpingCounter);
+        if (isWallSliding)
+        {
+            isWallJumping = false;
+            wallJumpDirection = -transform.localScale.x;
+            wallJumpingCounter = wallJumpingTime;
+
+            CancelInvoke(nameof(StopWallJumping));
+        } else
+        {
+            wallJumpingCounter -= Time.deltaTime;
+            // print("wallJumpingCounter on updating when !sliding: "+wallJumpingCounter);
+        }
+
+        // TODO: problem lies somewhere here. It also interferes with wall sliding. Why can i only jump twice?
+        if (GetJumpInput() && wallJumpingCounter > 0f)
+        {
+            print("i should see this max twice.");
+            isWallJumping = true;
+            body.velocity = new Vector2(wallJumpDirection * wallJumpingPower.x, wallJumpingPower.y);
+            wallJumpingCounter = 0f;
+
+            if (transform.localScale.x != wallJumpDirection)
+            {
+                facingDirection = -1;
+                Vector3 localScale = transform.localScale;
+                localScale.x *= -1f;
+                transform.localScale = localScale;
+            }
+
+            Invoke(nameof(StopWallJumping), wallJumpDuration);
+        }
+    }
+
+    private void StopWallJumping()
+    {
+        isWallJumping = false;
+    }
 
     #region Initialization Methods
     /// <summary>
@@ -191,51 +280,52 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("crouch", isCrouching && !isWalking);
         }
 
-        if (isWallJumping)
-        {
-            // Prevent horizontal movement input from overriding the wall jump
-            if (Time.time > wallJumpStartTime + wallJumpDuration)
-            {
-                isWallJumping = false;
-            }
-        }
-        else if ((wallColliderLeft != null || wallColliderRight != null) && !grounded && body.velocity.y < 0)
-        {
-            // Player is wall sliding
-            body.velocity = new Vector2(body.velocity.x, -wallSlideSpeed);
+        // if (isWallJumping)
+        // {
+        //     // Prevent horizontal movement input from overriding the wall jump
+        //     if (Time.time > wallJumpStartTime + wallJumpDuration)
+        //     {
+        //         isWallJumping = false;
+        //     }
+        // }
+        // else if ((wallColliderLeft != null || wallColliderRight != null) && !grounded && body.velocity.y < 0)
+        // if ((wallColliderLeft != null || wallColliderRight != null) && !grounded && body.velocity.y < 0)
+        // {
+        //     // Player is wall sliding
+        //     body.velocity = new Vector2(body.velocity.x, -wallSlideSpeed);
 
-            // Allow player to move away from the wall
-            if ((wallColliderLeft != null && horizontalInput > 0) || (wallColliderRight != null && horizontalInput < 0))
-            {
-                // Player moves away from the wall
-                body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
+        //     // Allow player to move away from the wall
+        //     if ((wallColliderLeft != null && horizontalInput > 0) || (wallColliderRight != null && horizontalInput < 0))
+        //     {
+        //         // Player moves away from the wall
+        //         body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
 
-                // Flip player sprite based on input direction
-                if (horizontalInput > 0.01f && facingDirection == -1)
-                {
-                    FlipPlayer();
-                }
-                else if (horizontalInput < -0.01f && facingDirection == 1)
-                {
-                    FlipPlayer();
-                }
-            }
-        }
-        else
-        {
+        //         // Flip player sprite based on input direction
+        //         if (horizontalInput > 0.01f && facingDirection == -1)
+        //         {
+        //             FlipPlayer();
+        //         }
+        //         else if (horizontalInput < -0.01f && facingDirection == 1)
+        //         {
+        //             FlipPlayer();
+        //         }
+        //     }
+        // }
+        // else
+        // {
             // Normal horizontal movement
-            body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
+            // body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
 
             // Flip player sprite based on input direction
-            if (horizontalInput > 0.01f && facingDirection == -1)
-            {
-                FlipPlayer();
-            }
-            else if (horizontalInput < -0.01f && facingDirection == 1)
-            {
-                FlipPlayer();
-            }
-        }
+            // if (horizontalInput > 0.01f && facingDirection == -1)
+            // {
+            //     FlipPlayer();
+            // }
+            // else if (horizontalInput < -0.01f && facingDirection == 1)
+            // {
+            //     FlipPlayer();
+            // }
+        // }
 
         // Update the animator's parameters
         animator.SetBool("run", horizontalInput != 0);
@@ -254,23 +344,24 @@ public class PlayerMovement : MonoBehaviour
                 body.velocity = new Vector2(body.velocity.x, jumpPower);
                 animator.SetTrigger("jump");
                 grounded = false;
-                jumpCounter = possibleJumps - 1; // Decrease jump counter
-                isWallJumping = false;
-                lastWallJumpedFrom = null;
+                // jumpCounter = possibleJumps - 1; // Decrease jump counter
+                // isWallJumping = false;
+                // lastWallJumpedFrom = null;
             }
-            else if ((wallColliderLeft != null || wallColliderRight != null) && !isWallJumping)
-            {
-                // Determine current wall collider
-                Collider2D currentWall = wallColliderLeft != null ? wallColliderLeft : wallColliderRight;
+            // else if ((wallColliderLeft != null || wallColliderRight != null) && !isWallJumping)
+            // else if (wallColliderLeft != null || wallColliderRight != null)
+            // {
+            //     // Determine current wall collider
+            //     Collider2D currentWall = wallColliderLeft != null ? wallColliderLeft : wallColliderRight;
 
-                // Check if the current wall is different from the last wall jumped from
-                if (currentWall != null && currentWall != lastWallJumpedFrom)
-                {
-                    // Perform a wall jump
-                    WallJump(currentWall);
-                    animator.SetTrigger("jump");
-                }
-            }
+            //     // Check if the current wall is different from the last wall jumped from
+            //     if (currentWall != null && currentWall != lastWallJumpedFrom)
+            //     {
+            //         // Perform a wall jump
+            //         WallJump(currentWall);
+            //         animator.SetTrigger("jump");
+            //     }
+            // }
             else if (jumpCounter > 0)
             {
                 // Perform a double jump
@@ -473,15 +564,26 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Flips the player's facing direction and updates the sprite accordingly.
     /// </summary>
-    private void FlipPlayer()
-    {
-        // Invert the facing direction
-        facingDirection *= -1;
+    // private void FlipPlayer()
+    // {
+    //     // Invert the facing direction
+    //     facingDirection *= -1;
 
-        // Flip the player's sprite by inverting the x scale
-        Vector3 scaler = transform.localScale;
-        scaler.x *= -1;
-        transform.localScale = scaler;
+    //     // Flip the player's sprite by inverting the x scale
+    //     Vector3 scaler = transform.localScale;
+    //     scaler.x *= -1;
+    //     transform.localScale = scaler;
+    // }
+
+    private void Flip()
+    {
+        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
+        }
     }
     #endregion
 
