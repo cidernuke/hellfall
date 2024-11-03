@@ -29,8 +29,10 @@ public class EnemyPatrol : MonoBehaviour
     {
         if (movingLeft)
         {
+            // Check if the enemy has reached the left edge
             if (enemy.position.x >= leftEdge.position.x)
             {
+                // Move the enemy to the left
                 MoveInDirection(-1);
             }
             else
@@ -40,8 +42,10 @@ public class EnemyPatrol : MonoBehaviour
         }
         else
         {
+            // Check if the enemy has reached the right edge
             if (enemy.position.x <= rightEdge.position.x)
             {
+                // Move the enemy to the right
                 MoveInDirection(1);
             }
             else
@@ -54,10 +58,14 @@ public class EnemyPatrol : MonoBehaviour
     private void DirectionChange()
     {
         anim.SetBool("moving", false);
-
+        
+        // Increase the idle timer by the time passed since the last frame
         idleTimer += Time.deltaTime;
+
+        // Check if the idle duration has been exceeded
         if (idleTimer > idleDuration)
-        {
+        {   
+            // Change the movement direction of the enemy
             movingLeft = !movingLeft;
         }
     }
