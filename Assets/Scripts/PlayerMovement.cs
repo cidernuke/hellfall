@@ -371,6 +371,13 @@ public class PlayerMovement : MonoBehaviour
         }
         // Note: We do not reset lastWallJumpedFrom when leaving the wall to prevent infinite wall jumps
     }
+
+    public bool canAttack()
+    {
+        float horizontalInput = GetHorizontalInput();
+
+        return horizontalInput == 0 && grounded;
+    }
     #endregion
 
     #region Dash Coroutine
