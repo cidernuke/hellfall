@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using System;
 
 /// <summary>
 /// Handles player movement, including walking, jumping, double jumping, wall jumping, wall sliding, dashing, and crouching.
@@ -11,8 +10,8 @@ public class PlayerMovement : MonoBehaviour
     #region Layer Masks
     // Layer masks to identify ground and wall layers for collision detection
     [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private LayerMask groundLayer;
     private LayerMask groundAndWallLayer;
-    // private LayerMask groundLayer;
     #endregion
 
     #region Movement Variables
@@ -25,44 +24,30 @@ public class PlayerMovement : MonoBehaviour
 
     // Movement flags and variables
     public bool grounded;
+    [SerializeField] private Transform groundCheck;
     [SerializeField] private static float speed = 10f;  // Horizontal movement speed
     [SerializeField] private float jumpPower;   // Vertical jump force
 
-    private int facingDirection = 1; // 1 for facing right, -1 for facing left
+    private int facingDirection = 1; // 1 for facing right, -1 for facing left, affects the player
     private bool isFacingRight = true;
     #endregion
 
     #region Jumping Variables
-    // Multiple jumps (e.g., double jump)
-    [SerializeField] private int possibleJumps = 2; // Total number of jumps allowed before landing
-    private int jumpCounter;                        // Tracks remaining jumps
-
     // Wall jumping
     private bool isWallSliding;
     [SerializeField] private float wallSlideSpeed = 2f; // Speed at which the player slides down a wall
-    [SerializeField] private float wallJumpX = 10f;     // Horizontal force applied during a wall jump
     [SerializeField] private Transform wallCheck;
-
-    // Wall colliders
-    private Collider2D wallColliderLeft = null;
-    private Collider2D wallColliderRight = null;
-    private Collider2D lastWallJumpedFrom = null;
-
-    // private bool isWallJumping = false;
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundLayer;
     private int wallSide;
-    private int lastWallJumped = 0;
+    private int lastWallJumped = 0; // compared to wallSide in logic --> int, not bool
     private bool canWallJump = true;
-    private bool isDoubleJumping;
     private bool isWallJumping;
     private float wallJumpDirection;
     private float wallJumpingTime = 0.2f;
     private float wallJumpingCounter;
     private float wallJumpDuration = 0.4f;  // Duration during which horizontal input is ignored after a wall jump
-    // private float wallJumpDuration = 0.2f;  // Duration during which horizontal input is ignored after a wall jump
-    // private Vector2 wallJumpingPower = new Vector2(body.velocity.x, 10f);
-    private float wallJumpStartTime;         // Time when the wall jump started
+    
+    // Double Jump
+    private bool isDoubleJumping;
     #endregion
 
     #region Dash Variables
@@ -78,8 +63,8 @@ public class PlayerMovement : MonoBehaviour
 
     #region Crouch Variables
     // Crouching mechanics
-    [SerializeField] private Sprite standing;  // Sprite used when standing
-    [SerializeField] private Sprite crouching; // Sprite used when crouching
+    [SerializeField] private Sprite standing;  // Sprite used when standing, initialized in unity inspector
+    [SerializeField] private Sprite crouching; // Sprite used when crouching, initialized in unity inspector
     [SerializeField] private float crouchSpeed = speed / 2;
 
     private Vector2 standingSize;    // Collider size when standing
@@ -100,7 +85,6 @@ public class PlayerMovement : MonoBehaviour
         InitializeLayers();
         InitializeCrouchVariables();
         InitializeDashVariables();
-        jumpCounter = possibleJumps;
     }
 
     /// <summary>
@@ -110,7 +94,6 @@ public class PlayerMovement : MonoBehaviour
     public void Update()
     {
         horizontal = GetHorizontalInput();
-        //horizontal = Input.GetAxisRaw("Horizontal");
         if (isDashing)
         {
             // Skip the rest of the update while dashing
@@ -122,15 +105,11 @@ public class PlayerMovement : MonoBehaviour
             isDoubleJumping = false;
         }
 
-
-        HandleJump();
+        HandleJumpInput();
         WallSlide();
         WallJump();
 
-        // HandleMovementInput();
-        // HandleJumpInput();
         HandleDashInput();
-        // HandleCrouchInput();
 
         if (!isWallJumping)
         {
@@ -153,147 +132,11 @@ public class PlayerMovement : MonoBehaviour
 
             if (IsGrounded() && isCrouchWalking)
             {
-                print("grounded: " + IsGrounded());
-                print("crouchSpeed: " + crouchSpeed + ", normal speed: " + speed);
                 body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
             }
-
-            // if (isWalking && isCrouching)
-            // {
-            //     print("we should be crouch walking");
-            //     // bool isCrouchWalking = isCrouching && isWalking;
-            //     animator.SetBool("crouch", false);
-            //     animator.SetBool("crouch_walking", isWalking);
-            // }
-            // else if (!isWalking && isCrouching)
-            // {
-            //     animator.SetBool("crouch", true);
-            //     animator.SetBool("crouch_walking", !isWalking);
-            // }
         }
     }
-
-    private void HandleJump()
-    {
-        // if (GetJumpInput())
-        // {
-        //     animator.SetTrigger("jump");
-        //     print("first input");
-        //     if (IsGrounded() || !isDoubleJumping)
-        //     {
-        //         print("second input");
-        //         body.velocity = new Vector2(body.velocity.x, jumpPower);
-
-        //         // Limits doublejump to 2. If not present, player can infinatly jump!
-        //         isDoubleJumping = !isDoubleJumping;
-        //         animator.SetTrigger("jump");
-        //     }
-        // }
-
-        if (GetJumpInput())
-        {
-            animator.SetTrigger("jump");  // Play jump animation on first jump
-            if (IsGrounded())
-            {
-                // First jump
-                print("if statement");
-                body.velocity = new Vector2(body.velocity.x, jumpPower);
-                isDoubleJumping = false;      // Reset double jump for the next jump
-            }
-            else if (!isDoubleJumping)
-            {
-                // Double jump
-                print("else statement");
-                body.velocity = new Vector2(body.velocity.x, jumpPower);
-                // animator.SetTrigger("jump");  // Play jump animation on double jump
-                isDoubleJumping = true;       // Set double jump flag to prevent further jumps
-                animator.SetBool("grounded", IsGrounded());
-            }
-        }
-    }
-
     #endregion
-
-    private bool IsGrounded()
-    {
-        grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundAndWallLayer);
-        animator.SetBool("grounded", grounded);
-        return grounded;
-    }
-
-    private bool IsWalled()
-    {
-        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
-    }
-
-    private void WallSlide()
-    {
-        if (IsWalled() && !grounded && horizontal != 0f)
-        {
-            isWallSliding = true;
-            // Determine the wall side (1 for right wall, -1 for left wall)
-            wallSide = transform.localScale.x > 0 ? 1 : -1;
-            // print("wall side in wallslide: "+wallSide);
-            body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlideSpeed, float.MaxValue));
-        }
-        else
-        {
-            // print("isWallSliding = false");
-            isWallSliding = false;
-        }
-    }
-
-    private void WallJump()
-    {
-        // print("wallJumpingCounter on entering: "+wallJumpingCounter);
-        if (isWallSliding)
-        {
-            // isWallJumping = false;
-            // wallJumpDirection = -transform.localScale.x;
-            wallJumpDirection = -wallSide;
-            wallJumpingCounter = wallJumpingTime;
-
-            CancelInvoke(nameof(StopWallJumping));
-
-            // Check if we are on a different wall than last jump
-            if (lastWallJumped != wallSide)
-            {
-                // Reset wall jumping ability since we switched walls
-                canWallJump = true;
-                lastWallJumped = wallSide;
-            }
-        }
-        else
-        {
-            wallJumpingCounter -= Time.deltaTime;
-        }
-
-        if (GetJumpInput() && wallJumpingCounter > 0f && canWallJump)
-        {
-            // TODO: make smoother, right now very janky feeling. When jumping from one wall to other, player very fast and then very slow. Hint: body.velocity.x (2f) 
-            Vector2 wallJumpingPower = new Vector2(2f, 7f);
-            isWallJumping = true;
-            body.velocity = new Vector2(wallJumpDirection * wallJumpingPower.x, wallJumpingPower.y);
-            // Disable jumping on the same wall again until we touch a new wall
-            canWallJump = false;
-            wallJumpingCounter = 0f;
-
-            if (transform.localScale.x != wallJumpDirection)
-            {
-                isFacingRight = !isFacingRight;
-                Vector3 localScale = transform.localScale;
-                localScale.x *= -1f;
-                transform.localScale = localScale;
-            }
-
-            Invoke(nameof(StopWallJumping), wallJumpDuration);
-        }
-    }
-
-    private void StopWallJumping()
-    {
-        isWallJumping = false;
-    }
 
     #region Initialization Methods
     /// <summary>
@@ -361,118 +204,106 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-    #region Input Handling Methods
-    /// <summary>
-    /// Handles horizontal movement input and updates the player's velocity accordingly.
-    /// </summary>
-    public void HandleMovementInput()
+    #region Movement Methods
+    private bool IsGrounded()
     {
-        // float horizontalInput = GetHorizontalInput();
-        // // // Update the animator's parameters
-        // bool isWalking = horizontalInput != 0;
-        // bool isCrouchWalking = isCrouching && isWalking;
-
-        // // // Adjust speed if crouching
-        // float currentSpeed = speed;
-
-        // if (isCrouching)
-        // {
-        //     currentSpeed *= 0.5f; // Half speed when crouching
-        //     animator.SetBool("crouch_walking", isCrouchWalking);
-        //     animator.SetBool("crouch", isCrouching && !isWalking);
-        // }
-
-        // if (isWallJumping)
-        // {
-        //     // Prevent horizontal movement input from overriding the wall jump
-        //     if (Time.time > wallJumpStartTime + wallJumpDuration)
-        //     {
-        //         isWallJumping = false;
-        //     }
-        // }
-        // else if ((wallColliderLeft != null || wallColliderRight != null) && !grounded && body.velocity.y < 0)
-        // if ((wallColliderLeft != null || wallColliderRight != null) && !grounded && body.velocity.y < 0)
-        // {
-        //     // Player is wall sliding
-        //     body.velocity = new Vector2(body.velocity.x, -wallSlideSpeed);
-
-        //     // Allow player to move away from the wall
-        //     if ((wallColliderLeft != null && horizontalInput > 0) || (wallColliderRight != null && horizontalInput < 0))
-        //     {
-        //         // Player moves away from the wall
-        //         body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
-
-        //         // Flip player sprite based on input direction
-        //         if (horizontalInput > 0.01f && facingDirection == -1)
-        //         {
-        //             FlipPlayer();
-        //         }
-        //         else if (horizontalInput < -0.01f && facingDirection == 1)
-        //         {
-        //             FlipPlayer();
-        //         }
-        //     }
-        // }
-        // else
-        // {
-        // Normal horizontal movement
-        // body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
-
-        // Flip player sprite based on input direction
-        // if (horizontalInput > 0.01f && facingDirection == -1)
-        // {
-        //     FlipPlayer();
-        // }
-        // else if (horizontalInput < -0.01f && facingDirection == 1)
-        // {
-        //     FlipPlayer();
-        // }
-        // }
-
-        // Update the animator's parameters
-        // animator.SetBool("run", horizontalInput != 0);
+        grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundAndWallLayer);
+        animator.SetBool("grounded", grounded);
+        return grounded;
     }
 
-    /// <summary>
-    /// Handles jump input and performs regular jumps, double jumps, and wall jumps.
-    /// </summary>
-    public void HandleJumpInput()
+    private bool IsWalled()
     {
-        if (GetJumpInput() && !isCrouching)
-        {
-            if (grounded)
-            {
-                // Perform a regular jump
-                body.velocity = new Vector2(body.velocity.x, jumpPower);
-                animator.SetTrigger("jump");
-                grounded = false;
-                // jumpCounter = possibleJumps - 1; // Decrease jump counter
-                // isWallJumping = false;
-                // lastWallJumpedFrom = null;
-            }
-            // else if ((wallColliderLeft != null || wallColliderRight != null) && !isWallJumping)
-            // else if (wallColliderLeft != null || wallColliderRight != null)
-            // {
-            //     // Determine current wall collider
-            //     Collider2D currentWall = wallColliderLeft != null ? wallColliderLeft : wallColliderRight;
+        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
+    }
 
-            //     // Check if the current wall is different from the last wall jumped from
-            //     if (currentWall != null && currentWall != lastWallJumpedFrom)
-            //     {
-            //         // Perform a wall jump
-            //         WallJump(currentWall);
-            //         animator.SetTrigger("jump");
-            //     }
-            // }
-            else if (jumpCounter > 0)
+    private void WallSlide()
+    {
+        if (IsWalled() && !grounded && horizontal != 0f)
+        {
+            isWallSliding = true;
+            // Determine the wall side (1 for right wall, -1 for left wall)
+            wallSide = transform.localScale.x > 0 ? 1 : -1;
+            body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlideSpeed, float.MaxValue));
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+    }
+
+    private void WallJump()
+    {
+        if (isWallSliding)
+        {
+            wallJumpDirection = -wallSide;
+            wallJumpingCounter = wallJumpingTime;
+
+            CancelInvoke(nameof(StopWallJumping));
+
+            // Check if we are on a different wall than last jump
+            if (lastWallJumped != wallSide)
             {
-                // Perform a double jump
-                body.velocity = new Vector2(body.velocity.x, jumpPower);
-                jumpCounter--;
-                animator.SetTrigger("jump");
+                // Reset wall jumping ability since we switched walls
+                canWallJump = true;
+                lastWallJumped = wallSide;
             }
         }
-        animator.SetBool("grounded", grounded);
+        else
+        {
+            wallJumpingCounter -= Time.deltaTime;
+        }
+
+        if (GetJumpInput() && wallJumpingCounter > 0f && canWallJump)
+        {
+            // TODO: make smoother, right now very janky feeling. When jumping from one wall to other, player very fast and then very slow. Hint: body.velocity.x (2f) 
+            Vector2 wallJumpingPower = new Vector2(2f, 7f);
+            isWallJumping = true;
+            body.velocity = new Vector2(wallJumpDirection * wallJumpingPower.x, wallJumpingPower.y);
+            // Disable jumping on the same wall again until we touch a new wall
+            canWallJump = false;
+            wallJumpingCounter = 0f;
+
+            if (transform.localScale.x != wallJumpDirection)
+            {
+                isFacingRight = !isFacingRight;
+                Vector3 localScale = transform.localScale;
+                localScale.x *= -1f;
+                transform.localScale = localScale;
+            }
+
+            Invoke(nameof(StopWallJumping), wallJumpDuration);
+        }
+    }
+
+    private void StopWallJumping()
+    {
+        isWallJumping = false;
+    }
+    #endregion
+
+    #region Input Handling Methods
+    private void HandleJumpInput()
+    {
+        if (GetJumpInput())
+        {
+            animator.SetTrigger("jump"); // Play jump animation on first jump
+            if (IsGrounded())
+            {
+                // First jump
+                // TODO: jumpPower is not initialized anywhere!
+                body.velocity = new Vector2(body.velocity.x, jumpPower);
+                isDoubleJumping = false; // Reset double jump for the next jump
+            }
+            else if (!isDoubleJumping)
+            {
+                // Double jump
+                // TODO: jumpPower is not initialized anywhere!
+                body.velocity = new Vector2(body.velocity.x, jumpPower);
+                isDoubleJumping = true; // Set double jump flag to prevent further jumps
+                animator.SetBool("grounded", IsGrounded());
+            }
+        }
     }
 
     /// <summary>
@@ -493,21 +324,6 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleCrouchInput()
     {
-        // if (GetCrouchInput())
-        // {
-        //     if (isCrouching)
-        //     {
-        // if (grounded)
-        // {
-        //     bool isWalking = GetHorizontalInput() != 0;
-        //     print("isWalking: "+isWalking);
-        //     bool isCrouchWalking = isCrouching && isWalking;
-        //     body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
-        //     animator.SetBool("crouch_walking", isCrouchWalking);
-        // }
-        //     }
-        // }
-
         if (GetCrouchInput())
         {
             if (!isCrouching)
@@ -518,26 +334,6 @@ public class PlayerMovement : MonoBehaviour
                 boxCollider.offset = crouchingOffset;
                 isCrouching = true;
                 animator.SetBool("crouch", true);
-
-                // bool isWalking = GetHorizontalInput() != 0;
-                //print("isWalking: " + isWalking);
-                // bool isCrouchWalking = isCrouching && isWalking;
-                // bool isCrouchWalking = isCrouching && GetHorizontalInput() != 0;
-                // print("isCrouchWalking: " + isCrouchWalking);
-
-
-                // animator.SetBool("crouch", true);
-                //animator.SetBool("crouch_walking", isCrouchWalking);
-                // if (GetHorizontalInput() != 0 && isCrouching)
-                // {
-                //     print("we should be crouch walking");
-                //     animator.SetBool("crouch_walking", true);
-                // }
-                // else
-                // {
-                //     print("just crouching, else block");
-                //     animator.SetBool("crouch", true);
-                // }
             }
         }
         else
@@ -553,49 +349,7 @@ public class PlayerMovement : MonoBehaviour
                 animator.SetBool("crouch_walking", false);
             }
         }
-
-
     }
-    #endregion
-
-    #region Collision Methods
-    /// <summary>
-    /// Called when the player collides with another collider.
-    /// Used to detect when the player lands on the ground.
-    /// </summary>
-    /// <param name="collision">Collision data.</param>
-    // public void OnCollisionEnter2D(Collision2D collision)
-    // {
-    //     int collisionLayer = collision.gameObject.layer;
-
-    //     // Check if the collision is with the ground layer
-    //     if ((groundLayer.value & (1 << collisionLayer)) != 0)
-    //     {
-    //         // Player has landed on the ground
-    //         grounded = true;
-    //         jumpCounter = possibleJumps; // Reset jump counter
-    //         isWallJumping = false;
-    //         lastWallJumpedFrom = null;
-    //     }
-    // }
-
-    /// <summary>
-    /// Called when the player stops colliding with another collider.
-    /// Used to detect when the player leaves the ground.
-    /// </summary>
-    /// <param name="collision">Collision data.</param>
-    // public void OnCollisionExit2D(Collision2D collision)
-    // {
-    //     int collisionLayer = collision.gameObject.layer;
-
-    //     // Check if the collision was with the ground layer
-    //     if ((groundLayer.value & (1 << collisionLayer)) != 0)
-    //     {
-    //         // Player has left the ground
-    //         grounded = false;
-    //     }
-    //     // Note: We do not reset lastWallJumpedFrom when leaving the wall to prevent infinite wall jumps
-    // }
     #endregion
 
     #region Dash Coroutine
@@ -640,75 +394,6 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-    #region Wall Methods
-    /// <summary>
-    /// Checks if the player is touching a wall on the left or right side.
-    /// Updates wall colliders accordingly.
-    /// </summary>
-    private void CheckWallTouch()
-    {
-        // Cast a box collider to the left to detect walls
-        RaycastHit2D raycastHitLeft = Physics2D.BoxCast(
-            boxCollider.bounds.center,
-            boxCollider.bounds.size,
-            0f,
-            Vector2.left,
-            0.1f,
-            wallLayer);
-
-        // Cast a box collider to the right to detect walls
-        RaycastHit2D raycastHitRight = Physics2D.BoxCast(
-            boxCollider.bounds.center,
-            boxCollider.bounds.size,
-            0f,
-            Vector2.right,
-            0.1f,
-            wallLayer);
-
-        // Update wall colliders based on collision results
-        wallColliderLeft = raycastHitLeft.collider;
-        wallColliderRight = raycastHitRight.collider;
-    }
-
-    /// <summary>
-    /// Performs a wall jump by applying a force away from the wall and flipping the player's direction.
-    /// </summary>
-    /// <param name="currentWall">The wall collider from which the player is jumping.</param>
-    private void WallJump(Collider2D currentWall)
-    {
-        // Apply a force away from the wall
-        float horizontalForce = -facingDirection * wallJumpX;
-        Vector2 force = new Vector2(horizontalForce, jumpPower);
-        body.velocity = Vector2.zero; // Reset current velocity
-        body.AddForce(force, ForceMode2D.Impulse);
-
-        // Immediately flip the player's facing direction
-        //FlipPlayer();
-
-        grounded = false;
-        isWallJumping = true;
-        wallJumpStartTime = Time.time;
-
-        lastWallJumpedFrom = currentWall; // Store the wall we just jumped from
-
-        // Reset jump counter after wall jump to allow double jump
-        jumpCounter = possibleJumps - 1;
-    }
-
-    /// <summary>
-    /// Flips the player's facing direction and updates the sprite accordingly.
-    /// </summary>
-    // private void FlipPlayer()
-    // {
-    //     // Invert the facing direction
-    //     facingDirection *= -1;
-
-    //     // Flip the player's sprite by inverting the x scale
-    //     Vector3 scaler = transform.localScale;
-    //     scaler.x *= -1;
-    //     transform.localScale = scaler;
-    // }
-
     private void Flip()
     {
         if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
@@ -719,7 +404,6 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = localScale;
         }
     }
-    #endregion
 
     #region Input Methods
     // These methods abstract input retrieval, making it easier to modify or mock inputs for testing

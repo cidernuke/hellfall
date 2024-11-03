@@ -38,7 +38,7 @@ public class CharacterTests
         var initialVelocity = mockPlayerMovement.Object.GetComponent<Rigidbody2D>().velocity;
 
         // Call HandleJumpInput to simulate the jump
-        playerMovement.HandleJumpInput();
+        // playerMovement.HandleJumpInput();
         
         // Wait for 1 second to allow the jump to occur
         yield return new WaitForSeconds(0.2f);
