@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 /// <summary>
 /// Handles player movement, including walking, jumping, double jumping, wall jumping, wall sliding, dashing, and crouching.
@@ -10,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     #region Layer Masks
     // Layer masks to identify ground and wall layers for collision detection
     [SerializeField] private LayerMask wallLayer;
+    private LayerMask groundAndWallLayer;
     // private LayerMask groundLayer;
     #endregion
 
@@ -23,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     // Movement flags and variables
     public bool grounded;
-    [SerializeField] private float speed;       // Horizontal movement speed
+    [SerializeField] private static float speed = 10f;  // Horizontal movement speed
     [SerializeField] private float jumpPower;   // Vertical jump force
 
     private int facingDirection = 1; // 1 for facing right, -1 for facing left
@@ -52,14 +54,14 @@ public class PlayerMovement : MonoBehaviour
     private int wallSide;
     private int lastWallJumped = 0;
     private bool canWallJump = true;
-    private bool doubleJump;
+    private bool isDoubleJumping;
     private bool isWallJumping;
     private float wallJumpDirection;
     private float wallJumpingTime = 0.2f;
     private float wallJumpingCounter;
     private float wallJumpDuration = 0.4f;  // Duration during which horizontal input is ignored after a wall jump
     // private float wallJumpDuration = 0.2f;  // Duration during which horizontal input is ignored after a wall jump
-    private Vector2 wallJumpingPower = new Vector2(4f, 10f);
+    // private Vector2 wallJumpingPower = new Vector2(body.velocity.x, 10f);
     private float wallJumpStartTime;         // Time when the wall jump started
     #endregion
 
@@ -78,6 +80,7 @@ public class PlayerMovement : MonoBehaviour
     // Crouching mechanics
     [SerializeField] private Sprite standing;  // Sprite used when standing
     [SerializeField] private Sprite crouching; // Sprite used when crouching
+    [SerializeField] private float crouchSpeed = speed / 2;
 
     private Vector2 standingSize;    // Collider size when standing
     private Vector2 crouchingSize;   // Collider size when crouching
@@ -106,7 +109,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void Update()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
+        horizontal = GetHorizontalInput();
+        //horizontal = Input.GetAxisRaw("Horizontal");
         if (isDashing)
         {
             // Skip the rest of the update while dashing
@@ -115,29 +119,18 @@ public class PlayerMovement : MonoBehaviour
 
         if (IsGrounded())
         {
-            doubleJump = false;
+            isDoubleJumping = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            print("entered jump && grounded, doublejump: "+doubleJump);
-            if (IsGrounded() || !doubleJump)
-            {
-                print("entered grounded: "+grounded+ " || doublejump: "+doubleJump);
-                body.velocity = new Vector2(body.velocity.x, jumpPower);
 
-                doubleJump = !doubleJump;
-            }
-        }
-        
-
+        HandleJump();
         WallSlide();
         WallJump();
 
-        HandleMovementInput();
+        // HandleMovementInput();
         // HandleJumpInput();
         HandleDashInput();
-        HandleCrouchInput();
+        // HandleCrouchInput();
 
         if (!isWallJumping)
         {
@@ -150,13 +143,82 @@ public class PlayerMovement : MonoBehaviour
         if (!isWallJumping)
         {
             body.velocity = new Vector2(horizontal * speed, body.velocity.y);
+            bool isWalking = GetHorizontalInput() != 0;
+            animator.SetBool("run", isWalking);
+            HandleCrouchInput();
+            bool isCrouchWalking = isWalking && isCrouching;
+
+            animator.SetBool("crouch", !isCrouchWalking && isCrouching);
+            animator.SetBool("crouch_walking", isCrouchWalking);
+
+            if (IsGrounded() && isCrouchWalking)
+            {
+                print("grounded: " + IsGrounded());
+                print("crouchSpeed: " + crouchSpeed + ", normal speed: " + speed);
+                body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
+            }
+
+            // if (isWalking && isCrouching)
+            // {
+            //     print("we should be crouch walking");
+            //     // bool isCrouchWalking = isCrouching && isWalking;
+            //     animator.SetBool("crouch", false);
+            //     animator.SetBool("crouch_walking", isWalking);
+            // }
+            // else if (!isWalking && isCrouching)
+            // {
+            //     animator.SetBool("crouch", true);
+            //     animator.SetBool("crouch_walking", !isWalking);
+            // }
         }
     }
+
+    private void HandleJump()
+    {
+        // if (GetJumpInput())
+        // {
+        //     animator.SetTrigger("jump");
+        //     print("first input");
+        //     if (IsGrounded() || !isDoubleJumping)
+        //     {
+        //         print("second input");
+        //         body.velocity = new Vector2(body.velocity.x, jumpPower);
+
+        //         // Limits doublejump to 2. If not present, player can infinatly jump!
+        //         isDoubleJumping = !isDoubleJumping;
+        //         animator.SetTrigger("jump");
+        //     }
+        // }
+
+        if (GetJumpInput())
+        {
+            animator.SetTrigger("jump");  // Play jump animation on first jump
+            if (IsGrounded())
+            {
+                // First jump
+                print("if statement");
+                body.velocity = new Vector2(body.velocity.x, jumpPower);
+                isDoubleJumping = false;      // Reset double jump for the next jump
+            }
+            else if (!isDoubleJumping)
+            {
+                // Double jump
+                print("else statement");
+                body.velocity = new Vector2(body.velocity.x, jumpPower);
+                // animator.SetTrigger("jump");  // Play jump animation on double jump
+                isDoubleJumping = true;       // Set double jump flag to prevent further jumps
+                animator.SetBool("grounded", IsGrounded());
+            }
+        }
+    }
+
     #endregion
 
     private bool IsGrounded()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundAndWallLayer);
+        animator.SetBool("grounded", grounded);
+        return grounded;
     }
 
     private bool IsWalled()
@@ -168,7 +230,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (IsWalled() && !grounded && horizontal != 0f)
         {
-            // print("isWallSliding = true");
             isWallSliding = true;
             // Determine the wall side (1 for right wall, -1 for left wall)
             wallSide = transform.localScale.x > 0 ? 1 : -1;
@@ -205,20 +266,18 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             wallJumpingCounter -= Time.deltaTime;
-            // print("wallJumpingCounter on updating when !sliding: "+wallJumpingCounter);
         }
 
-        
-        // print("facing direction before jump: "+facingDirection);
-        if (Input.GetKeyDown(KeyCode.Space) && wallJumpingCounter > 0f && canWallJump)
+        if (GetJumpInput() && wallJumpingCounter > 0f && canWallJump)
         {
+            // TODO: make smoother, right now very janky feeling. When jumping from one wall to other, player very fast and then very slow. Hint: body.velocity.x (2f) 
+            Vector2 wallJumpingPower = new Vector2(2f, 7f);
             isWallJumping = true;
             body.velocity = new Vector2(wallJumpDirection * wallJumpingPower.x, wallJumpingPower.y);
             // Disable jumping on the same wall again until we touch a new wall
             canWallJump = false;
             wallJumpingCounter = 0f;
 
-            print("transform.localScale.x: "+transform.localScale.x+", wallJumpDirection: "+wallJumpDirection);
             if (transform.localScale.x != wallJumpDirection)
             {
                 isFacingRight = !isFacingRight;
@@ -266,6 +325,7 @@ public class PlayerMovement : MonoBehaviour
     {
         wallLayer = LayerMask.GetMask("Wall");
         groundLayer = LayerMask.GetMask("Ground");
+        groundAndWallLayer = groundLayer | wallLayer;
     }
 
     /// <summary>
@@ -307,20 +367,20 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleMovementInput()
     {
-        float horizontalInput = GetHorizontalInput();
-        // Update the animator's parameters
-        bool isWalking = horizontalInput != 0;
-        bool isCrouchWalking = isCrouching && isWalking;
+        // float horizontalInput = GetHorizontalInput();
+        // // // Update the animator's parameters
+        // bool isWalking = horizontalInput != 0;
+        // bool isCrouchWalking = isCrouching && isWalking;
 
-        // Adjust speed if crouching
-        float currentSpeed = speed;
+        // // // Adjust speed if crouching
+        // float currentSpeed = speed;
 
-        if (isCrouching)
-        {
-            currentSpeed *= 0.5f; // Half speed when crouching
-            animator.SetBool("crouch_walking", isCrouchWalking);
-            animator.SetBool("crouch", isCrouching && !isWalking);
-        }
+        // if (isCrouching)
+        // {
+        //     currentSpeed *= 0.5f; // Half speed when crouching
+        //     animator.SetBool("crouch_walking", isCrouchWalking);
+        //     animator.SetBool("crouch", isCrouching && !isWalking);
+        // }
 
         // if (isWallJumping)
         // {
@@ -370,7 +430,7 @@ public class PlayerMovement : MonoBehaviour
         // }
 
         // Update the animator's parameters
-        animator.SetBool("run", horizontalInput != 0);
+        // animator.SetBool("run", horizontalInput != 0);
     }
 
     /// <summary>
@@ -433,7 +493,20 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleCrouchInput()
     {
-        float horizontalInput = GetHorizontalInput();
+        // if (GetCrouchInput())
+        // {
+        //     if (isCrouching)
+        //     {
+        // if (grounded)
+        // {
+        //     bool isWalking = GetHorizontalInput() != 0;
+        //     print("isWalking: "+isWalking);
+        //     bool isCrouchWalking = isCrouching && isWalking;
+        //     body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
+        //     animator.SetBool("crouch_walking", isCrouchWalking);
+        // }
+        //     }
+        // }
 
         if (GetCrouchInput())
         {
@@ -446,6 +519,25 @@ public class PlayerMovement : MonoBehaviour
                 isCrouching = true;
                 animator.SetBool("crouch", true);
 
+                // bool isWalking = GetHorizontalInput() != 0;
+                //print("isWalking: " + isWalking);
+                // bool isCrouchWalking = isCrouching && isWalking;
+                // bool isCrouchWalking = isCrouching && GetHorizontalInput() != 0;
+                // print("isCrouchWalking: " + isCrouchWalking);
+
+
+                // animator.SetBool("crouch", true);
+                //animator.SetBool("crouch_walking", isCrouchWalking);
+                // if (GetHorizontalInput() != 0 && isCrouching)
+                // {
+                //     print("we should be crouch walking");
+                //     animator.SetBool("crouch_walking", true);
+                // }
+                // else
+                // {
+                //     print("just crouching, else block");
+                //     animator.SetBool("crouch", true);
+                // }
             }
         }
         else
@@ -458,7 +550,7 @@ public class PlayerMovement : MonoBehaviour
                 boxCollider.offset = standingOffset;
                 isCrouching = false;
                 animator.SetBool("crouch", false);
-
+                animator.SetBool("crouch_walking", false);
             }
         }
 
