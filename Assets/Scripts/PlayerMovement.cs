@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using UnityEditor.Callbacks;
-using UnityEditor.ShaderGraph.Drawing.Inspector.PropertyDrawers;
 
 /// <summary>
 /// Handles player movement, including walking, jumping, double jumping, wall jumping, wall sliding, dashing, and crouching.
