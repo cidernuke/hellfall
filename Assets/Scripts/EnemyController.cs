@@ -16,11 +16,15 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private LayerMask playerLayer;
     private float cooldownTimer = Mathf.Infinity;
 
+    // References
     private Animator anim;
+    private HealthSystem playerHealth;
+    private EnemyPatrol enemyPatrol;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
+        enemyPatrol = GetComponentInParent<EnemyPatrol>();
     }
 
     // Update is called once per frame
@@ -40,6 +44,11 @@ public class EnemyController : MonoBehaviour
             }
         }
 
+        if(enemyPatrol != null)
+        {
+            enemyPatrol.enabled = !PlayerInSight();
+        }
+
     }
     /*
     * --PlayerInSight()-- 
@@ -53,6 +62,10 @@ public class EnemyController : MonoBehaviour
             new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z),
             0, Vector2.left, 0, playerLayer);
 
+        if(hit.collider != null)
+        {
+            playerHealth = hit.transform.GetComponent<HealthSystem>();
+        }
         return hit.collider != null;
     }
 
@@ -65,5 +78,17 @@ public class EnemyController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(boxCollider.bounds.center - transform.right * range * transform.localScale.x * colliderDistance,
             new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z));
+    }
+
+    /*
+    * --DamagePlayer()--
+    * If Player is in Sight, the Player takes damage.
+    **/
+    private void DamagePlayer()
+    {
+        if(PlayerInSight())
+        {
+            playerHealth.TakeDamage(damage);
+        }
     }
 }
