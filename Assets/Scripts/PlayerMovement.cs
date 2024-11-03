@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     #region Layer Masks
     // Layer masks to identify ground and wall layers for collision detection
     [SerializeField] private LayerMask wallLayer;
-    private LayerMask groundLayer;
+    // private LayerMask groundLayer;
     #endregion
 
     #region Movement Variables
@@ -47,13 +47,19 @@ public class PlayerMovement : MonoBehaviour
     private Collider2D lastWallJumpedFrom = null;
 
     // private bool isWallJumping = false;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private LayerMask groundLayer;
+    private int wallSide;
+    private int lastWallJumped = 0;
+    private bool canWallJump = true;
+    private bool doubleJump;
     private bool isWallJumping;
     private float wallJumpDirection;
     private float wallJumpingTime = 0.2f;
     private float wallJumpingCounter;
     private float wallJumpDuration = 0.4f;  // Duration during which horizontal input is ignored after a wall jump
     // private float wallJumpDuration = 0.2f;  // Duration during which horizontal input is ignored after a wall jump
-    private Vector2 wallJumpingPower = new Vector2(8f, 16f);
+    private Vector2 wallJumpingPower = new Vector2(4f, 10f);
     private float wallJumpStartTime;         // Time when the wall jump started
     #endregion
 
@@ -107,13 +113,29 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        // CheckWallTouch();
+        if (IsGrounded())
+        {
+            doubleJump = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            print("entered jump && grounded, doublejump: "+doubleJump);
+            if (IsGrounded() || !doubleJump)
+            {
+                print("entered grounded: "+grounded+ " || doublejump: "+doubleJump);
+                body.velocity = new Vector2(body.velocity.x, jumpPower);
+
+                doubleJump = !doubleJump;
+            }
+        }
+        
 
         WallSlide();
         WallJump();
 
         HandleMovementInput();
-        HandleJumpInput();
+        // HandleJumpInput();
         HandleDashInput();
         HandleCrouchInput();
 
@@ -132,6 +154,11 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
+    private bool IsGrounded()
+    {
+        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+    }
+
     private bool IsWalled()
     {
         return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
@@ -139,12 +166,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void WallSlide()
     {
-        if (IsWalled() && !grounded && GetHorizontalInput() != 0f)
+        if (IsWalled() && !grounded && horizontal != 0f)
         {
             // print("isWallSliding = true");
             isWallSliding = true;
+            // Determine the wall side (1 for right wall, -1 for left wall)
+            wallSide = transform.localScale.x > 0 ? 1 : -1;
+            // print("wall side in wallslide: "+wallSide);
             body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlideSpeed, float.MaxValue));
-        } else
+        }
+        else
         {
             // print("isWallSliding = false");
             isWallSliding = false;
@@ -156,28 +187,41 @@ public class PlayerMovement : MonoBehaviour
         // print("wallJumpingCounter on entering: "+wallJumpingCounter);
         if (isWallSliding)
         {
-            isWallJumping = false;
-            wallJumpDirection = -transform.localScale.x;
+            // isWallJumping = false;
+            // wallJumpDirection = -transform.localScale.x;
+            wallJumpDirection = -wallSide;
             wallJumpingCounter = wallJumpingTime;
 
             CancelInvoke(nameof(StopWallJumping));
-        } else
+
+            // Check if we are on a different wall than last jump
+            if (lastWallJumped != wallSide)
+            {
+                // Reset wall jumping ability since we switched walls
+                canWallJump = true;
+                lastWallJumped = wallSide;
+            }
+        }
+        else
         {
             wallJumpingCounter -= Time.deltaTime;
             // print("wallJumpingCounter on updating when !sliding: "+wallJumpingCounter);
         }
 
-        // TODO: problem lies somewhere here. It also interferes with wall sliding. Why can i only jump twice?
-        if (GetJumpInput() && wallJumpingCounter > 0f)
+        
+        // print("facing direction before jump: "+facingDirection);
+        if (Input.GetKeyDown(KeyCode.Space) && wallJumpingCounter > 0f && canWallJump)
         {
-            print("i should see this max twice.");
             isWallJumping = true;
             body.velocity = new Vector2(wallJumpDirection * wallJumpingPower.x, wallJumpingPower.y);
+            // Disable jumping on the same wall again until we touch a new wall
+            canWallJump = false;
             wallJumpingCounter = 0f;
 
+            print("transform.localScale.x: "+transform.localScale.x+", wallJumpDirection: "+wallJumpDirection);
             if (transform.localScale.x != wallJumpDirection)
             {
-                facingDirection = -1;
+                isFacingRight = !isFacingRight;
                 Vector3 localScale = transform.localScale;
                 localScale.x *= -1f;
                 transform.localScale = localScale;
@@ -311,18 +355,18 @@ public class PlayerMovement : MonoBehaviour
         // }
         // else
         // {
-            // Normal horizontal movement
-            // body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
+        // Normal horizontal movement
+        // body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
 
-            // Flip player sprite based on input direction
-            // if (horizontalInput > 0.01f && facingDirection == -1)
-            // {
-            //     FlipPlayer();
-            // }
-            // else if (horizontalInput < -0.01f && facingDirection == 1)
-            // {
-            //     FlipPlayer();
-            // }
+        // Flip player sprite based on input direction
+        // if (horizontalInput > 0.01f && facingDirection == -1)
+        // {
+        //     FlipPlayer();
+        // }
+        // else if (horizontalInput < -0.01f && facingDirection == 1)
+        // {
+        //     FlipPlayer();
+        // }
         // }
 
         // Update the animator's parameters
@@ -416,7 +460,7 @@ public class PlayerMovement : MonoBehaviour
                 animator.SetBool("crouch", false);
 
             }
-        }        
+        }
 
 
     }
@@ -428,38 +472,38 @@ public class PlayerMovement : MonoBehaviour
     /// Used to detect when the player lands on the ground.
     /// </summary>
     /// <param name="collision">Collision data.</param>
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        int collisionLayer = collision.gameObject.layer;
+    // public void OnCollisionEnter2D(Collision2D collision)
+    // {
+    //     int collisionLayer = collision.gameObject.layer;
 
-        // Check if the collision is with the ground layer
-        if ((groundLayer.value & (1 << collisionLayer)) != 0)
-        {
-            // Player has landed on the ground
-            grounded = true;
-            jumpCounter = possibleJumps; // Reset jump counter
-            isWallJumping = false;
-            lastWallJumpedFrom = null;
-        }
-    }
+    //     // Check if the collision is with the ground layer
+    //     if ((groundLayer.value & (1 << collisionLayer)) != 0)
+    //     {
+    //         // Player has landed on the ground
+    //         grounded = true;
+    //         jumpCounter = possibleJumps; // Reset jump counter
+    //         isWallJumping = false;
+    //         lastWallJumpedFrom = null;
+    //     }
+    // }
 
     /// <summary>
     /// Called when the player stops colliding with another collider.
     /// Used to detect when the player leaves the ground.
     /// </summary>
     /// <param name="collision">Collision data.</param>
-    public void OnCollisionExit2D(Collision2D collision)
-    {
-        int collisionLayer = collision.gameObject.layer;
+    // public void OnCollisionExit2D(Collision2D collision)
+    // {
+    //     int collisionLayer = collision.gameObject.layer;
 
-        // Check if the collision was with the ground layer
-        if ((groundLayer.value & (1 << collisionLayer)) != 0)
-        {
-            // Player has left the ground
-            grounded = false;
-        }
-        // Note: We do not reset lastWallJumpedFrom when leaving the wall to prevent infinite wall jumps
-    }
+    //     // Check if the collision was with the ground layer
+    //     if ((groundLayer.value & (1 << collisionLayer)) != 0)
+    //     {
+    //         // Player has left the ground
+    //         grounded = false;
+    //     }
+    //     // Note: We do not reset lastWallJumpedFrom when leaving the wall to prevent infinite wall jumps
+    // }
     #endregion
 
     #region Dash Coroutine
@@ -575,7 +619,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Flip()
     {
-        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
         {
             isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;
