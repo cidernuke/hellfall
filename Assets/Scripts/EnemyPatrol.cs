@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class EnemyPatrol : MonoBehaviour
 {
+    // for the merge
     [Header("Patrol Points")]
     [SerializeField] private Transform leftEdge;
     [SerializeField] private Transform rightEdge;
