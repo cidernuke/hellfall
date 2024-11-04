@@ -28,6 +28,7 @@ public class EnemyController : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
+        playerHealth  = GetComponent<HealthSystem>();
     }
 
     // Update is called once per frame
@@ -44,6 +45,7 @@ public class EnemyController : MonoBehaviour
             {
                 cooldownTimer = 0;
                 anim.SetTrigger("meleeAttack");
+                  
             }
         }
 
