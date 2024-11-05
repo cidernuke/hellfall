@@ -45,9 +45,14 @@ public class PlayerMovement : MonoBehaviour
     private float wallJumpingTime = 0.2f;
     private float wallJumpingCounter;
     private float wallJumpDuration = 0.4f;  // Duration during which horizontal input is ignored after a wall jump
-    
+
     // Double Jump
     private bool isDoubleJumping;
+
+    //Coyote Time
+    [SerializeField] private float coyoteTimeDuration = 0.2f;
+    private float lastTimeGrounded = -1f; // Set to -1 to prevent coyote time from triggering at game start
+    private bool coyoteUsable = true;
     #endregion
 
     #region Dash Variables
@@ -209,6 +214,18 @@ public class PlayerMovement : MonoBehaviour
     {
         grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundAndWallLayer);
         animator.SetBool("grounded", grounded);
+
+        // Store the last time the player touched the ground for coyote time
+        if (grounded)
+        {
+            lastTimeGrounded = Time.time;
+            coyoteUsable = true;
+        }
+        else if (coyoteUsable && Time.time > lastTimeGrounded + coyoteTimeDuration)
+        {
+            // If Coyote Time duration is exceeded, disable its usability
+            coyoteUsable = false;
+        }
         return grounded;
     }
 
@@ -288,12 +305,15 @@ public class PlayerMovement : MonoBehaviour
         if (GetJumpInput())
         {
             animator.SetTrigger("jump"); // Play jump animation on first jump
-            if (IsGrounded())
+
+            //Checks
+            if (IsGrounded() || CanUseCoyote())
             {
                 // First jump
                 // TODO: jumpPower is not initialized anywhere!
                 body.velocity = new Vector2(body.velocity.x, jumpPower);
                 isDoubleJumping = false; // Reset double jump for the next jump
+                coyoteUsable = false;
             }
             else if (!isDoubleJumping)
             {
@@ -305,6 +325,12 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
+    private bool CanUseCoyote()
+    {
+        return coyoteUsable && !grounded && Time.time < lastTimeGrounded + coyoteTimeDuration;
+    }
+
 
     /// <summary>
     /// Handles dash input and initiates the dash coroutine if possible.
