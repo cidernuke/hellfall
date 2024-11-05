@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 /// <summary>
 /// Handles player movement, including walking, jumping, double jumping, wall jumping, wall sliding, dashing, and crouching.
@@ -30,6 +31,11 @@ public class PlayerMovement : MonoBehaviour
 
     private int facingDirection = 1; // 1 for facing right, -1 for facing left, affects the player
     private bool isFacingRight = true;
+
+    //Fall variables --> HandleGravity is commented out due to problems, for explanation look at HandleGravity()
+    //[SerializeField] private float maxFallSpeed = 20f;
+    //[SerializeField] private float fallAcceleration = 2.5f; //Acceleration during the Fall
+
     #endregion
 
     #region Jumping Variables
@@ -140,6 +146,8 @@ public class PlayerMovement : MonoBehaviour
                 body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
             }
         }
+        //HandleGravity(); 
+        //ApplyMovement();
     }
     #endregion
 
@@ -297,6 +305,65 @@ public class PlayerMovement : MonoBehaviour
     {
         isWallJumping = false;
     }
+
+    private void Flip()
+    {
+        if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
+        }
+    }
+
+    private bool CanUseCoyote()
+    {
+        return coyoteUsable && !grounded && Time.time < lastTimeGrounded + coyoteTimeDuration;
+    }
+
+    // The HandleGravity method is intended to control the player's falling speed 
+    // by applying fall acceleration and capping it at a defined max fall speed.
+    // This should ensure smoother and more controlled falling behavior.
+    // It is currently commented out due to issues with other parts of the code 
+    // overwriting body.velocity.y, leading to conflicts that prevent the fall speed 
+    // cap from working as intended.
+
+//     private void HandleGravity()
+//     {
+//         //If the player is grounded and falling (not sure if even necessary)
+//         // if(grounded && body.velocity.y >= 0f)
+//         // {
+//         //     //Set a small downward force to keep the player grounded (not sure if even necessary)
+//         //     body.velocity = new Vector2(body.velocity.x, -0.5f);
+//         // }
+//         // else
+//         // {
+//         //     //Apply fall acceleration and limit fall speed (Important for smooth falling)
+//         //     body.velocity = new Vector2(body.velocity.x, Mathf.MoveTowards(body.velocity.y, -maxFallSpeed, fallAcceleration* Time.fixedDeltaTime));
+//         // }
+
+//         // if(!grounded && body.velocity.y < 0f){
+//         //     body.velocity = new Vector2(body.velocity.x, Mathf.MoveTowards(body.velocity.y, -maxFallSpeed, fallAcceleration* Time.fixedDeltaTime));
+//         //     Debug.Log("Fallspeed (clamped): " + body.velocity.y + " / MaxFallSpeed: " + -maxFallSpeed);
+//         // }
+
+//         //float initialGravityScale = body.gravityScale;
+//         //body.gravityScale = 0;
+//         if(!grounded && body.velocity.y < 0f)
+//         {
+//             float newFallSpeed = Mathf.MoveTowards(body.velocity.y, -maxFallSpeed, fallAcceleration * Time.fixedDeltaTime);
+//             body.velocity = new Vector2(body.velocity.x, newFallSpeed);
+//             Debug.Log("Fallspeed (clamped): " + body.velocity.y + " / MaxFallSpeed: " + -maxFallSpeed);
+//         }
+//         //body.gravityScale = initialGravityScale;
+//     }
+
+//     private void ApplyMovement()
+// {
+//     // Apply the current velocity values calculated in other methods to the Rigidbody2D component
+//     body.velocity = new Vector2(body.velocity.x, body.velocity.y);
+// }
     #endregion
 
     #region Input Handling Methods
@@ -325,12 +392,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
-
-    private bool CanUseCoyote()
-    {
-        return coyoteUsable && !grounded && Time.time < lastTimeGrounded + coyoteTimeDuration;
-    }
-
 
     /// <summary>
     /// Handles dash input and initiates the dash coroutine if possible.
@@ -419,17 +480,6 @@ public class PlayerMovement : MonoBehaviour
         canDash = true;
     }
     #endregion
-
-    private void Flip()
-    {
-        if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
-        {
-            isFacingRight = !isFacingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
-            transform.localScale = localScale;
-        }
-    }
 
     #region Input Methods
     // These methods abstract input retrieval, making it easier to modify or mock inputs for testing
