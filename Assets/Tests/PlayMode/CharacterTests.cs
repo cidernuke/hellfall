@@ -8,112 +8,55 @@ using Moq;
 
 public class CharacterTests
 {
-   [UnityTest]
-   public IEnumerator PlayerCanJump()
-   {
-            // Load the scene
-        SceneManager.LoadScene("SampleScene");
-        // Wait for 3 seconds to allow the player to load and hit the ground
-        yield return new WaitForSeconds(3);
-        // Find the player GameObject
-        GameObject player = GameObject.Find("Player");
-        //add the movement
-        var playerMovement = player.AddComponent<PlayerMovement>();
-
-        // Get the initial position of the player
-        Vector3 initialPosition = player.transform.position;
-
-        // Mock the input to simulate jump input
-        var mockPlayerMovement = new Mock<PlayerMovement>();
-        mockPlayerMovement.Setup(m => m.GetJumpInput()).Returns(true);
-        
-        // Replace the original PlayerMovement component with the mocked one
-        player.AddComponent<PlayerMovement>();
-        playerMovement = mockPlayerMovement.Object;
-
-        // Set the grounded status to true to allow jumping
-        mockPlayerMovement.Object.grounded = true;
-
-        // Capture the initial vertical velocity
-        var initialVelocity = mockPlayerMovement.Object.GetComponent<Rigidbody2D>().velocity;
-
-        // Call HandleJumpInput to simulate the jump
-        // playerMovement.HandleJumpInput();
-        
-        // Wait for 1 second to allow the jump to occur
-        yield return new WaitForSeconds(0.2f);
-
-        // Get the new vertical velocity after calling HandleJumpInput
-        var newVelocity = mockPlayerMovement.Object.GetComponent<Rigidbody2D>().velocity;
-
-        // Assert that the vertical velocity has increased by jumpPower
-        Assert.AreEqual(initialVelocity.x, newVelocity.x, "Horizontal velocity should not change.");
-        Assert.Greater(newVelocity.y, initialVelocity.y, "Vertical velocity should increase due to jump.");
-
-
-        yield return null;
-
-   }
-   /*[UnityTest]
-    public IEnumerator PlayerMovesLeftWhenAPressed()
+    [UnityTest]
+    public IEnumerator PlayerCanJump()
     {
         // Load the scene
         SceneManager.LoadScene("SampleScene");
-        // Wait for 3 seconds to allow the player to load and hit the ground
-        yield return new WaitForSeconds(3);
+
+        // Wait until the scene is loaded
+        yield return null; // Wait for one frame to ensure the scene is loaded
 
         // Find the player GameObject
         GameObject player = GameObject.Find("Player");
-        PlayerMovment playerMovment = player.GetComponent<PlayerMovment>();
+        Assert.IsNotNull(player, "Player GameObject not found in the scene.");
 
-        // Get the initial position of the player
-        Vector3 initialPosition = player.transform.position;
+        // Get the PlayerMovement component
+        var playerMovement = player.GetComponent<PlayerMovement>();
+        Assert.IsNotNull(playerMovement, "PlayerMovement component not found on the Player GameObject.");
 
-        // Simulate "A" key press
-        var keyboard = InputSystem.AddDevice<Keyboard>();
-        Press(keyboard.aKey);
-        // Wait for 0.5 seconds to allow the player to move
-        yield return new WaitForSeconds(0.5f);
-        Release(keyboard.aKey);
+        // Create a mock input and assign it to the playerMovement
+        var mockInput = new MockPlayerInput();
+        playerMovement.playerInput = mockInput;
 
-        // Wait for a frame
+        // Ensure the player is grounded
+        playerMovement.grounded = true;
+
+        // Get the initial vertical position
+        var initialPositionY = player.transform.position.y;
+
+        // Simulate jump input by setting the jumpInput property to true
+        mockInput.jumpInput = true;
+
+        // Call Update to process the input
+        playerMovement.Update();
+
+        // Wait for FixedUpdate to process physics
+        yield return new WaitForFixedUpdate();
+
+        // Reset jump input
+        mockInput.jumpInput = false;
+
+        // Wait a few frames to allow the player to move upwards
+        yield return new WaitForSeconds(0.2f);
+
+        // Get the new vertical position after jumping
+        var newPositionY = player.transform.position.y;
+
+        // Assert that the vertical position has increased due to jump
+        Assert.Greater(newPositionY, initialPositionY, "Player should have moved upwards due to jump.");
+
         yield return null;
-
-        // Get the new position of the player
-        Vector3 newPosition = player.transform.position;
-
-        // Assert that the new position is to the left of the initial position
-        Assert.Less(newPosition.x, initialPosition.x);
     }
-   [UnityTest]
-   public IEnumerator PlayerMovesRightWhenDPressed()
-   {
-        // Load the scene
-        SceneManager.LoadScene("SampleScene");
-        // Wait for 3 seconds to allow the player to load and hit the ground
-        yield return new WaitForSeconds(3);
-
-        // Find the player GameObject
-        GameObject player = GameObject.Find("Player");
-        PlayerMovment playerMovment = player.GetComponent<PlayerMovment>();
-
-        // Get the initial position of the player
-        Vector3 initialPosition = player.transform.position;
-
-        // Simulate "D" key press
-        var keyboard = InputSystem.AddDevice<Keyboard>();
-        Press(keyboard.dKey);
-        // Wait for 0.5 seconds to allow the player to move
-        yield return new WaitForSeconds(0.5f);
-        Release(keyboard.dKey);
-
-        // Wait for a frame
-        yield return null;
-
-        // Get the new position of the player
-        Vector3 newPosition = player.transform.position;
-
-        // Assert that the new position is to the right of the initial position
-        Assert.Greater(newPosition.x, initialPosition.x);
-    }*/
 }
+

@@ -8,6 +8,8 @@ using System;
 /// </summary>
 public class PlayerMovement : MonoBehaviour
 {
+    public IPlayerInput playerInput;
+
     #region Layer Masks
     // Layer masks to identify ground and wall layers for collision detection
     [SerializeField] private LayerMask wallLayer;
@@ -92,6 +94,12 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void Awake()
     {
+        // If no input is assigned, use the default input implementation
+        if (playerInput == null)
+        {
+            playerInput = new PlayerInput();
+        }
+
         InitializeComponents();
         InitializeLayers();
         InitializeCrouchVariables();
@@ -104,7 +112,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void Update()
     {
-        horizontal = GetHorizontalInput();
+        horizontal = playerInput.GetHorizontalInput();
         if (isDashing)
         {
             // Skip the rest of the update while dashing
@@ -133,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
         if (!isWallJumping)
         {
             body.velocity = new Vector2(horizontal * speed, body.velocity.y);
-            bool isWalking = GetHorizontalInput() != 0;
+            bool isWalking = playerInput.GetHorizontalInput() != 0;
             animator.SetBool("run", isWalking);
             HandleCrouchInput();
             bool isCrouchWalking = isWalking && isCrouching;
@@ -279,7 +287,7 @@ public class PlayerMovement : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
-        if (GetJumpInput() && wallJumpingCounter > 0f && canWallJump)
+        if (playerInput.GetJumpInput() && wallJumpingCounter > 0f && canWallJump)
         {
             // TODO: make smoother, right now very janky feeling. When jumping from one wall to other, player very fast and then very slow. Hint: body.velocity.x (2f) 
             Vector2 wallJumpingPower = new Vector2(2f, 7f);
@@ -369,7 +377,7 @@ public class PlayerMovement : MonoBehaviour
     #region Input Handling Methods
     private void HandleJumpInput()
     {
-        if (GetJumpInput())
+        if (playerInput.GetJumpInput())
         {
             animator.SetTrigger("jump"); // Play jump animation on first jump
 
@@ -398,8 +406,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleDashInput()
     {
-        float horizontalInput = GetHorizontalInput();
-        if (GetDashInput() && canDash && horizontalInput != 0 && !isCrouching)
+        float horizontalInput = playerInput.GetHorizontalInput();
+        if (playerInput.GetDashInput() && canDash && horizontalInput != 0 && !isCrouching)
         {
             StartDash(horizontalInput);
             animator.SetTrigger("dash");
@@ -411,7 +419,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleCrouchInput()
     {
-        if (GetCrouchInput())
+        if (playerInput.GetCrouchInput())
         {
             if (!isCrouching)
             {
@@ -488,36 +496,36 @@ public class PlayerMovement : MonoBehaviour
     /// Retrieves horizontal input from the player.
     /// </summary>
     /// <returns>Float value between -1 and 1 representing horizontal input.</returns>
-    public virtual float GetHorizontalInput()
-    {
-        return Input.GetAxis("Horizontal");
-    }
+    // public virtual float GetHorizontalInput()
+    // {
+    //     return Input.GetAxis("Horizontal");
+    // }
 
     /// <summary>
     /// Checks if the jump input has been pressed.
     /// </summary>
     /// <returns>True if jump input is pressed this frame.</returns>
-    public virtual bool GetJumpInput()
-    {
-        return Input.GetKeyDown(KeyCode.Space);
-    }
+    // public virtual bool GetJumpInput()
+    // {
+    //     return Input.GetKeyDown(KeyCode.Space);
+    // }
 
     /// <summary>
     /// Checks if the dash input has been pressed.
     /// </summary>
     /// <returns>True if dash input is pressed this frame.</returns>
-    public virtual bool GetDashInput()
-    {
-        return Input.GetKeyDown(KeyCode.LeftShift);
-    }
+    // public virtual bool GetDashInput()
+    // {
+    //     return Input.GetKeyDown(KeyCode.LeftShift);
+    // }
 
     /// <summary>
     /// Checks if the crouch input is being held down.
     /// </summary>
     /// <returns>True if crouch input is held down.</returns>
-    public virtual bool GetCrouchInput()
-    {
-        return Input.GetKey(KeyCode.S);
-    }
+    // public virtual bool GetCrouchInput()
+    // {
+    //     return Input.GetKey(KeyCode.S);
+    // }
     #endregion
 }

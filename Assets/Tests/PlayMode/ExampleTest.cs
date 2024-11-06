@@ -8,45 +8,54 @@ using Moq; //very important!!
 
 public class ExampleTest
 {
-    [UnityTest]
-   public IEnumerator PlayerCanJump()
-   {
+   [UnityTest]
+    public IEnumerator TestExample()
+    {
         // Load the scene
         SceneManager.LoadScene("SampleScene");
-        // Wait for 3 seconds to allow the player to load and hit the ground
-        yield return new WaitForSeconds(3);
-        // Find the player GameObject
+
+        // Wait until the scene is loaded
+        yield return null; // Wait for one frame to ensure the scene is loaded
+
+        // Find the (player) GameObject
         GameObject player = GameObject.Find("Player");
+        Assert.IsNotNull(player, "Player GameObject not found in the scene.");
 
-        // Get the PlayerMovment component attached to the player GameObject
-        PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
+        // Get the (PlayerMovement) component
+        var playerMovement = player.GetComponent<PlayerMovement>();
+        Assert.IsNotNull(playerMovement, "PlayerMovement component not found on the Player GameObject.");
 
-        // Get the initial position of the player
-        Vector3 initialPosition = player.transform.position;
+        // Create a mock input and assign it to the playerMovement
+        var mockInput = new MockPlayerInput();
+        playerMovement.playerInput = mockInput;
 
-        //Mocking is the heart and soul of our tests, please look into this or just use chat lol
-        // Mock PlayerMovement and override GetJumpInput to return true
-        var mockPlayerMovement = new Mock<PlayerMovement>() { CallBase = true };
-        mockPlayerMovement.Setup(pm => pm.GetJumpInput()).Returns(true);
+        // Ensure the player is grounded
+        playerMovement.grounded = true;
 
-        // Assign mockPlayerMovement to the player GameObject
-        player.GetComponent<PlayerMovement>().enabled = false;
-        player.AddComponent(mockPlayerMovement.Object.GetType());
+        // Get the initial (vertical) position --> Depends on what you want to test
+        var initialPositionY = player.transform.position.y;
 
-        // Set the grounded status to true to allow jumping
-        mockPlayerMovement.Object.grounded = true;
+        // Simulate jump input by setting the jumpInput property to true
+        mockInput.jumpInput = true;
 
-        // Capture the initial vertical velocity
-        var initialVelocity = mockPlayerMovement.Object.GetComponent<Rigidbody2D>().velocity;
+        // Call Update to process the input
+        playerMovement.Update();
 
-        // Call HandleJumpInput to simulate the jump
-     //    mockPlayerMovement.Object.HandleJumpInput();
-        
-        // Wait for 1 second to allow the jump to occur
+        // Wait for FixedUpdate to process physics
+        yield return new WaitForFixedUpdate();
+
+        // Reset jump input
+        mockInput.jumpInput = false;
+
+        // Wait a few frames to allow the player to move upwards
         yield return new WaitForSeconds(0.2f);
 
-        // Assert that the player's y position has increased, indicating a jump
-        Assert.Greater(player.transform.position.y, initialPosition.y);
+        // Get the new vertical position after jumping
+        var newPositionY = player.transform.position.y;
 
-   }
+        // Assert that the vertical position has increased due to jump
+        Assert.Greater(newPositionY, initialPositionY, "Player should have moved upwards due to jump.");
+
+        yield return null;
+    }
 }
