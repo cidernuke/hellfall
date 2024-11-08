@@ -329,41 +329,41 @@ public class PlayerMovement : MonoBehaviour
     // overwriting body.velocity.y, leading to conflicts that prevent the fall speed 
     // cap from working as intended.
 
-//     private void HandleGravity()
-//     {
-//         //If the player is grounded and falling (not sure if even necessary)
-//         // if(grounded && body.velocity.y >= 0f)
-//         // {
-//         //     //Set a small downward force to keep the player grounded (not sure if even necessary)
-//         //     body.velocity = new Vector2(body.velocity.x, -0.5f);
-//         // }
-//         // else
-//         // {
-//         //     //Apply fall acceleration and limit fall speed (Important for smooth falling)
-//         //     body.velocity = new Vector2(body.velocity.x, Mathf.MoveTowards(body.velocity.y, -maxFallSpeed, fallAcceleration* Time.fixedDeltaTime));
-//         // }
+    //     private void HandleGravity()
+    //     {
+    //         //If the player is grounded and falling (not sure if even necessary)
+    //         // if(grounded && body.velocity.y >= 0f)
+    //         // {
+    //         //     //Set a small downward force to keep the player grounded (not sure if even necessary)
+    //         //     body.velocity = new Vector2(body.velocity.x, -0.5f);
+    //         // }
+    //         // else
+    //         // {
+    //         //     //Apply fall acceleration and limit fall speed (Important for smooth falling)
+    //         //     body.velocity = new Vector2(body.velocity.x, Mathf.MoveTowards(body.velocity.y, -maxFallSpeed, fallAcceleration* Time.fixedDeltaTime));
+    //         // }
 
-//         // if(!grounded && body.velocity.y < 0f){
-//         //     body.velocity = new Vector2(body.velocity.x, Mathf.MoveTowards(body.velocity.y, -maxFallSpeed, fallAcceleration* Time.fixedDeltaTime));
-//         //     Debug.Log("Fallspeed (clamped): " + body.velocity.y + " / MaxFallSpeed: " + -maxFallSpeed);
-//         // }
+    //         // if(!grounded && body.velocity.y < 0f){
+    //         //     body.velocity = new Vector2(body.velocity.x, Mathf.MoveTowards(body.velocity.y, -maxFallSpeed, fallAcceleration* Time.fixedDeltaTime));
+    //         //     Debug.Log("Fallspeed (clamped): " + body.velocity.y + " / MaxFallSpeed: " + -maxFallSpeed);
+    //         // }
 
-//         //float initialGravityScale = body.gravityScale;
-//         //body.gravityScale = 0;
-//         if(!grounded && body.velocity.y < 0f)
-//         {
-//             float newFallSpeed = Mathf.MoveTowards(body.velocity.y, -maxFallSpeed, fallAcceleration * Time.fixedDeltaTime);
-//             body.velocity = new Vector2(body.velocity.x, newFallSpeed);
-//             Debug.Log("Fallspeed (clamped): " + body.velocity.y + " / MaxFallSpeed: " + -maxFallSpeed);
-//         }
-//         //body.gravityScale = initialGravityScale;
-//     }
+    //         //float initialGravityScale = body.gravityScale;
+    //         //body.gravityScale = 0;
+    //         if(!grounded && body.velocity.y < 0f)
+    //         {
+    //             float newFallSpeed = Mathf.MoveTowards(body.velocity.y, -maxFallSpeed, fallAcceleration * Time.fixedDeltaTime);
+    //             body.velocity = new Vector2(body.velocity.x, newFallSpeed);
+    //             Debug.Log("Fallspeed (clamped): " + body.velocity.y + " / MaxFallSpeed: " + -maxFallSpeed);
+    //         }
+    //         //body.gravityScale = initialGravityScale;
+    //     }
 
-//     private void ApplyMovement()
-// {
-//     // Apply the current velocity values calculated in other methods to the Rigidbody2D component
-//     body.velocity = new Vector2(body.velocity.x, body.velocity.y);
-// }
+    //     private void ApplyMovement()
+    // {
+    //     // Apply the current velocity values calculated in other methods to the Rigidbody2D component
+    //     body.velocity = new Vector2(body.velocity.x, body.velocity.y);
+    // }
     #endregion
 
     #region Input Handling Methods
