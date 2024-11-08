@@ -32,6 +32,10 @@ public class MenuController : MonoBehaviour
     private string levelToLoad;
     [SerializeField] private GameObject noSavedGameDialog = null;
 
+    public void LoadGame()
+    {
+        SceneManager.LoadScene("Menu"); // Replace with your actual game scene name
+    }
 
     public void NewGameDialogYes()
     {
