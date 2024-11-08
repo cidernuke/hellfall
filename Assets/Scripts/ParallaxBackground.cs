@@ -52,10 +52,10 @@ public class ParallaxBackground : MonoBehaviour
         // Update the previous camera position
         previousCamPos = Camera.main.transform.position;
 
-        Debug.Log("Camera position: " + Camera.main.transform.position);
-        Debug.Log("Background Layer 0 position: " + backgrounds[0].position);
-        Debug.Log("Background Layer 1 position: " + backgrounds[1].position);
-        Debug.Log("Background Layer 2 position: " + backgrounds[2].position);
+        // Debug.Log("Camera position: " + Camera.main.transform.position);
+        // Debug.Log("Background Layer 0 position: " + backgrounds[0].position);
+        // Debug.Log("Background Layer 1 position: " + backgrounds[1].position);
+        // Debug.Log("Background Layer 2 position: " + backgrounds[2].position);
 
 
 
