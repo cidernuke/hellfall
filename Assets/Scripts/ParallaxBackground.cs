@@ -1,64 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ParallaxBackground : MonoBehaviour
 {
-    public Transform[] backgrounds;   // Array of all the background layers
-    public float[] parallaxScales;    // The proportion of the camera's movement to move the backgrounds by
-    public float smoothing = 1f;      // How smooth the parallax is going to be. Set above 0.
+    public Transform player;               // Reference to the player transform
+    public Transform[] backgroundLayers;   // Array of background layers
+    public float[] parallaxScales;         // Scales to determine each layer's movement speed (0 = far, 1 = close)
+    public float smoothing = 0.5f;         // Smoothing factor for parallax effect
 
-    private Vector3 previousCamPos;   // Position of the camera in the previous frame
+    private Vector3[] startPositions;      // Store the initial positions of each background layer
 
-    // Called before Start(). Great for references.
-    private void Awake()
+    void Start()
     {
-        previousCamPos = Camera.main.transform.position;
-    }
-
-    private void Start()
-    {
-        // Setting parallax scales based on Z position, if not set manually
-        if (parallaxScales.Length != backgrounds.Length)
+        if (player == null)
         {
-            parallaxScales = new float[backgrounds.Length];
-            for (int i = 0; i < backgrounds.Length; i++)
-                parallaxScales[i] = backgrounds[i].position.z * -1;
+            Debug.LogError("Player Transform is not assigned in ParallaxBackground.");
+            return;
+        }
+
+        // Initialize start positions for each layer
+        startPositions = new Vector3[backgroundLayers.Length];
+        for (int i = 0; i < backgroundLayers.Length; i++)
+        {
+            startPositions[i] = backgroundLayers[i].position;
+
+            // Auto-assign default parallax scales if not set
+            if (parallaxScales.Length != backgroundLayers.Length)
+            {
+                Debug.LogWarning("Parallax scales array length doesn't match background layers array length. Assigning default scales.");
+                parallaxScales = new float[backgroundLayers.Length];
+                for (int j = 0; j < backgroundLayers.Length; j++)
+                {
+                    parallaxScales[j] = 0.1f * (j + 1); // Layer farther back moves slower
+                }
+            }
         }
     }
 
-    private void Update()
+    void Update()
     {
-        // Loop through each background
-        for (int i = 0; i < backgrounds.Length; i++)
+        for (int i = 0; i < backgroundLayers.Length; i++)
         {
-            // Calculate parallax effect
-            float parallax = (previousCamPos.x - Camera.main.transform.position.x) * parallaxScales[i];
+            // Calculate how far the player has moved relative to the start position
+            Vector3 playerOffset = player.position - startPositions[i];
 
-            // Set a target position which is the background's current position plus the parallax effect
-            float targetPosX = backgrounds[i].position.x + parallax;
+            // Calculate the new position for the layer based on parallax scales
+            Vector3 layerTargetPos = startPositions[i] + playerOffset * parallaxScales[i];
 
-            // Create the target position for the background
-            Vector3 targetPosition = new Vector3(targetPosX, backgrounds[i].position.y, backgrounds[i].position.z);
-
-            // Smoothly transition between positions
-            backgrounds[i].position = Vector3.Lerp(backgrounds[i].position, targetPosition, smoothing * Time.deltaTime);
+            // Smoothly move the background layer to the target position
+            backgroundLayers[i].position = Vector3.Lerp(backgroundLayers[i].position, layerTargetPos, smoothing * Time.deltaTime);
         }
-
-        // Update the previous camera position
-        previousCamPos = Camera.main.transform.position;
-
-        // Debug.Log("Camera position: " + Camera.main.transform.position);
-        // Debug.Log("Background Layer 0 position: " + backgrounds[0].position);
-        // Debug.Log("Background Layer 1 position: " + backgrounds[1].position);
-        // Debug.Log("Background Layer 2 position: " + backgrounds[2].position);
-
-
-
     }
 }
-
