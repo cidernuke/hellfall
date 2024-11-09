@@ -141,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
         if (!isWallJumping)
         {
             body.velocity = new Vector2(horizontal * speed, body.velocity.y);
-            bool isWalking = playerInput.GetHorizontalInput() != 0;
+            bool isWalking = horizontal != 0;
             animator.SetBool("run", isWalking);
             HandleCrouchInput();
             bool isCrouchWalking = isWalking && isCrouching;
