@@ -9,7 +9,7 @@ public class MovementAnimationTests
     private GameObject player;
     private PlayerMovement playerMovement;
     private MockPlayerInput mockInput;
-    //private Animator animator;
+    private Animator animator;
 
     [UnitySetUp]
     public IEnumerator SetUp()
@@ -22,8 +22,8 @@ public class MovementAnimationTests
         player = GameObject.Find("Player");
         Assert.IsNotNull(player, "Player GameObject not found in the scene.");
 
-        // animator = player.GetComponent<Animator>();
-        // Assert.IsNotNull(animator, "Animator component not found on the Player GameObject.");
+        animator = player.GetComponent<Animator>();
+        Assert.IsNotNull(animator, "Animator component not found on the Player GameObject.");
 
         playerMovement = player.GetComponent<PlayerMovement>();
         Assert.IsNotNull(playerMovement, "PlayerMovement component not found on the Player GameObject.");
@@ -46,8 +46,8 @@ public class MovementAnimationTests
         yield return null;
 
         // Überprüfe, ob die Laufanimation getriggert wird
-        // bool isRunning = animator.GetBool("run");
-        // Assert.IsTrue(isRunning, "Run animation should be active when moving.");
+        bool isRunning = animator.GetBool("run");
+        Assert.IsTrue(isRunning, "Run animation should be active when moving.");
 
         yield return null;
     }
@@ -60,9 +60,9 @@ public class MovementAnimationTests
         playerMovement.Update();
         yield return null;
 
-        // Überprüfe, ob die Sprunganimation ausgelöst wurde
-        // bool isJumping = animator.GetCurrentAnimatorStateInfo(0).IsName("Jump");
-        // Assert.IsTrue(isJumping, "Jump animation should have been triggered.");
+        //Überprüfe, ob die Sprunganimation ausgelöst wurde
+        bool isJumping = animator.GetCurrentAnimatorStateInfo(0).IsName("Jump");
+        Assert.IsTrue(isJumping, "Jump animation should have been triggered.");
 
         mockInput.jumpInput = false;
         yield return null;

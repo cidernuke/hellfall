@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float dashDuration = 0.2f;  // Duration of the dash
     [SerializeField] private float dashCooldown = 1f;    // Cooldown time before dash can be used again
 
-    private bool isDashing;
+    public bool isDashing = false;
     private bool canDash = true;
     private float dashDirection;
     #endregion
