@@ -444,13 +444,7 @@ public class PlayerMovement : MonoBehaviour
 
         return horizontalInput == 0 && grounded;
     }
-
-    public bool canAttack()
-    {
-        float horizontalInput = GetHorizontalInput();
-
-        return horizontalInput == 0 && grounded;
-    }
+   
     #endregion
 
     #region Dash Coroutine
