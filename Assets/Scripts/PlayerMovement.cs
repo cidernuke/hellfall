@@ -438,7 +438,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public bool canAttack()
+    public bool CanAttack()
     {
         float horizontalInput = GetHorizontalInput();
 
