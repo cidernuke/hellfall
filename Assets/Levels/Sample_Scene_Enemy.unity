@@ -156,7 +156,12 @@ MonoBehaviour:
   boxCollider: {fileID: 69732189}
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
+--- !u!4 &90255822 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 976393204391322360, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+  m_PrefabInstance: {fileID: 2048547118}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,7 +407,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1776847006795675958, guid: b3d5414a0a40e2c46a9d08e7272b9363, type: 3}
       propertyPath: playerLayer.m_Bits
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3816967287189773138, guid: b3d5414a0a40e2c46a9d08e7272b9363, type: 3}
       propertyPath: m_LocalPosition.x
@@ -462,6 +467,11 @@ Transform:
 Animator:
   m_CorrespondingSourceObject: {fileID: 3058734885864157243, guid: b3d5414a0a40e2c46a9d08e7272b9363, type: 3}
   m_PrefabInstance: {fileID: 702726989}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &851609949 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7624676514274553780, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+  m_PrefabInstance: {fileID: 2048547118}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &954883822
 GameObject:
@@ -886,6 +896,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2174369621339499416, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+      propertyPath: m_Size.x
+      value: 3.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 2174369621339499416, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+      propertyPath: m_Size.y
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2193375495534342346, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: startingHealth
       value: 3
@@ -905,11 +923,11 @@ PrefabInstance:
     - target: {fileID: 5746640054634646074, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: wallCheck
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 90255822}
     - target: {fileID: 5746640054634646074, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: groundCheck
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 851609949}
     - target: {fileID: 5746640054634646074, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: wallLayer.m_Bits
       value: 0
