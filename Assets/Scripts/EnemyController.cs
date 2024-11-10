@@ -24,12 +24,16 @@ public class EnemyController : MonoBehaviour
     private Animator anim;
     private HealthSystem playerHealth;
     private EnemyPatrol enemyPatrol;
+    private PlayerMovement playerMovement;
+
+
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
         playerHealth  = GetComponent<HealthSystem>();
+        playerMovement = GetComponent<PlayerMovement>();
     }
 
     // Update is called once per frame
@@ -71,6 +75,9 @@ public class EnemyController : MonoBehaviour
         if(hit.collider != null)
         {
             playerHealth = hit.transform.GetComponent<HealthSystem>();
+
+            //abrufen des PlayerMovemnt objektes wenn der Spieler in Sicht ist
+            playerMovement = hit.transform.GetComponent<PlayerMovement>();
         }
         return hit.collider != null;
     }
@@ -93,8 +100,9 @@ public class EnemyController : MonoBehaviour
     private void DamagePlayer()
     {
         if(PlayerInSight())
-        {
-            playerHealth.TakeDamage(damage);
+        {  
+                  
+            playerHealth.TakeDamage(damage, playerMovement);
         }
     }
 }
