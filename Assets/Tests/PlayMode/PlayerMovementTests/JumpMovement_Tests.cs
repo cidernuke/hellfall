@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-public class JumpMovement_Test
+public class JumpMovement_Tests
 {
     private static bool sceneLoaded = false;
     private GameObject player;
@@ -41,9 +41,6 @@ public class JumpMovement_Test
     [UnityTest]
     public IEnumerator BasicJump()
     {
-        // Ensure the player is grounded
-        playerMovement.grounded = true;
-
         // Get the initial vertical position
         var initialPositionY = player.transform.position.y;
 
@@ -53,7 +50,6 @@ public class JumpMovement_Test
         // Call Update to process the input
         playerMovement.Update();
 
-        // Warte einen Frame, damit der Animator den Trigger verarbeiten kann
         yield return null;
 
         // Wait for FixedUpdate to process physics
@@ -63,7 +59,7 @@ public class JumpMovement_Test
         mockInput.jumpInput = false;
 
         // Wait a few frames to allow the player to move upwards
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         // Get the new vertical position after jumping
         var newPositionY = player.transform.position.y;

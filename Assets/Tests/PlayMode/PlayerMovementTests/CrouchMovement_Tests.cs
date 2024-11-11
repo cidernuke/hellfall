@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-public class CrouchMovement_Test
+public class CrouchMovement_Tests
 {
     private static bool sceneLoaded = false;
     private GameObject player;
@@ -142,6 +142,7 @@ public class CrouchMovement_Test
         var positionYAfterJump = player.transform.position.y;
         //yield return new WaitForSeconds(2f);
         Assert.Greater(positionYAfterJump, initialPositionY, "Player should be able to jump while crouching");
+        Assert.IsTrue(playerMovement.isCrouching, "Player should crouch while jumping");
 
         // Reset inputs
         //mockInput.jumpInput = false;
