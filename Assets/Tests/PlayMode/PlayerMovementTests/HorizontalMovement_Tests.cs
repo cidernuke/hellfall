@@ -4,45 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-public class MovementTests
+public class MovementTests: PlayerMovement_Test_SetUp
 {
-
-    private static bool sceneLoaded = false;
-    private GameObject player;
-    private PlayerMovement playerMovement;
-    private MockPlayerInput mockInput;
-    //private Animator animator;
-
-    [UnitySetUp]
-    public IEnumerator SetUp()
-    {
-        // Load scene only once
-        if (!sceneLoaded)
-        {
-            SceneManager.LoadScene("TestScene");
-            yield return null; // Wait for scene being loaded
-            sceneLoaded = true;
-        }
-
-        // Initialize the Player
-        player = GameObject.Find("Player");
-        Assert.IsNotNull(player, "Player GameObject not found in the scene.");
-
-        // animator = player.GetComponent<Animator>();
-        // Assert.IsNotNull(animator, "Animator component not found on the Player GameObject.");
-
-        // Initialize the Components
-        playerMovement = player.GetComponent<PlayerMovement>();
-        Assert.IsNotNull(playerMovement, "PlayerMovement component not found on the Player GameObject.");
-
-        // Initialize the Mock Input
-        mockInput = new MockPlayerInput();
-        playerMovement.playerInput = mockInput;
-
-        //Wait for the Player to drop on the Ground
-        yield return new WaitForSeconds(1f);
-    }
-
     [UnityTest]
     public IEnumerator HorizontalMovement()
     {
