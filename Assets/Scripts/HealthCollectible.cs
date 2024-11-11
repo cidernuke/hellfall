@@ -11,8 +11,12 @@ public class HealthCollectible : MonoBehaviour
         if (collider.tag == "Player")
         {
             HealthSystem playerHealth = collider.GetComponent<HealthSystem>();
-            playerHealth.AddHealth(healthAmount);            
-            Destroy(gameObject);
+            if (playerHealth.currentHealth < playerHealth.startingHealth)
+            {
+                playerHealth.AddHealth(healthAmount);
+                Destroy(gameObject);
+
+            }
         }
     }
 }
