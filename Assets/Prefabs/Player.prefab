@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 5746640054634646074}
   - component: {fileID: 8335488962519607957}
   - component: {fileID: 2193375495534342346}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,23 +209,23 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
-  grounded: 0
-  speed: 10
-  jumpPower: 5
-  possibleJumps: 2
-  wallSlideSpeed: 2
-  wallJumpX: 10
-  wallCheck: {fileID: 976393204391322360}
-  groundCheck: {fileID: 7624676514274553780}
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
+  grounded: 0
+  groundCheck: {fileID: 7624676514274553780}
+  jumpPower: 5
+  wallSlideSpeed: 2
+  wallCheck: {fileID: 976393204391322360}
+  coyoteTimeDuration: 0.2
   dashSpeed: 30
   dashDuration: 0.2
   dashCooldown: 1
   standing: {fileID: 691704114, guid: 22a836ecf58efa24f8d6db5ebc1c5eeb, type: 3}
   crouching: {fileID: 21300000, guid: adf511fbe02c3784e8780b1b89e29439, type: 3}
+  crouchSpeed: 5
   isCrouching: 0
+  targetJumpHeight: 3
 --- !u!95 &8335488962519607957
 Animator:
   serializedVersion: 5

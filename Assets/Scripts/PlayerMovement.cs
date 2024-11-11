@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     // Layer masks to identify ground and wall layers for collision detection
     [SerializeField] private LayerMask wallLayer;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask platformLayer;
     private LayerMask groundAndWallLayer;
     #endregion
 
@@ -25,8 +26,12 @@ public class PlayerMovement : MonoBehaviour
 
     // Movement flags and variables
     public bool grounded;
+    public bool platformed;
+    private bool isDropping = false; // flag for dropping through platform
+    [SerializeField] private float dropDuration = 0.5f; // Duration of which collision with platform is ignored
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private static float speed = 10f;  // Horizontal movement speed
+    [SerializeField] private Transform flipPivotPoint;
+    [SerializeField] private float groundSpeed = 2.3f;  // Horizontal movement speed
     [SerializeField] private float jumpPower;   // Vertical jump force
 
     private int facingDirection = 1; // 1 for facing right, -1 for facing left, affects the player
@@ -45,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform wallCheck;
     private int wallSide;
     private int lastWallJumped = 0; // compared to wallSide in logic --> int, not bool
-    private bool canWallJump = true;
+    private bool canWallJump = false;
     private bool isWallJumping;
     private float wallJumpDirection;
     private float wallJumpingTime = 0.2f;
@@ -76,7 +81,8 @@ public class PlayerMovement : MonoBehaviour
     // Crouching mechanics
     [SerializeField] private Sprite standing;  // Sprite used when standing, initialized in unity inspector
     [SerializeField] private Sprite crouching; // Sprite used when crouching, initialized in unity inspector
-    [SerializeField] private float crouchSpeed = speed / 2;
+    // [SerializeField] private float crouchSpeed = groundSpeed / 2;
+    [SerializeField] private float crouchSpeed = 1.5f;
 
     private Vector2 standingSize;    // Collider size when standing
     private Vector2 crouchingSize;   // Collider size when crouching
@@ -101,7 +107,12 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Called once per frame.
     /// Handles input and updates player state.
-    /// </summary>
+    /// </summary>        // Normal horizontal movement speed
+    [SerializeField] private float jumpGravityScale = 3.5f;  // Gravity scale during ascent
+    [SerializeField] private float fallGravityScale = 2.5f;
+    private bool isFalling = false;
+    [Range(0f, 1f)]
+    [SerializeField] private float groundDecay;
     public void Update()
     {
         horizontal = GetHorizontalInput();
@@ -116,9 +127,11 @@ public class PlayerMovement : MonoBehaviour
             isDoubleJumping = false;
         }
 
+        IsOnPlatform(); // until a better solution for its placement is found, it stays here!
         HandleJumpInput();
         WallSlide();
         WallJump();
+        HandleDropThroughPlatform();
 
         HandleDashInput();
 
@@ -128,11 +141,24 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void HandleDropThroughPlatform()
+    {
+        if (GetDropDownInput() && IsOnPlatform() && !isDropping)
+        {
+            Collider2D platformCollider = GetPlatformColliderBelow();
+            if (platformCollider != null)
+            {
+                StartCoroutine(DropThroughPlatformCoroutine(platformCollider));
+            }
+        }
+    }
+
     private void FixedUpdate()
     {
         if (!isWallJumping)
         {
-            body.velocity = new Vector2(horizontal * speed, body.velocity.y);
+            // body.velocity = new Vector2(horizontal * speed, body.velocity.y);
+            body.velocity = new Vector2(Input.GetAxis("Horizontal") * groundSpeed, body.velocity.y);
             bool isWalking = GetHorizontalInput() != 0;
             animator.SetBool("run", isWalking);
             HandleCrouchInput();
@@ -145,6 +171,26 @@ public class PlayerMovement : MonoBehaviour
             {
                 body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
             }
+
+        }
+        if (IsGrounded() && GetHorizontalInput() == 0)
+        {
+            print("we are decaying");
+            body.velocity *= groundDecay;
+        }
+        // !Diego, hier vielleicht für orientierung für clamped fall speed.
+        if (body.velocity.y <= 0.2 && !isFalling)
+        {
+            print("apex");
+            body.gravityScale *= jumpGravityScale;
+            // body.AddForce(Vector2.down * 15f);
+            isFalling = true; // Set falling state
+        }
+        else if (body.velocity.y > 0 && isFalling)
+        {
+            // Reset gravity when jumping up again
+            body.gravityScale = 1f;
+            isFalling = false;
         }
         //HandleGravity(); 
         //ApplyMovement();
@@ -181,6 +227,7 @@ public class PlayerMovement : MonoBehaviour
     {
         wallLayer = LayerMask.GetMask("Wall");
         groundLayer = LayerMask.GetMask("Ground");
+        platformLayer = LayerMask.GetMask("Platform");
         groundAndWallLayer = groundLayer | wallLayer;
     }
 
@@ -220,7 +267,8 @@ public class PlayerMovement : MonoBehaviour
     #region Movement Methods
     private bool IsGrounded()
     {
-        grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundAndWallLayer);
+        // grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundAndWallLayer);
+        grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
         animator.SetBool("grounded", grounded);
 
         // Store the last time the player touched the ground for coyote time
@@ -267,11 +315,13 @@ public class PlayerMovement : MonoBehaviour
             CancelInvoke(nameof(StopWallJumping));
 
             // Check if we are on a different wall than last jump
+            print("wallSide: " + wallSide + ", lastWallJumped: " + lastWallJumped);
             if (lastWallJumped != wallSide)
             {
                 // Reset wall jumping ability since we switched walls
                 canWallJump = true;
                 lastWallJumped = wallSide;
+                print("how many times do i enter");
             }
         }
         else
@@ -279,12 +329,27 @@ public class PlayerMovement : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
+        // print("wallJumpingCounter: "+wallJumpingCounter);
         if (GetJumpInput() && wallJumpingCounter > 0f && canWallJump)
         {
+            print("shouldnt be here");
             // TODO: make smoother, right now very janky feeling. When jumping from one wall to other, player very fast and then very slow. Hint: body.velocity.x (2f) 
-            Vector2 wallJumpingPower = new Vector2(2f, 7f);
-            isWallJumping = true;
+            float targetJumpHeight = 1.8f;  // Desired jump height
+            float targetJumpDistance = 3.5f;
+            float gravity = Mathf.Abs(Physics2D.gravity.y * body.gravityScale);
+            float verticalPower = Mathf.Sqrt(2 * gravity * targetJumpHeight);
+
+            // Horizontal power based on jump duration needed to reach target distance
+            float timeToApex = verticalPower / gravity;
+            float horizontalPower = targetJumpDistance / timeToApex;
+
+            Vector2 wallJumpingPower = new Vector2(horizontalPower, verticalPower);
             body.velocity = new Vector2(wallJumpDirection * wallJumpingPower.x, wallJumpingPower.y);
+            // Vector2 wallJumpingPower = new Vector2(2f, 7f);
+            isWallJumping = true;
+            // body.velocity = new Vector2(wallJumpDirection * wallJumpingPower.x, wallJumpingPower.y);
+            // body.AddForce(new Vector2(wallJumpDirection * wallJumpingPower.x, wallJumpingPower.y), ForceMode2D.Impulse);
+
             // Disable jumping on the same wall again until we touch a new wall
             canWallJump = false;
             wallJumpingCounter = 0f;
@@ -298,6 +363,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             Invoke(nameof(StopWallJumping), wallJumpDuration);
+            print("canWallJump: " + canWallJump);
         }
     }
 
@@ -321,6 +387,19 @@ public class PlayerMovement : MonoBehaviour
     {
         return coyoteUsable && !grounded && Time.time < lastTimeGrounded + coyoteTimeDuration;
     }
+
+    private bool IsOnPlatform()
+    {
+        platformed = Physics2D.OverlapCircle(groundCheck.position, 0.1f, platformLayer);
+        print("platformed: " + platformed);
+        return platformed;
+    }
+
+    private Collider2D GetPlatformColliderBelow()
+    {
+        return Physics2D.OverlapCircle(groundCheck.position, 0.1f, platformLayer);
+    }
+
 
     // The HandleGravity method is intended to control the player's falling speed 
     // by applying fall acceleration and capping it at a defined max fall speed.
@@ -369,26 +448,34 @@ public class PlayerMovement : MonoBehaviour
     #region Input Handling Methods
     private void HandleJumpInput()
     {
+        // TODO: more gravity, i think also more height --> bigger curve, less distance
         if (GetJumpInput())
         {
             animator.SetTrigger("jump"); // Play jump animation on first jump
 
             //Checks
-            if (IsGrounded() || CanUseCoyote())
+            if (IsGrounded() || CanUseCoyote() || IsOnPlatform())
             {
                 // First jump
                 // TODO: jumpPower is not initialized anywhere!
                 body.velocity = new Vector2(body.velocity.x, jumpPower);
+                // body.velocity = new Vector2(body.velocity.x, body.velocity.y * groundSpeed);
+                // body.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
                 isDoubleJumping = false; // Reset double jump for the next jump
                 coyoteUsable = false;
             }
             else if (!isDoubleJumping)
             {
-                // Double jump
                 // TODO: jumpPower is not initialized anywhere!
+                // body.velocity = new Vector2(GetHorizontalInput() * (speed * jumpHorizontalDamping), jumpPower);
+                // body.velocity = new Vector2(body.velocity.x, jumpPower - (jumpPower / 3));
                 body.velocity = new Vector2(body.velocity.x, jumpPower);
+                // body.velocity = new Vector2(body.velocity.x, Input.GetAxis("Vertical") * groundSpeed);
+                // body.gravityScale *= 1.5f;
                 isDoubleJumping = true; // Set double jump flag to prevent further jumps
                 animator.SetBool("grounded", IsGrounded());
+                // animator.SetBool("platformed", IsOnPlatform());
+
             }
         }
     }
@@ -444,7 +531,7 @@ public class PlayerMovement : MonoBehaviour
 
         return horizontalInput == 0 && grounded;
     }
-   
+
     #endregion
 
     #region Dash Coroutine
@@ -488,6 +575,16 @@ public class PlayerMovement : MonoBehaviour
         canDash = true;
     }
     #endregion
+    private IEnumerator DropThroughPlatformCoroutine(Collider2D platformCollider)
+    {
+        isDropping = true;
+        Collider2D playerCollider = GetComponent<Collider2D>();
+        Physics2D.IgnoreCollision(playerCollider, platformCollider, true);
+        yield return new WaitForSeconds(dropDuration);
+        Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
+        isDropping = false;
+    }
+
 
     #region Input Methods
     // These methods abstract input retrieval, making it easier to modify or mock inputs for testing
@@ -526,6 +623,12 @@ public class PlayerMovement : MonoBehaviour
     public virtual bool GetCrouchInput()
     {
         return Input.GetKey(KeyCode.S);
+    }
+
+    public virtual bool GetDropDownInput()
+    {
+        // Wir verwenden GetKeyDown, um sicherzustellen, dass die Aktion nur einmal pro Tastendruck ausgeführt wird
+        return Input.GetKeyDown(KeyCode.F);
     }
     #endregion
 }
