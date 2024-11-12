@@ -26,7 +26,7 @@ public class HealthSystem : MonoBehaviour
     /// <summary>
     /// Indicates whether the object is currently invincible.
     /// </summary>
-    private bool isInvincible;
+    public bool isInvincible;
 
     /// <summary>
     /// The remaining cooldown time for invincibility.
@@ -44,7 +44,7 @@ public class HealthSystem : MonoBehaviour
     /// <summary>
     /// Updates the invincibility status and cooldown timer.
     /// </summary>
-    private void Update()
+    public void Update()
     {
         if (isInvincible)
         {
