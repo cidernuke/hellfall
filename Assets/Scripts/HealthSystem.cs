@@ -28,10 +28,13 @@ public class HealthSystem : MonoBehaviour
     public void TakeDamage(float damage, PlayerMovement playerMovement = null, EnemyController enemyController = null)
     {
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
-        Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
         // UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
-        anim.SetTrigger("hurt");
-        if (currentHealth <= 0)
+        if (currentHealth > 0)
+        {
+            Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
+            anim.SetTrigger("hurt");
+        }
+        else 
         {
             if (!isDead)
             {
@@ -45,6 +48,7 @@ public class HealthSystem : MonoBehaviour
                 else if (enemyController != null)
                 {
                     enemyController.enabled = false;
+                    
                 }
                 isDead = true;
 
