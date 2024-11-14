@@ -48,7 +48,7 @@ public class HealthSystemTest
                 //Let Player take damage
                 playerHealthSystem.TakeDamage(10);
 
-                playerHealthSystem.Update();
+                //playerHealthSystem.Update();
 
                 // Wait for 0.2 second
                 yield return new WaitForSeconds(0.2f);
