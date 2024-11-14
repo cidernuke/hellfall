@@ -7,23 +7,24 @@ using TMPro;
 
 public class MenuController : MonoBehaviour
 {
-
+    // Volume settings
     [Header("Volume Setting")]
     [SerializeField] private TMP_Text volumeTextValue = null;
     [SerializeField] private Slider volumeSlider = null;
     [SerializeField] private float defaultVolume = 1.0f;
 
-
+    // Gameplay settings for controller sensitivity
     [Header("Gameplay Settings")]
     [SerializeField] private TMP_Text ControllerSenTextValue = null;
     [SerializeField] private Slider controllerSenSlider = null;
     [SerializeField] private int defaultSen = 4;
     public int mainControllerSen = 4;
 
-
+    // Invert Y-axis toggle
     [Header("Toggle Settings")]
     [SerializeField] private Toggle invertYToggle = null;
 
+    // Graphics settings for brightness, quality, and fullscreen
     [Header("Graphic Settings")]
     [SerializeField] private Slider brightnessSlider = null;
     [SerializeField] private TMP_Text brightnessTextValue = null;
@@ -37,18 +38,22 @@ public class MenuController : MonoBehaviour
     private bool _isFullScreen;
     private float _brightnessLevel;
 
-    [Header("Conformation")]
-    [SerializeField] private GameObject conformationPrompt;
+    // Confirmation prompt for setting changes
+    [Header("Confirmation")]
+    [SerializeField] private GameObject confirmationPrompt;
 
+    // Scene loading settings
     [Header("Levels To Load")]
     public string _newGameLevel;
     private string levelToLoad;
     [SerializeField] private GameObject noSavedGameDialog = null;
 
+    // Resolution dropdown options
     [Header("Resolution Dropdowns")]
     public TMP_Dropdown resolutionDropdown;
     private Resolution[] resolutions;
 
+    // Initialize resolution dropdown and set the current resolution
     private void Start()
     {
         resolutions = Screen.resolutions;
@@ -57,7 +62,6 @@ public class MenuController : MonoBehaviour
         List<string> options = new List<string>();
 
         int currentResolutionIndex = 0;
-
         for (int i = 0; i < resolutions.Length; i++)
         {
             string option = resolutions[i].width + " x " + resolutions[i].height;
@@ -73,26 +77,27 @@ public class MenuController : MonoBehaviour
         resolutionDropdown.value = currentResolutionIndex;
     }
 
+    // Change the screen resolution based on the selected dropdown index
     public void SetResolution(int resolutionIndex)
     {
         Resolution resolution = resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
-
-
+    // Load game scene
     public void LoadGame()
     {
-        SceneManager.LoadScene("Menu"); // Replace with your actual game scene name
+        SceneManager.LoadScene("Menu"); // Replace with the actual game scene name
     }
 
+    // Start a new game, loading a specified level
     public void NewGameDialogYes()
     {
-
         SceneManager.LoadScene(_newGameLevel);
     }
 
-    public void LoadGameDialogYes() //checks if we have a saved level if its going to load (needs to have the same name)
+    // Load the saved game if a saved level exists
+    public void LoadGameDialogYes()
     {
         if (PlayerPrefs.HasKey("SavedLevel"))
         {
@@ -105,74 +110,74 @@ public class MenuController : MonoBehaviour
         }
     }
 
+    // Exit the game
     public void ExitButton()
     {
         Application.Quit();
     }
 
+    // Adjust the volume and update the display
     public void SetVolume(float volume)
     {
         AudioListener.volume = volume;
         volumeTextValue.text = volume.ToString("0.0");
     }
 
+    // Adjust controller sensitivity and update the display
     public void SetControllerSen(float sensitivity)
     {
         mainControllerSen = Mathf.RoundToInt(sensitivity);
         ControllerSenTextValue.text = sensitivity.ToString("0");
     }
 
+    // Apply gameplay settings like controller sensitivity and invert Y toggle
     public void GameplayApply()
     {
-        if (invertYToggle.isOn)
-        {
-            PlayerPrefs.SetInt("masterInvertY", 1);
-        }
-        else
-        {
-            PlayerPrefs.SetInt("masterInvertY", 0);
-        }
-
+        PlayerPrefs.SetInt("masterInvertY", invertYToggle.isOn ? 1 : 0);
         PlayerPrefs.SetFloat("masterSen", mainControllerSen);
-        StartCoroutine(ConformationBox());
+        StartCoroutine(ConfirmationBox());
     }
 
+    // Set brightness and update the display
     public void SetBrightness(float brightness)
     {
         _brightnessLevel = brightness;
         brightnessTextValue.text = brightness.ToString("0.0");
     }
 
+    // Toggle fullscreen mode
     public void SetFullScreen(bool isFullScreen)
     {
         _isFullScreen = isFullScreen;
     }
 
+    // Set the quality level of graphics
     public void SetQuality(int qualityIndex)
     {
         _qualityLevel = qualityIndex;
     }
 
+    // Apply graphics settings like brightness, quality, and fullscreen mode
     public void GraphicsApply()
     {
         PlayerPrefs.SetFloat("masterBrightness", _brightnessLevel);
-        //Need to implemnt brightness change
-
         PlayerPrefs.SetInt("masterQuality", _qualityLevel);
         QualitySettings.SetQualityLevel(_qualityLevel);
 
         PlayerPrefs.SetInt("masterFullscreen", (_isFullScreen ? 1 : 0));
         Screen.fullScreen = _isFullScreen;
 
-        StartCoroutine(ConformationBox());
+        StartCoroutine(ConfirmationBox());
     }
 
+    // Save and apply volume settings
     public void VolumeApply()
     {
         PlayerPrefs.SetFloat("masterVolume", AudioListener.volume);
-        StartCoroutine(ConformationBox());
+        StartCoroutine(ConfirmationBox());
     }
 
+    // Reset specific settings (Audio, Gameplay, Graphics) to default values
     public void ResetButton(string MenuType)
     {
         if (MenuType == "Audio")
@@ -210,12 +215,11 @@ public class MenuController : MonoBehaviour
         }
     }
 
-    public IEnumerator ConformationBox()
+    // Show confirmation prompt for 2 seconds
+    public IEnumerator ConfirmationBox()
     {
-        conformationPrompt.SetActive(true);
+        confirmationPrompt.SetActive(true);
         yield return new WaitForSeconds(2);
-        conformationPrompt.SetActive(false);
+        confirmationPrompt.SetActive(false);
     }
 }
-
-

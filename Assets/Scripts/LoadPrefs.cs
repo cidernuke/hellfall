@@ -6,39 +6,47 @@ using TMPro;
 
 public class LoadPrefs : MonoBehaviour
 {
+    // General settings
     [Header("General Setting")]
     [SerializeField] private bool canUse = false;
     [SerializeField] private MenuController menuController;
 
+    // Volume settings
     [Header("Volume Setting")]
     [SerializeField] private TMP_Text volumeTextValue = null;
     [SerializeField] private Slider volumeSlider = null;
 
+    // Brightness settings
     [Header("Brightness Setting")]
     [SerializeField] private Slider brightnessSlider = null;
     [SerializeField] private TMP_Text brightnessTextValue = null;
 
+    // Quality level settings
     [Header("Quality Level Setting")]
     [SerializeField] private TMP_Dropdown qualityDropdown;
 
+    // Fullscreen settings
     [Header("Fullscreen Setting")]
     [SerializeField] private Toggle fullScreenToggle;
 
-    [Header("Sensitivty Setting")]
+    // Controller sensitivity settings
+    [Header("Sensitivity Setting")]
     [SerializeField] private TMP_Text controllerSenTextValue = null;
     [SerializeField] private Slider controllerSenSlider = null;
 
+    // Invert Y-axis setting
     [Header("Invert Y Setting")]
     [SerializeField] private Toggle invertYToggle = null;
 
+    // Load player preferences for settings on Awake
     private void Awake()
     {
         if (canUse)
         {
+            // Load volume setting or reset to default
             if (PlayerPrefs.HasKey("masterVolume"))
             {
                 float localVolume = PlayerPrefs.GetFloat("masterVolume");
-
                 volumeTextValue.text = localVolume.ToString("0.0");
                 volumeSlider.value = localVolume;
                 AudioListener.volume = localVolume;
@@ -48,6 +56,7 @@ public class LoadPrefs : MonoBehaviour
                 menuController.ResetButton("Audio");
             }
 
+            // Load quality setting or reset to default
             if (PlayerPrefs.HasKey("masterQuality"))
             {
                 int localQuality = PlayerPrefs.GetInt("masterQuality");
@@ -59,54 +68,37 @@ public class LoadPrefs : MonoBehaviour
                 menuController.ResetButton("Graphics");
             }
 
+            // Load fullscreen setting
             if (PlayerPrefs.HasKey("masterFullscreen"))
             {
                 int localFullscreen = PlayerPrefs.GetInt("masterFullscreen");
-                if (localFullscreen == 1)
-                {
-                    Screen.fullScreen = true;
-                    fullScreenToggle.isOn = true;
-                }
-                else
-                {
-                    Screen.fullScreen = false;
-                    fullScreenToggle.isOn = false;
-                }
+                Screen.fullScreen = (localFullscreen == 1);
+                fullScreenToggle.isOn = (localFullscreen == 1);
             }
 
+            // Load brightness setting
             if (PlayerPrefs.HasKey("masterBrightness"))
             {
                 float localBrightness = PlayerPrefs.GetFloat("masterBrightness");
-
                 brightnessTextValue.text = localBrightness.ToString("0.0");
                 brightnessSlider.value = localBrightness;
-                //change the brighness in actual game
+                // Apply brightness in the game here
             }
 
+            // Load controller sensitivity setting
             if (PlayerPrefs.HasKey("masterSen"))
             {
                 float localSensitivity = PlayerPrefs.GetFloat("masterSen");
-
                 controllerSenTextValue.text = localSensitivity.ToString("0.0");
                 controllerSenSlider.value = localSensitivity;
                 menuController.mainControllerSen = Mathf.RoundToInt(localSensitivity);
             }
 
+            // Load invert Y setting
             if (PlayerPrefs.HasKey("masterInvertY"))
             {
-                if (PlayerPrefs.GetInt("masterInvertY") == 1)
-                {
-                    invertYToggle.isOn = true;
-                }
-                else
-                {
-                    invertYToggle.isOn = false;
-                }
+                invertYToggle.isOn = (PlayerPrefs.GetInt("masterInvertY") == 1);
             }
-
-
         }
     }
-
-
 }
