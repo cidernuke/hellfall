@@ -10,14 +10,14 @@ public class HealthSystem : MonoBehaviour
     public float currentHealth;
     [SerializeField] private Animator anim;
 
-    private bool isDead;    
+    private bool isDead;
 
 
     //zum Awake wird current = starting gesetzt
     private void Awake()
     {
         currentHealth = startingHealth;
-        anim = GetComponent<Animator>();        
+        anim = GetComponent<Animator>();
     }
 
     /// <summary>
@@ -34,28 +34,9 @@ public class HealthSystem : MonoBehaviour
             Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
             anim.SetTrigger("hurt");
         }
-        else 
+        else
         {
-            if (!isDead)
-            {
-                //Die();
-                Debug.Log("Player died");
-                anim.SetTrigger("die");
-                if (playerMovement != null)
-                {
-                    playerMovement.enabled = false;
-                    
-                }
-                else if (enemyController != null)
-                {
-                    enemyController.enabled = false;
-                    StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
-                   
-                    
-                }
-                isDead = true;
-
-            }
+            Die(playerMovement, enemyController);
 
         }
     }
@@ -70,6 +51,35 @@ public class HealthSystem : MonoBehaviour
         Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
         // UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
     }
- 
+
+    /// <summary>
+    /// Kills the player or enemy, disabling their movement and triggering the death animation.
+    /// </summary>
+    /// <param name="playerMovement"></param>
+    /// <param name="enemyController"></param>
+
+    private void Die(PlayerMovement playerMovement = null, EnemyController enemyController = null)
+
+    {
+        if (!isDead)
+        {
+            Debug.Log("Player died");
+            anim.SetTrigger("die");
+            if (playerMovement != null)
+            {
+                playerMovement.enabled = false;
+
+            }
+            else if (enemyController != null)
+            {
+                enemyController.enabled = false;
+                StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
+
+            }
+            isDead = true;
+
+        }
+    }
+
 
 }
