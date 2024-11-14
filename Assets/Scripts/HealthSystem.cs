@@ -10,14 +10,14 @@ public class HealthSystem : MonoBehaviour
     public float currentHealth;
     [SerializeField] private Animator anim;
 
-    private bool isDead;
+    private bool isDead;    
 
 
     //zum Awake wird current = starting gesetzt
     private void Awake()
     {
         currentHealth = startingHealth;
-        anim = GetComponent<Animator>();
+        anim = GetComponent<Animator>();        
     }
 
     /// <summary>
@@ -44,10 +44,13 @@ public class HealthSystem : MonoBehaviour
                 if (playerMovement != null)
                 {
                     playerMovement.enabled = false;
+                    
                 }
                 else if (enemyController != null)
                 {
                     enemyController.enabled = false;
+                    StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
+                   
                     
                 }
                 isDead = true;
@@ -57,11 +60,16 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Increases the current health by the specified health amount and updates the health UI.
+    /// </summary>
+
     public void AddHealth(float healthAmount)
     {
         currentHealth = Mathf.Clamp(currentHealth + healthAmount, 0, startingHealth);
         Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
         // UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
     }
+ 
 
 }
