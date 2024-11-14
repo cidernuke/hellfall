@@ -10,14 +10,20 @@ public class HealthSystemTest
 {
     private GameObject player;
     private HealthSystem playerHealthSystem;
+    //for setup
+    private bool sceneLoaded = false;
 
     [UnitySetUp]
     public IEnumerator SetUp()
     {
-        // Load the test scene
-        SceneManager.LoadScene("Sample_Scene_DamageZone");
-        yield return null; // Wait for the scene to load
-
+        if (!sceneLoaded)
+        {
+            // Load scene
+            SceneManager.LoadScene("Sample_Scene_DamageZone");
+            // Wait for scene being loaded
+            yield return null; 
+            sceneLoaded = true;
+        }
         // Find the player GameObject
         player = GameObject.Find("Player");
         Assert.IsNotNull(player, "Player GameObject not found in the scene.");
@@ -48,9 +54,9 @@ public class HealthSystemTest
                 yield return new WaitForSeconds(0.2f);
 
                 // Assert that the player's health has decreased
-                Assert.Greater(playerHealthSystem.currentHealth, initialHealth);
+                Assert.Less(playerHealthSystem.currentHealth, initialHealth,"Player health did not decrease as expected.");
 
                 // Assert that the player's health is now at 90
-                Assert.Equals(playerHealthSystem.currentHealth, 90);
+                Assert.AreEqual(90, playerHealthSystem.currentHealth);
         }
 }
