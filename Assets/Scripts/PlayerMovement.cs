@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isFacingRight = true;
 
     //Fall variables --> HandleGravity is commented out due to problems, for explanation look at HandleGravity()
-    //[SerializeField] private float maxFallSpeed = 20f;
+    [SerializeField] private float maxFallSpeed = -20f;
     //[SerializeField] private float fallAcceleration = 2.5f; //Acceleration during the Fall
 
     #endregion
@@ -162,7 +162,8 @@ public class PlayerMovement : MonoBehaviour
             if (!isDashing)
             {
                 body.velocity = new Vector2(Input.GetAxis("Horizontal") * groundSpeed, body.velocity.y);
-            } else return;
+            }
+            else return;
             bool isWalking = GetHorizontalInput() != 0;
             animator.SetBool("run", isWalking);
             HandleCrouchInput();
@@ -197,10 +198,18 @@ public class PlayerMovement : MonoBehaviour
         //     body.gravityScale = 1f;
         //     isFalling = false;
         // }
+        
         if (body.velocity.y < 0 && !isDashing)
         {
             print("entered gravity place");
             body.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
+        }
+
+        // Clamped fall speed
+        if (body.velocity.y < maxFallSpeed)
+        {
+            print("fallspeed: " + body.velocity.y + "maxFallSpeed: "+ maxFallSpeed);
+            body.velocity = new Vector2(body.velocity.x, maxFallSpeed);
         }
         //HandleGravity(); 
         //ApplyMovement();
