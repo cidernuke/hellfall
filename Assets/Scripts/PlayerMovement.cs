@@ -249,7 +249,7 @@ public class PlayerMovement : MonoBehaviour
             isWallSliding = true;
             // Determine the wall side (1 for right wall, -1 for left wall)
             wallSide = transform.localScale.x > 0 ? 1 : -1;
-            body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlideSpeed, float.MaxValue));            
+            body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlideSpeed, float.MaxValue));                        
             animator.SetBool("is_wall_sliding", isWallSliding);
             
             

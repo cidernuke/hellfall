@@ -52,6 +52,8 @@ public class HealthSystem : MonoBehaviour
         // UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
     }
 
+    #region Death funtionality
+
     /// <summary>
     /// Kills the player or enemy, disabling their movement and triggering the death animation.
     /// </summary>
@@ -80,6 +82,7 @@ public class HealthSystem : MonoBehaviour
 
         }
     }
+    #endregion
 
 
 }
