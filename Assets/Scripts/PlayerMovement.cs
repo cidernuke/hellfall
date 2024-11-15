@@ -114,6 +114,7 @@ public class PlayerMovement : MonoBehaviour
     public void Update()
     {
         horizontal = GetHorizontalInput();
+        
         if (isDashing)
         {
             // Skip the rest of the update while dashing
@@ -400,9 +401,9 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = localScale;
 
             //? Offset adjustment, currently commented because its very noticable in the game. Fine tune or find other solution.
-            // float colliderWidth = boxCollider.size.x / 2;
-            // Vector3 offset = new Vector3(-localScale.x * colliderWidth, 0f, 0f);
-            // transform.position -= offset;
+            float colliderWidth = boxCollider.size.x / 2;
+            Vector3 offset = new Vector3(-localScale.x * colliderWidth, 0f, 0f);
+            transform.position -= offset;
         }
     }
 
@@ -483,6 +484,7 @@ public class PlayerMovement : MonoBehaviour
             //Checks
             if (IsGrounded() || CanUseCoyote() || IsOnPlatform())
             {
+                print("entered jump, coyoteUsable: "+coyoteUsable);
                 // print("in first jump");
                 // First jump
                 // TODO: jumpPower is not initialized anywhere!
@@ -572,6 +574,8 @@ public class PlayerMovement : MonoBehaviour
     {
         dashDirection = Mathf.Sign(direction);
         StartCoroutine(DashCoroutine());
+        
+        // animator.SetBool("is_dashing", isDashing);
     }
 
     /// <summary>
@@ -582,6 +586,7 @@ public class PlayerMovement : MonoBehaviour
         isDashing = true;
         canDash = false;
 
+        animator.SetBool("is_dashing", true);
         // Disable gravity during the dash for consistent movement
         print("entered coroutine, current gravity scale should be 1: " + body.gravityScale);
         float originalGravity = body.gravityScale;
@@ -600,6 +605,8 @@ public class PlayerMovement : MonoBehaviour
 
         isDashing = false;
         body.gravityScale = originalGravity; // Restore original gravity
+
+        animator.SetBool("is_dashing", false);
 
         // Wait for dash cooldown before allowing another dash
         yield return new WaitForSeconds(dashCooldown);
