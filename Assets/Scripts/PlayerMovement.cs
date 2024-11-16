@@ -33,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform flipPivotPoint;
     [SerializeField] private float groundSpeed = 2.3f;  // Horizontal movement speed
     [SerializeField] private float jumpPower;   // Vertical jump force
+    [SerializeField] private float jumpBufferTime = 0.1f; //Duration of the jump buffer in seconds
+    private float lastTimeJumpPressed = -1f;
 
     private int facingDirection = 1; // 1 for facing right, -1 for facing left, affects the player
     private bool isFacingRight = true;
@@ -126,6 +128,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         IsOnPlatform(); // until a better solution for its placement is found, it stays here!
+
+
+        //Detect last time jump pressed -> jump buffering
+        if (GetJumpInput())
+        {
+            lastTimeJumpPressed = Time.time;
+        }
+
         HandleJumpInput();
         // WallSlide(); // moved into WallJump for performance.
         WallJump();
@@ -197,7 +207,7 @@ public class PlayerMovement : MonoBehaviour
         //     body.gravityScale = 1f;
         //     isFalling = false;
         // }
-        
+
         if (body.velocity.y < 0 && !isDashing)
         {
             print("entered gravity place");
@@ -207,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
         // Clamped fall speed
         if (body.velocity.y < maxFallSpeed)
         {
-            print("fallspeed: " + body.velocity.y + "maxFallSpeed: "+ maxFallSpeed);
+            print("fallspeed: " + body.velocity.y + "maxFallSpeed: " + maxFallSpeed);
             body.velocity = new Vector2(body.velocity.x, maxFallSpeed);
         }
         //HandleGravity(); 
@@ -485,13 +495,17 @@ public class PlayerMovement : MonoBehaviour
     private void HandleJumpInput()
     {
         // TODO: more gravity, i think also more height --> bigger curve, less distance
-        if (GetJumpInput())
-        {
-            animator.SetTrigger("jump"); // Play jump animation on first jump
+        // if (GetJumpInput())
+        // {
+        //animator.SetTrigger("jump"); // Play jump animation on first jump
 
+        if ((Time.time - lastTimeJumpPressed) <= jumpBufferTime)
+        {
             //Checks
             if (IsGrounded() || CanUseCoyote() || IsOnPlatform())
             {
+                animator.SetTrigger("jump"); // Play jump animation on first jump
+
                 // print("in first jump");
                 // First jump
                 // TODO: jumpPower is not initialized anywhere!
@@ -500,8 +514,15 @@ public class PlayerMovement : MonoBehaviour
                 // body.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
                 isDoubleJumping = false; // Reset double jump for the next jump
                 coyoteUsable = false;
+
+                //Reset von lastTimeJumpPressed
+                lastTimeJumpPressed = -1f;
             }
-            else if (!isDoubleJumping)
+            //else if
+        }
+        if (GetJumpInput())
+        {
+            if (!isDoubleJumping && !IsGrounded())
             {
                 // print("in double jump");
                 // TODO: jumpPower is not initialized anywhere!
@@ -516,6 +537,7 @@ public class PlayerMovement : MonoBehaviour
 
             }
         }
+        // }
     }
 
     /// <summary>
