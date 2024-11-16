@@ -114,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
     public void Update()
     {
         horizontal = GetHorizontalInput();
-        
+
         if (isDashing)
         {
             // Skip the rest of the update while dashing
@@ -126,16 +126,18 @@ public class PlayerMovement : MonoBehaviour
             isDoubleJumping = false;
         }
 
-        IsOnPlatform(); // until a better solution for its placement is found, it stays here!
+        // IsOnPlatform(); // until a better solution for its placement is found, it stays here!
         HandleJumpInput();
         // WallSlide(); // moved into WallJump for performance.
         WallJump();
-        HandleDropThroughPlatform();
+        // HandleDropThroughPlatform();
 
         HandleDashInput();
 
+        // TODO: problem lies here, and walljump logic.
         if (!isWallJumping)
         {
+            print("normal flip");
             Flip();
         }
     }
@@ -198,17 +200,17 @@ public class PlayerMovement : MonoBehaviour
         //     body.gravityScale = 1f;
         //     isFalling = false;
         // }
-        
+
         if (body.velocity.y < 0 && !isDashing)
         {
-            print("entered gravity place");
+            // print("entered gravity place");
             body.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime;
         }
 
         // Clamped fall speed
         if (body.velocity.y < maxFallSpeed)
         {
-            print("fallspeed: " + body.velocity.y + "maxFallSpeed: "+ maxFallSpeed);
+            print("fallspeed: " + body.velocity.y + "maxFallSpeed: " + maxFallSpeed);
             body.velocity = new Vector2(body.velocity.x, maxFallSpeed);
         }
         //HandleGravity(); 
@@ -358,25 +360,9 @@ public class PlayerMovement : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
-        // print("wallJumpingCounter: "+wallJumpingCounter);
         if (GetJumpInput() && wallJumpingCounter > 0f && canWallJump)
         {
-
-            // TODO: make smoother, right now very janky feeling. When jumping from one wall to other, player very fast and then very slow. Hint: body.velocity.x (2f) 
-            // float targetJumpHeight = 1.8f;  // Desired jump height
-            // float targetJumpDistance = 3.5f;
-            // float gravity = Mathf.Abs(Physics2D.gravity.y * body.gravityScale);
-            // float verticalPower = Mathf.Sqrt(2 * gravity * targetJumpHeight);
-
-            // // Horizontal power based on jump duration needed to reach target distance
-            // float timeToApex = verticalPower / gravity;
-            // float horizontalPower = targetJumpDistance / timeToApex;
-
-            // Vector2 wallJumpingPower = new Vector2(horizontalPower, verticalPower);
-            // body.velocity = new Vector2(wallJumpDirection * wallJumpingPower.x, wallJumpingPower.y);
-            // Vector2 wallJumpingPower = new Vector2(2f, 7f);
             isWallJumping = true;
-            // print("walljumped");
             body.velocity = new Vector2(wallJumpDirection * 3, 6);
 
             // Disable jumping on the same wall again until we touch a new wall
@@ -397,12 +383,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void StopWallJumping()
     {
+        print("invoking");
         isWallJumping = false;
     }
 
     private void Flip()
     {
         if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
+        // if (isFacingRight && horizontal < 0f)
         {
             isFacingRight = !isFacingRight;
             Vector3 localScale = transform.localScale;
@@ -410,10 +398,27 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = localScale;
 
             //? Offset adjustment, currently commented because its very noticable in the game. Fine tune or find other solution.
-            float colliderWidth = boxCollider.size.x / 2;
-            Vector3 offset = new Vector3(-localScale.x * colliderWidth, 0f, 0f);
-            transform.position -= offset;
-        }
+            // float colliderWidth = boxCollider.size.x / 2;
+            // Vector3 offset = new Vector3(-localScale.x * colliderWidth, 0f, 0f);
+            // transform.position -= offset;
+
+            // spriteRenderer.flipX = false;
+        }// else if (!isFacingRight && horizontal > 0f)
+        // {
+        //     spriteRenderer.flipX = true;
+        // }
+
+        // if (Input.GetKeyDown(KeyCode.LeftArrow))
+        // {
+        //     GetComponent<SpriteRenderer>().flipX = true;
+        //     isFacingRight = false;
+        // }
+
+        // if (Input.GetKeyDown(KeyCode.RightArrow))
+        // {
+        //     GetComponent<SpriteRenderer>().flipX = false;
+        //     isFacingRight = true;
+        // }
     }
 
     private bool CanUseCoyote()
@@ -493,7 +498,7 @@ public class PlayerMovement : MonoBehaviour
             //Checks
             if (IsGrounded() || CanUseCoyote() || IsOnPlatform())
             {
-                print("entered jump, coyoteUsable: "+coyoteUsable);
+                print("entered jump, coyoteUsable: " + coyoteUsable);
                 // print("in first jump");
                 // First jump
                 // TODO: jumpPower is not initialized anywhere!
@@ -583,7 +588,7 @@ public class PlayerMovement : MonoBehaviour
     {
         dashDirection = Mathf.Sign(direction);
         StartCoroutine(DashCoroutine());
-        
+
         // animator.SetBool("is_dashing", isDashing);
     }
 

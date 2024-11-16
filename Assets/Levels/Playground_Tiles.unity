@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 269192567}
   m_Layer: 0
   m_Name: platform
-  m_TagString: Untagged
+  m_TagString: OneWayPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -470,7 +470,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5585758838363563765, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1548495590}
   m_SourcePrefab: {fileID: 100100000, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
 --- !u!4 &558345296 stripped
 Transform:
@@ -1847,6 +1850,29 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!1 &1548495589 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5585758838363563765, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+  m_PrefabInstance: {fileID: 558345295}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1548495590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1548495589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba6c94739b73fd49b7395b1ba318fd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCollider: {fileID: 1548495595}
+--- !u!61 &1548495595 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 8124953113361661337, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+  m_PrefabInstance: {fileID: 558345295}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2112458628
 GameObject:
   m_ObjectHideFlags: 0
