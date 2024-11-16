@@ -4,6 +4,7 @@ public class MockPlayerInput : IPlayerInput
     public bool jumpInput = false;
     public bool dashInput = false;
     public bool crouchInput = false;
+    public bool fallingThroughPlatfrom = false;
 
     public float GetHorizontalInput()
     {
@@ -23,5 +24,10 @@ public class MockPlayerInput : IPlayerInput
     public bool GetJumpInput()
     {
         return jumpInput;
+    }
+
+    public bool GetDropDownInput()
+    {
+        return fallingThroughPlatfrom;
     }
 }
