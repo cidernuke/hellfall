@@ -13,10 +13,10 @@ variables:
   # You can expose this in Unity via Application.version
   VERSION_NUMBER_VAR: $CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID-$CI_JOB_ID
   VERSION_BUILD_VAR: $CI_PIPELINE_IID
-  UNITY_VERSION: :windows-2022.3.40f1-base-3.1.0
+  UNITY_VERSION: :ubuntu-2022.3.51f1-base-3.1.0
 
-# image: $IMAGE:$UNITY_VERSION
-image: unityci/editor@sha256:7572b9ecfc55c8bae63162bb35870af9301b1005149ff53dc2aef3c09282c3b6
+image: $IMAGE:$UNITY_VERSION
+# image: unityci/editor@sha256:7572b9ecfc55c8bae63162bb35870af9301b1005149ff53dc2aef3c09282c3b6
 
 # get-unity-version:
 #   image: alpine
