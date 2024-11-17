@@ -5,11 +5,23 @@ using UnityEngine;
 public class SoulShardItem : MonoBehaviour, IItem
 {
     public string itemName { get; set; }
-    public Sprite itemSprite { get; set; }
+    public Sprite itemSprite { get; set; }   
+    
 
-    public void OnTriggerEnter2D(Collider2D other)
+    public void OnTriggerEnter2D(Collider2D collider)
     {
-        throw new System.NotImplementedException();
+        if(collider.tag == "Player"){
+            SoulShardSystem soulShardSystem = collider.GetComponent<SoulShardSystem>();
+            if (soulShardSystem != null)
+            {
+                soulShardSystem.inreaseSoulShard(this);
+                Destroy(gameObject);
+            }
+            else
+            {
+                Debug.LogError("SoulShardSystem component not found on the player.");
+            }
+        }
     }
 }
 

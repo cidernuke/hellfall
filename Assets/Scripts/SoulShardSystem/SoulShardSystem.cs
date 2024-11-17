@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class SoulShardSystem : MonoBehaviour
 {
-    private List<SoulShardItem> soulShardItems = new List<SoulShardItem>();
+    private List<SoulShardItem> soulShardItems;
 
-    public void inreaseSoulShard(SoulShardItem soulShardItem, int amount)    
+    private void Awake()
+    {
+        soulShardItems = new List<SoulShardItem>();
+    }
+    public void inreaseSoulShard(SoulShardItem soulShardItem)    
     {
         soulShardItems.Add(soulShardItem);
+        Debug.Log("Soul Shard collected: " + soulShardItems.Count);
     }
 
     public void decreaseSoulShard(SoulShardItem soulShardItem, int amount)
