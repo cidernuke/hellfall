@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +7,27 @@ public class HealthItem : MonoBehaviour, IItem
 {
     public string itemName { get; set; }
     public Sprite itemSprite { get; set; }
-
-    public void OnTriggerEnter2D(Collider2D other)
+    private float healthAmount;
+    [SerializeField]private Potion potion;
+    void Start()
     {
-        throw new System.NotImplementedException();
+        itemName = potion.itemName;
+        itemSprite = potion.itemSprite;
+        healthAmount = potion.healthAmount;
+    }
+
+    public void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.tag == "Player")
+        {
+            HealthSystem playerHealth = collider.GetComponent<HealthSystem>();
+            if (playerHealth.currentHealth < playerHealth.startingHealth)
+            {
+                playerHealth.AddHealth(healthAmount);
+                Destroy(gameObject);
+
+            }
+        }
     }
 }
 
