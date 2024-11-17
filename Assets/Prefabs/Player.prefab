@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 5746640054634646074}
   - component: {fileID: 8335488962519607957}
   - component: {fileID: 2193375495534342346}
+  - component: {fileID: 6267264117480742500}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -68,6 +69,7 @@ Transform:
   m_Children:
   - {fileID: 7624676514274553780}
   - {fileID: 976393204391322360}
+  - {fileID: 2931979755600972161}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2174369621339499416
@@ -116,7 +118,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3.75, y: 2.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -154,18 +156,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.17377819, y: -0.64141524}
+  m_Offset: {x: -0.064144015, y: -0.65301937}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.47, y: 0.5}
     oldSize: {x: 3.75, y: 2.5}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 3.75, y: 2.5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.53890896, y: 1.307872}
+  m_Size: {x: 0.6679776, y: 1.207719}
   m_EdgeRadius: 0
 --- !u!50 &8302531813951290086
 Rigidbody2D:
@@ -183,7 +185,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: e0f35738286e7ef409a70eca057bda48, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -212,20 +214,32 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
+  platformLayer:
+    serializedVersion: 2
+    m_Bits: 0
   grounded: 0
+  platformed: 0
+  dropDuration: 0.5
   groundCheck: {fileID: 7624676514274553780}
-  jumpPower: 5
-  wallSlideSpeed: 2
+  ceilingCheck: {fileID: 2931979755600972161}
+  groundSpeed: 7
+  jumpPower: 7
+  jumpBufferTime: 0.1
+  maxFallSpeed: -20
+  wallSlideSpeed: 3
   wallCheck: {fileID: 976393204391322360}
+  wallJumpDuration: 0.07
   coyoteTimeDuration: 0.2
-  dashSpeed: 30
-  dashDuration: 0.2
-  dashCooldown: 1
+  dashSpeed: 14
+  dashDuration: 0.4
+  dashCooldown: 0.4
+  isDashing: 0
   standing: {fileID: 691704114, guid: 22a836ecf58efa24f8d6db5ebc1c5eeb, type: 3}
   crouching: {fileID: 21300000, guid: adf511fbe02c3784e8780b1b89e29439, type: 3}
   crouchSpeed: 5
   isCrouching: 0
-  targetJumpHeight: 3
+  fallMultiplier: 4
+  groundDecay: 0.804
 --- !u!95 &8335488962519607957
 Animator:
   serializedVersion: 5
@@ -261,6 +275,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 0
   currentHealth: 0
+--- !u!114 &6267264117480742500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5585758838363563765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba6c94739b73fd49b7395b1ba318fd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCollider: {fileID: 8124953113361661337}
+--- !u!1 &8569570615257531477
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2931979755600972161}
+  m_Layer: 0
+  m_Name: Ceiling Check
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2931979755600972161
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8569570615257531477}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2149054594424086871}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8769760779391340631
 GameObject:
   m_ObjectHideFlags: 0

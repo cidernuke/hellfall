@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isDropping = false; // flag for dropping through platform
     [SerializeField] private float dropDuration = 0.5f; // Duration of which collision with platform is ignored
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private Transform flipPivotPoint;
+    [SerializeField] private Transform ceilingCheck;
     [SerializeField] private float groundSpeed = 2.3f;  // Horizontal movement speed
     [SerializeField] private float jumpPower;   // Vertical jump force
     [SerializeField] private float jumpBufferTime = 0.1f; //Duration of the jump buffer in seconds
@@ -444,13 +444,20 @@ public class PlayerMovement : MonoBehaviour
         {
             if (isCrouching)
             {
-                // Exit crouching state
-                spriteRenderer.sprite = standing;
-                boxCollider.size = standingSize;
-                boxCollider.offset = standingOffset;
-                isCrouching = false;
-                animator.SetBool("crouch", false);
-                animator.SetBool("crouch_walking", false);
+                // Check for obstacles above
+                Collider2D obstacle = Physics2D.OverlapCircle(ceilingCheck.position, 0.2f, platformLayer | wallLayer);
+
+                // Only exits if no obstacle is detected above the player
+                if (!obstacle)
+                {
+                    // Exit crouching state
+                    spriteRenderer.sprite = standing;
+                    boxCollider.size = standingSize;
+                    boxCollider.offset = standingOffset;
+                    isCrouching = false;
+                    animator.SetBool("crouch", false);
+                    animator.SetBool("crouch_walking", false);
+                }
             }
         }
     }
