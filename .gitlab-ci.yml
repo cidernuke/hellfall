@@ -39,7 +39,7 @@ get-unity-version:
     # - *unity_before_script
     - *cache
 
-.test: &test
+test:
   stage: build_and_test
   <<: *unity_defaults
   script:
