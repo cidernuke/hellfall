@@ -1,5 +1,5 @@
 stages:
-  - prepare
+  # - prepare
   - build_and_test
 
 # If you are looking for a place where to add 'UNITY_LICENSE_FILE' and other secrets, please visit your project's gitlab page:
@@ -13,19 +13,20 @@ variables:
   # You can expose this in Unity via Application.version
   VERSION_NUMBER_VAR: $CI_COMMIT_REF_SLUG-$CI_PIPELINE_ID-$CI_JOB_ID
   VERSION_BUILD_VAR: $CI_PIPELINE_IID
+  UNITY_VERSION: 2022.3.40f1-base-3.1.0
 
 image: $IMAGE:$UNITY_VERSION-base-$IMAGE_VERSION
 
-get-unity-version:
-  image: alpine
-  stage: prepare
-  variables:
-    GIT_DEPTH: 1
-  script:
-    - echo UNITY_VERSION=$(cat $UNITY_DIR/ProjectSettings/ProjectVersion.txt | grep "m_EditorVersion:.*" | awk '{ print $2}') | tee prepare.env
-  artifacts:
-    reports:
-      dotenv: prepare.env
+# get-unity-version:
+#   image: alpine
+#   stage: prepare
+#   variables:
+#     GIT_DEPTH: 1
+#   script:
+#     - echo UNITY_VERSION=$(cat $UNITY_DIR/ProjectSettings/ProjectVersion.txt | grep "m_EditorVersion:.*" | awk '{ print $2}') | tee prepare.env
+#   artifacts:
+#     reports:
+#       dotenv: prepare.env
 
 .cache: &cache
   cache:
