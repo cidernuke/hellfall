@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     private BoxCollider2D boxCollider;
 
     // Movement flags and variables
-    public bool grounded;
+    private bool grounded;
     public bool platformed;
     private bool isDropping = false; // flag for dropping through platform
     [SerializeField] private float dropDuration = 0.5f; // Duration of which collision with platform is ignored
@@ -71,10 +71,10 @@ public class PlayerMovement : MonoBehaviour
     #region Dash Variables
     // Dashing mechanics
     [SerializeField] private float dashSpeed = 30f; // Speed during dash
-    [SerializeField] public float dashDuration = 0.2f; // Duration of the dash
-    [SerializeField] public float dashCooldown = 1f; // Cooldown time before dash can be used again
+    [SerializeField] private float dashDuration = 0.2f; // Duration of the dash
+    [SerializeField] private float dashCooldown = 1f; // Cooldown time before dash can be used again
 
-    public bool isDashing = false;
+    private bool isDashing = false;
     private bool canDash = true;
     private float dashDirection;
     #endregion
@@ -89,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 crouchingSize; // Collider size when crouching
     private Vector2 standingOffset; // Collider offset when standing
     private Vector2 crouchingOffset; // Collider offset when crouching
-    public bool isCrouching = false;
+    private bool isCrouching = false;
     #endregion
 
     #region Unity Methods
@@ -156,7 +156,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (!isDashing)
             {
-                body.velocity = new Vector2(Input.GetAxis("Horizontal") * groundSpeed, body.velocity.y);
+                body.velocity = new Vector2(playerInput.GetHorizontalInput() * groundSpeed, body.velocity.y);
             }
             else return;
             bool isWalking = playerInput.GetHorizontalInput() != 0;
@@ -525,4 +525,17 @@ public class PlayerMovement : MonoBehaviour
         Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
         isDropping = false;
     }
+
+    #region getter for tests
+    public Rigidbody2D Body => body;
+    public float WallSlideSpeed => wallSlideSpeed;
+    public bool IsWallSliding => isWallSliding;
+    public bool Grounded => grounded;
+    public float DashDuration => dashDuration;
+    public float DashCooldown => dashCooldown;
+    public bool IsDashing => isDashing;
+    public bool IsCrouching => isCrouching;
+    public bool IsWallJumping => isWallJumping;
+
+    #endregion
 }

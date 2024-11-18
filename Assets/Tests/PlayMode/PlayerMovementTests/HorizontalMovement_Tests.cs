@@ -10,7 +10,7 @@ public class MovementTests: PlayerMovement_Test_SetUp
     public IEnumerator HorizontalMovement()
     {
         // Ensure the player is grounded
-        playerMovement.grounded = true;
+        //playerMovement.grounded = true;
 
         // Start with horizontal position
         var initialPositionX = player.transform.position.x;

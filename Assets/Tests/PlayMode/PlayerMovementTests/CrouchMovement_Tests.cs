@@ -10,7 +10,7 @@ public class CrouchMovement_Tests : PlayerMovement_Test_SetUp
     public IEnumerator CrouchChangesColliderSize()
     {
         // Ensure the player is grounded
-        playerMovement.grounded = true;
+        //playerMovement.grounded = true;
 
         // Start with the initial height of the collider
         var initialColliderSize = playerMovement.GetComponent<BoxCollider2D>().size;
@@ -25,7 +25,7 @@ public class CrouchMovement_Tests : PlayerMovement_Test_SetUp
         yield return new WaitForFixedUpdate();
 
          // Check if the player is in crouch mode
-        Assert.IsTrue(playerMovement.isCrouching, "Player should be crouching.");
+        Assert.IsTrue(playerMovement.IsCrouching, "Player should be crouching.");
 
         // Check if the collider size and sprite have changed correctly
         var crouchedColliderSize = playerMovement.GetComponent<BoxCollider2D>().size;
@@ -38,7 +38,7 @@ public class CrouchMovement_Tests : PlayerMovement_Test_SetUp
         yield return new WaitForFixedUpdate();
 
         // Check if the player is no longer crouching
-        Assert.IsFalse(playerMovement.isCrouching, "Player should not be crouching anymore.");
+        Assert.IsFalse(playerMovement.IsCrouching, "Player should not be crouching anymore.");
 
         // Check if the collider size and sprite have been reset to their original values
         var finalColliderSize = playerMovement.GetComponent<BoxCollider2D>().size;
@@ -53,7 +53,7 @@ public class CrouchMovement_Tests : PlayerMovement_Test_SetUp
     public IEnumerator CrouchWalking()
     {
         // Ensure the player is grounded
-        playerMovement.grounded = true;
+        //playerMovement.grounded = true;
 
         // Start with the initial horizontal position
         var initialPositionX = player.transform.position.x;
@@ -77,7 +77,7 @@ public class CrouchMovement_Tests : PlayerMovement_Test_SetUp
         var newPositionX = player.transform.position.x;
 
         // Check if the player is in crouch mode
-        Assert.IsTrue(playerMovement.isCrouching, "Player should be crouching.");
+        Assert.IsTrue(playerMovement.IsCrouching, "Player should be crouching.");
         // Check if the horizontal position has moved to the right
         Assert.Greater(newPositionX, initialPositionX, "Player should have moved to the right.");
 
@@ -110,7 +110,7 @@ public class CrouchMovement_Tests : PlayerMovement_Test_SetUp
         var positionYAfterJump = player.transform.position.y;
         //yield return new WaitForSeconds(2f);
         Assert.Greater(positionYAfterJump, initialPositionY, "Player should be able to jump while crouching");
-        Assert.IsTrue(playerMovement.isCrouching, "Player should crouch while jumping");
+        Assert.IsTrue(playerMovement.IsCrouching, "Player should crouch while jumping");
 
         // Reset inputs
         //mockInput.jumpInput = false;
@@ -131,7 +131,7 @@ public class CrouchMovement_Tests : PlayerMovement_Test_SetUp
     [UnityTest]
     public IEnumerator Crouching_DoesNotAllow_Dash()
     {
-        playerMovement.grounded = true;
+        //playerMovement.grounded = true;
 
         // Simulate crouch input to enter crouch mode
         mockInput.crouchInput = true;
@@ -148,9 +148,9 @@ public class CrouchMovement_Tests : PlayerMovement_Test_SetUp
         yield return new WaitForFixedUpdate();
 
         //Ensure player is crouching
-        Assert.IsTrue(playerMovement.isCrouching, "Player should  be crouching.");
+        Assert.IsTrue(playerMovement.IsCrouching, "Player should  be crouching.");
         // Check if player is not dashing (isDashing should be false)
-        Assert.IsFalse(playerMovement.isDashing, "Player should not be able to dash while crouching.");
+        Assert.IsFalse(playerMovement.IsDashing, "Player should not be able to dash while crouching.");
 
         // Reset inputs
         mockInput.dashInput = false;

@@ -50,9 +50,6 @@ public class Example_Test
     [UnityTest]
     public IEnumerator HorizontalMovement()
     {
-        // Ensure the player is grounded
-        playerMovement.grounded = true;
-
         // Start with horizontal position
         var initialPositionX = player.transform.position.x;
 

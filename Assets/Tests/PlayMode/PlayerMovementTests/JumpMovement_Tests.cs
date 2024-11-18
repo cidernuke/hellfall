@@ -41,8 +41,8 @@ public class JumpMovement_Tests: PlayerMovement_Test_SetUp
     [UnityTest]
     public IEnumerator DoubleJump()
     {
-        //First Jump
-        playerMovement.grounded = true;
+        // //First Jump
+        // playerMovement.Grounded = true;
         var initialPositionY = player.transform.position.y;
         mockInput.jumpInput = true;
         playerMovement.Update();
@@ -57,7 +57,7 @@ public class JumpMovement_Tests: PlayerMovement_Test_SetUp
         Assert.Greater(afterJumpPositionY, initialPositionY, "Player should have moved upwards due to jump.");
 
         //Assert that the Player is in the air after jump
-        Assert.IsFalse(playerMovement.grounded, "Player should be in the air after first jump.");
+        Assert.IsFalse(playerMovement.Grounded, "Player should be in the air after first jump.");
 
         //Seconde Jump
         mockInput.jumpInput = true;
@@ -69,7 +69,7 @@ public class JumpMovement_Tests: PlayerMovement_Test_SetUp
 
         // Assert that the vertical position has increased due to jump
         Assert.Greater(afterDoubleJumpPositionY, afterJumpPositionY, "Player should have moved upwards due to double jump.");
-        Assert.IsFalse(playerMovement.grounded, "Player should be in the air after seconde jump.");
+        Assert.IsFalse(playerMovement.Grounded, "Player should be in the air after seconde jump.");
 
         yield return null;
 

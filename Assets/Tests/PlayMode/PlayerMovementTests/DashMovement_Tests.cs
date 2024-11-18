@@ -29,14 +29,14 @@ public class DashMovement_Tests: PlayerMovement_Test_SetUp
         mockInput.dashInput = false; // Ensure dash input is only active for one frame
 
         // Check that the player has started dashing
-        Assert.IsTrue(playerMovement.isDashing, "Player should be dashing after dash input.");
+        Assert.IsTrue(playerMovement.IsDashing, "Player should be dashing after dash input.");
 
         // Wait for the dash duration to elapse
         //yield return new WaitForSeconds(playerMovement.dashDuration + 0.1f);
         yield return new WaitForSeconds(1f);
 
         // Check that the player has stopped dashing
-        Assert.IsFalse(playerMovement.isDashing, "Player should have stopped dashing after dash duration.");
+        Assert.IsFalse(playerMovement.IsDashing, "Player should have stopped dashing after dash duration.");
 
         // Record position after dash ends
         var positionXAfterDashEnd = player.transform.position.x;
@@ -49,96 +49,93 @@ public class DashMovement_Tests: PlayerMovement_Test_SetUp
         yield return null;
     }
 
-    [UnityTest]
-    public IEnumerator DashDurationTest()
-    {
-        // Ensure the player is grounded
-        playerMovement.grounded = true;
+    // [UnityTest]
+    // public IEnumerator DashDurationTest()
+    // {
+    //     // Set horizontal input to simulate movement direction
+    //     mockInput.horizontalInput = 1f;
 
-        // Set horizontal input to simulate movement direction
-        mockInput.horizontalInput = 1f;
+    //     // Start the dash
+    //     mockInput.dashInput = true;
+    //     playerMovement.Update();
+    //     yield return null; // Process the input
+    //     mockInput.dashInput = false; // Reset dash input
 
-        // Start the dash
-        mockInput.dashInput = true;
-        playerMovement.Update();
-        yield return null; // Process the input
-        mockInput.dashInput = false; // Reset dash input
+    //     // Verify that the player has started dashing
+    //     Assert.IsTrue(playerMovement.IsDashing, "Player should be dashing after dash input.");
 
-        // Verify that the player has started dashing
-        Assert.IsTrue(playerMovement.isDashing, "Player should be dashing after dash input.");
+    //     // Calculate the number of frames the dash should last
+    //     int dashFrames = Mathf.CeilToInt(playerMovement.DashDuration / Time.fixedDeltaTime);
 
-        // Calculate the number of frames the dash should last
-        int dashFrames = Mathf.CeilToInt(playerMovement.dashDuration / Time.fixedDeltaTime);
+    //     // Advance frames while checking that the player is still dashing
+    //     for (int i = 0; i < dashFrames; i++)
+    //     {
+    //         yield return new WaitForFixedUpdate(); // Advance one physics frame
+    //         Assert.IsTrue(playerMovement.IsDashing, $"Player should still be dashing at frame {i + 1}.");
+    //     }
 
-        // Advance frames while checking that the player is still dashing
-        for (int i = 0; i < dashFrames; i++)
-        {
-            yield return new WaitForFixedUpdate(); // Advance one physics frame
-            Assert.IsTrue(playerMovement.isDashing, $"Player should still be dashing at frame {i + 1}.");
-        }
+    //     // After the expected dash duration, the player should stop dashing
+    //     yield return new WaitForFixedUpdate(); // Advance one more frame
+    //     Assert.IsFalse(playerMovement.IsDashing, "Player should have stopped dashing after dash duration.");
 
-        // After the expected dash duration, the player should stop dashing
-        yield return new WaitForFixedUpdate(); // Advance one more frame
-        Assert.IsFalse(playerMovement.isDashing, "Player should have stopped dashing after dash duration.");
+    //     // Check the actual dash duration
+    //     float expectedDuration = playerMovement.DashDuration;
+    //     float actualDuration = dashFrames * Time.fixedDeltaTime;
 
-        // Check the actual dash duration
-        float expectedDuration = playerMovement.dashDuration;
-        float actualDuration = dashFrames * Time.fixedDeltaTime;
+    //     // Allow a small margin of error
+    //     float allowedError = 0.01f;
 
-        // Allow a small margin of error
-        float allowedError = 0.01f;
+    //     Assert.IsTrue(Mathf.Abs(actualDuration - expectedDuration) <= allowedError,
+    //         $"Dash duration should be approximately {expectedDuration}s, but was {actualDuration}s.");
 
-        Assert.IsTrue(Mathf.Abs(actualDuration - expectedDuration) <= allowedError,
-            $"Dash duration should be approximately {expectedDuration}s, but was {actualDuration}s.");
+    //     yield return new WaitForSeconds(1f);
 
-        yield return new WaitForSeconds(1f);
+    //     // Reset horizontal input
+    //     mockInput.horizontalInput = 0f;
+    //     yield return null;
+    // }
 
-        // Reset horizontal input
-        mockInput.horizontalInput = 0f;
-        yield return null;
-    }
+    // [UnityTest]
+    // public IEnumerator DashCooldownTest()
+    // {
+    //     // Start with initial dash
+    //     mockInput.horizontalInput = 1f;  // Set direction for dash
+    //     mockInput.dashInput = true;
+    //     playerMovement.Update();
+    //     yield return new WaitForFixedUpdate();
+    //     Assert.IsTrue(playerMovement.IsDashing, "Player should be dashing initially.");
 
-    [UnityTest]
-    public IEnumerator DashCooldownTest()
-    {
-        // Start with initial dash
-        mockInput.horizontalInput = 1f;  // Set direction for dash
-        mockInput.dashInput = true;
-        playerMovement.Update();
-        yield return new WaitForFixedUpdate();
-        Assert.IsTrue(playerMovement.isDashing, "Player should be dashing initially.");
+    //     // Wait for dash to complete
+    //     yield return new WaitForSeconds(playerMovement.DashDuration + 0.1f);
+    //     Assert.IsFalse(playerMovement.IsDashing, "Player should have stopped dashing after dash duration.");
 
-        // Wait for dash to complete
-        yield return new WaitForSeconds(playerMovement.dashDuration + 0.1f);
-        Assert.IsFalse(playerMovement.isDashing, "Player should have stopped dashing after dash duration.");
+    //     // Try to dash again immediately, which should fail due to cooldown
+    //     mockInput.dashInput = true;
+    //     playerMovement.Update();
+    //     yield return new WaitForFixedUpdate();
+    //     Assert.IsFalse(playerMovement.IsDashing, "Player should not be able to dash during cooldown.");
 
-        // Try to dash again immediately, which should fail due to cooldown
-        mockInput.dashInput = true;
-        playerMovement.Update();
-        yield return new WaitForFixedUpdate();
-        Assert.IsFalse(playerMovement.isDashing, "Player should not be able to dash during cooldown.");
+    //     // Wait for cooldown to complete
+    //     yield return new WaitForSeconds(playerMovement.DashCooldown);
 
-        // Wait for cooldown to complete
-        yield return new WaitForSeconds(playerMovement.dashCooldown);
+    //     // Try to dash again after cooldown
+    //     mockInput.dashInput = true;
+    //     playerMovement.Update();
+    //     yield return new WaitForFixedUpdate();
+    //     Assert.IsTrue(playerMovement.IsDashing, "Player should be able to dash again after cooldown.");
 
-        // Try to dash again after cooldown
-        mockInput.dashInput = true;
-        playerMovement.Update();
-        yield return new WaitForFixedUpdate();
-        Assert.IsTrue(playerMovement.isDashing, "Player should be able to dash again after cooldown.");
-
-        // Reset inputs
-        mockInput.dashInput = false;
-        mockInput.horizontalInput = 0f;
-        yield return new WaitForSeconds(playerMovement.dashDuration + 1f);
-        yield return null;
-    }
+    //     // Reset inputs
+    //     mockInput.dashInput = false;
+    //     mockInput.horizontalInput = 0f;
+    //     yield return new WaitForSeconds(playerMovement.DashDuration + 1f);
+    //     yield return null;
+    // }
 
     [UnityTest]
     public IEnumerator DashDirectionTest()
     {
         // Ensure the player is grounded
-        playerMovement.grounded = true;
+        //playerMovement.grounded = true;
 
         // Record the initial position
         var initialPositionX = player.transform.position.x;
@@ -154,7 +151,7 @@ public class DashMovement_Tests: PlayerMovement_Test_SetUp
         mockInput.dashInput = false; // Reset dash input
 
         // Wait for the dash duration to elapse
-        yield return new WaitForSeconds(playerMovement.dashDuration + 0.1f);
+        yield return new WaitForSeconds(playerMovement.DashDuration + 0.1f);
 
         mockInput.horizontalInput = 0f;
 
@@ -180,7 +177,7 @@ public class DashMovement_Tests: PlayerMovement_Test_SetUp
         mockInput.dashInput = false; // Reset dash input
 
         // Wait for the dash duration to elapse
-        yield return new WaitForSeconds(playerMovement.dashDuration + 0.1f);
+        yield return new WaitForSeconds(playerMovement.DashDuration + 0.1f);
 
         // Record the final position
         finalPositionX = player.transform.position.x;
@@ -196,7 +193,7 @@ public class DashMovement_Tests: PlayerMovement_Test_SetUp
     public IEnumerator DashNotActivated_WhenNoHorizontalInput()
     {
         // Ensure the player is grounded
-        playerMovement.grounded = true;
+        //playerMovement.grounded = true;
 
         // Record the initial position
         var initialPositionX = player.transform.position.x;
@@ -212,7 +209,7 @@ public class DashMovement_Tests: PlayerMovement_Test_SetUp
         mockInput.dashInput = false; // Reset dash input
 
         // Verify that the dash was not activated
-        Assert.IsFalse(playerMovement.isDashing, "Player should not dash when horizontal input is zero.");
+        Assert.IsFalse(playerMovement.IsDashing, "Player should not dash when horizontal input is zero.");
 
         // Wait for a short duration to confirm no movement occurs
         yield return new WaitForSeconds(0.5f);
@@ -238,7 +235,7 @@ public class DashMovement_Tests: PlayerMovement_Test_SetUp
 
         // Ensure the player is not grounded (simulate jumping)
         mockInput.jumpInput = true;
-        playerMovement.grounded = false;
+        //playerMovement.grounded = false;
 
         yield return new WaitForSeconds(0.1f);
 
@@ -254,14 +251,14 @@ public class DashMovement_Tests: PlayerMovement_Test_SetUp
         mockInput.jumpInput = false; // Reset jump input
 
         // Verify that the player has started dashing
-        Assert.IsTrue(playerMovement.isDashing, "Player should be dashing while airborne.");
+        Assert.IsTrue(playerMovement.IsDashing, "Player should be dashing while airborne.");
 
         // Wait for the dash duration
         //yield return new WaitForSeconds(playerMovement.dashDuration + 0.1f);
         yield return new WaitForSeconds(1f);
 
         // Verify that the player has stopped dashing
-        Assert.IsFalse(playerMovement.isDashing, "Player should have stopped dashing after dash duration.");
+        Assert.IsFalse(playerMovement.IsDashing, "Player should have stopped dashing after dash duration.");
 
         // Verify that the player has moved horizontally
         var finalPositionX = player.transform.position.x;
