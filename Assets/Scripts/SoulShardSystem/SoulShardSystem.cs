@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ItemSystem.Items;
 
 public class SoulShardSystem : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class SoulShardSystem : MonoBehaviour
     {
         soulShardItems = new List<SoulShardItem>();
     }
-    public void inreaseSoulShard(SoulShardItem soulShardItem)    
+    public void inreaseSoulShard(SoulShardItem soulShardItem)
     {
         soulShardItems.Add(soulShardItem);
         Debug.Log("Soul Shard collected: " + soulShardItems.Count);
@@ -21,3 +22,4 @@ public class SoulShardSystem : MonoBehaviour
         soulShardItems.Remove(soulShardItem);
     }
 }
+

@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Potion", menuName = "Inventory System/Items/HealthItem/Potion")]
-public class Potion : ScriptableObject
+[CreateAssetMenu(fileName = "New Item", menuName = "Inventory System/Items")]
+public class ItemData : ScriptableObject
 {
     public string itemName;
     public Sprite itemSprite;
