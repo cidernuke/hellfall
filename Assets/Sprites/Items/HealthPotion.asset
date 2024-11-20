@@ -15,3 +15,7 @@ MonoBehaviour:
   itemName: Health Potion (small)
   itemSprite: {fileID: 3110332419431051783, guid: 42841dbacd4b88447a3d4ba22f85abdd, type: 3}
   healthAmount: 1
+  isHealthItem: 1
+  isModifierItem: 0
+  isWeaponItem: 0
+  collider: {fileID: 0}
