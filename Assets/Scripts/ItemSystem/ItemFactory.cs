@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -6,15 +7,29 @@ using ItemSystem.Items;
 using UnityEngine;
 
 public class ItemFactory : MonoBehaviour
-{
+{    
+    [SerializeField] private ItemData itemData;
+    
+    private HealthItem healthItem;
+    
+    public void Awake()
+    {
+        createHealthItem();
+    }
 
-    [SerializeField] private static ItemData itemData;
-    public Item healthItem = new HealthItem(itemData);
-
-    /*
-        TODO: Hier werden die Items erstellt.
-
-    */
+    private void createHealthItem()
+    {
+        if(itemData.isHealthItem)
+        {
+            healthItem = new HealthItem(itemData);
+            healthItem.OnTriggerEnter2D();
+            if(healthItem.isDestroyed)
+            {
+                Destroy(gameObject);
+            }
+            
+        }
+    }
 
     
 

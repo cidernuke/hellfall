@@ -15,8 +15,7 @@ namespace ItemSystem.Items
                 SoulShardSystem soulShardSystem = collider.GetComponent<SoulShardSystem>();
                 if (soulShardSystem != null)
                 {
-                    soulShardSystem.inreaseSoulShard(this);
-                    
+                    soulShardSystem.inreaseSoulShard(this);                    
                 }
                 else
                 {
