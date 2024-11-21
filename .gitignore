@@ -28,6 +28,7 @@
 .vscode/
 .idea
 /idea
+.DS_Store/
 
 # Gradle cache directory
 .gradle/
