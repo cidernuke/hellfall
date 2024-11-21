@@ -623,7 +623,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 230dcb29e379b574a89ea9a462e11e1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiDocument: {fileID: 877499152}
+  slots: []
+  uiDocument: {fileID: 0}
 --- !u!4 &877499154
 Transform:
   m_ObjectHideFlags: 0
@@ -980,7 +981,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68d73f421f6ea6246ad0516cc148281c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: f597998f4eebae649a1301d266ee3e11, type: 2}
 --- !u!1001 &1878175763
 PrefabInstance:
   m_ObjectHideFlags: 0

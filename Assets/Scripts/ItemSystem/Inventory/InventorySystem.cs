@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ItemSystem.Abstract;
+
 public class InventorySystem : MonoBehaviour
 {
     public InventorySlot[] slots;
 
-    public UIDocument uiDocument;
 
     void Start()
     {
-        uiDocument = GetComponent<UIDocument>();
+        UIDocument uiDocument = GetComponent<UIDocument>();
         if(uiDocument == null){
             Debug.LogError("Could not find UIDocument component on GameObject");
             return;
@@ -27,7 +28,7 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    public bool AddItemToFirstAvailableSlot(Item item)
+    public bool AddItemToFirstAvailableSlot(ItemSystem.Abstract.Item item)
     {
         foreach (var slot in slots)
         {

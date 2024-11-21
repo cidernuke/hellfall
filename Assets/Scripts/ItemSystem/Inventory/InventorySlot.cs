@@ -3,7 +3,7 @@ using UnityEngine.UIElements;
 
 public class InventorySlot : MonoBehaviour
 {
-    public Item storedItem;
+    public ItemSystem.Abstract.Item storedItem;
     private VisualElement hotkey;
 
     public void Initialize(VisualElement slotVisualElement)
@@ -12,7 +12,7 @@ public class InventorySlot : MonoBehaviour
         UpdateSlotVisual();
     }
 
-    public void StoreItem(Item item)
+    public void StoreItem(ItemSystem.Abstract.Item item)
     {
         storedItem = item;
         UpdateSlotVisual();
@@ -34,7 +34,7 @@ public class InventorySlot : MonoBehaviour
         {
             if (storedItem != null)
             {
-                hotkey.style.backgroundImage = new StyleBackground(storedItem.icon);
+                hotkey.style.backgroundImage = new StyleBackground(storedItem.itemSprite);
             }
             else
             {
