@@ -6,16 +6,15 @@ using ItemSystem.Abstract;
 namespace ItemSystem.Items
 {
     public class PowerUpItem : ModifierItem
-    {       
-
-        public void OnTriggerEnter2D(Collider2D other)
+    {        
+        public override bool use()
         {
-            throw new System.NotImplementedException();
+            Debug.Log("PowerUpItem used");
+            return true;
         }
 
-        public void modifyStats()
-        {
-        }
+        // TODO: Implement the rest of the PowerUpItem class
+        // For example, get reference to StatSystem and increase the players stats
     }
 }
 

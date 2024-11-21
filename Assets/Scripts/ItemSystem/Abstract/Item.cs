@@ -3,16 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace ItemSystem.Abstract
 {
-    public abstract class Item
+    [System.Serializable]
+    public abstract class Item 
     {
-        public string itemName { get; set; }    
+        public string itemName { get; set; }
         public Sprite itemSprite { get; set; }
-        public bool isDestroyed { get; set; } 
+        
 
-        public void OnTriggerEnter2D(Collider2D collider)
+        public virtual bool use()
         {
+            return false;
+        }
+        public virtual bool use(HealthSystem playerHealth)
+        {
+            return false;
         }
 
     }

@@ -10,14 +10,9 @@ namespace ItemSystem.Abstract
         public float duration { get; set; }
         public int amount { get; set; }
         public String description { get; set; }
-
-        public void OnTriggerEnter2D(Collider2D other)
-        {
-        }
+       
 
         // TODO: has parameter of Type StatSystem ( StatSystem stats )  
-        public void modifyStats()
-        {
-        }
+        
     }
 }

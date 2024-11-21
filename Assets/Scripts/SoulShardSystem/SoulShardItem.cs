@@ -1,12 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ItemSystem.Abstract;
 
-
-namespace ItemSystem.Items
-{
-    public class SoulShardItem : Item
+    public class SoulShardItem : MonoBehaviour
     {
         public void OnTriggerEnter2D(Collider2D collider)
         {
@@ -15,7 +11,8 @@ namespace ItemSystem.Items
                 SoulShardSystem soulShardSystem = collider.GetComponent<SoulShardSystem>();
                 if (soulShardSystem != null)
                 {
-                    soulShardSystem.inreaseSoulShard(this);                    
+                    soulShardSystem.inreaseSoulShard(this);
+                    Destroy(gameObject);                    
                 }
                 else
                 {
@@ -24,5 +21,5 @@ namespace ItemSystem.Items
             }
         }
     }
-}
+
 

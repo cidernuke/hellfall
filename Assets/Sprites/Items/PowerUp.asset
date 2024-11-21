@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cc0c4acd6bfa5c4786f79389bb96a16, type: 3}
-  m_Name: HealthPotion
+  m_Name: PowerUp
   m_EditorClassIdentifier: 
-  itemName: Health Potion (small)
-  itemSprite: {fileID: 3110332419431051783, guid: 42841dbacd4b88447a3d4ba22f85abdd, type: 3}
-  healthAmount: 1
-  isHealthItem: 1
-  isModifierItem: 0
+  itemName: "Str\xE4ke Buff"
+  itemSprite: {fileID: 0}
+  healthAmount: 0
+  isModifierItem: 1
   isWeaponItem: 0
-  collider: {fileID: 0}
+  isHealthItem: 0
