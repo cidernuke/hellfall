@@ -5,17 +5,18 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Enemy
   - NPC
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Wall
   - Ground
-  - 
+  - Enemy
   - 
   - 
   - 

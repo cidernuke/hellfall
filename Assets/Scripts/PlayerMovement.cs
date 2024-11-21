@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 /// <summary>
 /// Handles player movement, including walking, jumping, double jumping, wall jumping, wall sliding, dashing, and crouching.
@@ -9,12 +10,14 @@ public class PlayerMovement : MonoBehaviour
 {
     #region Layer Masks
     // Layer masks to identify ground and wall layers for collision detection
-    private LayerMask wallLayer;
-    private LayerMask groundLayer;
+    [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private LayerMask groundLayer;
+    private LayerMask groundAndWallLayer;
     #endregion
 
     #region Movement Variables
     // Components
+    private float horizontal;
     private Rigidbody2D body;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -22,29 +25,40 @@ public class PlayerMovement : MonoBehaviour
 
     // Movement flags and variables
     public bool grounded;
-    [SerializeField] private float speed;       // Horizontal movement speed
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private static float speed = 10f;  // Horizontal movement speed
     [SerializeField] private float jumpPower;   // Vertical jump force
 
-    private int facingDirection = 1; // 1 for facing right, -1 for facing left
+    private int facingDirection = 1; // 1 for facing right, -1 for facing left, affects the player
+    private bool isFacingRight = true;
+
+    //Fall variables --> HandleGravity is commented out due to problems, for explanation look at HandleGravity()
+    //[SerializeField] private float maxFallSpeed = 20f;
+    //[SerializeField] private float fallAcceleration = 2.5f; //Acceleration during the Fall
+
     #endregion
 
     #region Jumping Variables
-    // Multiple jumps (e.g., double jump)
-    [SerializeField] private int possibleJumps = 2; // Total number of jumps allowed before landing
-    private int jumpCounter;                        // Tracks remaining jumps
-
     // Wall jumping
+    private bool isWallSliding;
     [SerializeField] private float wallSlideSpeed = 2f; // Speed at which the player slides down a wall
-    [SerializeField] private float wallJumpX = 10f;     // Horizontal force applied during a wall jump
+    [SerializeField] private Transform wallCheck;
+    private int wallSide;
+    private int lastWallJumped = 0; // compared to wallSide in logic --> int, not bool
+    private bool canWallJump = true;
+    private bool isWallJumping;
+    private float wallJumpDirection;
+    private float wallJumpingTime = 0.2f;
+    private float wallJumpingCounter;
+    private float wallJumpDuration = 0.4f;  // Duration during which horizontal input is ignored after a wall jump
 
-    // Wall colliders
-    private Collider2D wallColliderLeft = null;
-    private Collider2D wallColliderRight = null;
-    private Collider2D lastWallJumpedFrom = null;
+    // Double Jump
+    private bool isDoubleJumping;
 
-    private bool isWallJumping = false;
-    private float wallJumpDuration = 0.2f;  // Duration during which horizontal input is ignored after a wall jump
-    private float wallJumpStartTime;         // Time when the wall jump started
+    //Coyote Time
+    [SerializeField] private float coyoteTimeDuration = 0.2f;
+    private float lastTimeGrounded = -1f; // Set to -1 to prevent coyote time from triggering at game start
+    private bool coyoteUsable = true;
     #endregion
 
     #region Dash Variables
@@ -60,8 +74,9 @@ public class PlayerMovement : MonoBehaviour
 
     #region Crouch Variables
     // Crouching mechanics
-    [SerializeField] private Sprite standing;  // Sprite used when standing
-    [SerializeField] private Sprite crouching; // Sprite used when crouching
+    [SerializeField] private Sprite standing;  // Sprite used when standing, initialized in unity inspector
+    [SerializeField] private Sprite crouching; // Sprite used when crouching, initialized in unity inspector
+    [SerializeField] private float crouchSpeed = speed / 2;
 
     private Vector2 standingSize;    // Collider size when standing
     private Vector2 crouchingSize;   // Collider size when crouching
@@ -81,7 +96,6 @@ public class PlayerMovement : MonoBehaviour
         InitializeLayers();
         InitializeCrouchVariables();
         InitializeDashVariables();
-        jumpCounter = possibleJumps;
     }
 
     /// <summary>
@@ -90,18 +104,50 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void Update()
     {
+        horizontal = GetHorizontalInput();
         if (isDashing)
         {
             // Skip the rest of the update while dashing
             return;
         }
 
-        CheckWallTouch();
+        if (IsGrounded())
+        {
+            isDoubleJumping = false;
+        }
 
-        HandleMovementInput();
         HandleJumpInput();
+        WallSlide();
+        WallJump();
+
         HandleDashInput();
-        HandleCrouchInput();
+
+        if (!isWallJumping)
+        {
+            Flip();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (!isWallJumping)
+        {
+            body.velocity = new Vector2(horizontal * speed, body.velocity.y);
+            bool isWalking = GetHorizontalInput() != 0;
+            animator.SetBool("run", isWalking);
+            HandleCrouchInput();
+            bool isCrouchWalking = isWalking && isCrouching;
+
+            animator.SetBool("crouch", !isCrouchWalking && isCrouching);
+            animator.SetBool("crouch_walking", isCrouchWalking);
+
+            if (IsGrounded() && isCrouchWalking)
+            {
+                body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
+            }
+        }
+        //HandleGravity(); 
+        //ApplyMovement();
     }
     #endregion
 
@@ -135,6 +181,7 @@ public class PlayerMovement : MonoBehaviour
     {
         wallLayer = LayerMask.GetMask("Wall");
         groundLayer = LayerMask.GetMask("Ground");
+        groundAndWallLayer = groundLayer | wallLayer;
     }
 
     /// <summary>
@@ -170,116 +217,188 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-    #region Input Handling Methods
-    /// <summary>
-    /// Handles horizontal movement input and updates the player's velocity accordingly.
-    /// </summary>
-    public void HandleMovementInput()
+    #region Movement Methods
+    private bool IsGrounded()
     {
-        float horizontalInput = GetHorizontalInput();
-        // Update the animator's parameters
-        bool isWalking = horizontalInput != 0;
-        bool isCrouchWalking = isCrouching && isWalking;
+        grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundAndWallLayer);
+        animator.SetBool("grounded", grounded);
 
-        // Adjust speed if crouching
-        float currentSpeed = speed;
-
-        if (isCrouching)
+        // Store the last time the player touched the ground for coyote time
+        if (grounded)
         {
-            currentSpeed *= 0.5f; // Half speed when crouching
-            animator.SetBool("crouch_walking", isCrouchWalking);
-            animator.SetBool("crouch", isCrouching && !isWalking);
+            lastTimeGrounded = Time.time;
+            coyoteUsable = true;
         }
-
-        if (isWallJumping)
+        else if (coyoteUsable && Time.time > lastTimeGrounded + coyoteTimeDuration)
         {
-            // Prevent horizontal movement input from overriding the wall jump
-            if (Time.time > wallJumpStartTime + wallJumpDuration)
-            {
-                isWallJumping = false;
-            }
+            // If Coyote Time duration is exceeded, disable its usability
+            coyoteUsable = false;
         }
-        else if ((wallColliderLeft != null || wallColliderRight != null) && !grounded && body.velocity.y < 0)
+        return grounded;
+    }
+
+    private bool IsWalled()
+    {
+        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
+    }
+
+    private void WallSlide()
+    {
+        if (IsWalled() && !grounded && horizontal != 0f)
         {
-            // Player is wall sliding
-            body.velocity = new Vector2(body.velocity.x, -wallSlideSpeed);
+            isWallSliding = true;
+            // Determine the wall side (1 for right wall, -1 for left wall)
+            wallSide = transform.localScale.x > 0 ? 1 : -1;
+            body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlideSpeed, float.MaxValue));
 
-            // Allow player to move away from the wall
-            if ((wallColliderLeft != null && horizontalInput > 0) || (wallColliderRight != null && horizontalInput < 0))
+            if (wallJumpDirection < 0 || wallJumpDirection > 0)
             {
-                // Player moves away from the wall
-                body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
-
-                // Flip player sprite based on input direction
-                if (horizontalInput > 0.01f && facingDirection == -1)
-                {
-                    FlipPlayer();
-                }
-                else if (horizontalInput < -0.01f && facingDirection == 1)
-                {
-                    FlipPlayer();
-                }
+                GetComponent<SpriteRenderer>().flipX = true;
+                animator.SetBool("is_wall_sliding", isWallSliding);
             }
         }
         else
         {
-            // Normal horizontal movement
-            body.velocity = new Vector2(horizontalInput * currentSpeed, body.velocity.y);
-
-            // Flip player sprite based on input direction
-            if (horizontalInput > 0.01f && facingDirection == -1)
-            {
-                FlipPlayer();
-            }
-            else if (horizontalInput < -0.01f && facingDirection == 1)
-            {
-                FlipPlayer();
-            }
+            GetComponent<SpriteRenderer>().flipX = false;
+            isWallSliding = false;
+            animator.SetBool("is_wall_sliding", isWallSliding);
         }
-
-        // Update the animator's parameters
-        animator.SetBool("run", horizontalInput != 0);
     }
 
-    /// <summary>
-    /// Handles jump input and performs regular jumps, double jumps, and wall jumps.
-    /// </summary>
-    public void HandleJumpInput()
+    private void WallJump()
     {
-        if (GetJumpInput() && !isCrouching)
+        if (isWallSliding)
         {
-            if (grounded)
-            {
-                // Perform a regular jump
-                body.velocity = new Vector2(body.velocity.x, jumpPower);
-                animator.SetTrigger("jump");
-                grounded = false;
-                jumpCounter = possibleJumps - 1; // Decrease jump counter
-                isWallJumping = false;
-                lastWallJumpedFrom = null;
-            }
-            else if ((wallColliderLeft != null || wallColliderRight != null) && !isWallJumping)
-            {
-                // Determine current wall collider
-                Collider2D currentWall = wallColliderLeft != null ? wallColliderLeft : wallColliderRight;
+            wallJumpDirection = -wallSide;
+            wallJumpingCounter = wallJumpingTime;
 
-                // Check if the current wall is different from the last wall jumped from
-                if (currentWall != null && currentWall != lastWallJumpedFrom)
-                {
-                    // Perform a wall jump
-                    WallJump(currentWall);
-                    animator.SetTrigger("jump");
-                }
-            }
-            else if (jumpCounter > 0)
+            CancelInvoke(nameof(StopWallJumping));
+
+            // Check if we are on a different wall than last jump
+            if (lastWallJumped != wallSide)
             {
-                // Perform a double jump
-                body.velocity = new Vector2(body.velocity.x, jumpPower);
-                jumpCounter--;
-                animator.SetTrigger("jump");
+                // Reset wall jumping ability since we switched walls
+                canWallJump = true;
+                lastWallJumped = wallSide;
             }
         }
-        animator.SetBool("grounded", grounded);
+        else
+        {
+            wallJumpingCounter -= Time.deltaTime;
+        }
+
+        if (GetJumpInput() && wallJumpingCounter > 0f && canWallJump)
+        {
+            // TODO: make smoother, right now very janky feeling. When jumping from one wall to other, player very fast and then very slow. Hint: body.velocity.x (2f) 
+            Vector2 wallJumpingPower = new Vector2(2f, 7f);
+            isWallJumping = true;
+            body.velocity = new Vector2(wallJumpDirection * wallJumpingPower.x, wallJumpingPower.y);
+            // Disable jumping on the same wall again until we touch a new wall
+            canWallJump = false;
+            wallJumpingCounter = 0f;
+
+            if (transform.localScale.x != wallJumpDirection)
+            {
+                isFacingRight = !isFacingRight;
+                Vector3 localScale = transform.localScale;
+                localScale.x *= -1f;
+                transform.localScale = localScale;
+            }
+
+            Invoke(nameof(StopWallJumping), wallJumpDuration);
+        }
+    }
+
+    private void StopWallJumping()
+    {
+        isWallJumping = false;
+    }
+
+    private void Flip()
+    {
+        if ((isFacingRight && horizontal < 0f) || (!isFacingRight && horizontal > 0f))
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
+        }
+    }
+
+    private bool CanUseCoyote()
+    {
+        return coyoteUsable && !grounded && Time.time < lastTimeGrounded + coyoteTimeDuration;
+    }
+
+    // The HandleGravity method is intended to control the player's falling speed 
+    // by applying fall acceleration and capping it at a defined max fall speed.
+    // This should ensure smoother and more controlled falling behavior.
+    // It is currently commented out due to issues with other parts of the code 
+    // overwriting body.velocity.y, leading to conflicts that prevent the fall speed 
+    // cap from working as intended.
+
+    //     private void HandleGravity()
+    //     {
+    //         //If the player is grounded and falling (not sure if even necessary)
+    //         // if(grounded && body.velocity.y >= 0f)
+    //         // {
+    //         //     //Set a small downward force to keep the player grounded (not sure if even necessary)
+    //         //     body.velocity = new Vector2(body.velocity.x, -0.5f);
+    //         // }
+    //         // else
+    //         // {
+    //         //     //Apply fall acceleration and limit fall speed (Important for smooth falling)
+    //         //     body.velocity = new Vector2(body.velocity.x, Mathf.MoveTowards(body.velocity.y, -maxFallSpeed, fallAcceleration* Time.fixedDeltaTime));
+    //         // }
+
+    //         // if(!grounded && body.velocity.y < 0f){
+    //         //     body.velocity = new Vector2(body.velocity.x, Mathf.MoveTowards(body.velocity.y, -maxFallSpeed, fallAcceleration* Time.fixedDeltaTime));
+    //         //     Debug.Log("Fallspeed (clamped): " + body.velocity.y + " / MaxFallSpeed: " + -maxFallSpeed);
+    //         // }
+
+    //         //float initialGravityScale = body.gravityScale;
+    //         //body.gravityScale = 0;
+    //         if(!grounded && body.velocity.y < 0f)
+    //         {
+    //             float newFallSpeed = Mathf.MoveTowards(body.velocity.y, -maxFallSpeed, fallAcceleration * Time.fixedDeltaTime);
+    //             body.velocity = new Vector2(body.velocity.x, newFallSpeed);
+    //             Debug.Log("Fallspeed (clamped): " + body.velocity.y + " / MaxFallSpeed: " + -maxFallSpeed);
+    //         }
+    //         //body.gravityScale = initialGravityScale;
+    //     }
+
+    //     private void ApplyMovement()
+    // {
+    //     // Apply the current velocity values calculated in other methods to the Rigidbody2D component
+    //     body.velocity = new Vector2(body.velocity.x, body.velocity.y);
+    // }
+    #endregion
+
+    #region Input Handling Methods
+    private void HandleJumpInput()
+    {
+        if (GetJumpInput())
+        {
+            animator.SetTrigger("jump"); // Play jump animation on first jump
+
+            //Checks
+            if (IsGrounded() || CanUseCoyote())
+            {
+                // First jump
+                // TODO: jumpPower is not initialized anywhere!
+                body.velocity = new Vector2(body.velocity.x, jumpPower);
+                isDoubleJumping = false; // Reset double jump for the next jump
+                coyoteUsable = false;
+            }
+            else if (!isDoubleJumping)
+            {
+                // Double jump
+                // TODO: jumpPower is not initialized anywhere!
+                body.velocity = new Vector2(body.velocity.x, jumpPower);
+                isDoubleJumping = true; // Set double jump flag to prevent further jumps
+                animator.SetBool("grounded", IsGrounded());
+            }
+        }
     }
 
     /// <summary>
@@ -300,8 +419,6 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleCrouchInput()
     {
-        float horizontalInput = GetHorizontalInput();
-
         if (GetCrouchInput())
         {
             if (!isCrouching)
@@ -312,7 +429,6 @@ public class PlayerMovement : MonoBehaviour
                 boxCollider.offset = crouchingOffset;
                 isCrouching = true;
                 animator.SetBool("crouch", true);
-
             }
         }
         else
@@ -325,52 +441,18 @@ public class PlayerMovement : MonoBehaviour
                 boxCollider.offset = standingOffset;
                 isCrouching = false;
                 animator.SetBool("crouch", false);
-
+                animator.SetBool("crouch_walking", false);
             }
-        }        
-
-
-    }
-    #endregion
-
-    #region Collision Methods
-    /// <summary>
-    /// Called when the player collides with another collider.
-    /// Used to detect when the player lands on the ground.
-    /// </summary>
-    /// <param name="collision">Collision data.</param>
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        int collisionLayer = collision.gameObject.layer;
-
-        // Check if the collision is with the ground layer
-        if ((groundLayer.value & (1 << collisionLayer)) != 0)
-        {
-            // Player has landed on the ground
-            grounded = true;
-            jumpCounter = possibleJumps; // Reset jump counter
-            isWallJumping = false;
-            lastWallJumpedFrom = null;
         }
     }
 
-    /// <summary>
-    /// Called when the player stops colliding with another collider.
-    /// Used to detect when the player leaves the ground.
-    /// </summary>
-    /// <param name="collision">Collision data.</param>
-    public void OnCollisionExit2D(Collision2D collision)
+    public bool CanAttack()
     {
-        int collisionLayer = collision.gameObject.layer;
+        float horizontalInput = GetHorizontalInput();
 
-        // Check if the collision was with the ground layer
-        if ((groundLayer.value & (1 << collisionLayer)) != 0)
-        {
-            // Player has left the ground
-            grounded = false;
-        }
-        // Note: We do not reset lastWallJumpedFrom when leaving the wall to prevent infinite wall jumps
+        return horizontalInput == 0 && grounded;
     }
+
     #endregion
 
     #region Dash Coroutine
@@ -412,76 +494,6 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
 
         canDash = true;
-    }
-    #endregion
-
-    #region Wall Methods
-    /// <summary>
-    /// Checks if the player is touching a wall on the left or right side.
-    /// Updates wall colliders accordingly.
-    /// </summary>
-    private void CheckWallTouch()
-    {
-        // Cast a box collider to the left to detect walls
-        RaycastHit2D raycastHitLeft = Physics2D.BoxCast(
-            boxCollider.bounds.center,
-            boxCollider.bounds.size,
-            0f,
-            Vector2.left,
-            0.1f,
-            wallLayer);
-
-        // Cast a box collider to the right to detect walls
-        RaycastHit2D raycastHitRight = Physics2D.BoxCast(
-            boxCollider.bounds.center,
-            boxCollider.bounds.size,
-            0f,
-            Vector2.right,
-            0.1f,
-            wallLayer);
-
-        // Update wall colliders based on collision results
-        wallColliderLeft = raycastHitLeft.collider;
-        wallColliderRight = raycastHitRight.collider;
-    }
-
-    /// <summary>
-    /// Performs a wall jump by applying a force away from the wall and flipping the player's direction.
-    /// </summary>
-    /// <param name="currentWall">The wall collider from which the player is jumping.</param>
-    private void WallJump(Collider2D currentWall)
-    {
-        // Apply a force away from the wall
-        float horizontalForce = -facingDirection * wallJumpX;
-        Vector2 force = new Vector2(horizontalForce, jumpPower);
-        body.velocity = Vector2.zero; // Reset current velocity
-        body.AddForce(force, ForceMode2D.Impulse);
-
-        // Immediately flip the player's facing direction
-        //FlipPlayer();
-
-        grounded = false;
-        isWallJumping = true;
-        wallJumpStartTime = Time.time;
-
-        lastWallJumpedFrom = currentWall; // Store the wall we just jumped from
-
-        // Reset jump counter after wall jump to allow double jump
-        jumpCounter = possibleJumps - 1;
-    }
-
-    /// <summary>
-    /// Flips the player's facing direction and updates the sprite accordingly.
-    /// </summary>
-    private void FlipPlayer()
-    {
-        // Invert the facing direction
-        facingDirection *= -1;
-
-        // Flip the player's sprite by inverting the x scale
-        Vector3 scaler = transform.localScale;
-        scaler.x *= -1;
-        transform.localScale = scaler;
     }
     #endregion
 
