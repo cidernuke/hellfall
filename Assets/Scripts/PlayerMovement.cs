@@ -89,7 +89,14 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 crouchingSize; // Collider size when crouching
     private Vector2 standingOffset; // Collider offset when standing
     private Vector2 crouchingOffset; // Collider offset when crouching
-    private bool isCrouching = false;
+    public bool isCrouching = false;
+    #endregion
+
+    #region Blocking variables
+    [SerializeField] public bool blockWalk = false;     // blocks Player from walking, if true
+    [SerializeField] public bool blockJump = false;     // blocks Player from jumping, if true
+    [SerializeField] public bool blockCrouch = false;   // blocks Player from crouching, if true
+    [SerializeField] public bool blockDash = false;     // blocks Player from dashing, if true
     #endregion
 
     #region Unity Methods
@@ -136,10 +143,16 @@ public class PlayerMovement : MonoBehaviour
             lastTimeJumpPressed = Time.time;
         }
 
+        if (!blockJump) { HandleJumpInput(); }
+
+        if (!blockDash) { HandleDashInput(); }
+
+        WallSlide();
         HandleJumpInput();
         // WallSlide(); --> moved into WallJump for performance.
         WallJump();
-        HandleDashInput();
+
+        // HandleDashInput();
 
         if (!isWallJumping && !isWallSliding)
         {
@@ -161,7 +174,7 @@ public class PlayerMovement : MonoBehaviour
             else return;
             bool isWalking = playerInput.GetHorizontalInput() != 0;
             animator.SetBool("run", isWalking);
-            HandleCrouchInput();
+            if (!blockCrouch) { HandleCrouchInput(); }
             bool isCrouchWalking = isWalking && isCrouching;
 
             animator.SetBool("crouch", !isCrouchWalking && isCrouching);
@@ -302,10 +315,18 @@ public class PlayerMovement : MonoBehaviour
             // Determine the wall side (1 for right wall, -1 for left wall)
             wallSide = transform.localScale.x > 0 ? 1 : -1;
             body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlideSpeed, float.MaxValue));
+
+            if (wallJumpDirection < 0 || wallJumpDirection > 0)
+            {
+                GetComponent<SpriteRenderer>().flipX = true;
+                animator.SetBool("is_wall_sliding", isWallSliding);
+            }
         }
         else
         {
+            GetComponent<SpriteRenderer>().flipX = false;
             isWallSliding = false;
+            animator.SetBool("is_wall_sliding", isWallSliding);
         }
     }
 
