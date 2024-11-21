@@ -85,6 +85,14 @@ public class PlayerMovement : MonoBehaviour
     public bool isCrouching = false;
     #endregion
 
+    #region Blocking variables
+    [SerializeField] public bool blockWalk = false;     // blocks Player from walking, if true
+    [SerializeField] public bool blockJump = false;     // blocks Player from jumping, if true
+    [SerializeField] public bool blockCrouch = false;   // blocks Player from crouching, if true
+    [SerializeField] public bool blockDash = false;     // blocks Player from dashing, if true
+    #endregion
+
+
     #region Unity Methods
     /// <summary>
     /// Called when the script instance is being loaded.
@@ -116,11 +124,14 @@ public class PlayerMovement : MonoBehaviour
             isDoubleJumping = false;
         }
 
-        HandleJumpInput();
+        if (!blockJump) { HandleJumpInput(); }
+
+        if (!blockDash) { HandleDashInput(); }
+
         WallSlide();
         WallJump();
 
-        HandleDashInput();
+        // HandleDashInput();
 
         if (!isWallJumping)
         {
@@ -135,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
             body.velocity = new Vector2(horizontal * speed, body.velocity.y);
             bool isWalking = GetHorizontalInput() != 0;
             animator.SetBool("run", isWalking);
-            HandleCrouchInput();
+            if (!blockCrouch) { HandleCrouchInput(); }
             bool isCrouchWalking = isWalking && isCrouching;
 
             animator.SetBool("crouch", !isCrouchWalking && isCrouching);
