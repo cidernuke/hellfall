@@ -5,7 +5,6 @@ using UnityEngine;
 public class Socrates_Script : MonoBehaviour
 {
     // Player variables
-
     public GameObject player;                           // Player Game Object
     private Rigidbody2D playerRigidBody;                // Player Rigidbody
     public GameObject playerSpeech;                     // Player Speech Bubble Object
@@ -243,7 +242,7 @@ public class Socrates_Script : MonoBehaviour
     IEnumerator thirdSequence()
     {
 
-         // S: you can double-jump
+        // S: you can double-jump
         StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_21", 3f));
         yield return skipCheck(2f);
 
@@ -269,8 +268,4 @@ public class Socrates_Script : MonoBehaviour
         playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
 
     }
-    
-    
-
-
 }
