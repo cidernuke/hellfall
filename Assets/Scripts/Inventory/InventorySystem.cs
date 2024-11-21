@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 public class InventorySystem : MonoBehaviour
 {
-    InventorySlot[] slots;
+    public InventorySlot[] slots;
 
     public UIDocument uiDocument;
 
