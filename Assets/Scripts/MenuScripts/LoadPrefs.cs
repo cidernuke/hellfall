@@ -80,7 +80,7 @@ public class LoadPrefs : MonoBehaviour
             if (PlayerPrefs.HasKey("masterBrightness"))
             {
                 float localBrightness = PlayerPrefs.GetFloat("masterBrightness");
-                brightnessTextValue.text = localBrightness.ToString("0.0");
+
                 brightnessSlider.value = localBrightness;
                 // Apply brightness in the game here
             }
