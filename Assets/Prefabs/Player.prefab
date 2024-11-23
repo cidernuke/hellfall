@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 976393204391322360}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wall Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,9 +46,11 @@ GameObject:
   - component: {fileID: 5746640054634646074}
   - component: {fileID: 8335488962519607957}
   - component: {fileID: 2193375495534342346}
-  m_Layer: 0
+  - component: {fileID: 6581974467983910770}
+  - component: {fileID: 7515475865458641955}
+  m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -116,7 +118,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3.75, y: 2.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -159,7 +161,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 3.75, y: 2.5}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 3.75, y: 2.5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -209,22 +211,21 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 64
-  grounded: 0
-  speed: 10
-  jumpPower: 5
-  possibleJumps: 2
-  wallSlideSpeed: 2
-  wallJumpX: 10
-  wallCheck: {fileID: 976393204391322360}
-  groundCheck: {fileID: 7624676514274553780}
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
+  grounded: 0
+  groundCheck: {fileID: 7624676514274553780}
+  jumpPower: 5
+  wallSlideSpeed: 2
+  wallCheck: {fileID: 976393204391322360}
+  coyoteTimeDuration: 0.2
   dashSpeed: 30
   dashDuration: 0.2
   dashCooldown: 1
   standing: {fileID: 691704114, guid: 22a836ecf58efa24f8d6db5ebc1c5eeb, type: 3}
   crouching: {fileID: 21300000, guid: adf511fbe02c3784e8780b1b89e29439, type: 3}
+  crouchSpeed: 5
   isCrouching: 0
 --- !u!95 &8335488962519607957
 Animator:
@@ -259,8 +260,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bbbdafceb1d62046b87c955a0d68953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 0
+  startingHealth: 5
   currentHealth: 0
+  anim: {fileID: 8335488962519607957}
+  timeInvincible: 0.5
+  isInvincible: 0
+--- !u!114 &6581974467983910770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5585758838363563765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122240b373e6694e909995038f8120c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackCooldown: 1
+  range: 1
+  damage: 1
+  colliderDistance: 2
+  boxCollider: {fileID: 8124953113361661337}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!114 &7515475865458641955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5585758838363563765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a43574253fdef974c8c85f3a7305bb1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8769760779391340631
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,7 +306,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7624676514274553780}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
