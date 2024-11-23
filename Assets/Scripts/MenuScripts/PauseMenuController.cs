@@ -50,3 +50,4 @@ public class PauseMenuController : MonoBehaviour
         SceneManager.LoadScene(_mainMenu);
     }
 }
+

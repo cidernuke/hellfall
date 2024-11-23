@@ -1849,7 +1849,7 @@ MonoBehaviour:
       - m_Target: {fileID: 442774683}
         m_TargetAssemblyTypeName: MenuController, ScriptsAssemblyDef
         m_MethodName: SetQuality
-        m_Mode: 0
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2129,7 +2129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79922d85356774715bed7106744becff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canUse: 1
+  canUse: 0
   menuController: {fileID: 442774683}
   volumeTextValue: {fileID: 493175241}
   volumeSlider: {fileID: 554339601}
@@ -2137,8 +2137,8 @@ MonoBehaviour:
   brightnessTextValue: {fileID: 1754923740}
   qualityDropdown: {fileID: 268211023}
   fullScreenToggle: {fileID: 384643049}
-  controllerSenTextValue: {fileID: 999959838}
-  controllerSenSlider: {fileID: 1840686230}
+  controllerSenTextValue: {fileID: 513756688}
+  controllerSenSlider: {fileID: 554339601}
   invertYToggle: {fileID: 661822212}
 --- !u!4 &343792945
 Transform:
@@ -2376,7 +2376,7 @@ MonoBehaviour:
       - m_Target: {fileID: 442774683}
         m_TargetAssemblyTypeName: MenuController, ScriptsAssemblyDef
         m_MethodName: SetFullScreen
-        m_Mode: 0
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2856,7 +2856,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   volumeTextValue: {fileID: 1627322134}
   volumeSlider: {fileID: 554339601}
-  defaultVolume: 0.5
+  defaultVolume: 1
   ControllerSenTextValue: {fileID: 513756688}
   controllerSenSlider: {fileID: 1840686230}
   defaultSen: 4
@@ -2868,7 +2868,7 @@ MonoBehaviour:
   qualityDropdown: {fileID: 268211023}
   fullScreenToggle: {fileID: 384643049}
   confirmationPrompt: {fileID: 1912816273}
-  _newGameLevel: MenuTest
+  _newGameLevel: MenuPause
   noSavedGameDialog: {fileID: 25361277}
   resolutionDropdown: {fileID: 809471535}
 --- !u!4 &442774684
@@ -4003,14 +4003,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 442774683}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuController, ScriptsAssemblyDef
         m_MethodName: SetVolume
-        m_Mode: 0
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
+          m_FloatArgument: 0.5
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -7280,7 +7280,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 442774683}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuController, ScriptsAssemblyDef
         m_MethodName: ResetButton
         m_Mode: 5
         m_Arguments:
@@ -7977,7 +7977,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 442774683}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuController, ScriptsAssemblyDef
         m_MethodName: VolumeApply
         m_Mode: 1
         m_Arguments:
@@ -10161,7 +10161,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 442774683}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuController, ScriptsAssemblyDef
         m_MethodName: GameplayApply
         m_Mode: 1
         m_Arguments:
@@ -10545,7 +10545,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 442774683}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuController, ScriptsAssemblyDef
         m_MethodName: ResetButton
         m_Mode: 5
         m_Arguments:
@@ -10825,7 +10825,7 @@ MonoBehaviour:
       - m_Target: {fileID: 442774683}
         m_TargetAssemblyTypeName: MenuController, ScriptsAssemblyDef
         m_MethodName: SetBrightness
-        m_Mode: 0
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -11487,7 +11487,7 @@ MonoBehaviour:
           m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 442774683}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuController, ScriptsAssemblyDef
         m_MethodName: VolumeApply
         m_Mode: 1
         m_Arguments:
@@ -14243,7 +14243,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 442774683}
-        m_TargetAssemblyTypeName: MenuController, Assembly-CSharp
+        m_TargetAssemblyTypeName: MenuController, ScriptsAssemblyDef
         m_MethodName: ResetButton
         m_Mode: 5
         m_Arguments:
