@@ -36,7 +36,7 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    public bool AddItemToFirstAvailableSlot(ItemSystem.Abstract.Item item)
+    public bool AddItemToFirstAvailableSlot(ItemData item)
     {
         if (item == null)
         {

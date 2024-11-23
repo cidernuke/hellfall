@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-[System.Serializable]
 public class InventorySlot
 {
-    public ItemSystem.Abstract.Item storedItem;
+    public ItemData storedItem;
     private VisualElement hotkey;
 
     public void Initialize(VisualElement slotVisualElement)
@@ -13,9 +12,9 @@ public class InventorySlot
         UpdateSlotVisual();
     }
 
-    public void StoreItem(ItemSystem.Abstract.Item item)
+    public void StoreItem(ItemData itemData)
     {
-        storedItem = item;
+        storedItem = itemData;
         UpdateSlotVisual();
     }
 

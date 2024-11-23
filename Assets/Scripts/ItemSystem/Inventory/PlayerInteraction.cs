@@ -10,9 +10,9 @@ public class PlayerInteraction : MonoBehaviour
         if (other.CompareTag("Item"))
         {
             // Attempt to find an Item component directly
-            var itemComponent = other.GetComponent<ItemSystem.Abstract.Item>();
+            var pickup = other.GetComponent<InventoryItem>();
 
-            if (itemComponent != null && playerInventory.AddItemToFirstAvailableSlot(itemComponent))
+            if (pickup != null && playerInventory.AddItemToFirstAvailableSlot(pickup.item))
             {
                 Destroy(other.gameObject); // Remove the item from the world
             }

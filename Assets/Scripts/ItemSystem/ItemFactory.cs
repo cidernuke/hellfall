@@ -53,7 +53,7 @@ public class ItemFactory : MonoBehaviour
         switch (itemData.itemType)
         {
             case ItemType.ModifierItem:
-                powerUpItem = new PowerUpItem();
+                powerUpItem = new PowerUpItem(itemData.itemName, itemData.itemSprite);
                 break;
 
             case ItemType.HealthItem:

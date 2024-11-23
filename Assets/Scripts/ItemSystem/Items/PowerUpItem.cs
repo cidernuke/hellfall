@@ -7,9 +7,15 @@ namespace ItemSystem.Items
 {
     public class PowerUpItem : ModifierItem
     {        
+        public PowerUpItem(string itemName, Sprite itemSprite)
+    {
+        this.itemName = itemName;
+        this.itemSprite = itemSprite;
+        
+    }
         public override bool use()
         {
-            Debug.Log("PowerUpItem used");
+            Debug.Log("PowerUpItem can now be used");
             return true;
         }
 

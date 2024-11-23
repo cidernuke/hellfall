@@ -6,5 +6,5 @@ using ItemSystem.Abstract;
 
 public class InventoryItem : MonoBehaviour
 {
-    public Item item;
+    public ItemData item;
 }

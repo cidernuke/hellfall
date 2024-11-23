@@ -16,12 +16,15 @@ public class HealthItem : Item
     }
     public override bool use(HealthSystem playerHealth)
         {
+            /*
             if (playerHealth.currentHealth < playerHealth.startingHealth)
             {
                 playerHealth.AddHealth(healthAmount);                
                 return true;             
 
             }
+            */
+            Debug.Log("HealthItem can now be used");
             return false;
         }
     

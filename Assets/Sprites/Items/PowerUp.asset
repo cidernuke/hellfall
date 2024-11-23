@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cc0c4acd6bfa5c4786f79389bb96a16, type: 3}
   m_Name: PowerUp
   m_EditorClassIdentifier: 
-  itemName: "Str\xE4ke Buff"
-  itemSprite: {fileID: 0}
+  itemName: Staerke Buff
+  itemSprite: {fileID: 3450577421433650506, guid: c7d1d3d805b430c48b35e2241065a0cb, type: 3}
   healthAmount: 0
-  isModifierItem: 1
-  isWeaponItem: 0
-  isHealthItem: 0
+  itemType: 0
