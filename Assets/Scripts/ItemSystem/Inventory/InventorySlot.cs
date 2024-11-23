@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class InventorySlot : MonoBehaviour
+[System.Serializable]
+public class InventorySlot
 {
     public ItemSystem.Abstract.Item storedItem;
     private VisualElement hotkey;
@@ -20,9 +21,9 @@ public class InventorySlot : MonoBehaviour
 
     public void DropItem()
     {
-        if (storedItem != null && storedItem.prefab != null)
+        if (storedItem != null)
         {
-            Instantiate(storedItem.prefab, transform.position + transform.forward, Quaternion.identity);
+            Debug.Log($"Dropping item: {storedItem.itemName}");
             storedItem = null;
         }
         UpdateSlotVisual();

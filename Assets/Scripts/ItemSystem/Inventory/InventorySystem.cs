@@ -7,33 +7,48 @@ using ItemSystem.Abstract;
 public class InventorySystem : MonoBehaviour
 {
     public InventorySlot[] slots;
+    [SerializeField] protected UIDocument uiDocument;
+    protected VisualElement root;
 
 
     void Start()
     {
-        UIDocument uiDocument = GetComponent<UIDocument>();
-        if(uiDocument == null){
+        root = uiDocument.rootVisualElement;
+        if (uiDocument == null)
+        {
             Debug.LogError("Could not find UIDocument component on GameObject");
             return;
         }
+        //Create 3 InventorySlots 
+        slots = new InventorySlot[3];
         //For the 3 Itemslots "Hotkey1", "Hotkey2", "Hotkey3"
         for (int i = 0; i < slots.Length; i++)
         {
             //Regex to find the VisualElement with the name "Hotkey" + i
-            VisualElement hotkey = uiDocument.rootVisualElement.Q<VisualElement>($"Hotkey{i + 1}");
-            slots[i].Initialize(hotkey);
-            if(hotkey == null){
+            VisualElement hotkey = root.Q<VisualElement>($"Hotkey{i + 1}");
+            if (hotkey == null)
+            {
                 Debug.LogError("Could not find VisualElement with name Hotkey" + i + 1);
             }
+            // Initialize a new InventorySlot and assign it to the slots array
+            slots[i] = new InventorySlot();
+            slots[i].Initialize(hotkey);
         }
     }
 
     public bool AddItemToFirstAvailableSlot(ItemSystem.Abstract.Item item)
     {
+        if (item == null)
+        {
+            Debug.LogError("Attempting to add a null item to the inventory.");
+            return false;
+        }
+
         foreach (var slot in slots)
         {
             if (slot.storedItem == null)
             {
+                Debug.Log($"Adding item {item.itemName} to the inventory.");
                 slot.StoreItem(item);
                 return true;
             }

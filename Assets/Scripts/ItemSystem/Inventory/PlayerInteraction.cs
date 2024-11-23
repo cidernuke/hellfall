@@ -2,20 +2,23 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    public InventorySystem playerInventory; // Reference to the Inventory script
+    public InventorySystem playerInventory;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         // Check if the colliding object is tagged as "Item"
         if (other.CompareTag("Item"))
         {
-            // Get the ItemPickup component
-            InventoryItem pickup = other.GetComponent<InventoryItem>();
+            // Attempt to find an Item component directly
+            var itemComponent = other.GetComponent<ItemSystem.Abstract.Item>();
 
-            // Ensure the item and inventory are valid
-            if (pickup != null && playerInventory.AddItemToFirstAvailableSlot(pickup.item))
+            if (itemComponent != null && playerInventory.AddItemToFirstAvailableSlot(itemComponent))
             {
                 Destroy(other.gameObject); // Remove the item from the world
+            }
+            else
+            {
+                Debug.LogWarning("The object tagged 'Item' does not have a valid Item component!");
             }
         }
     }
