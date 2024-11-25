@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     // Components
     private float horizontal;
     private Rigidbody2D body;
-    private Animator animator;
+    public Animator animator;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider;
 
