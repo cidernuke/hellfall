@@ -17,6 +17,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask platformLayer;
     #endregion
 
+    #region Checkpoint
+    private Vector3 respawnPosition;
+    public bool isDead = false;
+    #endregion
+
     #region Movement Variables
     // Components
     private float horizontal;
@@ -116,6 +121,9 @@ public class PlayerMovement : MonoBehaviour
         InitializeLayers();
         InitializeCrouchVariables();
         InitializeDashVariables();
+
+        // Initialise the respawnPosition to the Start Position of the Player
+        respawnPosition = transform.position;
     }
 
     /// <summary>
@@ -488,6 +496,51 @@ public class PlayerMovement : MonoBehaviour
         float horizontalInput = playerInput.GetHorizontalInput();
 
         return horizontalInput == 0 && grounded;
+    }
+
+    #endregion
+
+    #region Checkpoint
+
+    // Methode zum Aktualisieren des Respawn-Punkts
+    public void UpdateRespawnPoint(Vector3 newRespawnPosition)
+    {
+        respawnPosition = newRespawnPosition;
+    }
+
+    public void Respawn()
+    {
+        // Set the position of the Player to the respawn-point
+        transform.position = respawnPosition;
+
+        // // Berechne den Offset zwischen dem Spieler-Pivot und dem Ground-Check
+        // float pivotToGroundCheckOffset = transform.position.y - groundCheck.position.y;
+
+        // // Passe die Respawn-Position an
+        // Vector3 adjustedRespawnPosition = new Vector3(
+        //     respawnPosition.x,
+        //     respawnPosition.y + pivotToGroundCheckOffset,
+        //     respawnPosition.z
+        // );
+
+        // // Setze die Position des Spielers
+        // transform.position = adjustedRespawnPosition;
+
+        // Reactivate the PlayerMovement-script
+        enabled = true;
+
+        // Reset death-flag
+        isDead = false;
+
+        // Reset velocity
+        body.velocity = Vector2.zero;
+
+        //TODO: Add respawn animation here
+        //Reset die trigger
+        animator.ResetTrigger("die");
+        //Set Idle animation again, if not player is invisible unitl the animation is changed
+        //Just unitl i found better solution
+        animator.Play("Idle");
     }
 
     #endregion

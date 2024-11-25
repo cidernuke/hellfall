@@ -121,6 +121,9 @@ public class HealthSystem : MonoBehaviour
             if (playerMovement != null)
             {
                 playerMovement.enabled = false;
+                isDead = true;
+
+                StartCoroutine(RespawnPlayer(playerMovement));
 
             }
             else if (enemyController != null)
@@ -135,5 +138,23 @@ public class HealthSystem : MonoBehaviour
     }
     #endregion
 
+    // Coroutine zum Respawnen des Spielers
+    private IEnumerator RespawnPlayer(PlayerMovement playerMovement)
+    {
+        // wait for the die animation
+        yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
 
+        // reset health
+        currentHealth = startingHealth;
+
+        // Later: Update the health-bar
+        // UIHandler.instance.SetHealthValue(currentHealth / startingHealth);
+
+        // Call the Respawn method from playerMovement
+        playerMovement.Respawn();
+        //isInvincible = false;
+
+        // Reset isDead
+        isDead = false;
+    }
 }
