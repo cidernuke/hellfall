@@ -148,9 +148,9 @@ public class PlayerMovement : MonoBehaviour
         if (!blockDash) { HandleDashInput(); }
 
         WallSlide();
-        HandleJumpInput();
+        // HandleJumpInput();
         // WallSlide(); --> moved into WallJump for performance.
-        WallJump();
+        if (!blockJump) { WallJump(); }
 
         // HandleDashInput();
 

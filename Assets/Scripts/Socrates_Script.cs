@@ -111,7 +111,7 @@ public class Socrates_Script : MonoBehaviour
             }
 
             // Check if player has double-jumped
-            if(playerPosition.y >= -1 && sequence == 4) 
+            if(playerPosition.y >= -0.5 && sequence == 4) 
             {
                 StartCoroutine(fourthSequence());
                 sequence = 5;
@@ -218,8 +218,6 @@ public class Socrates_Script : MonoBehaviour
     IEnumerator titleAnimation()
     {
 
-        titleAnimator.SetBool("Title", true);
-
         // Start following the camera
         isTitleAnimating = true;
 
@@ -237,6 +235,9 @@ public class Socrates_Script : MonoBehaviour
     IEnumerator firstSequence() {
         skipped = false;
         StopPlayer();
+
+        playerSpeech.transform.position = new Vector2(9.65f, -1.75f);
+
 
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(8f, -2.5f), 0.2f));
         yield return new WaitForSeconds(1f);
@@ -364,6 +365,7 @@ public class Socrates_Script : MonoBehaviour
 
         playerRigidBody.constraints = RigidbodyConstraints2D.None;
         playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        playerRigidBody.constraints = RigidbodyConstraints2D.FreezePositionX;
 
         playerMovementScript.blockJump = false;
 
@@ -371,6 +373,7 @@ public class Socrates_Script : MonoBehaviour
 
     IEnumerator thirdSequence()
     {
+        StopPlayer();
 
         yield return new WaitForSeconds(1f);
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.5f), 0.05f));
@@ -383,6 +386,8 @@ public class Socrates_Script : MonoBehaviour
 
         playerRigidBody.constraints = RigidbodyConstraints2D.None;
         playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        playerRigidBody.constraints = RigidbodyConstraints2D.FreezePositionX;
+        
         playerMovementScript.blockJump = false;
         
     }
@@ -488,13 +493,17 @@ public class Socrates_Script : MonoBehaviour
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(144f, -2.35f), 0.2f));
 
         socratesSpeech.transform.position = new Vector2(146.5f, -1.75f);
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_28", 2f));
+        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_28", 1f));
+        yield return skipCheck(1f);
+        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_29", 1f));
+        yield return skipCheck(1f);
+        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_30", 1f));
+        yield return skipCheck(1f);
+        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_31", 1f));
         yield return skipCheck(2f);
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_29", 2f));
+        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_32", 2f));
         yield return skipCheck(2f);
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_30", 2f));
-        yield return skipCheck(2f);
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_31", 2f));
+        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_33", 2f));
         yield return skipCheck(2f);
 
         playerMovementScript.blockWalk = false;
@@ -504,8 +513,7 @@ public class Socrates_Script : MonoBehaviour
 
         playerRigidBody.constraints = RigidbodyConstraints2D.None;
         playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+
     }
-
-
 
 }
