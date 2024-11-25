@@ -107,6 +107,7 @@ public class HealthSystem : MonoBehaviour
 
     /// <summary>
     /// Kills the player or enemy, disabling their movement and triggering the death animation.
+    /// If Enemy is killed, loot is spawned.
     /// </summary>
     /// <param name="playerMovement"></param>
     /// <param name="enemyController"></param>
@@ -127,6 +128,7 @@ public class HealthSystem : MonoBehaviour
             {
                 enemyController.enabled = false;
                 StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
+                enemyController.SpawnLoot();
 
             }
             isDead = true;
