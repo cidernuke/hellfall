@@ -8,6 +8,8 @@ public class PauseMenuController : MonoBehaviour
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private bool isPaused;
 
+    [SerializeField] private AudioSource musicAudioSource;
+
     [Header("MainMenu")]
     public string _mainMenu;
 
@@ -31,17 +33,33 @@ public class PauseMenuController : MonoBehaviour
 
     void ActivateMenu()
     {
-        Time.timeScale = 0; // Freezes time
-        AudioListener.pause = true;  // Sets Audio from player to pause
+        Time.timeScale = 0; // Freeze time
         pauseMenuUI.SetActive(true);
+
+        // Pause all audio sources except the music
+        foreach (AudioSource audio in FindObjectsOfType<AudioSource>())
+        {
+            if (audio != musicAudioSource)
+            {
+                audio.Pause();
+            }
+        }
     }
 
     public void DeactivateMenu() // public so resume button can acces the function
     {
-        Time.timeScale = 1; // Resets Time to normal
-        AudioListener.pause = false; //Activates Audio
+        Time.timeScale = 1; // Resume time
         pauseMenuUI.SetActive(false);
         isPaused = false;
+
+        // Resume all audio sources except the music
+        foreach (AudioSource audio in FindObjectsOfType<AudioSource>())
+        {
+            if (audio != musicAudioSource)
+            {
+                audio.UnPause();
+            }
+        }
     }
 
     // On confirm load MainMenu Scene
