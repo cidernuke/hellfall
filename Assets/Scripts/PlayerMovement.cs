@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     // Components
     private float horizontal;
     private Rigidbody2D body;
-    private Animator animator;
+    public Animator animator;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider;
 
@@ -149,9 +149,9 @@ public class PlayerMovement : MonoBehaviour
         if (!blockDash) { HandleDashInput(); }
 
         WallSlide();
-        HandleJumpInput();
+        // HandleJumpInput();
         // WallSlide(); --> moved into WallJump for performance.
-        WallJump();
+        if (!blockJump) { WallJump(); }
 
         // HandleDashInput();
 
