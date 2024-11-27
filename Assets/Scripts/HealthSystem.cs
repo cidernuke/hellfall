@@ -79,7 +79,7 @@ public class HealthSystem : MonoBehaviour
             damageCooldown = timeInvincible;
         }
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
-        // UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
+        UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
         if (currentHealth > 0)
         {
             Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
@@ -100,7 +100,7 @@ public class HealthSystem : MonoBehaviour
     {
         currentHealth = Mathf.Clamp(currentHealth + healthAmount, 0, startingHealth);
         Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
-        // UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
+        UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
     }
 
     #region Death funtionality
