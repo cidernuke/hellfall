@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Codice.Client.Common.GameUI;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour

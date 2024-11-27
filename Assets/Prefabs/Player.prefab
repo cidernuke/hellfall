@@ -77,7 +77,6 @@ GameObject:
   - component: {fileID: 5746640054634646074}
   - component: {fileID: 8335488962519607957}
   - component: {fileID: 2193375495534342346}
-  - component: {fileID: 6581974467983910770}
   - component: {fileID: 7515475865458641955}
   - component: {fileID: 925187609528179871}
   - component: {fileID: 4868045794191523349}
@@ -314,26 +313,6 @@ MonoBehaviour:
   anim: {fileID: 8335488962519607957}
   timeInvincible: 0.5
   isInvincible: 0
---- !u!114 &6581974467983910770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5585758838363563765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1122240b373e6694e909995038f8120c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackCooldown: 1
-  range: 1
-  damage: 1
-  colliderDistance: 2
-  boxCollider: {fileID: 8124953113361661337}
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 256
 --- !u!114 &7515475865458641955
 MonoBehaviour:
   m_ObjectHideFlags: 0
