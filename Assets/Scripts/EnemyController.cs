@@ -16,9 +16,14 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float colliderDistance;
     [SerializeField] private BoxCollider2D boxCollider;
 
+
     [Header("Player Layer")]
     [SerializeField] private LayerMask playerLayer;
     private float cooldownTimer = Mathf.Infinity;
+
+    [Header("Loot")]
+    [SerializeField] public List<LootItem> lootTable = new List<LootItem>();
+
 
     // References
     private Animator anim;
@@ -26,14 +31,13 @@ public class EnemyController : MonoBehaviour
     private EnemyPatrol enemyPatrol;
     private PlayerMovement playerMovement;
 
-
-
     private void Awake()
     {
         anim = GetComponent<Animator>();
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
         playerHealth  = GetComponent<HealthSystem>();
         playerMovement = GetComponent<PlayerMovement>();
+        
     }
 
     // Update is called once per frame
@@ -103,6 +107,22 @@ public class EnemyController : MonoBehaviour
         {  
                   
             playerHealth.TakeDamage(damage, playerMovement);
+        }
+    }
+    /// <summary>
+    /// Spawns loot items from the loot table.
+    /// If the random number is less than the drop chance, the item is spawned.
+    /// </summary>
+
+    public void SpawnLoot()
+    {
+        foreach (LootItem lootItem in lootTable)
+        {
+            if (UnityEngine.Random.Range(0f, 100f) <= lootItem.dropChance)
+            {
+                Vector3 lootPosition = transform.position - new Vector3(0,1,0);
+                Instantiate(lootItem.itemPrefab, lootPosition, Quaternion.identity);
+            }
         }
     }
 }

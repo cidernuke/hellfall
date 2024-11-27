@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using ItemSystem.Abstract;
 
+/// <summary>
+/// Class for power up items in the game.
+/// </summary>
+
 namespace ItemSystem.Items
 {
     public class PowerUpItem : ModifierItem
-    {        
+    {
         public override bool use()
         {
             Debug.Log("PowerUpItem used");

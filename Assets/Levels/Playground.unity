@@ -1160,6 +1160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aheadDistance: 0
+  aheadY: 0
   cameraSpeed: 0
   player: {fileID: 1069053153}
 --- !u!114 &1377891912

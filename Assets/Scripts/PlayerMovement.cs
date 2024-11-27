@@ -58,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
     private float wallJumpingTime = 0.2f;
     private float wallJumpingCounter;
     [SerializeField] private float wallJumpDuration = 0.09f;  // Duration during which horizontal input is ignored after a wall jump
+    private bool isFalling = false;
 
     // Double Jump
     private bool isDoubleJumping;
@@ -185,6 +186,12 @@ public class PlayerMovement : MonoBehaviour
                 body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
             }
 
+            if (body.velocity.y < 0 && !isFalling && !IsGrounded())
+            {
+                print("isFalling in uodate: " + isFalling);
+                isFalling = true; // Set falling state
+                animator.SetBool("is_falling", isFalling);
+            }
         }
 
         // Ensures that traction of the ground properly stops player when no movement input is detected. Only active when player is not moving and is grounded.
@@ -290,6 +297,9 @@ public class PlayerMovement : MonoBehaviour
         // Store the last time the player touched the ground for coyote time
         if (grounded)
         {
+            isFalling = false;
+            print("isFalling in grounded: " + isFalling);
+            animator.SetBool("is_falling", isFalling);
             OnLanding(); // called here to reset wall jump logic once player lands back on ground --> player can walljump from same wall once grounded after wall jump.
             lastTimeGrounded = Time.time;
             coyoteUsable = true;

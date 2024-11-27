@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &21909789400411246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2791585649349192052}
+  m_Layer: 3
+  m_Name: Ceiling Check
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2791585649349192052
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21909789400411246}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.098, y: -0.096, z: -0.11334795}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2149054594424086871}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2513221433042151728
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 976393204391322360}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wall Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,10 +77,13 @@ GameObject:
   - component: {fileID: 5746640054634646074}
   - component: {fileID: 8335488962519607957}
   - component: {fileID: 2193375495534342346}
-  - component: {fileID: 6267264117480742500}
+  - component: {fileID: 6581974467983910770}
+  - component: {fileID: 7515475865458641955}
+  - component: {fileID: 925187609528179871}
+  - component: {fileID: 4868045794191523349}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -69,7 +103,7 @@ Transform:
   m_Children:
   - {fileID: 7624676514274553780}
   - {fileID: 976393204391322360}
-  - {fileID: 2931979755600972161}
+  - {fileID: 2791585649349192052}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2174369621339499416
@@ -217,11 +251,10 @@ MonoBehaviour:
   platformLayer:
     serializedVersion: 2
     m_Bits: 0
-  grounded: 0
   platformed: 0
   dropDuration: 0.5
   groundCheck: {fileID: 7624676514274553780}
-  ceilingCheck: {fileID: 2931979755600972161}
+  ceilingCheck: {fileID: 2791585649349192052}
   groundSpeed: 7
   jumpPower: 7
   jumpBufferTime: 0.1
@@ -233,11 +266,14 @@ MonoBehaviour:
   dashSpeed: 14
   dashDuration: 0.4
   dashCooldown: 0.4
-  isDashing: 0
   standing: {fileID: 691704114, guid: 22a836ecf58efa24f8d6db5ebc1c5eeb, type: 3}
   crouching: {fileID: 21300000, guid: adf511fbe02c3784e8780b1b89e29439, type: 3}
   crouchSpeed: 5
   isCrouching: 0
+  blockWalk: 0
+  blockJump: 0
+  blockCrouch: 0
+  blockDash: 0
   fallMultiplier: 4
   groundDecay: 0.804
 --- !u!95 &8335488962519607957
@@ -273,9 +309,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bbbdafceb1d62046b87c955a0d68953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 0
+  startingHealth: 5
   currentHealth: 0
---- !u!114 &6267264117480742500
+  anim: {fileID: 8335488962519607957}
+  timeInvincible: 0.5
+  isInvincible: 0
+--- !u!114 &6581974467983910770
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -284,41 +323,61 @@ MonoBehaviour:
   m_GameObject: {fileID: 5585758838363563765}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ba6c94739b73fd49b7395b1ba318fd4, type: 3}
+  m_Script: {fileID: 11500000, guid: 1122240b373e6694e909995038f8120c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCollider: {fileID: 8124953113361661337}
---- !u!1 &8569570615257531477
-GameObject:
+  attackCooldown: 1
+  range: 1
+  damage: 1
+  colliderDistance: 2
+  boxCollider: {fileID: 8124953113361661337}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!114 &7515475865458641955
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2931979755600972161}
-  m_Layer: 0
-  m_Name: Ceiling Check
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2931979755600972161
-Transform:
+  m_GameObject: {fileID: 5585758838363563765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a43574253fdef974c8c85f3a7305bb1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &925187609528179871
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8569570615257531477}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2149054594424086871}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 5585758838363563765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122240b373e6694e909995038f8120c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackCooldown: 0
+  range: 1
+  damage: 1
+  colliderDistance: 2
+  boxCollider: {fileID: 8124953113361661337}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!114 &4868045794191523349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5585758838363563765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a43574253fdef974c8c85f3a7305bb1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8769760779391340631
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,7 +387,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7624676514274553780}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Ground Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}

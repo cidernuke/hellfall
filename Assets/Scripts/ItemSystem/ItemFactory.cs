@@ -1,11 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Security.Principal;
 using ItemSystem.Abstract;
 using ItemSystem.Items;
 using UnityEngine;
+
+/// <summary>
+/// Factory class for creating items in the game.
+/// </summary>
 
 public class ItemFactory : MonoBehaviour
 {
@@ -20,7 +19,11 @@ public class ItemFactory : MonoBehaviour
         createItem();
     }
 
-
+    /// <summary>
+    /// Called when the player collides with the item.
+    /// If the player collides with an item, the item is used and destroyed.
+    /// </summary>
+    /// <param name="collider"></param>
     private void OnTriggerEnter2D(Collider2D collider)
     {
         switch (itemData.itemType)
@@ -47,7 +50,9 @@ public class ItemFactory : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// Creates an item based on the item type.
+    /// </summary>
     private void createItem()
     {
         switch (itemData.itemType)
