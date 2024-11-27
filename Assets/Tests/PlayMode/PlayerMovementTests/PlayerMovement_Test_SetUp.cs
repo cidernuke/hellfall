@@ -15,12 +15,12 @@ public abstract class PlayerMovement_Test_SetUp
     public virtual IEnumerator SetUp()
     {
         // Load scene only once
-        if (!sceneLoaded)
-        {
+        // if (!sceneLoaded)
+        // {
             SceneManager.LoadScene("TestScene");
             yield return null; // Wait for scene being loaded
             sceneLoaded = true;
-        }
+        //}
 
         // Initialize the Player
         player = GameObject.Find("Player");

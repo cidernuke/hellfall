@@ -188,7 +188,6 @@ public class PlayerMovement : MonoBehaviour
 
             if (body.velocity.y < 0 && !isFalling && !IsGrounded())
             {
-                print("isFalling in uodate: " + isFalling);
                 isFalling = true; // Set falling state
                 animator.SetBool("is_falling", isFalling);
             }
@@ -298,8 +297,8 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
         {
             isFalling = false;
-            print("isFalling in grounded: " + isFalling);
             animator.SetBool("is_falling", isFalling);
+
             OnLanding(); // called here to reset wall jump logic once player lands back on ground --> player can walljump from same wall once grounded after wall jump.
             lastTimeGrounded = Time.time;
             coyoteUsable = true;
