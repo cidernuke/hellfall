@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Socrates_Script : MonoBehaviour
+public class guide_Script : MonoBehaviour
 {
     // Player variables
 
@@ -12,11 +12,12 @@ public class Socrates_Script : MonoBehaviour
     private SpriteRenderer playerSpeechSpriteRenderer;  // Player speech Bubble
     private PlayerMovement playerMovementScript;
 
-    // Socrates variables
-    public GameObject socrates;                           // Socrates Game Object
-    private Rigidbody2D socratesRigidBody;                // Socrates Rigidbody
-    public GameObject socratesSpeech;                     // Socrates Speech Bubble Object
-    private SpriteRenderer socratesSpeechSpriteRenderer;  // Socrates speech Bubble
+    // guide variables
+    public GameObject guide;                           // guide Game Object
+    private Rigidbody2D guideRigidBody;                // guide Rigidbody
+    public GameObject guideSpeech;                     // guide Speech Bubble Object
+    private SpriteRenderer guideSpeechSpriteRenderer;  // guide speech Bubble
+    public Animator guideAnimator;
 
     // Camera variables
     public GameObject camera;
@@ -46,10 +47,12 @@ public class Socrates_Script : MonoBehaviour
         playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
         playerMovementScript = player.GetComponent<PlayerMovement>();
         
-        socrates = GameObject.Find("Socrates");
-        socratesRigidBody = socrates.GetComponent<Rigidbody2D>();
-        socratesSpeech = GameObject.Find("Socrates_Speech_Bubble");
-        socratesSpeechSpriteRenderer = socratesSpeech.GetComponent<SpriteRenderer>();
+        guide = GameObject.Find("Guide");
+        guideRigidBody = guide.GetComponent<Rigidbody2D>();
+        guideSpeech = GameObject.Find("Guide_Speech_Bubble");
+        guideSpeechSpriteRenderer = guideSpeech.GetComponent<SpriteRenderer>();
+        guideAnimator = guide.GetComponent<Animator>();
+
         
         camera = GameObject.Find("Main Camera");
 
@@ -87,17 +90,18 @@ public class Socrates_Script : MonoBehaviour
             if(sequence == 0)
             {
                 StartCoroutine(titleAnimation());
+                StopPlayer();
                 sequence = 1;
             }
 
-            // Check if player has arrived in front of Socrates after spawn
-            if (playerPosition.x >= 8f && playerPosition.x <= 9f && sequence == 1)
+            // Check if title is finished
+            if (!isTitleAnimating && sequence == 1)
             {
                 StartCoroutine(firstSequence());
                 sequence = 2;
             }
 
-            // Check if player has walked to in front of socrates after testing |A| and |D| 
+            // Check if player has walked to in front of guide after testing |A| and |D| 
             if (playerPosition.x >= 23f && playerPosition.x <= 24f && sequence == 2)
             {
                 StartCoroutine(secondSequence());
@@ -108,14 +112,12 @@ public class Socrates_Script : MonoBehaviour
             if(playerPosition.y >= -2 && sequence == 3) 
             {
                 StartCoroutine(thirdSequence());
-                sequence = 4;
             }
 
             // Check if player has double-jumped
-            if(playerPosition.y >= -0.5 && sequence == 4) 
+            if(playerPosition.y >= -1 && sequence == 4) 
             {
                 StartCoroutine(fourthSequence());
-                sequence = 5;
             }
 
             // Check if player made it to just before the platforms
@@ -133,7 +135,7 @@ public class Socrates_Script : MonoBehaviour
             }
 
             // Check if player dashed
-            if(playerPosition.x >= 118.5 && playerPosition.x <= 120 && playerPosition.y <= 8 && sequence == 7) 
+            if(playerPosition.x >= 118.5 && playerPosition.x <= 120 && sequence == 7) 
             {
                 StartCoroutine(seventhSequence());
                 sequence = 8;
@@ -214,6 +216,10 @@ public class Socrates_Script : MonoBehaviour
         playerMovementScript.animator.SetBool("grounded", true);
 
         playerRigidBody.constraints = RigidbodyConstraints2D.FreezePosition;
+
+        guideAnimator.SetBool("hasDisappeared", false);
+        guideAnimator.SetBool("playerArrived", true);
+        guideAnimator.SetBool("isIdle", true);
     }
 
     IEnumerator titleAnimation()
@@ -226,9 +232,16 @@ public class Socrates_Script : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         // Stop following the camera
-        isTitleAnimating = false;
-
         titleSpriteRenderer.sprite = null;
+
+        isTitleAnimating = false;
+    }
+
+    void ResetAnimation()
+    {
+        guideAnimator.SetBool("isIdle", false);
+        guideAnimator.SetBool("playerArrived", false);
+        guideAnimator.SetBool("hasDisappeared", true);
     }
 
 
@@ -236,11 +249,6 @@ public class Socrates_Script : MonoBehaviour
     IEnumerator firstSequence() {
         skipped = false;
         StopPlayer();
-
-        playerSpeech.transform.position = new Vector2(9.65f, -1.75f);
-
-
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(8f, -2.5f), 0.2f));
         yield return new WaitForSeconds(1f);
 
         // P: What.. what happened? (3 words)
@@ -249,10 +257,10 @@ public class Socrates_Script : MonoBehaviour
 
         // Hint: Use | Q | to skip dialogue. (7 words)
         StartCoroutine(someoneSpeaks(hintBubbleSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/hint_bubble_1", 3.5f));
-        yield return skipCheck(3.6f);
+        yield return skipCheck(1f);
 
-        // S: Long Socrates Quote (Assume ~10 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_1", 5.0f));
+        // S: Long guide Quote (Assume ~10 words)
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_1", 5.0f));
         yield return skipCheck(5.1f);
 
         // P: What? (1 word)
@@ -260,7 +268,7 @@ public class Socrates_Script : MonoBehaviour
         yield return skipCheck(1.3f);
 
         // S: Death may be the greatest of all human blessings (9 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_2", 4.0f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_2", 4.0f));
         yield return skipCheck(4.1f);
 
         // P: That's dark (2 words)
@@ -272,11 +280,11 @@ public class Socrates_Script : MonoBehaviour
         yield return skipCheck(3.1f);
 
         // S: Why? (1 word)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_3", 1.2f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_3", 1.2f));
         yield return skipCheck(1.3f);
 
         // S: Cause we're dead of course (5 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_4", 2.5f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_4", 2.5f));
         yield return skipCheck(2.6f);
 
         // P: Dead? (1 word)
@@ -284,7 +292,7 @@ public class Socrates_Script : MonoBehaviour
         yield return skipCheck(1.3f);
 
         // S: Yes, you're in the first circle of hell. (9 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_5", 4.0f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_5", 4.0f));
         yield return skipCheck(4.1f);
 
         // P: What? Hell? Why? (3 words)
@@ -292,27 +300,27 @@ public class Socrates_Script : MonoBehaviour
         yield return skipCheck(2.1f);
 
         // S: Well like I always say: "It's ... (9 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_6", 4.0f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_6", 4.0f));
         yield return skipCheck(4.1f);
 
         // S: Aaaaand you apparently did not my friend. (7 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_7", 3.5f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_7", 3.5f));
         yield return skipCheck(3.6f);
 
         // P: Who are you to judge my life? (8 words)
         StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_7", 3.5f));
         yield return skipCheck(3.6f);
 
-        // S: I am Socrates! (3 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_8", 2.0f));
+        // S: I am guide! (3 words)
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_8", 2.0f));
         yield return skipCheck(2.1f);
 
         // S: But I did not judge your life... (7 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_9", 3.5f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_9", 3.5f));
         yield return skipCheck(3.6f);
 
         // S: God did! (2 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_10", 1.5f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_10", 1.5f));
         yield return skipCheck(1.6f);
 
         // P: Okay... Okay... (2 words)
@@ -324,27 +332,29 @@ public class Socrates_Script : MonoBehaviour
         yield return skipCheck(4.1f);
 
         // S: Well, that's a more difficult question (6 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_11", 3.0f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_11", 3.0f));
         yield return skipCheck(3.1f);
 
         // S: At the moment you're in the first of eight circles of hell. (13 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_12", 5.0f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_12", 5.0f));
         yield return skipCheck(5.1f);
 
         // S: But if you decide to leave I'll have to teach you a few things first (14 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_16", 5.5f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_16", 5.5f));
         yield return skipCheck(5.6f);
 
         // S: Let's get started! (3 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_18", 2.0f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_18", 2.0f));
         yield return skipCheck(2.1f);
 
         // S: Try moving forwards and backwards with | A | and | D |. (10 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_19", 4.5f));
-        yield return skipCheck(4.6f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_19", 3.5f));
+        yield return skipCheck(3.6f);
 
-        StartCoroutine(moveSomeone(socrates, socrates.transform.position, new Vector2(30f, socrates.transform.position.y), 2f));
+        ResetAnimation();
         yield return new WaitForSeconds(1f);
+
+        guide.transform.position = new Vector2(30f, guide.transform.position.y);
 
         playerRigidBody.constraints = RigidbodyConstraints2D.None;
         playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -355,17 +365,18 @@ public class Socrates_Script : MonoBehaviour
     IEnumerator secondSequence()
     {
         playerSpeech.transform.position = new Vector2(24.5f, -1.75f);
-        socratesSpeech.transform.position = new Vector2(28.5f, -1.75f);
+        guideSpeech.transform.position = new Vector2(28.5f, -1.75f);
 
         StopPlayer();
+        yield return new WaitForSeconds(0.5f);
+
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.5f), 0.05f));
 
         // S: you can jump with | space |...
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_20", 1.5f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_20", 1.5f));
         yield return skipCheck(1.5f);
 
-        playerRigidBody.constraints = RigidbodyConstraints2D.None;
-        playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        playerRigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 
         playerMovementScript.blockJump = false;
 
@@ -376,61 +387,72 @@ public class Socrates_Script : MonoBehaviour
 
         yield return new WaitForSeconds(1.1f);
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.5f), 0.05f));
+
         StopPlayer();
+        yield return new WaitForSeconds(0.5f);
+
 
         // S: ...you can also double-jump by hitting | space | twice.
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_21", 1.5f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_21", 1.5f));
         yield return skipCheck(1.5f);
 
-
-        playerRigidBody.constraints = RigidbodyConstraints2D.None;
-        playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        playerRigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 
         playerMovementScript.blockJump = false;
-        
+        sequence = 4;
     }
 
     IEnumerator fourthSequence()
     {
         yield return new WaitForSeconds(1f);
         StopPlayer();
+        yield return new WaitForSeconds(0.5f);
+
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.5f), 0.2f));
 
         // S: Follow me for your next lesson.
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_22", 1f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_22", 1f));
         yield return skipCheck(1f);
 
-        socrates.transform.position = new Vector2(80.8f, 1.4f);
+        ResetAnimation();
+        yield return new WaitForSeconds(1f);
+        guide.transform.position = new Vector2(80.8f, 1.4f);
+
 
         playerRigidBody.constraints = RigidbodyConstraints2D.None;
         playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
         playerMovementScript.blockWalk = false;
         playerMovementScript.blockJump = false;
-
+        sequence = 5;
     }
 
     IEnumerator fifthSequence()
     {
+        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(77f, 1.48f), 0.2f));
         StopPlayer();
         
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(77f, 1.48f), 0.2f));
 
         playerSpeech.transform.position = new Vector2(77.75f, 2.7f);
-        socratesSpeech.transform.position = new Vector2(78.75f, 2.3f);
+        guideSpeech.transform.position = new Vector2(77.75f, 2f);
+
+        yield return new WaitForSeconds(1f);
 
         // S: You can move through certain platforms with | SPACE | and | S | (9 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_23", 4.0f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_23", 4.0f));
         yield return skipCheck(4.1f);
 
         // S: You can Wall-Jump by jumping against a wall (8 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_24", 3.5f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_24", 3.5f));
         yield return skipCheck(3.6f);
 
         // S: Let's see if you can make it past this next part! (11 words)
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_25", 4.5f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_25", 4.5f));
         yield return skipCheck(4.6f);
 
-        socrates.transform.position = new Vector2(101.3f, 12.89f);
+        ResetAnimation();
+        yield return new WaitForSeconds(1f);
+
+        guide.transform.position = new Vector2(101.3f, 12.89f);
 
         playerMovementScript.blockWalk = false;
         playerMovementScript.blockJump = false;
@@ -441,16 +463,22 @@ public class Socrates_Script : MonoBehaviour
     
     IEnumerator sixthSequence()
     {
+        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(98f, 12.502f), 0.4f));
         StopPlayer();
 
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(98f, 12.502f), 0.2f));
-        socratesSpeech.transform.position = new Vector2(100.2f, 13.8f);
+        yield return new WaitForSeconds(1f);
+
+        guideSpeech.transform.position = new Vector2(100.2f, 13f);
 
         // S: Try crouching using | S |
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_26", 2f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_26", 2f));
         yield return skipCheck(2f);
 
-        socrates.transform.position = new Vector2(123f, 7.32f);
+
+        ResetAnimation();
+        yield return new WaitForSeconds(1f);
+
+        guide.transform.position = new Vector2(123f, 7.32f);
 
         playerMovementScript.blockWalk = false;
         playerMovementScript.blockJump = false;
@@ -464,52 +492,67 @@ public class Socrates_Script : MonoBehaviour
 
     IEnumerator seventhSequence()
     {
+        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(119f, 7.5f), 0.4f));
+        guideSpeech.transform.position = new Vector2(121.5f, 8f);
+
         StopPlayer();
+        yield return new WaitForSeconds(1f);
 
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(119f, 7.5f), 0.2f));
 
-        socratesSpeech.transform.position = new Vector2(122.5f, 8f);
 
         // S: You can also Dash using | Shift | 
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_27", 2f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_27", 2f));
         yield return skipCheck(2f);
+
+        ResetAnimation();
+        yield return new WaitForSeconds(1f);
 
         playerMovementScript.blockWalk = false;
         playerMovementScript.blockJump = false;
         playerMovementScript.blockCrouch = false;
         playerMovementScript.blockDash = false;
 
-        socrates.transform.position = new Vector2(147f, -2.35f);
+        guide.transform.position = new Vector2(147f, -2.35f);
         playerRigidBody.constraints = RigidbodyConstraints2D.None;
         playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     IEnumerator eighthSequence()
     {
+        // StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(141f, -2.49f), 0.2f));
+        playerRigidBody.constraints = RigidbodyConstraints2D.FreezePosition;
+        Debug.Log("Guide Speech: " + guideSpeech.transform.position);
+        guideSpeech.transform.position = new Vector2(144.5f, -1.5f);
+        Debug.Log("Guide Speech: " + guideSpeech.transform.position);
+
+
         StopPlayer();
-
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(144f, -2.35f), 0.2f));
-
-        socratesSpeech.transform.position = new Vector2(146.5f, 0f);
+        yield return new WaitForSeconds(1f);
 
         // S: Didn't think you'd manage all that.
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_28", 3f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_28", 3f));
         yield return skipCheck(3f);
         // S: Maybe you do have a chance to make it out.
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_29", 3f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_29", 3f));
         yield return skipCheck(3f);
         // S: Finally, before you go, you'll have to do some fighting in the next circles
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_30", 5f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_30", 5f));
         yield return skipCheck(5f);
         // S: You can hit enemies with Left-Click
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_31", 3f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_31", 3f));
         yield return skipCheck(3f);
         // S: Now you are ready head down into the depths of hell.
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_32", 4f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_32", 4f));
         yield return skipCheck(4f);
         // S: Try not to die again!
-        StartCoroutine(someoneSpeaks(socratesSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/socrates_speech_33", 2.5f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_33", 2.5f));
         yield return skipCheck(2.5f);
+
+        ResetAnimation();
+        yield return new WaitForSeconds(1f);
+
+        guide.transform.position = new Vector2(135f, 7.32f);
+
 
         playerMovementScript.blockWalk = false;
         playerMovementScript.blockJump = false;
