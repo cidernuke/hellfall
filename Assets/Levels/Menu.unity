@@ -3140,7 +3140,7 @@ MonoBehaviour:
   qualityDropdown: {fileID: 268211023}
   fullScreenToggle: {fileID: 384643049}
   confirmationPrompt: {fileID: 1912816273}
-  _newGameLevel: MenuPause
+  _newGameLevel: Level_One
   noSavedGameDialog: {fileID: 25361277}
   resolutionDropdown: {fileID: 809471535}
 --- !u!4 &442774684
@@ -8783,6 +8783,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aheadDistance: 1
+  aheadY: 0
   cameraSpeed: 2.4
   player: {fileID: 1622098727}
 --- !u!114 &1024486581

@@ -79,11 +79,11 @@ public class HealthSystem : MonoBehaviour
             damageCooldown = timeInvincible;
         }
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
-        UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
         if (currentHealth > 0)
         {
             Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
             anim.SetTrigger("hurt");
+            UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
         }
         else
         {
