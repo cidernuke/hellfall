@@ -2,7 +2,13 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
+    public int checkpointID;
     private bool isActive = false;
+
+    private PlayerMovement playerMovement;
+    private HealthSystem healthSystem;
+    //private PlayerInventory playerInventory;
+    //private SoulShardSystem soulShardSystem;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -10,13 +16,31 @@ public class Checkpoint : MonoBehaviour
         if (!isActive && collision.gameObject.CompareTag("Player"))
         {
             // Get access to the PlayerMovement-Script
-            PlayerMovement player = collision.GetComponent<PlayerMovement>();
-            if (player != null)
+            //PlayerMovement player = collision.GetComponent<PlayerMovement>();
+            playerMovement = collision.GetComponent<PlayerMovement>();
+            if (playerMovement != null)
             {
                 //player.UpdateRespawnPoint(transform.position);
                 //print(transform.position);
-                player.UpdateRespawnPoint(player.transform.position);
-                ActivateCheckpoint();
+                playerMovement.UpdateRespawnPoint(playerMovement.transform.position, checkpointID);
+
+                healthSystem = collision.GetComponent<HealthSystem>();
+                //playerInventory = collision.GetComponent<PlayerInventory>();
+                //soulShardSystem = collision.GetComponent<SoulShardSystem>();
+
+                //if (healthSystem != null && playerInventory != null && soulShardSystem != null)
+                if (healthSystem != null)
+                {
+                    ActivateCheckpoint();
+                }
+                else
+                {
+                    Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden.");
+                }
+            }
+            else
+            {
+                Debug.LogError("PlayerMovement-Komponente wurde nicht gefunden.");
             }
         }
     }
@@ -24,7 +48,13 @@ public class Checkpoint : MonoBehaviour
     private void ActivateCheckpoint()
     {
         isActive = true;
-        print("Checkpoint activated");
+        Debug.Log("Checkpoint " + checkpointID + " aktiviert");
+
+        healthSystem.respawnHealth = healthSystem.currentHealth;
+
+        // Spiel speichern
+        SaveManager.Instance.SaveGame(playerMovement, healthSystem);
+        //SaveManager.Instance.SaveGame(playerMovement, healthSystem, playerInventory, soulShardSystem);
         // Add Visualisation or sound here
     }
 }

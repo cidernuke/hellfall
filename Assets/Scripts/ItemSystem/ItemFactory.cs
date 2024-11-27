@@ -46,8 +46,6 @@ public class ItemFactory : MonoBehaviour
         }
     }
 
-
-
     private void createItem()
     {
         switch (itemData.itemType)
@@ -64,13 +62,6 @@ public class ItemFactory : MonoBehaviour
             default:
                 Debug.LogError("Unknown ItemType: " + itemData.itemType);
                 break;
-
-
-
         }
     }
-
-
-
-
 }

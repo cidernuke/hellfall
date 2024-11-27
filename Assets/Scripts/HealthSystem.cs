@@ -19,9 +19,6 @@ public class HealthSystem : MonoBehaviour
     public float currentHealth;
     [SerializeField] private Animator anim;
 
-    private bool isDead;
-
-
     //zum Awake wird current = starting gesetzt
 
     /// <summary>
@@ -39,12 +36,17 @@ public class HealthSystem : MonoBehaviour
     /// </summary>
     private float damageCooldown;
 
+      //Respawn variables
+    private bool isDead;
+    public float respawnHealth;
+
     /// <summary>
     /// Initializes the current health to the starting health value.
     /// </summary>
     private void Awake()
     {
         currentHealth = startingHealth;
+        respawnHealth = startingHealth; //To avoid null-pointers
         anim = GetComponent<Animator>();
     }
 
@@ -144,8 +146,12 @@ public class HealthSystem : MonoBehaviour
         // wait for the die animation
         yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
 
+        //Works so the Player get his inital LP
         // reset health
-        currentHealth = startingHealth;
+        //currentHealth = startingHealth;
+
+        currentHealth = respawnHealth;
+        print("Player health after respawn: " + currentHealth);
 
         // Later: Update the health-bar
         // UIHandler.instance.SetHealthValue(currentHealth / startingHealth);

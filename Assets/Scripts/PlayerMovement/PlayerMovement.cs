@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Checkpoint
+    private int lastCheckpointID;
     private Vector3 respawnPosition;
     public bool isDead = false;
     #endregion
@@ -502,10 +503,17 @@ public class PlayerMovement : MonoBehaviour
 
     #region Checkpoint
 
-    // Methode zum Aktualisieren des Respawn-Punkts
-    public void UpdateRespawnPoint(Vector3 newRespawnPosition)
+    // Method to update the respawn-point
+    public void UpdateRespawnPoint(Vector3 newRespawnPosition, int checkpointID)
     {
+        lastCheckpointID = checkpointID;
         respawnPosition = newRespawnPosition;
+    }
+
+    // Method to get the checkpointID for the SaveManager
+    public int GetLastCheckpointID()
+    {
+        return lastCheckpointID;
     }
 
     public void Respawn()
