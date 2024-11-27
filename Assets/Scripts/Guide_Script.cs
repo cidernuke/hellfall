@@ -476,7 +476,7 @@ public class guide_Script : MonoBehaviour
 
 
         ResetAnimation();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         guide.transform.position = new Vector2(123f, 7.32f);
 
