@@ -221,12 +221,13 @@ public class guide_Script : MonoBehaviour
         guideAnimator.SetBool("playerArrived", true);
         guideAnimator.SetBool("isIdle", true);
 
-        playerMovementScript.enabled = false;
+        // playerMovementScript.animator.Play("Idle", 0, 0f);
+        // playerMovementScript.enabled = false;
     }
 
     void StartPlayer(int which)
     {
-        playerMovementScript.enabled = true;
+        // playerMovementScript.enabled = true;
         if(which == 2) {
             playerRigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         } else {
