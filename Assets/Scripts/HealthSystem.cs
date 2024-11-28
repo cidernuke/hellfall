@@ -18,6 +18,7 @@ public class HealthSystem : MonoBehaviour
     /// </summary>
     public float currentHealth;
     [SerializeField] private Animator anim;
+    [SerializeField] private bool isPlayer = false;
 
     private bool isDead;
 
@@ -46,6 +47,7 @@ public class HealthSystem : MonoBehaviour
     {
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
+        
     }
 
     /// <summary>
@@ -83,7 +85,11 @@ public class HealthSystem : MonoBehaviour
         {
             Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
             anim.SetTrigger("hurt");
-            UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
+            if (isPlayer)
+            {
+                UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
+            }
+            
         }
         else
         {

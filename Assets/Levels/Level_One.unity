@@ -285,11 +285,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2855179074708735691, guid: 51af897960135a74c81d0d53209ceec2, type: 3}
   m_PrefabInstance: {fileID: 172924292}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &55163152 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8381836596924870710, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-  m_PrefabInstance: {fileID: 676830087}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &55204440
 GameObject:
   m_ObjectHideFlags: 0
@@ -3358,10 +3353,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 5746640054634646074, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: ceilingCheck
-      value: 
-      objectReference: {fileID: 55163152}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

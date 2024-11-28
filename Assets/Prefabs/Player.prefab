@@ -286,7 +286,7 @@ MonoBehaviour:
   platformed: 0
   dropDuration: 0.5
   groundCheck: {fileID: 7624676514274553780}
-  ceilingCheck: {fileID: 0}
+  ceilingCheck: {fileID: 8381836596924870710}
   groundSpeed: 8
   jumpPower: 6.5
   jumpBufferTime: 0.1
@@ -344,6 +344,7 @@ MonoBehaviour:
   startingHealth: 100
   currentHealth: 0
   anim: {fileID: 8335488962519607957}
+  isPlayer: 1
   timeInvincible: 0.5
   isInvincible: 0
 --- !u!114 &7515475865458641955
