@@ -1163,6 +1163,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1305849009}
+    - target: {fileID: 4023924653877491004, guid: e157cdd619666cb42983f832714623b8, type: 3}
+      propertyPath: aheadDistance
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5622730312735196000, guid: e157cdd619666cb42983f832714623b8, type: 3}
       propertyPath: m_Enabled
       value: 1
