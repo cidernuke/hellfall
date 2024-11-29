@@ -220,6 +220,53 @@ public class guide_Script : MonoBehaviour
         guideAnimator.SetBool("hasDisappeared", false);
         guideAnimator.SetBool("playerArrived", true);
         guideAnimator.SetBool("isIdle", true);
+
+        // playerMovementScript.animator.Play("Idle", 0, 0f);
+        // playerMovementScript.enabled = false;
+    }
+
+    void StartPlayer(int which)
+    {
+        // playerMovementScript.enabled = true;
+        if(which == 2) {
+            playerRigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        } else {
+            playerRigidBody.constraints = RigidbodyConstraints2D.None;
+            playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+       
+
+        switch(which)
+        {
+            case 1:
+                playerMovementScript.blockWalk = false;
+                break;
+            case 2:
+                playerMovementScript.blockJump = false;
+                break;
+            case 3:
+                playerMovementScript.blockWalk = false;
+                playerMovementScript.blockJump = false;
+                break;
+            case 4:
+                playerMovementScript.blockWalk = false;
+                playerMovementScript.blockJump = false;
+                playerMovementScript.blockCrouch = false;
+                break;
+            case 5:
+                playerMovementScript.blockWalk = false;
+                playerMovementScript.blockJump = false;
+                playerMovementScript.blockCrouch = false;
+                playerMovementScript.blockDash = false;
+                break;
+            default:
+                playerMovementScript.blockWalk = false;
+                playerMovementScript.blockJump = false;
+                playerMovementScript.blockCrouch = false;
+                playerMovementScript.blockDash = false;
+                break;
+        }
+
     }
 
     IEnumerator titleAnimation()
@@ -356,9 +403,9 @@ public class guide_Script : MonoBehaviour
 
         guide.transform.position = new Vector2(30f, guide.transform.position.y);
 
-        playerRigidBody.constraints = RigidbodyConstraints2D.None;
-        playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-        playerMovementScript.blockWalk = false;
+        StartPlayer(1);
+
+        
     }
 
     
@@ -376,10 +423,7 @@ public class guide_Script : MonoBehaviour
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_20", 1.5f));
         yield return skipCheck(1.5f);
 
-        playerRigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-
-        playerMovementScript.blockJump = false;
-
+        StartPlayer(2);
     }
 
     IEnumerator thirdSequence()
@@ -396,9 +440,8 @@ public class guide_Script : MonoBehaviour
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_21", 1.5f));
         yield return skipCheck(1.5f);
 
-        playerRigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        StartPlayer(2);
 
-        playerMovementScript.blockJump = false;
         sequence = 4;
     }
 
@@ -418,11 +461,8 @@ public class guide_Script : MonoBehaviour
         yield return new WaitForSeconds(1f);
         guide.transform.position = new Vector2(80.8f, 1.4f);
 
+        StartPlayer(3);
 
-        playerRigidBody.constraints = RigidbodyConstraints2D.None;
-        playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-        playerMovementScript.blockWalk = false;
-        playerMovementScript.blockJump = false;
         sequence = 5;
     }
 
@@ -454,11 +494,7 @@ public class guide_Script : MonoBehaviour
 
         guide.transform.position = new Vector2(101.3f, 12.89f);
 
-        playerMovementScript.blockWalk = false;
-        playerMovementScript.blockJump = false;
-
-        playerRigidBody.constraints = RigidbodyConstraints2D.None;
-        playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        StartPlayer(3);
     }
     
     IEnumerator sixthSequence()
@@ -480,13 +516,7 @@ public class guide_Script : MonoBehaviour
 
         guide.transform.position = new Vector2(123f, 7.32f);
 
-        playerMovementScript.blockWalk = false;
-        playerMovementScript.blockJump = false;
-        playerMovementScript.blockCrouch = false;
-
-
-        playerRigidBody.constraints = RigidbodyConstraints2D.None;
-        playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        StartPlayer(4);
 
     }
 
@@ -507,14 +537,7 @@ public class guide_Script : MonoBehaviour
         ResetAnimation();
         yield return new WaitForSeconds(1f);
 
-        playerMovementScript.blockWalk = false;
-        playerMovementScript.blockJump = false;
-        playerMovementScript.blockCrouch = false;
-        playerMovementScript.blockDash = false;
-
-        guide.transform.position = new Vector2(147f, -2.35f);
-        playerRigidBody.constraints = RigidbodyConstraints2D.None;
-        playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+        StartPlayer(5);
     }
 
     IEnumerator eighthSequence()
@@ -553,15 +576,7 @@ public class guide_Script : MonoBehaviour
 
         guide.transform.position = new Vector2(135f, 7.32f);
 
-
-        playerMovementScript.blockWalk = false;
-        playerMovementScript.blockJump = false;
-        playerMovementScript.blockCrouch = false;
-        playerMovementScript.blockDash = false;
-
-        playerRigidBody.constraints = RigidbodyConstraints2D.None;
-        playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
-
+        StartPlayer(5);
     }
 
 }
