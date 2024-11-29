@@ -15,7 +15,7 @@ namespace ItemSystem.Items
     }
         public override bool use()
         {
-            Debug.Log("PowerUpItem can now be used");
+            Debug.Log("PowerUpItem was used");
             return true;
         }
 

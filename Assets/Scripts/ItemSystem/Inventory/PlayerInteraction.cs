@@ -3,25 +3,21 @@ using UnityEngine;
 public class PlayerInteraction : MonoBehaviour
 {
     public InventorySystem playerInventory;
+    private HealthSystem playerHealth;
 
     //For Dropping Items
     void Update()
     {
-        if (Input.GetKey(KeyCode.Q))
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                playerInventory.DropItemFromSlot(0); // Drop from slot 1
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                playerInventory.DropItemFromSlot(1); // Drop from slot 2
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                playerInventory.DropItemFromSlot(2); // Drop from slot 3
-            }
-        }
+        //Logik zum Droppen
+        DropOnKeyPress();
+
+        //Logik zum Usen
+        UseOnKeyPress();
+    }
+    void Start()
+    {
+        playerHealth = GetComponent<HealthSystem>();
+        playerInventory.playerHealth = playerHealth;
     }
 
 
@@ -35,7 +31,8 @@ public class PlayerInteraction : MonoBehaviour
             // Attempt to find an Item component directly
             var pickup = other.GetComponent<InventoryItem>();
 
-            if (pickup != null && playerInventory.AddItemToFirstAvailableSlot(pickup.item))
+            // rufe AddItemToFirstAvailableSlot und wenn true, wurde das Objekt hinzugefügt
+            if (pickup != null && playerInventory.AddItemToFirstAvailableSlot(pickup.item)) //übergibt nur ItemData
             {
                 Destroy(other.gameObject); // Remove the item from the world
             }
@@ -45,4 +42,47 @@ public class PlayerInteraction : MonoBehaviour
             }
         }
     }
+
+    private void DropOnKeyPress()
+    {
+        if (Input.GetKey(KeyCode.Q))
+        {
+            Vector3 playerPosition = transform.position;  //Player Position
+            Vector3 dropOffset = new Vector3(1f, -0.5f, 0f); // Example offset to the right of the player
+
+            //when Player presses 1,2,3
+            //drop item from slot 1,2,3
+            //pass player position and drop offset
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                playerInventory.DropItemFromSlot(0, playerPosition, dropOffset); // Drop from slot 1
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                playerInventory.DropItemFromSlot(1, playerPosition, dropOffset); // Drop from slot 2
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                playerInventory.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
+            }
+        }
+    }
+
+    private void UseOnKeyPress()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            playerInventory.UseItemFromSlot(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            playerInventory.UseItemFromSlot(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            playerInventory.UseItemFromSlot(2);
+        }
+    }
+
+
 }

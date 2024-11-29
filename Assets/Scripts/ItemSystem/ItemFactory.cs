@@ -20,34 +20,6 @@ public class ItemFactory : MonoBehaviour
         createItem();
     }
 
-
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-        switch (itemData.itemType)
-        {
-            case ItemType.ModifierItem:
-                if (powerUpItem.use())
-                {
-                    Destroy(gameObject);
-                }
-                break;
-
-            case ItemType.HealthItem:
-                HealthSystem playerHealth = collider.GetComponent<HealthSystem>();
-                if (healthItem.use(playerHealth))
-                {
-                    Destroy(gameObject);
-                }
-                break;
-            // Weitere Fälle für andere Item-Typen können hier hinzugefügt werden
-            default:
-                Debug.LogError("Unknown ItemType: " + itemData.itemType);
-                break;
-        }
-    }
-
-
-
     private void createItem()
     {
         switch (itemData.itemType)
