@@ -44,6 +44,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: ObjectsInEnvironment
+    uniqueID: 1985207377
+    locked: 0
+  - name: Ground/Walls
+    uniqueID: 584759993
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
