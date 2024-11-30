@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -15,6 +16,8 @@ namespace ItemSystem.Abstract
         public string itemName { get; set; }
         public Sprite itemSprite { get; set; }
 
+        public GameObject prefab;
+        
 
         public virtual bool use()
         {
@@ -24,8 +27,5 @@ namespace ItemSystem.Abstract
         {
             return false;
         }
-
     }
-
 }
-
