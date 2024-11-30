@@ -14,6 +14,10 @@ public class InventorySlot
     public void Initialize(VisualElement slotVisualElement)
     {
         hotkey = slotVisualElement;
+        if (hotkey == null)
+        {
+            Debug.LogError("Could not find VisualElement with name Hotkey");
+        }
         UpdateSlotVisual();
     }
 
@@ -26,6 +30,11 @@ public class InventorySlot
 
     public void useItem()
     {
+        if(storedItem == null)
+        {
+            Debug.Log("No item to use");
+            return;
+        }
         storedItem.use();
         //after use, delete item
         //problem: instance of item is not really deleted
@@ -89,10 +98,12 @@ public class InventorySlot
             {
                 // set image of hotkey to the image of the item
                 hotkey.style.backgroundImage = new StyleBackground(storedItem.itemSprite);
+                Debug.Log("InvSlot: Item displayed");
             }
             else
             {
                 hotkey.style.backgroundImage = null;
+                Debug.Log("InvSlot: No item to display");
             }
         }
     }

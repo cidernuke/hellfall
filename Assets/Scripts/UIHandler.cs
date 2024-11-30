@@ -20,6 +20,11 @@ public class UIHandler : MonoBehaviour
     void Start()
     {
         UIDocument uiDocument = GetComponent<UIDocument>();
+        if(uiDocument == null)
+        {
+            Debug.LogError("Could not find UIDocument component");
+            return;
+        }
         m_Healthbar = uiDocument.rootVisualElement.Q<VisualElement>("HealthBar");
         SetHealthValue(1.0f);
     }
