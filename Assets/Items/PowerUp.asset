@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: PowerUp
   m_EditorClassIdentifier: 
   itemName: Staerke Buff
-  itemSprite: {fileID: 3450577421433650506, guid: c7d1d3d805b430c48b35e2241065a0cb, type: 3}
-  healthAmount: 0
+  itemSprite: {fileID: 8319234128083534739, guid: 372c2c9ccdd1a934392aefc40ac987e2, type: 3}
   itemType: 0
+  healthAmount: 0
+  duration: 0
+  amount: 0
+  description: 
+  damage: 0
