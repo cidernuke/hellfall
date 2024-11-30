@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour
     private void Update()
     {
         transform.position = new Vector3(player.position.x + lookAhead, player.position.y + aheadY, transform.position.z);
-        lookAhead = Mathf.Lerp(lookAhead, (aheadDistance * player.localScale.x), Time.deltaTime * cameraSpeed);
+        lookAhead = Mathf.Lerp(lookAhead, aheadDistance * player.localScale.x, Time.deltaTime * cameraSpeed);
     }
 
 
