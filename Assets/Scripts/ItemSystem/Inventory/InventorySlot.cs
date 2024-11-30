@@ -36,39 +36,37 @@ public class InventorySlot
     {
         //get player position
         Vector3 dropPosition = playerPosition + dropOffset;
-        //falls überhaupt ein Item da ist
+        // if there even is an item
         if (storedItem != null)
         {
-            //switch basierend auf dem Namen des Items
+            // switch based on the name of the item
             switch (itemData.itemType)
             {
                 case ItemType.ModifierItem:
                     Debug.Log("PowerUpItem was dropped");
-                    //Lade die Resource
-                    GameObject resource = null;
                     //resource Laden
-                    resource = Resources.Load<GameObject>("Prefabs/PowerUp");
-                    //prüfen ob das Laden funktioniert hat
+                    GameObject resource = Resources.Load<GameObject>("Prefabs/PowerUp");
+                    // check if loading of resource worked
                     if (resource == null)
                     {
                         Debug.LogError("Failed to load HealthItem(new) prefab");
                         return;
                     }
 
-                    //erstelle Instanz des Prefabs
+                    // create instance of the prefab
                     GameObject.Instantiate(resource, dropPosition, Quaternion.identity);
                     break;
 
                 case ItemType.HealthItem:
                     Debug.Log("HealthItem was dropped");
-                    //Lade die Resource
+                    // load the resource
                     var resourceH = Resources.Load<GameObject>("Prefabs/HealthItem(new)");
                     if (resourceH == null)
                     {
                         Debug.LogError("Failed to load HealthItem(new) prefab");
                         return;
                     }
-                    //erstelle Instanz des Prefabs
+                    // create instance of the prefab
                     GameObject.Instantiate(resourceH, dropPosition, Quaternion.identity);
                     break;
 
@@ -89,7 +87,7 @@ public class InventorySlot
         {
             if (storedItem != null)
             {
-                //setze das Bild des Hotkeys auf das Bild des Items
+                // set image of hotkey to the image of the item
                 hotkey.style.backgroundImage = new StyleBackground(storedItem.itemSprite);
             }
             else

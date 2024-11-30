@@ -5,22 +5,20 @@ public class PlayerInteraction : MonoBehaviour
     public InventorySystem playerInventory;
     private HealthSystem playerHealth;
 
-    //For Dropping Items
     void Update()
     {
-        //Logik zum Droppen
+        // Logic for dropping items
         DropOnKeyPress();
 
-        //Logik zum Usen
+        // Logic for using items
         UseOnKeyPress();
     }
+
     void Start()
     {
         playerHealth = GetComponent<HealthSystem>();
         playerInventory.playerHealth = playerHealth;
     }
-
-
 
     //For Pickung up Items
     private void OnTriggerEnter2D(Collider2D other)
@@ -31,7 +29,7 @@ public class PlayerInteraction : MonoBehaviour
             // Attempt to find an Item component directly
             var pickup = other.GetComponent<InventoryItem>();
 
-            // rufe AddItemToFirstAvailableSlot und wenn true, wurde das Objekt hinzugefügt
+            // call AddItemToFirstAvailableSlot. If true, the object was added
             if (pickup != null && playerInventory.AddItemToFirstAvailableSlot(pickup.item)) //übergibt nur ItemData
             {
                 Destroy(other.gameObject); // Remove the item from the world

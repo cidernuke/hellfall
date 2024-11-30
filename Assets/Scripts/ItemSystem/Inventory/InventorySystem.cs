@@ -53,15 +53,15 @@ public class InventorySystem : MonoBehaviour
             if (slot.storedItem == null)
             {
                 Debug.Log($"Adding item {itemData.itemName} to the inventory.");
-                //rufe methode auf, um Instanz zu erstellen
+                // calling method to set up instance
                 Item newItem = CreateItemInstance(itemData);
-                //Falls Itemtyp nicht bekannt, ist newItem null
+                // incase itemType isnt known, newItem is null
                 if (newItem == null)
                 {
                     Debug.LogError("Failed to create item instance.");
                     return false;
                 }
-                //übergebe die Iteminstanz und die Itemdata an den Slot
+                // pass the item-instance and itemData to the slot
                 slot.StoreItem(newItem, itemData);
                 return true;
             }
@@ -72,7 +72,7 @@ public class InventorySystem : MonoBehaviour
 
     public void DropItemFromSlot(int slotIndex, Vector3 playerPosition, Vector3 dropOffset)
     {
-        //droppt Item aus dem jeweiligen Slot
+        // dropps item from the respective slot
         if (slotIndex >= 0 && slotIndex < slots.Length)
         {
             slots[slotIndex].DropItem(playerPosition, dropOffset);
@@ -92,7 +92,7 @@ public class InventorySystem : MonoBehaviour
                 var it = new HealthItem(itemData.itemName, itemData.itemSprite, itemData.healthAmount);
                 it.playerHealth = playerHealth;    
                 return it;
-            // Weitere Fälle für andere Item-Typen können hier hinzugefügt werden
+            // Additional cases for other item types can be added here
             default:
                 Debug.LogError("Unknown ItemType: " + itemData.itemType);
                 return null;
@@ -101,7 +101,7 @@ public class InventorySystem : MonoBehaviour
 
     public void UseItemFromSlot(int SlotNumber)
     {
-        //Rufe useItem Methode des Items im zugehörigen Slot auf
+        // call useItem from Items on the respective slot
         switch(SlotNumber)
         {
             case 0:
