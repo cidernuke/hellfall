@@ -28,6 +28,7 @@
 .vscode/
 .idea
 /idea
+.DS_Store/
 
 # Gradle cache directory
 .gradle/
@@ -73,3 +74,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Blobs
+mono_crash.*
+test-results.xml

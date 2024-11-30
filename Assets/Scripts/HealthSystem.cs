@@ -18,6 +18,7 @@ public class HealthSystem : MonoBehaviour
     /// </summary>
     public float currentHealth;
     [SerializeField] private Animator anim;
+    [SerializeField] private bool isPlayer = false;
 
     private bool isDead;
 
@@ -46,6 +47,7 @@ public class HealthSystem : MonoBehaviour
     {
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
+        
     }
 
     /// <summary>
@@ -79,11 +81,15 @@ public class HealthSystem : MonoBehaviour
             damageCooldown = timeInvincible;
         }
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
-        UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
         if (currentHealth > 0)
         {
             Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
             anim.SetTrigger("hurt");
+            if (isPlayer)
+            {
+                UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
+            }
+            
         }
         else
         {
@@ -107,6 +113,7 @@ public class HealthSystem : MonoBehaviour
 
     /// <summary>
     /// Kills the player or enemy, disabling their movement and triggering the death animation.
+    /// If Enemy is killed, loot is spawned.
     /// </summary>
     /// <param name="playerMovement"></param>
     /// <param name="enemyController"></param>
@@ -127,6 +134,7 @@ public class HealthSystem : MonoBehaviour
             {
                 enemyController.enabled = false;
                 StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
+                enemyController.SpawnLoot();
 
             }
             isDead = true;

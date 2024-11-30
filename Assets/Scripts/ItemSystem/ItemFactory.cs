@@ -1,11 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Security.Principal;
 using ItemSystem.Abstract;
 using ItemSystem.Items;
 using UnityEngine;
+
+/// <summary>
+/// Factory class for creating items in the game.
+/// </summary>
 
 public class ItemFactory : MonoBehaviour
 {
@@ -36,13 +35,6 @@ public class ItemFactory : MonoBehaviour
             default:
                 Debug.LogError("Unknown ItemType: " + itemData.itemType);
                 break;
-
-
-
         }
     }
-
-
-
-
 }

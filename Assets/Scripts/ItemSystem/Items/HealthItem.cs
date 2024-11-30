@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using ItemSystem.Abstract;
 using UnityEngine;
 
+/// <summary>
+/// Class for health items in the game.
+/// </summary>
+
 public class HealthItem : Item
 {
-    private float healthAmount;  
-    public HealthSystem playerHealth;
+    private float healthAmount; // how much does an item heal
+    public HealthSystem playerHealth; // reference to healthsystem
 
     public HealthItem(string itemName, Sprite itemSprite, float healthAmount) 
     {
         this.itemName = itemName;
         this.itemSprite = itemSprite;
         this.healthAmount = healthAmount;
-        
-        
     }
     public override bool use()        {
             
@@ -22,10 +24,8 @@ public class HealthItem : Item
             {
                 playerHealth.AddHealth(healthAmount);                
                 return true;             
-
             }            
             Debug.Log("Item was used");
             return false;
         }
-    
 }
