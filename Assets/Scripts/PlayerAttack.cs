@@ -1,3 +1,5 @@
+using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
@@ -15,6 +17,11 @@ public class PlayerAttack : MonoBehaviour
     [Header("Enemy Layer")]
     [SerializeField] private LayerMask enemyLayer;
     private float cooldownTimer = Mathf.Infinity;
+
+    [Header("Ranged Attack")]
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private GameObject[] projectiles;
+
 
     // references
     private Animator anim;
@@ -35,6 +42,11 @@ public class PlayerAttack : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && cooldownTimer >= attackCooldown && playerMovement.CanAttack())
         {
             Attack();
+        }
+        if (Input.GetMouseButtonDown(1) && cooldownTimer >= attackCooldown && playerMovement.CanAttack())
+        {
+            AttackRanged();
+            
         }
         cooldownTimer += Time.deltaTime;
     }
@@ -75,6 +87,27 @@ public class PlayerAttack : MonoBehaviour
     {
         anim.SetTrigger("attack_01");
         cooldownTimer = 0;
+    }
+
+    private void AttackRanged()
+    {
+        //anim.SetTrigger("attack_01");
+        cooldownTimer = 0;
+        projectiles[FindProjectile()].transform.position = firePoint.position;
+        projectiles[FindProjectile()].GetComponent<Projectile>().SetDirection(Math.Sign(transform.localScale.x));
+        
+    }
+    
+    private int FindProjectile()
+    {
+        for (int i = 0; i < projectiles.Length; i++)
+        {
+            if (!projectiles[i].activeInHierarchy)
+            {
+                return i;
+            }
+        }
+        return 0;
     }
 
     /*
