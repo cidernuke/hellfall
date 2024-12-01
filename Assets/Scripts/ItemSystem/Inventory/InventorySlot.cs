@@ -39,6 +39,7 @@ public class InventorySlot
         //after use, delete item
         //problem: instance of item is not really deleted
         storedItem = null;
+        itemData = null;
         UpdateSlotVisual();
     }
     public void DropItem(Vector3 playerPosition, Vector3 dropOffset)
