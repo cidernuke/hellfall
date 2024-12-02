@@ -12,13 +12,13 @@ public class PlayerData
     public float respawnHealth;
 
     // Collected Items as List with the item-names
-    //public List<string> collectedItems;
+    public List<string> collectedItemNames;
 
     // Current amount of soulShards
-    //public int soulShardCount;
+    public int soulShardCount;
 
     //public PlayerData(HealthSystem healthSystem, List<ItemSystem.Abstract.Item> playerItems, SoulShardSystem soulShardSystem, int lastCheckpointID)
-    public PlayerData(HealthSystem healthSystem, int lastCheckpointID)
+    public PlayerData(HealthSystem healthSystem, int lastCheckpointID, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     {
         // Save latest checkpointID
         this.lastCheckpointID = lastCheckpointID;
@@ -29,14 +29,20 @@ public class PlayerData
         // Save respawnHealth
         respawnHealth = healthSystem.respawnHealth;
 
-        // // Safe collected items
-        // collectedItems = new List<string>();
-        // foreach (var item in playerItems)
-        // {
-        //     collectedItems.Add(item.itemName);
-        // }
+        //Save the current amout of Soul Shards
+        soulShardCount = soulShardSystem.GetSoulShardCount();
 
-        // // Save current amount of soulShards
-        // soulShardCount = soulShardSystem.GetSoulShardCount();
+        collectedItemNames = new List<string>();
+        foreach (var slot in inventorySystem.slots)
+        {
+            if (slot.storedItem != null)
+            {
+                collectedItemNames.Add(slot.storedItem.itemName);
+            }
+            else
+            {
+                collectedItemNames.Add(null); // Platzhalter für leere Slots
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@ public class SaveManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Optional, falls der SaveManager über Szenen hinweg erhalten bleiben soll
+            DontDestroyOnLoad(gameObject); // Damit der SaveManager über Szenen hinweg erhalten bleibt
             print("SaveManager initialisiert");
         }
         else
@@ -35,14 +35,14 @@ public class SaveManager : MonoBehaviour
 
     // Methode zum Speichern des Spiels
     //public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, PlayerInventory playerInventory, SoulShardSystem soulShardSystem)
-    public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem)
+    public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     {
         // Erstelle ein neues PlayerData-Objekt
         PlayerData playerData = new PlayerData(
             healthSystem,
-            //playerInventory.collectedItems,
-            //soulShardSystem,
-            playerMovement.GetLastCheckpointID()
+            playerMovement.GetLastCheckpointID(),
+            soulShardSystem,
+            inventorySystem
         );
 
         // Erstelle GameData und füge PlayerData hinzu
@@ -52,34 +52,38 @@ public class SaveManager : MonoBehaviour
             // enviromentData = ... // später, wenn  EnviromentData hinzugefügt wird
         };
 
-        // Serialisiere GameData und schreibe es in die Datei
-        // BinaryFormatter gilt scheinbar als veraltet und unsicher
-
-        // BinaryFormatter bf = new BinaryFormatter();
-        // FileStream file = File.Create(saveFilePath);
-        // bf.Serialize(file, gameData);
-        // file.Close();
-
         // Serialisiere GameData zu JSON
         string json = JsonUtility.ToJson(gameData);
 
         // Schreibe JSON in Datei
         File.WriteAllText(saveFilePath, json);
 
-        Debug.Log("Spiel gespeichert.");
+        //Check if the file was written and the integrity
+        if (File.Exists(saveFilePath))
+        {
+            string writtenContent = File.ReadAllText(saveFilePath);
+            if (writtenContent == json)
+            {
+                Console.WriteLine("Das Spiel wurde erfolgreich gespeichert und überprüft.");
+            }
+            else
+            {
+                Console.WriteLine("Der Dateiinhalt stimmt nicht mit dem erwarteten Inhalt überein.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Das Spiel wurde nicht gespeichert.");
+        }
+
+        //Debug.Log("Spiel gespeichert.");
     }
 
     // Methode zum Laden des Spiels
-    public void LoadGame(PlayerMovement playerMovement, HealthSystem healthSystem, PlayerInventory playerInventory, SoulShardSystem soulShardSystem)
+    public void LoadGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     {
         if (File.Exists(saveFilePath))
         {
-            // Lese die Datei und deserialisiere GameData
-            // BinaryFormatter bf = new BinaryFormatter();
-            // FileStream file = File.Open(saveFilePath, FileMode.Open);
-            // GameData gameData = (GameData)bf.Deserialize(file);
-            // file.Close();
-
             string json = File.ReadAllText(saveFilePath);
 
             // Deserialisiere JSON zu GameData
@@ -87,7 +91,7 @@ public class SaveManager : MonoBehaviour
 
             // Wende die geladenen Daten an
             //ApplyLoadedData(gameData, playerMovement, healthSystem, playerInventory, soulShardSystem);
-            ApplyLoadedData(gameData, playerMovement, healthSystem);
+            ApplyLoadedData(gameData, playerMovement, healthSystem, soulShardSystem, inventorySystem);
             Debug.Log("Spiel geladen.");
         }
         else
@@ -97,7 +101,7 @@ public class SaveManager : MonoBehaviour
     }
 
     //private void ApplyLoadedData(GameData gameData, PlayerMovement playerMovement, HealthSystem healthSystem, PlayerInventory playerInventory, SoulShardSystem soulShardSystem)
-    private void ApplyLoadedData(GameData gameData, PlayerMovement playerMovement, HealthSystem healthSystem)
+    private void ApplyLoadedData(GameData gameData, PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     {
         PlayerData data = gameData.playerData;
 
@@ -106,6 +110,33 @@ public class SaveManager : MonoBehaviour
 
         // Setze respawnHealth
         healthSystem.respawnHealth = data.respawnHealth;
+
+        // Setze die Anzahl der Soul Shards
+        soulShardSystem.SetSoulShardCount(data.soulShardCount);
+
+
+        for (int i = 0; i < inventorySystem.slots.Length; i++)
+    {
+        string itemName = data.collectedItemNames[i];
+        if (!string.IsNullOrEmpty(itemName))
+        {
+            ItemData itemData = Resources.Load<ItemData>("ItemData/" + itemName);
+            if (itemData != null)
+            {
+                Item newItem = inventorySystem.CreateItemInstance(itemData);
+                inventorySystem.slots[i].StoreItem(newItem, itemData);
+            }
+            else
+            {
+                Debug.LogWarning("ItemData für " + itemName + " nicht gefunden.");
+            }
+        }
+        else
+        {
+            // Leeren Slot sicherstellen
+            inventorySystem.slots[i].storedItem = null;
+        }
+    }
 
         // Finde den Checkpoint mit der gespeicherten ID und setze die Position
         Checkpoint[] checkpoints = FindObjectsOfType<Checkpoint>();

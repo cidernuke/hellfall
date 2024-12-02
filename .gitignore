@@ -77,3 +77,4 @@ crashlytics-build.properties
 
 # Blobs
 mono_crash.*
+test-results.xml

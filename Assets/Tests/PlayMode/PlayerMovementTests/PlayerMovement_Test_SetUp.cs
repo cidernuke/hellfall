@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-public abstract class PlayerMovement_Test_SetUp
+public class PlayerMovement_Test_SetUp
 {
     protected static bool sceneLoaded = false;
     protected GameObject player;
@@ -15,8 +15,8 @@ public abstract class PlayerMovement_Test_SetUp
     public virtual IEnumerator SetUp()
     {
         // Load scene only once
-        //if (!sceneLoaded)
-        //{
+        // if (!sceneLoaded)
+        // {
             SceneManager.LoadScene("TestScene");
             yield return null; // Wait for scene being loaded
             sceneLoaded = true;

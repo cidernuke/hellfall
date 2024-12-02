@@ -7,8 +7,8 @@ public class Checkpoint : MonoBehaviour
 
     private PlayerMovement playerMovement;
     private HealthSystem healthSystem;
-    //private PlayerInventory playerInventory;
-    //private SoulShardSystem soulShardSystem;
+    private SoulShardSystem soulShardSystem;
+    private InventorySystem inventorySystem;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -25,11 +25,11 @@ public class Checkpoint : MonoBehaviour
                 playerMovement.UpdateRespawnPoint(playerMovement.transform.position, checkpointID);
 
                 healthSystem = collision.GetComponent<HealthSystem>();
-                //playerInventory = collision.GetComponent<PlayerInventory>();
-                //soulShardSystem = collision.GetComponent<SoulShardSystem>();
+                soulShardSystem = collision.GetComponent<SoulShardSystem>();
+                inventorySystem = collision.GetComponent<InventorySystem>();
 
-                //if (healthSystem != null && playerInventory != null && soulShardSystem != null)
-                if (healthSystem != null)
+                //if (healthSystem != null)
+                if (healthSystem != null && inventorySystem  != null && soulShardSystem != null)
                 {
                     ActivateCheckpoint();
                 }
@@ -53,8 +53,7 @@ public class Checkpoint : MonoBehaviour
         healthSystem.respawnHealth = healthSystem.currentHealth;
 
         // Spiel speichern
-        SaveManager.Instance.SaveGame(playerMovement, healthSystem);
-        //SaveManager.Instance.SaveGame(playerMovement, healthSystem, playerInventory, soulShardSystem);
+        SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,inventorySystem);
         // Add Visualisation or sound here
     }
 }
