@@ -14,6 +14,10 @@ public class InventorySystem : MonoBehaviour
     // needed for the HealthItem
     public HealthSystem playerHealth;
 
+    private GameObject playerSpeech;
+
+    private SpriteRenderer playerSpeechSpriteRenderer;
+
 
     void Start()
     {
@@ -38,6 +42,10 @@ public class InventorySystem : MonoBehaviour
             slots[i] = new InventorySlot();
             slots[i].Initialize(hotkey);
         }
+
+        playerSpeech = GameObject.Find("Player_Speech_Bubble");
+        playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
+
     }
 
     /// <summary>
@@ -78,7 +86,7 @@ public class InventorySystem : MonoBehaviour
                 return true;
             }
         }
-        Debug.Log("Inventory full!");
+        StartCoroutine(InvenotryFull());
         return false;
     }
     
@@ -192,5 +200,30 @@ public class InventorySystem : MonoBehaviour
 
         Debug.Log($"AFTER SWAP: Item in first slot: {slots[firstSlot].itemData?.itemName}, Item in second slot: {slots[secondSlot].itemData?.itemName}");
 
+    }
+
+    public IEnumerator InvenotryFull()
+    {
+        var time = 1.5f;
+        Sprite speechBubble = Resources.Load<Sprite>("Sprites/Level_One/Speech_Bubbles/Inventory_full_bubble");
+        playerSpeechSpriteRenderer.sprite = speechBubble;
+        
+        float elapsedTime = 0f;
+
+        // Wait for either the full time or until "Q" is pressed to skip
+        while (elapsedTime < time) 
+        {
+            if (Input.GetKeyDown(KeyCode.Q)) 
+            {
+                // Hide the speech bubble and exit early if "Q" is pressed
+                playerSpeechSpriteRenderer.sprite = null;
+                yield break;
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null; // Wait for the next frame
+        }
+
+        playerSpeechSpriteRenderer.sprite = null;
     }
 }

@@ -9,6 +9,9 @@ public class PlayerInteraction : MonoBehaviour
 
     private bool isSwitching = false; // To prevent re-entry in switching mode
 
+    // Store the current item the player can pick up
+    private InventoryItem itemToPickUp;
+
     void Update()
     {
         // Logic for dropping items
@@ -19,6 +22,9 @@ public class PlayerInteraction : MonoBehaviour
 
         // Logic for switching items
         SwitchItems();
+
+        // Logic for picking up items
+        PickupOnKeyPress();
     }
 
     void Start()
@@ -27,23 +33,44 @@ public class PlayerInteraction : MonoBehaviour
         playerInventory.playerHealth = playerHealth;
     }
 
-    //For Pickung up Items
     private void OnTriggerEnter2D(Collider2D other)
     {
         // Check if the colliding object is tagged as "Item"
         if (other.CompareTag("Item"))
         {
-            // Attempt to find an Item component directly
-            var pickup = other.GetComponent<InventoryItem>();
-
-            // call AddItemToFirstAvailableSlot. If true, the object was added
-            if (pickup != null && playerInventory.AddItemToFirstAvailableSlot(pickup.item)) //übergibt nur ItemData
+            // Attempt to find an InventoryItem component on the object
+            itemToPickUp = other.GetComponent<InventoryItem>();
+            if (itemToPickUp != null)
             {
-                Destroy(other.gameObject); // Remove the item from the world
+                Debug.Log($"Item in range to pick up: {itemToPickUp.item.itemName}");
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        // Clear the reference when the player leaves the item's trigger zone
+        if (other.CompareTag("Item") && itemToPickUp != null && other.GetComponent<InventoryItem>() == itemToPickUp)
+        {
+            Debug.Log($"Item out of range: {itemToPickUp.item.itemName}");
+            itemToPickUp = null;
+        }
+    }
+
+    private void PickupOnKeyPress()
+    {
+        // Check if the player presses E and an item is available to pick up
+        if (Input.GetKeyDown(KeyCode.E) && itemToPickUp != null)
+        {
+            Debug.Log($"Picking up item: {itemToPickUp.item.itemName}");
+            if (playerInventory.AddItemToFirstAvailableSlot(itemToPickUp.item)) // Attempt to add the item to the inventory
+            {
+                Destroy(itemToPickUp.gameObject); // Remove the item from the scene
+                itemToPickUp = null; // Clear the reference
             }
             else
             {
-                Debug.LogWarning("The object tagged 'Item' does not have a valid Item component!");
+                Debug.Log("Failed to pick up item. Inventory is full!");
             }
         }
     }
