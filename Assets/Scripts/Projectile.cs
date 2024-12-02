@@ -4,6 +4,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float speed;
+    [SerializeField] private float damage;
     private bool hit;
     private float direction;
 
@@ -36,7 +37,8 @@ public class Projectile : MonoBehaviour
         }
         if(collision.tag == "Enemy")
         {
-            collision.GetComponent<HealthSystem>().TakeDamage(1);          
+            EnemyController enemyController = collision.GetComponent<EnemyController>();
+            collision.GetComponent<HealthSystem>().TakeDamage(damage, null,enemyController);          
             hit = true;
             boxCollider.enabled = false;
             animator.SetTrigger("explode");
