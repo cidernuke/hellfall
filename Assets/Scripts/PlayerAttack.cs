@@ -45,6 +45,7 @@ public class PlayerAttack : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(1) && cooldownTimer >= attackCooldown && playerMovement.CanAttack())
         {
+            projectiles[0].SetActive(true);
             AttackRanged();
             
         }
@@ -91,10 +92,12 @@ public class PlayerAttack : MonoBehaviour
 
     private void AttackRanged()
     {
-        //anim.SetTrigger("attack_01");
+        
+        anim.SetTrigger("attack_ranged");
         cooldownTimer = 0;
-        projectiles[FindProjectile()].transform.position = firePoint.position;
-        projectiles[FindProjectile()].GetComponent<Projectile>().SetDirection(Math.Sign(transform.localScale.x));
+        int projectileIndex = FindProjectile();
+        projectiles[projectileIndex].transform.position = firePoint.position;
+        projectiles[projectileIndex].GetComponent<Projectile>().SetDirection(Math.Sign(transform.localScale.x));
         
     }
     
@@ -104,6 +107,7 @@ public class PlayerAttack : MonoBehaviour
         {
             if (!projectiles[i].activeInHierarchy)
             {
+                Debug.Log("Projectile active" + i);
                 return i;
             }
         }

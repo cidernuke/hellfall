@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using Codice.Client.Common.GameUI;
 using UnityEngine;
-using UnityEngine.UIElements;
+
 
 public class Projectile : MonoBehaviour
 {
@@ -31,9 +28,20 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        hit = true;
-        boxCollider.enabled = false;
-        animator.SetTrigger("explode");
+        if(collision.tag == "Wall")
+        {
+            hit = true;
+            boxCollider.enabled = false;
+            animator.SetTrigger("explode");
+        }
+        if(collision.tag == "Enemy")
+        {
+            collision.GetComponent<HealthSystem>().TakeDamage(1);          
+            hit = true;
+            boxCollider.enabled = false;
+            animator.SetTrigger("explode");
+        }
+        
     }
 
     public void SetDirection(float _direction)
