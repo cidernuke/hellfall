@@ -410,6 +410,7 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
+    private bool doubleJump;
     #region Input Handling Methods
     private void HandleJumpInput()
     {
@@ -419,7 +420,7 @@ public class PlayerMovement : MonoBehaviour
             if (IsGrounded() || CanUseCoyote())
             {
                 animator.SetTrigger("jump"); // Play jump animation on first jump
-                body.velocity = new Vector2(body.velocity.x, jumpPower);
+                body.velocity = new Vector2(body.velocity.y, jumpPower);
                 isDoubleJumping = false; // Reset double jump for the next jump
                 coyoteUsable = false;
 
@@ -438,6 +439,40 @@ public class PlayerMovement : MonoBehaviour
                 animator.SetBool("grounded", IsGrounded());
             }
         }
+
+        // if (IsGrounded() && !Input.GetButton("Jump"))
+        // {
+        //     doubleJump = false;
+        // }
+        // TODO: conditions are messy. Maybe try simplifying again
+        // if ((Time.time - lastTimeJumpPressed) <= jumpBufferTime)
+        // {
+        // if (IsGrounded() || CanUseCoyote())
+        // if (Input.GetButtonDown("Jump") && (IsGrounded() || doubleJump))
+        // {
+        //     print("first jump");
+        //     animator.SetTrigger("jump"); // Play jump animation on first jump
+        //     body.velocity = new Vector2(body.velocity.x, jumpPower);
+        //     doubleJump = !doubleJump;
+
+        //     isDoubleJumping = false; // Reset double jump for the next jump
+        //     coyoteUsable = false;
+
+        //     lastTimeJumpPressed = -1f;
+        // }
+        // }
+
+        // if (playerInput.GetJumpInput()) // && body.velocity.y > 0f
+        // {
+        // if (!isDoubleJumping && !IsGrounded())
+        // if (Input.GetButtonUp("Jump") && body.velocity.y > 0f)
+        // {
+        //     print("second jump");
+        //     animator.SetTrigger("jump"); // Play jump animation on first jump
+        //     isDoubleJumping = true;
+        //     body.velocity = new Vector2(body.velocity.x, body.velocity.y * 0.5f);
+        // }
+        // }
     }
 
     /// <summary>
