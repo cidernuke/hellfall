@@ -35,7 +35,8 @@ public class Checkpoint : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden.");
+                    Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden. HealthSystem: "+ healthSystem+ "| SoulshardSystem: " + soulShardSystem+ "| inventorySystem: " + inventorySystem);
+                    //Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden.");
                 }
             }
             else
