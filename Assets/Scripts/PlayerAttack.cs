@@ -30,6 +30,10 @@ public class PlayerAttack : MonoBehaviour
     private PlayerMovement playerMovement;
     private EnemyController enemyController;
 
+    //variables for attack
+    private int attackIndex = 0;
+    private int totalAttacks = 2;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -92,10 +96,23 @@ public class PlayerAttack : MonoBehaviour
 
     /// <summary>
     /// Triggers the attack animation and resets the cooldown timer.
+    /// Switches between the different attack animations depending on the counter.
     /// </summary>
     private void Attack()
     {
-        anim.SetTrigger("attack_01");
+                
+        switch(attackIndex)
+        {
+            case 0:
+                anim.SetTrigger("attack_01");
+                break;
+            case 1:
+                anim.SetTrigger("attack_02");
+                break;
+            
+        }
+
+        attackIndex = (attackIndex + 1) % totalAttacks;
         cooldownTimer = 0;
     }
 
