@@ -644,6 +644,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6914914050249091937, guid: 442271828e880ad48870a5eb80bac62f, type: 3}
+      propertyPath: m_Size.x
+      value: 0.32
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1788,10 +1792,6 @@ PrefabInstance:
     - target: {fileID: 3105599385479915624, guid: ce1ee5ec5cfd1614f8ae566b6dedbc58, type: 3}
       propertyPath: m_Name
       value: SoulShard
-      objectReference: {fileID: 0}
-    - target: {fileID: 3105599385479915624, guid: ce1ee5ec5cfd1614f8ae566b6dedbc58, type: 3}
-      propertyPath: m_TagString
-      value: Item
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -45,7 +45,7 @@ public class PlayerAttack : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(1) && cooldownTimer >= attackCooldown && playerMovement.CanAttack())
         {
-            projectiles[0].SetActive(true);
+            
             AttackRanged();
             
         }
@@ -106,8 +106,7 @@ public class PlayerAttack : MonoBehaviour
         for (int i = 0; i < projectiles.Length; i++)
         {
             if (!projectiles[i].activeInHierarchy)
-            {
-                Debug.Log("Projectile active" + i);
+            {                
                 return i;
             }
         }
