@@ -34,9 +34,10 @@ public class SaveManager : MonoBehaviour
     }
 
     // Methode zum Speichern des Spiels
-    //public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, PlayerInventory playerInventory, SoulShardSystem soulShardSystem)
+    //public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     {
+        print("Saving Game");
         // Erstelle ein neues PlayerData-Objekt
         PlayerData playerData = new PlayerData(
             healthSystem,
@@ -64,19 +65,17 @@ public class SaveManager : MonoBehaviour
             string writtenContent = File.ReadAllText(saveFilePath);
             if (writtenContent == json)
             {
-                Console.WriteLine("Das Spiel wurde erfolgreich gespeichert und überprüft.");
+                print("Das Spiel wurde erfolgreich gespeichert und überprüft.");
             }
             else
             {
-                Console.WriteLine("Der Dateiinhalt stimmt nicht mit dem erwarteten Inhalt überein.");
+                print("Der Dateiinhalt stimmt nicht mit dem erwarteten Inhalt überein.");
             }
         }
         else
         {
-            Console.WriteLine("Das Spiel wurde nicht gespeichert.");
+            print("Das Spiel wurde nicht gespeichert.");
         }
-
-        //Debug.Log("Spiel gespeichert.");
     }
 
     // Methode zum Laden des Spiels

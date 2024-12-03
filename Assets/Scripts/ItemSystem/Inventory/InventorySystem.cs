@@ -7,6 +7,8 @@ using ItemSystem.Items; // Add this line to include the namespace where PowerUpI
 
 public class InventorySystem : MonoBehaviour
 {
+    // Singleton-Instance
+    public static InventorySystem Instance { get; private set; }
     public InventorySlot[] slots;
     [SerializeField] protected UIDocument uiDocument;
     protected VisualElement root;
@@ -15,6 +17,20 @@ public class InventorySystem : MonoBehaviour
     public HealthSystem playerHealth;
 
 
+    //Singleton-implementation, to make global accessable
+    private void Awake()
+    {
+        // Implement the Singleton pattern
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Inventory persist across scenes
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
         root = uiDocument.rootVisualElement;

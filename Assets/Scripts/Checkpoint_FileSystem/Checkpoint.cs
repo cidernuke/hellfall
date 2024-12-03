@@ -8,7 +8,7 @@ public class Checkpoint : MonoBehaviour
     private PlayerMovement playerMovement;
     private HealthSystem healthSystem;
     private SoulShardSystem soulShardSystem;
-    private InventorySystem inventorySystem;
+    //private InventorySystem inventorySystem;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -26,17 +26,18 @@ public class Checkpoint : MonoBehaviour
 
                 healthSystem = collision.GetComponent<HealthSystem>();
                 soulShardSystem = collision.GetComponent<SoulShardSystem>();
-                inventorySystem = collision.GetComponent<InventorySystem>();
+                //inventorySystem = collision.GetComponent<InventorySystem>();
 
                 //if (healthSystem != null)
-                if (healthSystem != null && inventorySystem  != null && soulShardSystem != null)
+                //if (healthSystem != null && inventorySystem != null && soulShardSystem != null)
+                if (healthSystem != null && InventorySystem.Instance  != null && soulShardSystem != null)
                 {
                     ActivateCheckpoint();
                 }
                 else
                 {
-                    Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden. HealthSystem: "+ healthSystem+ "| SoulshardSystem: " + soulShardSystem+ "| inventorySystem: " + inventorySystem);
-                    //Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden.");
+                    Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden. HealthSystem: "+ healthSystem+ "| SoulshardSystem: " + soulShardSystem+ "| inventorySystem: " + InventorySystem.Instance);
+                    //Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden. HealthSystem: "+ healthSystem+ "| SoulshardSystem: " + soulShardSystem+ "| inventorySystem: " + inventorySystem);
                 }
             }
             else
@@ -54,7 +55,8 @@ public class Checkpoint : MonoBehaviour
         healthSystem.respawnHealth = healthSystem.currentHealth;
 
         // Spiel speichern
-        SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,inventorySystem);
+        SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,InventorySystem.Instance);
+        //SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,inventorySystem);
         // Add Visualisation or sound here
     }
 }

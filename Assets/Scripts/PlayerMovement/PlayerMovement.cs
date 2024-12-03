@@ -556,7 +556,6 @@ public class PlayerMovement : MonoBehaviour
         //Reset die trigger
         animator.ResetTrigger("die");
         //Set Idle animation again, if not player is invisible unitl the animation is changed
-        //Just unitl i found better solution
         animator.Play("Idle");
     }
 

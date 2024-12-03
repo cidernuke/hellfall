@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    public InventorySystem playerInventory;
+    //public InventorySystem playerInventory;
     private HealthSystem playerHealth;
 
     void Update()
@@ -17,7 +17,9 @@ public class PlayerInteraction : MonoBehaviour
     void Start()
     {
         playerHealth = GetComponent<HealthSystem>();
-        playerInventory.playerHealth = playerHealth;
+        //playerInventory.playerHealth = playerHealth;
+        InventorySystem.Instance.playerHealth = playerHealth;
+        
     }
 
     //For Pickung up Items
@@ -30,7 +32,8 @@ public class PlayerInteraction : MonoBehaviour
             var pickup = other.GetComponent<InventoryItem>();
 
             // call AddItemToFirstAvailableSlot. If true, the object was added
-            if (pickup != null && playerInventory.AddItemToFirstAvailableSlot(pickup.item)) //übergibt nur ItemData
+            //if (pickup != null && playerInventory.AddItemToFirstAvailableSlot(pickup.item)) //übergibt nur ItemData
+            if (pickup != null && InventorySystem.Instance.AddItemToFirstAvailableSlot(pickup.item)) //übergibt nur ItemData
             {
                 Destroy(other.gameObject); // Remove the item from the world
             }
@@ -53,15 +56,18 @@ public class PlayerInteraction : MonoBehaviour
             //pass player position and drop offset
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                playerInventory.DropItemFromSlot(0, playerPosition, dropOffset); // Drop from slot 1
+                //playerInventory.DropItemFromSlot(0, playerPosition, dropOffset); // Drop from slot 1
+                InventorySystem.Instance.DropItemFromSlot(0, playerPosition, dropOffset); // Drop from slot 1
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                playerInventory.DropItemFromSlot(1, playerPosition, dropOffset); // Drop from slot 2
+                //playerInventory.DropItemFromSlot(1, playerPosition, dropOffset); // Drop from slot 2
+                InventorySystem.Instance.DropItemFromSlot(1, playerPosition, dropOffset); // Drop from slot 2
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                playerInventory.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
+                //playerInventory.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
+                InventorySystem.Instance.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
             }
         }
     }
@@ -70,17 +76,18 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            playerInventory.UseItemFromSlot(0);
+            //playerInventory.UseItemFromSlot(0);
+            InventorySystem.Instance.UseItemFromSlot(0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            playerInventory.UseItemFromSlot(1);
+            //playerInventory.UseItemFromSlot(1);
+            InventorySystem.Instance.UseItemFromSlot(1);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            playerInventory.UseItemFromSlot(2);
+            //playerInventory.UseItemFromSlot(2);
+            InventorySystem.Instance.UseItemFromSlot(2);
         }
     }
-
-
 }
