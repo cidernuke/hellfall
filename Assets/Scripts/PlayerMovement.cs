@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider;
+    private Transform transform;
 
     // Movement flags and variables
     private bool grounded;
@@ -100,6 +101,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public bool blockDash = false;     // blocks Player from dashing, if true
     #endregion
 
+    #region Particle Animator
+    public GameObject playerFX;
+    public Animator playerFXAnimator;
+    public GameObject dust;
+    public ParticleSystem dustParticleSystem;
+
+    #endregion
+
     #region Unity Methods
     /// <summary>
     /// Called when the script instance is being loaded.
@@ -126,6 +135,8 @@ public class PlayerMovement : MonoBehaviour
     public void Update()
     {
         horizontal = playerInput.GetHorizontalInput();
+
+        ResetAnimation();
 
         if (isDashing)
         {
@@ -223,8 +234,18 @@ public class PlayerMovement : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        transform = GetComponent<Transform>();
         // Get reference to the Animator component
         animator = GetComponent<Animator>();
+
+        // Get Player Effects Object
+        playerFX = GameObject.Find("Player_Effects");
+        // Get Player Effects Animator
+        playerFXAnimator = playerFX.GetComponent<Animator>();
+        // Get Dust Game Object
+        dust = GameObject.Find("Dust");
+        dustParticleSystem = dust.GetComponent<ParticleSystem>();
+
 
         if (body == null)
             Debug.LogError("Rigidbody2D component not found!");
@@ -232,8 +253,14 @@ public class PlayerMovement : MonoBehaviour
             Debug.LogError("BoxCollider2D component not found!");
         if (spriteRenderer == null)
             Debug.LogError("SpriteRenderer not found!");
+        if (transform == null)
+            Debug.LogError("Transform not found!");
         if (animator == null)
             Debug.LogError("Animator not found!");
+        if (playerFX == null)
+            Debug.LogError("playerFX component not found!");
+        if (playerFXAnimator == null)
+            Debug.LogError("playerFXAnimator component not found!");
     }
 
     /// <summary>
@@ -293,11 +320,15 @@ public class PlayerMovement : MonoBehaviour
         grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer | platformLayer);
         animator.SetBool("grounded", grounded);
 
+
         // Store the last time the player touched the ground for coyote time
         if (grounded)
         {
             isFalling = false;
             animator.SetBool("is_falling", isFalling);
+
+            // Wall Slide Particle stopped
+            dustParticleSystem.Stop();
 
             OnLanding(); // called here to reset wall jump logic once player lands back on ground --> player can walljump from same wall once grounded after wall jump.
             lastTimeGrounded = Time.time;
@@ -321,9 +352,15 @@ public class PlayerMovement : MonoBehaviour
         if (IsWalled() && !grounded && horizontal != 0f)
         {
             isWallSliding = true;
+
             // Determine the wall side (1 for right wall, -1 for left wall)
             wallSide = transform.localScale.x > 0 ? 1 : -1;
             body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlideSpeed, float.MaxValue));
+
+            // Dust Particle
+            dustParticleSystem.Play();
+            dust.transform.position = new Vector2(transform.position.x + 0.4f * wallSide, transform.position.y - 0.2f);
+
 
             if (wallJumpDirection < 0 || wallJumpDirection > 0)
             {
@@ -433,9 +470,14 @@ public class PlayerMovement : MonoBehaviour
         {
             if (!isDoubleJumping && !IsGrounded())
             {
+                //Double-Jump Particle Animation
+                playerFX.transform.position = new Vector2(transform.position.x + 0.1f, transform.position.y - 0.35f);
+                playerFXAnimator.SetBool("hasDoubleJumped", true);
+
                 body.velocity = new Vector2(body.velocity.x, jumpPower / 1.5f);
                 isDoubleJumping = true; // Set double jump flag to prevent further jumps
                 animator.SetBool("grounded", IsGrounded());
+
             }
         }
     }
@@ -554,6 +596,17 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dropDuration);
         Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
         isDropping = false;
+    }
+
+    private void ResetAnimation() {
+        playerFXAnimator.SetBool("resetAnimation", true);
+
+        AnimatorStateInfo stateInfo = playerFXAnimator.GetCurrentAnimatorStateInfo(0);
+
+        if(stateInfo.IsName("Transition")){
+            playerFXAnimator.SetBool("hasDoubleJumped", false);
+        }
+
     }
 
     #region getter for tests
