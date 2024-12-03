@@ -104,8 +104,10 @@ public class PlayerMovement : MonoBehaviour
     #region Particle Animator
     public GameObject playerFX;
     public Animator playerFXAnimator;
-    public GameObject dust;
-    public ParticleSystem dustParticleSystem;
+    public GameObject wallDust;
+    public ParticleSystem wallDustParticleSystem;
+    public GameObject floorDust;
+    public ParticleSystem floorDustParticleSystem;
 
     #endregion
 
@@ -186,6 +188,8 @@ public class PlayerMovement : MonoBehaviour
             else return;
             bool isWalking = playerInput.GetHorizontalInput() != 0;
             animator.SetBool("run", isWalking);
+
+
             if (!blockCrouch) { HandleCrouchInput(); }
             bool isCrouchWalking = isWalking && isCrouching;
 
@@ -242,9 +246,12 @@ public class PlayerMovement : MonoBehaviour
         playerFX = GameObject.Find("Player_Effects");
         // Get Player Effects Animator
         playerFXAnimator = playerFX.GetComponent<Animator>();
-        // Get Dust Game Object
-        dust = GameObject.Find("Dust");
-        dustParticleSystem = dust.GetComponent<ParticleSystem>();
+        // Get Wall Dust Game Object
+        wallDust = GameObject.Find("Wall_Dust");
+        wallDustParticleSystem = wallDust.GetComponent<ParticleSystem>();
+        // Get Floor Dust Game Object
+        floorDust = GameObject.Find("Floor_Dust");
+        floorDustParticleSystem = floorDust.GetComponent<ParticleSystem>();
 
 
         if (body == null)
@@ -261,6 +268,7 @@ public class PlayerMovement : MonoBehaviour
             Debug.LogError("playerFX component not found!");
         if (playerFXAnimator == null)
             Debug.LogError("playerFXAnimator component not found!");
+        
     }
 
     /// <summary>
@@ -309,16 +317,25 @@ public class PlayerMovement : MonoBehaviour
     #region Movement Methods
 
     // Used to reset walljump logic, specifically when walljumping once and then landing on the ground.
-    private void OnLanding() // Called when the player lands on the ground
+    void OnLanding() // Called when the player lands on the ground
     {
         canWallJump = true;
-        lastWallJumped = 0; // Reset the last wall
+        lastWallJumped = 0; // Reset the last wall        
     }
 
     private bool IsGrounded()
     {
+        // Check if the player is currently grounded
+        bool previouslyGrounded = grounded; // Store the previous grounded state
         grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer | platformLayer);
         animator.SetBool("grounded", grounded);
+
+        if (grounded && !previouslyGrounded)
+        {
+            // Trigger floor dust particles when the player lands
+            floorDust.transform.position = new Vector2(transform.position.x, transform.position.y - 1.4f);
+            floorDustParticleSystem.Play();
+        }
 
 
         // Store the last time the player touched the ground for coyote time
@@ -327,8 +344,7 @@ public class PlayerMovement : MonoBehaviour
             isFalling = false;
             animator.SetBool("is_falling", isFalling);
 
-            // Wall Slide Particle stopped
-            dustParticleSystem.Stop();
+            wallDustParticleSystem.Stop();
 
             OnLanding(); // called here to reset wall jump logic once player lands back on ground --> player can walljump from same wall once grounded after wall jump.
             lastTimeGrounded = Time.time;
@@ -358,8 +374,8 @@ public class PlayerMovement : MonoBehaviour
             body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlideSpeed, float.MaxValue));
 
             // Dust Particle
-            dustParticleSystem.Play();
-            dust.transform.position = new Vector2(transform.position.x + 0.4f * wallSide, transform.position.y - 0.2f);
+            wallDustParticleSystem.Play();
+            wallDust.transform.position = new Vector2(transform.position.x + 0.4f * wallSide, transform.position.y - 0.2f);
 
 
             if (wallJumpDirection < 0 || wallJumpDirection > 0)
@@ -377,7 +393,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void WallJump()
-    {
+    {        
         WallSlide();
         if (isWallSliding)
         {
@@ -482,6 +498,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// Handles dash input and initiates the dash coroutine if possible.
     /// </summary>
@@ -552,6 +569,7 @@ public class PlayerMovement : MonoBehaviour
     {
         dashDirection = Mathf.Sign(direction);
         StartCoroutine(DashCoroutine());
+
     }
 
     /// <summary>
@@ -622,3 +640,4 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 }
+

@@ -309,6 +309,10 @@ MonoBehaviour:
   blockJump: 0
   blockCrouch: 0
   blockDash: 0
+  playerFX: {fileID: 0}
+  playerFXAnimator: {fileID: 0}
+  dust: {fileID: 0}
+  dustParticleSystem: {fileID: 0}
   fallMultiplier: 4
   groundDecay: 0.804
 --- !u!95 &8335488962519607957
