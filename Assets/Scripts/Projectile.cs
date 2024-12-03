@@ -8,6 +8,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float damage;
     private bool hit;
     private float direction;
+    private float lifeTime;
 
     // references
     private BoxCollider2D boxCollider;
@@ -28,6 +29,19 @@ public class Projectile : MonoBehaviour
         }
         float movementSpeed = speed * Time.deltaTime * direction;
         transform.Translate(movementSpeed, 0, 0);
+        SetLifeTime();
+    }
+
+    /// <summary>
+    /// Sets the lifetime of the projectile.
+    /// </summary>
+    private void SetLifeTime()
+    {
+        lifeTime += Time.deltaTime;
+        if(lifeTime > 5)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -57,12 +71,12 @@ public class Projectile : MonoBehaviour
 
     /// <summary>
     /// Sets the direction of the projectile and activates it.
+    /// Sets the lifetime to 0.
     /// </summary>
     /// <param name="_direction">The direction of the projectile.</param>
-
-
     public void SetDirection(float _direction)
     {
+        lifeTime = 0;
         direction = _direction;
         gameObject.SetActive(true);
         hit = false;
@@ -80,7 +94,6 @@ public class Projectile : MonoBehaviour
     /// Deactivates the projectile.
     /// gets called by the animation "explode" event.
     /// </summary>
-
     private void Deactivate()
     {
         gameObject.SetActive(false);
