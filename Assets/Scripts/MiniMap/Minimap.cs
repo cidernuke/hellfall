@@ -6,6 +6,9 @@ public class Minimap : MonoBehaviour
 {
     public Transform player;
 
+    /// <summary>
+    /// Sets the position of the minimap camera to the player's position.
+    /// </summary>
     void LateUpdate()
     {
         Vector3 newPosition = player.position;
