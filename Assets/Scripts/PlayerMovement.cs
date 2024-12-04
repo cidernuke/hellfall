@@ -268,6 +268,14 @@ public class PlayerMovement : MonoBehaviour
             Debug.LogError("playerFX component not found!");
         if (playerFXAnimator == null)
             Debug.LogError("playerFXAnimator component not found!");
+        if (wallDust == null)
+            Debug.LogError("Wall_Dust component not found!");
+        if (wallDustParticleSystem == null)
+            Debug.LogError("Wall_Dust Particle System component not found!");
+        if (floorDust == null)
+            Debug.LogError("Floor_Dust component not found!");
+        if (floorDustParticleSystem == null)
+            Debug.LogError("Floor_Dust Particle System component not found!");
         
     }
 
