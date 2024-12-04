@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider;
+    private Transform transform;
 
     // Movement flags and variables
     private bool grounded;
@@ -100,6 +101,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public bool blockDash = false;     // blocks Player from dashing, if true
     #endregion
 
+    #region Particle Animator
+    public GameObject playerFX;
+    public Animator playerFXAnimator;
+    public GameObject wallDust;
+    public ParticleSystem wallDustParticleSystem;
+    public GameObject floorDust;
+    public ParticleSystem floorDustParticleSystem;
+
+    #endregion
+
     #region Unity Methods
     /// <summary>
     /// Called when the script instance is being loaded.
@@ -126,6 +137,8 @@ public class PlayerMovement : MonoBehaviour
     public void Update()
     {
         horizontal = playerInput.GetHorizontalInput();
+
+        ResetAnimation();
 
         if (isDashing)
         {
@@ -175,6 +188,8 @@ public class PlayerMovement : MonoBehaviour
             else return;
             bool isWalking = playerInput.GetHorizontalInput() != 0;
             animator.SetBool("run", isWalking);
+
+
             if (!blockCrouch) { HandleCrouchInput(); }
             bool isCrouchWalking = isWalking && isCrouching;
 
@@ -223,8 +238,21 @@ public class PlayerMovement : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        transform = GetComponent<Transform>();
         // Get reference to the Animator component
         animator = GetComponent<Animator>();
+
+        // Get Player Effects Object
+        playerFX = GameObject.Find("Player_Effects");
+        // Get Player Effects Animator
+        playerFXAnimator = playerFX.GetComponent<Animator>();
+        // Get Wall Dust Game Object
+        wallDust = GameObject.Find("Wall_Dust");
+        wallDustParticleSystem = wallDust.GetComponent<ParticleSystem>();
+        // Get Floor Dust Game Object
+        floorDust = GameObject.Find("Floor_Dust");
+        floorDustParticleSystem = floorDust.GetComponent<ParticleSystem>();
+
 
         if (body == null)
             Debug.LogError("Rigidbody2D component not found!");
@@ -232,8 +260,23 @@ public class PlayerMovement : MonoBehaviour
             Debug.LogError("BoxCollider2D component not found!");
         if (spriteRenderer == null)
             Debug.LogError("SpriteRenderer not found!");
+        if (transform == null)
+            Debug.LogError("Transform not found!");
         if (animator == null)
             Debug.LogError("Animator not found!");
+        if (playerFX == null)
+            Debug.LogError("playerFX component not found!");
+        if (playerFXAnimator == null)
+            Debug.LogError("playerFXAnimator component not found!");
+        if (wallDust == null)
+            Debug.LogError("Wall_Dust component not found!");
+        if (wallDustParticleSystem == null)
+            Debug.LogError("Wall_Dust Particle System component not found!");
+        if (floorDust == null)
+            Debug.LogError("Floor_Dust component not found!");
+        if (floorDustParticleSystem == null)
+            Debug.LogError("Floor_Dust Particle System component not found!");
+        
     }
 
     /// <summary>
@@ -282,22 +325,34 @@ public class PlayerMovement : MonoBehaviour
     #region Movement Methods
 
     // Used to reset walljump logic, specifically when walljumping once and then landing on the ground.
-    private void OnLanding() // Called when the player lands on the ground
+    void OnLanding() // Called when the player lands on the ground
     {
         canWallJump = true;
-        lastWallJumped = 0; // Reset the last wall
+        lastWallJumped = 0; // Reset the last wall        
     }
 
     private bool IsGrounded()
     {
+        // Check if the player is currently grounded
+        bool previouslyGrounded = grounded; // Store the previous grounded state
         grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer | platformLayer);
         animator.SetBool("grounded", grounded);
+
+        if (grounded && !previouslyGrounded)
+        {
+            // Trigger floor dust particles when the player lands
+            floorDust.transform.position = new Vector2(transform.position.x, transform.position.y - 1.4f);
+            floorDustParticleSystem.Play();
+        }
+
 
         // Store the last time the player touched the ground for coyote time
         if (grounded)
         {
             isFalling = false;
             animator.SetBool("is_falling", isFalling);
+
+            wallDustParticleSystem.Stop();
 
             OnLanding(); // called here to reset wall jump logic once player lands back on ground --> player can walljump from same wall once grounded after wall jump.
             lastTimeGrounded = Time.time;
@@ -321,9 +376,15 @@ public class PlayerMovement : MonoBehaviour
         if (IsWalled() && !grounded && horizontal != 0f)
         {
             isWallSliding = true;
+
             // Determine the wall side (1 for right wall, -1 for left wall)
             wallSide = transform.localScale.x > 0 ? 1 : -1;
             body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlideSpeed, float.MaxValue));
+
+            // Dust Particle
+            wallDustParticleSystem.Play();
+            wallDust.transform.position = new Vector2(transform.position.x + 0.4f * wallSide, transform.position.y - 0.2f);
+
 
             if (wallJumpDirection < 0 || wallJumpDirection > 0)
             {
@@ -340,7 +401,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void WallJump()
-    {
+    {        
         WallSlide();
         if (isWallSliding)
         {
@@ -433,12 +494,18 @@ public class PlayerMovement : MonoBehaviour
         {
             if (!isDoubleJumping && !IsGrounded())
             {
+                //Double-Jump Particle Animation
+                playerFX.transform.position = new Vector2(transform.position.x + 0.1f, transform.position.y - 0.35f);
+                playerFXAnimator.SetBool("hasDoubleJumped", true);
+
                 body.velocity = new Vector2(body.velocity.x, jumpPower / 1.5f);
                 isDoubleJumping = true; // Set double jump flag to prevent further jumps
                 animator.SetBool("grounded", IsGrounded());
+
             }
         }
     }
+
 
     /// <summary>
     /// Handles dash input and initiates the dash coroutine if possible.
@@ -510,6 +577,7 @@ public class PlayerMovement : MonoBehaviour
     {
         dashDirection = Mathf.Sign(direction);
         StartCoroutine(DashCoroutine());
+
     }
 
     /// <summary>
@@ -556,6 +624,17 @@ public class PlayerMovement : MonoBehaviour
         isDropping = false;
     }
 
+    private void ResetAnimation() {
+        playerFXAnimator.SetBool("resetAnimation", true);
+
+        AnimatorStateInfo stateInfo = playerFXAnimator.GetCurrentAnimatorStateInfo(0);
+
+        if(stateInfo.IsName("Transition")){
+            playerFXAnimator.SetBool("hasDoubleJumped", false);
+        }
+
+    }
+
     #region getter for tests
     public Rigidbody2D Body => body;
     public float WallSlideSpeed => wallSlideSpeed;
@@ -569,3 +648,4 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 }
+

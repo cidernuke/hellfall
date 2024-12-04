@@ -302,18 +302,9 @@ public class guide_Script : MonoBehaviour
         StopPlayer();
         yield return new WaitForSeconds(1f);
 
-        // // P: What.. what happened? (3 words)
-        // StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_1", 2.0f));
-        // yield return skipCheck(2.1f);
-
         // Hint: Use | Q | to skip dialogue. (7 words)
         StartCoroutine(someoneSpeaks(hintBubbleSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/hint_bubble_1", 3.5f));
         yield return skipCheck(1f);
-
-        // // S: Long guide Quote (Assume ~10 words)
-        // StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_1", 5.0f));
-        // yield return skipCheck(5.1f);
-
         
         // S: Death may be the greatest of all human blessings (9 words)
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_2", 4.0f));
@@ -401,7 +392,7 @@ public class guide_Script : MonoBehaviour
         yield return skipCheck(4.6f);
 
         // G: I suppose you can try and fight your way out of hell. (11 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_12", 5.0f));
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_12a", 5.0f));
         yield return skipCheck(5.1f);
 
         // S: But if you decide to leave I'll have to teach you a few things first. (14 words)
