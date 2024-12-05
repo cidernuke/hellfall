@@ -165,6 +165,7 @@ public class HealthSystem : MonoBehaviour
         // UIHandler.instance.SetHealthValue(currentHealth / startingHealth);
 
         // Call the Respawn method from playerMovement
+        //SaveManager.Instance.LoadGame(playerMovement, GetComponent<HealthSystem>(), GetComponent<SoulShardSystem>(), InventorySystem.Instance);
         playerMovement.Respawn();
         //isInvincible = false;
 

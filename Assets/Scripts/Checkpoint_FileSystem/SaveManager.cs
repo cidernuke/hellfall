@@ -104,40 +104,43 @@ public class SaveManager : MonoBehaviour
     {
         PlayerData data = gameData.playerData;
 
-        // Setze die Gesundheit
+        // Setzt die Gesundheit
         healthSystem.currentHealth = data.currentHealth;
 
-        // Setze respawnHealth
+        // Setzt respawnHealth
         healthSystem.respawnHealth = data.respawnHealth;
 
-        // Setze die Anzahl der Soul Shards
+        // Setzt die Anzahl der Soul Shards
         soulShardSystem.SetSoulShardCount(data.soulShardCount);
 
 
+        //Setzt die Items
         for (int i = 0; i < inventorySystem.slots.Length; i++)
-    {
-        string itemName = data.collectedItemNames[i];
-        if (!string.IsNullOrEmpty(itemName))
         {
-            ItemData itemData = Resources.Load<ItemData>("ItemData/" + itemName);
-            if (itemData != null)
+            string itemName = data.collectedItemNames[i];
+            if (!string.IsNullOrEmpty(itemName))
             {
-                Item newItem = inventorySystem.CreateItemInstance(itemData);
-                inventorySystem.slots[i].StoreItem(newItem, itemData);
+                ItemData itemData = Resources.Load<ItemData>("ItemData/" + itemName);
+                if (itemData != null)
+                {
+                    Item newItem = inventorySystem.CreateItemInstance(itemData);
+                    inventorySystem.slots[i].StoreItem(newItem, itemData);
+                }
+                else
+                {
+                    Debug.LogWarning("ItemData für " + itemName + " nicht gefunden.");
+                    //Game keeps running but with empty slot
+                    inventorySystem.slots[i].storedItem = null;
+                }
             }
             else
             {
-                Debug.LogWarning("ItemData für " + itemName + " nicht gefunden.");
+                // Leeren Slot sicherstellen
+                inventorySystem.slots[i].storedItem = null;
             }
         }
-        else
-        {
-            // Leeren Slot sicherstellen
-            inventorySystem.slots[i].storedItem = null;
-        }
-    }
 
-        // Finde den Checkpoint mit der gespeicherten ID und setze die Position
+        // Findet den Checkpoint mit der gespeicherten ID und setze die Position
         Checkpoint[] checkpoints = FindObjectsOfType<Checkpoint>();
         foreach (var checkpoint in checkpoints)
         {
