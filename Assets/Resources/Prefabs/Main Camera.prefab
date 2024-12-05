@@ -151,6 +151,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   aheadDistance: 1
-  aheadY: 1
+  aheadY: 0.5
   cameraSpeed: 2.5
   player: {fileID: 0}

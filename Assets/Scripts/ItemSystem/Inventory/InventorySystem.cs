@@ -33,7 +33,7 @@ public class InventorySystem : MonoBehaviour
         for (int i = 0; i < slots.Length; i++)
         {
             //Regex to find the VisualElement with the name "Hotkey" + i
-            VisualElement hotkey = root.Q<VisualElement>($"Hotkey{i + 1}");
+            VisualElement hotkey = root.Q<VisualElement>($"Hotkey{i + 1}Container");
             if (hotkey == null)
             {
                 Debug.LogError("Could not find VisualElement with name Hotkey" + i + 1);
