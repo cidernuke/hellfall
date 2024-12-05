@@ -221,17 +221,12 @@ public class guide_Script : MonoBehaviour
         guideAnimator.SetBool("playerArrived", true);
         guideAnimator.SetBool("isIdle", true);
 
-        // while(playerMovementScript.animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) {
-        //     Debug.Log(playerMovementScript.animator.GetCurrentAnimatorStateInfo(0));
-        //     playerMovementScript.animator.Play("Idle", 0, 0f);
-        // }
-
         playerMovementScript.enabled = false;
     }
 
     void StartPlayer(int which)
     {
-        // playerMovementScript.enabled = true;
+        playerMovementScript.enabled = true;
         if(which == 2) {
             playerRigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         } else {
@@ -310,50 +305,33 @@ public class guide_Script : MonoBehaviour
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_2", 4.0f));
         yield return skipCheck(4.1f);
 
-        // P: What? (1 word)
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_2", 0.7f));
-        yield return skipCheck(0.8f);
+        // P: That's dark (2 words)
+        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_3", 1.5f));
+        yield return skipCheck(1.6f);
 
-        // P: Where am I?
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_2a", 1.6f));
-        yield return skipCheck(1.7f);
+        // P: Why are you talking about death? (6 words)
+        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_4", 3.0f));
+        yield return skipCheck(3.1f);
 
-        // // P: That's dark (2 words)
-        // StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_3", 1.5f));
-        // yield return skipCheck(1.6f);
+        // S: Why? (1 word)
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_3", 1.2f));
+        yield return skipCheck(1.3f);
 
-        // // P: Why are you talking about death? (6 words)
-        // StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_4", 3.0f));
-        // yield return skipCheck(3.1f);
+        // S: Cause we're dead of course (5 words)
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_4", 2.5f));
+        yield return skipCheck(2.6f);
 
-        // // S: Why? (1 word)
-        // StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_3", 1.2f));
-        // yield return skipCheck(1.3f);
-
-        // // S: Cause we're dead of course (5 words)
-        // StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_4", 2.5f));
-        // yield return skipCheck(2.6f);
-
-        // // P: Dead? (1 word)
-        // StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_5", 1.2f));
-        // yield return skipCheck(1.3f);
+        // P: Dead? (1 word)
+        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_5", 1.2f));
+        yield return skipCheck(1.3f);
 
         // S: Yes, you're in the first circle of hell. (9 words)
-        // -> Welcome to the first circle of hell!
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_5", 4.0f));
         yield return skipCheck(4.1f);
 
-        // P: What? (1 Word)
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_2", 1.2f));
-        yield return skipCheck(1.3f);
-
-        // P: Hell?
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_6", 1.2f));
-        yield return skipCheck(1.3f);
-
-        // P: Why?
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_5", 1.2f));
-        yield return skipCheck(1.3f);
+        // P: What? Hell? Why? (3 words)
+        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_6", 2.0f));
+        yield return skipCheck(2.1f);
 
         // S: Well like I always say: "It's ... (9 words)
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_6", 4.0f));
@@ -367,7 +345,11 @@ public class guide_Script : MonoBehaviour
         StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_7", 3.5f));
         yield return skipCheck(3.6f);
 
-        // S: I did not judge your life...
+        // S: I am guide! (3 words)
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_8", 2.0f));
+        yield return skipCheck(2.1f);
+
+        // S: But I did not judge your life... (7 words)
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_9", 3.5f));
         yield return skipCheck(3.6f);
 
@@ -383,9 +365,9 @@ public class guide_Script : MonoBehaviour
         StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_9", 4.0f));
         yield return skipCheck(4.1f);
 
-        // // S: Well, that's a more difficult question. (6 words)
-        // StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_11", 3.0f));
-        // yield return skipCheck(3.1f);
+        // S: Well, that's a more difficult question (6 words)
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_11", 3.0f));
+        yield return skipCheck(3.1f);
 
         // S: At the moment you're in the first of eight circles. (10 words)
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_12", 4.5f));
@@ -395,7 +377,7 @@ public class guide_Script : MonoBehaviour
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_12a", 5.0f));
         yield return skipCheck(5.1f);
 
-        // S: But if you decide to leave I'll have to teach you a few things first. (14 words)
+        // S: But if you decide to leave I'll have to teach you a few things first (14 words)
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_16", 5.5f));
         yield return skipCheck(5.6f);
 

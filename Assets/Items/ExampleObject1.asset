@@ -9,9 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 820f9e7b4305ca84a9b9749a0c119201, type: 3}
+  m_Script: {fileID: 0}
   m_Name: ExampleObject1
   m_EditorClassIdentifier: 
-  itemName: Example
-  icon: {fileID: 21300000, guid: 29be9d2d6e2f5eb44892a285a4a39872, type: 3}
-  prefab: {fileID: 8663396676948062880, guid: 890123c0feb1cbb429a264a1c5107bc9, type: 3}
