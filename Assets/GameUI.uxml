@@ -1,10 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="HealthBarBackground" style="flex-grow: 1; background-image: resource(&apos;Sprites/Inventory/UI/Grey_ValueBar_128x16&apos;); width: 568px; height: 74px; -unity-background-scale-mode: scale-to-fit; position: absolute; right: initial; left: 41px; top: initial; bottom: 50px; scale: 1.1 0.9;">
-        <ui:VisualElement name="HealthBarContainer" style="flex-grow: 1; width: 535px; height: 25px; position: absolute; left: 10px; top: 29px;">
-            <ui:VisualElement name="HealthBar" style="flex-grow: 1; background-image: resource(&apos;Sprites/Inventory/UI/Redder_ValueRed_120x8&apos;); -unity-background-scale-mode: stretch-to-fill; width: 535px; height: 36px; border-top-left-radius: 9px; border-top-right-radius: 9px; border-bottom-right-radius: 9px; border-bottom-left-radius: 9px; position: absolute; top: -10px; left: 6px;" />
+    <ui:VisualElement name="HealthBarBackground" style="flex-grow: 0; background-image: resource(&apos;Sprites/Inventory/UI/Grey_ValueBar_128x16&apos;); width: 568px; height: 74px; -unity-background-scale-mode: scale-to-fit; position: absolute; right: initial; left: 41px; top: initial; bottom: 50px; scale: 1.1 0.9;">
+        <ui:VisualElement name="HeatlthBarContainer" style="flex-grow: 1; position: absolute; height: 41px; width: 541px; top: 16px; left: 15px; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-bottom-left-radius: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;">
+            <ui:VisualElement name="HealthBar" style="flex-grow: 1; background-image: resource(&apos;Sprites/Inventory/UI/Redder_ValueRed_120x8&apos;); border-top-left-radius: 9px; border-top-right-radius: 9px; border-bottom-right-radius: 9px; border-bottom-left-radius: 9px;" />
         </ui:VisualElement>
-        <ui:VisualElement name="HeartIcon" style="flex-grow: 1; position: absolute; background-image: resource(&apos;Sprites/Inventory/UI/HeartIcons_32x32&apos;); width: 48px; height: 48px; -unity-background-scale-mode: scale-to-fit; left: 0; top: -50px;" />
     </ui:VisualElement>
+    <ui:VisualElement name="HeartIcon" style="flex-grow: 1; position: absolute; background-image: resource(&apos;Sprites/Inventory/UI/HeartIcons_32x32&apos;); width: 48px; height: 48px; -unity-background-scale-mode: scale-to-fit; left: 15px; top: 910px;" />
     <ui:VisualElement name="Hotkey1" style="flex-grow: 0; background-image: resource(&apos;Sprites/Inventory/UI/Grey_HotkeyBox_34x34 copy&apos;); width: 102px; height: 102px; position: absolute; top: 810px; left: 300px;">
         <ui:VisualElement name="Hotkey1Container" style="flex-grow: 1; height: 75px; width: 75px; -unity-background-scale-mode: scale-to-fit; flex-basis: auto; position: absolute; top: 12px; left: 12px;" />
     </ui:VisualElement>
@@ -15,9 +15,9 @@
         <ui:VisualElement name="Hotkey3Container" style="flex-grow: 1; position: absolute; left: 12px; top: 12px; width: 75px; height: 75px; -unity-background-scale-mode: scale-to-fit;" />
     </ui:VisualElement>
     <ui:VisualElement name="Weapon1" style="flex-grow: 0; background-image: resource(&apos;Sprites/Inventory/UI/Grey_HotkeyBox_34x34 copy&apos;); width: 102px; height: 102px; position: absolute; top: 810px; left: 20px; align-self: auto; align-items: stretch;">
-        <ui:VisualElement name="Weapon1Container" style="flex-grow: 1; position: absolute; left: 17px; top: 17px; width: 65px; height: 65px; -unity-background-scale-mode: scale-to-fit;" />
+        <ui:VisualElement name="Weapon1Container" style="flex-grow: 1; position: absolute; left: 12px; top: 12px; width: 75px; height: 75px; -unity-background-scale-mode: scale-to-fit; background-image: resource(&apos;Sprites/Inventory/UI/ItemsIcons_24x24&apos;);" />
     </ui:VisualElement>
     <ui:VisualElement name="Weapon2" style="flex-grow: 0; background-image: resource(&apos;Sprites/Inventory/UI/Grey_HotkeyBox_34x34 copy&apos;); width: 102px; height: 102px; position: absolute; top: 810px; left: 140px;">
-        <ui:VisualElement name="Weapon2Container" style="flex-grow: 1; position: absolute; left: 17px; top: 17px; width: 65px; height: 65px; -unity-background-scale-mode: scale-to-fit;" />
+        <ui:VisualElement name="Weapon2Container" style="flex-grow: 1; position: absolute; left: 14px; top: 14px; width: 70px; height: 70px; -unity-background-scale-mode: scale-to-fit; background-image: resource(&apos;Sprites/Warped Shooting Fx/Pixel Art/Bolt/bolt1&apos;);" />
     </ui:VisualElement>
 </ui:UXML>
