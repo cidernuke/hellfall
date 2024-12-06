@@ -210,7 +210,7 @@ public class guide_Script : MonoBehaviour
 
     void StopPlayer() 
     {
-        playerMovementScript.blockWalk = true;
+        // playerMovementScript.blockWalk = true;
         playerMovementScript.blockJump = true;
         playerMovementScript.blockCrouch = true;
         playerMovementScript.animator.SetBool("grounded", true);
@@ -413,8 +413,6 @@ public class guide_Script : MonoBehaviour
         guide.transform.position = new Vector2(30f, guide.transform.position.y);
 
         StartPlayer(1);
-
-        
     }
 
     
