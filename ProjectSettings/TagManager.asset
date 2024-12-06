@@ -47,7 +47,7 @@ TagManager:
   - name: Background
     uniqueID: 505792023
     locked: 0
-  - name: ObjectsInEnvironment
+  - name: Houses_and_Objects
     uniqueID: 1985207377
     locked: 0
   - name: Ground/Walls
