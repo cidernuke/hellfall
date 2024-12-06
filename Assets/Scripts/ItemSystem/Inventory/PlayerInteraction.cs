@@ -118,8 +118,8 @@ public class PlayerInteraction : MonoBehaviour
     private void UseOnKeyPress()
     {
 
-        // Prevent using items when the right mouse button is held (switching mode)
-        if (Input.GetMouseButton(1)) return;
+        // Prevent using items when tab is held (switching mode)
+        if (Input.GetKey(KeyCode.Tab)) return;
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
@@ -146,7 +146,7 @@ public class PlayerInteraction : MonoBehaviour
     /// </remarks>
     private void SwitchItems()
     {
-        if (Input.GetMouseButton(1))
+        if (Input.GetKey(KeyCode.Tab))
         {
             //the ? makes the integer nullable
             int? firstSlot = null;
@@ -192,7 +192,7 @@ public class PlayerInteraction : MonoBehaviour
         while (true)
         {
             // Check if the right mouse button is still being held
-            if (!Input.GetMouseButton(1))
+            if (!Input.GetKey(KeyCode.Tab))
             {
                 Debug.Log("Right mouse button released. Canceling item switch.");
                 break;
