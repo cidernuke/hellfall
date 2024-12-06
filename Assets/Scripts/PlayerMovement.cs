@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     #region Movement Variables
     // Components
     private float horizontal;
-    private Rigidbody2D body;
+    public Rigidbody2D body;
     public Animator animator;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider;
@@ -99,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public bool blockJump = false;     // blocks Player from jumping, if true
     [SerializeField] public bool blockCrouch = false;   // blocks Player from crouching, if true
     [SerializeField] public bool blockDash = false;     // blocks Player from dashing, if true
+    [SerializeField] public bool blockInput = false;    // blocks UserInput, if true
     #endregion
 
     #region Particle Animator
@@ -136,7 +137,9 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>        
     public void Update()
     {
-        horizontal = playerInput.GetHorizontalInput();
+        if (!blockInput){
+            horizontal = playerInput.GetHorizontalInput();
+        }
 
         ResetAnimation();
 
@@ -179,32 +182,34 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundDecay;
     private void FixedUpdate()
     {
-        if (!isWallJumping)
-        {
-            if (!isDashing)
+        if (!blockInput){
+            if (!isWallJumping)
             {
-                body.velocity = new Vector2(playerInput.GetHorizontalInput() * groundSpeed, body.velocity.y);
-            }
-            else return;
-            bool isWalking = playerInput.GetHorizontalInput() != 0;
-            animator.SetBool("run", isWalking);
+                if (!isDashing)
+                {
+                    body.velocity = new Vector2(playerInput.GetHorizontalInput() * groundSpeed, body.velocity.y);
+                }
+                else return;
+                bool isWalking = playerInput.GetHorizontalInput() != 0;
+                animator.SetBool("run", isWalking);
 
 
-            if (!blockCrouch) { HandleCrouchInput(); }
-            bool isCrouchWalking = isWalking && isCrouching;
+                if (!blockCrouch) { HandleCrouchInput(); }
+                bool isCrouchWalking = isWalking && isCrouching;
 
-            animator.SetBool("crouch", !isCrouchWalking && isCrouching);
-            animator.SetBool("crouch_walking", isCrouchWalking);
+                animator.SetBool("crouch", !isCrouchWalking && isCrouching);
+                animator.SetBool("crouch_walking", isCrouchWalking);
 
-            if (IsGrounded() && isCrouchWalking)
-            {
-                body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
-            }
+                if (IsGrounded() && isCrouchWalking)
+                {
+                    body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
+                }
 
-            if (body.velocity.y < 0 && !isFalling && !IsGrounded())
-            {
-                isFalling = true; // Set falling state
-                animator.SetBool("is_falling", isFalling);
+                if (body.velocity.y < 0 && !isFalling && !IsGrounded())
+                {
+                    isFalling = true; // Set falling state
+                    animator.SetBool("is_falling", isFalling);
+                }
             }
         }
 
@@ -423,25 +428,27 @@ public class PlayerMovement : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
-        if (playerInput.GetJumpInput() && wallJumpingCounter > 0f && canWallJump)
-        {
-            isWallJumping = true;
-            body.velocity = new Vector2(wallJumpDirection * 3, 6);
-
-            // Disable jumping on the same wall again until we touch a new wall
-            canWallJump = false;
-            wallJumpingCounter = 0f;
-
-            // Flips player during walljump
-            if (transform.localScale.x != wallJumpDirection)
+        if (!blockInput){
+            if (playerInput.GetJumpInput() && wallJumpingCounter > 0f && canWallJump)
             {
-                isFacingRight = !isFacingRight;
-                Vector3 localScale = transform.localScale;
-                localScale.x *= -1f;
-                transform.localScale = localScale;
-            }
+                isWallJumping = true;
+                body.velocity = new Vector2(wallJumpDirection * 3, 6);
 
-            Invoke(nameof(StopWallJumping), wallJumpDuration);
+                // Disable jumping on the same wall again until we touch a new wall
+                canWallJump = false;
+                wallJumpingCounter = 0f;
+
+                // Flips player during walljump
+                if (transform.localScale.x != wallJumpDirection)
+                {
+                    isFacingRight = !isFacingRight;
+                    Vector3 localScale = transform.localScale;
+                    localScale.x *= -1f;
+                    transform.localScale = localScale;
+                }
+
+                Invoke(nameof(StopWallJumping), wallJumpDuration);
+            }
         }
     }
 
@@ -490,18 +497,20 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Double Jump
-        if (playerInput.GetJumpInput())
-        {
-            if (!isDoubleJumping && !IsGrounded())
+        if (!blockInput){
+            if (playerInput.GetJumpInput())
             {
-                //Double-Jump Particle Animation
-                playerFX.transform.position = new Vector2(transform.position.x + 0.1f, transform.position.y - 0.35f);
-                playerFXAnimator.SetBool("hasDoubleJumped", true);
+                if (!isDoubleJumping && !IsGrounded())
+                {
+                    //Double-Jump Particle Animation
+                    playerFX.transform.position = new Vector2(transform.position.x + 0.1f, transform.position.y - 0.35f);
+                    playerFXAnimator.SetBool("hasDoubleJumped", true);
 
-                body.velocity = new Vector2(body.velocity.x, jumpPower / 1.5f);
-                isDoubleJumping = true; // Set double jump flag to prevent further jumps
-                animator.SetBool("grounded", IsGrounded());
+                    body.velocity = new Vector2(body.velocity.x, jumpPower / 1.5f);
+                    isDoubleJumping = true; // Set double jump flag to prevent further jumps
+                    animator.SetBool("grounded", IsGrounded());
 
+                }
             }
         }
     }
@@ -512,11 +521,13 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleDashInput()
     {
-        float horizontalInput = playerInput.GetHorizontalInput();
-        if (playerInput.GetDashInput() && canDash && horizontalInput != 0 && !isCrouching)
-        {
-            StartDash(horizontalInput);
-            animator.SetTrigger("dash");
+        if (!blockInput){
+            float horizontalInput = playerInput.GetHorizontalInput();
+            if (playerInput.GetDashInput() && canDash && horizontalInput != 0 && !isCrouching)
+            {
+                StartDash(horizontalInput);
+                animator.SetTrigger("dash");
+            }
         }
     }
 
@@ -525,35 +536,37 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleCrouchInput()
     {
-        if (playerInput.GetCrouchInput())
-        {
-            if (!isCrouching)
+        if (!blockInput){
+            if (playerInput.GetCrouchInput())
             {
-                // Enter crouching state
-                spriteRenderer.sprite = crouching;
-                boxCollider.size = crouchingSize;
-                boxCollider.offset = crouchingOffset;
-                isCrouching = true;
-                animator.SetBool("crouch", true);
-            }
-        }
-        else
-        {
-            if (isCrouching)
-            {
-                // Check for obstacles above
-                Collider2D obstacle = Physics2D.OverlapCircle(ceilingCheck.position, 0.2f, platformLayer | wallLayer);
-
-                // Only exits if no obstacle is detected above the player
-                if (!obstacle)
+                if (!isCrouching)
                 {
-                    // Exit crouching state
-                    spriteRenderer.sprite = standing;
-                    boxCollider.size = standingSize;
-                    boxCollider.offset = standingOffset;
-                    isCrouching = false;
-                    animator.SetBool("crouch", false);
-                    animator.SetBool("crouch_walking", false);
+                    // Enter crouching state
+                    spriteRenderer.sprite = crouching;
+                    boxCollider.size = crouchingSize;
+                    boxCollider.offset = crouchingOffset;
+                    isCrouching = true;
+                    animator.SetBool("crouch", true);
+                }
+            }
+            else
+            {
+                if (isCrouching)
+                {
+                    // Check for obstacles above
+                    Collider2D obstacle = Physics2D.OverlapCircle(ceilingCheck.position, 0.2f, platformLayer | wallLayer);
+
+                    // Only exits if no obstacle is detected above the player
+                    if (!obstacle)
+                    {
+                        // Exit crouching state
+                        spriteRenderer.sprite = standing;
+                        boxCollider.size = standingSize;
+                        boxCollider.offset = standingOffset;
+                        isCrouching = false;
+                        animator.SetBool("crouch", false);
+                        animator.SetBool("crouch_walking", false);
+                    }
                 }
             }
         }
@@ -561,9 +574,13 @@ public class PlayerMovement : MonoBehaviour
 
     public bool CanAttack()
     {
-        float horizontalInput = playerInput.GetHorizontalInput();
+        if (!blockInput){
+            float horizontalInput = playerInput.GetHorizontalInput();
 
-        return horizontalInput == 0 && grounded;
+            return horizontalInput == 0 && grounded;
+        } else {
+            return false;
+        }
     }
 
     #endregion
