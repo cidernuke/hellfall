@@ -2,14 +2,17 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Door : MonoBehaviour
+/// <summary>
+/// Handles the loading screen shown when transitioning to a new scene
+/// </summary>
+public class SceneLoader : MonoBehaviour
 {
-    [SerializeField] private string sceneToLoad; // Name of the scene to load
-    [SerializeField] private GameObject loadingScreen; // Reference to loading screen object (optional)
+    [SerializeField] private string sceneToLoad;
+    [SerializeField] private GameObject loadingScreen; // Reference to loading screen object
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player")) // Check if the player enters the trigger
+        if (other.CompareTag("Player"))
         {
             print("starting coroutine");
             StartCoroutine(LoadScene());
@@ -26,6 +29,6 @@ public class Door : MonoBehaviour
         
         yield return new WaitForSeconds(1f); // Simulate loading time (optional)
             print("loading scene");
-        SceneManager.LoadScene(sceneToLoad); // Load the specified scene
+        SceneManager.LoadScene(sceneToLoad);
     }
 }
