@@ -1,10 +1,13 @@
+using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
     // for the merge
     [Header("Attack Parameters")]
-    [SerializeField] private float attackCooldown;
+    [SerializeField] private float closeRangeAttackCooldown;
+    [SerializeField] private float rangedAttackCooldown;
     [SerializeField] private float range;
     [SerializeField] private float damage;
 
@@ -16,25 +19,44 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private LayerMask enemyLayer;
     private float cooldownTimer = Mathf.Infinity;
 
+    [Header("Ranged Attack")]
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private GameObject[] projectiles;
+
+
     // references
     private Animator anim;
     private HealthSystem enemyHealth;
     private PlayerMovement playerMovement;
     private EnemyController enemyController;
 
+    //variables for attack
+    private int attackIndex = 0;
+    private int totalAttacks = 2;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
         enemyHealth = GetComponent<HealthSystem>();
-        enemyController = GetComponent<EnemyController>();        
+        enemyController = GetComponent<EnemyController>();
     }
-
+    /// <summary>
+    /// Checks if the player is able to attack and if the cooldown is over.
+    /// Calls the Attack() method if left mouse button is clicked.
+    /// Calls the AttackRanged() method if right mouse button is clicked.
+    /// </summary>
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && cooldownTimer >= attackCooldown && playerMovement.CanAttack())
+        if (Input.GetMouseButtonDown(0) && cooldownTimer >= closeRangeAttackCooldown && playerMovement.CanAttack())
         {
             Attack();
+        }
+        if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown && playerMovement.CanAttack())
+        {
+
+            AttackRanged();
+
         }
         cooldownTimer += Time.deltaTime;
     }
@@ -71,10 +93,58 @@ public class PlayerAttack : MonoBehaviour
         Gizmos.DrawWireCube(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
             new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z));
     }
+
+    /// <summary>
+    /// Triggers the attack animation and resets the cooldown timer.
+    /// Switches between the different attack animations depending on the counter.
+    /// </summary>
     private void Attack()
     {
-        anim.SetTrigger("attack_01");
+                
+        switch(attackIndex)
+        {
+            case 0:
+                anim.SetTrigger("attack_01");
+                break;
+            case 1:
+                anim.SetTrigger("attack_02");
+                break;
+            
+        }
+
+        attackIndex = (attackIndex + 1) % totalAttacks;
         cooldownTimer = 0;
+    }
+
+    /// <summary>
+    /// Triggers the ranged attack animation and resets the cooldown timer.
+    /// Spawns a projectile and sets the direction.
+    /// </summary>
+    private void AttackRanged()
+    {
+
+        anim.SetTrigger("attack_ranged");
+        cooldownTimer = 0;
+        int projectileIndex = FindProjectile();
+        projectiles[projectileIndex].transform.position = firePoint.position;
+        projectiles[projectileIndex].GetComponent<Projectile>().SetDirection(Math.Sign(transform.localScale.x));
+
+    }
+
+    /// <summary>
+    /// Finds an inactive projectile in the array and returns its index.
+    /// </summary>
+    /// <returns></returns>
+    private int FindProjectile()
+    {
+        for (int i = 0; i < projectiles.Length; i++)
+        {
+            if (!projectiles[i].activeInHierarchy)
+            {
+                return i;
+            }
+        }
+        return 0;
     }
 
     /*
