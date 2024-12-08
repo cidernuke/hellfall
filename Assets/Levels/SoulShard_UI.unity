@@ -1144,10 +1144,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: projectiles.Array.size
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: projectiles.Array.data[0]
       value: 
       objectReference: {fileID: 197850066}
@@ -1235,8 +1231,7 @@ PrefabInstance:
       propertyPath: counter
       value: 
       objectReference: {fileID: 933377641}
-    m_RemovedComponents:
-    - {fileID: 7515475865458641955, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1869,6 +1864,10 @@ PrefabInstance:
     - target: {fileID: 3105599385479915624, guid: ce1ee5ec5cfd1614f8ae566b6dedbc58, type: 3}
       propertyPath: m_Name
       value: SoulShard
+      objectReference: {fileID: 0}
+    - target: {fileID: 3105599385479915624, guid: ce1ee5ec5cfd1614f8ae566b6dedbc58, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

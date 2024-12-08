@@ -153,7 +153,6 @@ GameObject:
   - component: {fileID: 5746640054634646074}
   - component: {fileID: 8335488962519607957}
   - component: {fileID: 2193375495534342346}
-  - component: {fileID: 7515475865458641955}
   - component: {fileID: 8026818364704553123}
   - component: {fileID: 1795978731709622821}
   - component: {fileID: 6027865557405022282}
@@ -403,19 +402,6 @@ MonoBehaviour:
   isPlayer: 1
   timeInvincible: 0.5
   isInvincible: 0
---- !u!114 &7515475865458641955
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5585758838363563765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a43574253fdef974c8c85f3a7305bb1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  counter: {fileID: 0}
 --- !u!114 &8026818364704553123
 MonoBehaviour:
   m_ObjectHideFlags: 0
