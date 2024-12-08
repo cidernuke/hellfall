@@ -102,7 +102,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8052408924215863405}
   - component: {fileID: 817159615300423432}
-  - component: {fileID: 2509538498946264768}
   m_Layer: 0
   m_Name: InventorySystem
   m_TagString: Untagged
@@ -139,22 +138,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiDocument: {fileID: 4400391326371214075}
   playerHealth: {fileID: 0}
---- !u!114 &2509538498946264768
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2917540015868206305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_PanelSettings: {fileID: 11400000, guid: 4cc203f146ab8764f94e2cb12f03e64f, type: 2}
-  m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 80e3c070354a5e0478be034c068debc7, type: 3}
-  m_SortingOrder: 0
 --- !u!1 &5585758838363563765
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,8 +358,10 @@ MonoBehaviour:
   blockDash: 0
   playerFX: {fileID: 0}
   playerFXAnimator: {fileID: 0}
-  dust: {fileID: 0}
-  dustParticleSystem: {fileID: 0}
+  wallDust: {fileID: 0}
+  wallDustParticleSystem: {fileID: 0}
+  floorDust: {fileID: 0}
+  floorDustParticleSystem: {fileID: 0}
   fallMultiplier: 4
   groundDecay: 0.804
 --- !u!95 &8335488962519607957
@@ -430,6 +415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a43574253fdef974c8c85f3a7305bb1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  counter: {fileID: 0}
 --- !u!114 &8026818364704553123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,9 +443,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   closeRangeAttackCooldown: 0
   rangedAttackCooldown: 0.25
-  range: 1
+  range: 2
   damage: 1
-  colliderDistance: 2
+  colliderDistance: 0.5
   boxCollider: {fileID: 8124953113361661337}
   enemyLayer:
     serializedVersion: 2
@@ -488,6 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a43574253fdef974c8c85f3a7305bb1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  counter: {fileID: 0}
 --- !u!114 &7685874390314061115
 MonoBehaviour:
   m_ObjectHideFlags: 0
