@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+[System.Serializable]
 public class InventorySlot
 {
     public Item storedItem;

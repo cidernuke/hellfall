@@ -136,6 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 230dcb29e379b574a89ea9a462e11e1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slots: []
   uiDocument: {fileID: 4400391326371214075}
   playerHealth: {fileID: 0}
 --- !u!1 &5585758838363563765
@@ -156,7 +157,6 @@ GameObject:
   - component: {fileID: 8026818364704553123}
   - component: {fileID: 1795978731709622821}
   - component: {fileID: 6027865557405022282}
-  - component: {fileID: 7685874390314061115}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -270,7 +270,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.064144015, y: -0.65301937}
+  m_Offset: {x: -0.06111288, y: -0.65301937}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.47, y: 0.5}
@@ -281,7 +281,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.6679776, y: 1.207719}
+  m_Size: {x: 0.67403984, y: 1.207719}
   m_EdgeRadius: 0
 --- !u!50 &8302531813951290086
 Rigidbody2D:
@@ -331,13 +331,14 @@ MonoBehaviour:
   platformLayer:
     serializedVersion: 2
     m_Bits: 0
+  body: {fileID: 0}
   animator: {fileID: 0}
   platformed: 0
   dropDuration: 0.5
   groundCheck: {fileID: 7624676514274553780}
   ceilingCheck: {fileID: 8381836596924870710}
-  groundSpeed: 8
-  jumpPower: 6.5
+  groundSpeed: 7
+  jumpPower: 5
   jumpBufferTime: 0.1
   maxFallSpeed: -10
   wallSlideSpeed: 5
@@ -355,14 +356,15 @@ MonoBehaviour:
   blockJump: 0
   blockCrouch: 0
   blockDash: 0
+  blockInput: 0
   playerFX: {fileID: 0}
   playerFXAnimator: {fileID: 0}
   wallDust: {fileID: 0}
   wallDustParticleSystem: {fileID: 0}
   floorDust: {fileID: 0}
   floorDustParticleSystem: {fileID: 0}
-  fallMultiplier: 4
-  groundDecay: 0.804
+  fallMultiplier: 5
+  groundDecay: 1
 --- !u!95 &8335488962519607957
 Animator:
   serializedVersion: 5

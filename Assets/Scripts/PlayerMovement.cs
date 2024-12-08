@@ -478,6 +478,7 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
+    private bool doubleJump;
     #region Input Handling Methods
     private void HandleJumpInput()
     {
@@ -487,7 +488,7 @@ public class PlayerMovement : MonoBehaviour
             if (IsGrounded() || CanUseCoyote())
             {
                 animator.SetTrigger("jump"); // Play jump animation on first jump
-                body.velocity = new Vector2(body.velocity.x, jumpPower);
+                body.velocity = new Vector2(body.velocity.y, jumpPower);
                 isDoubleJumping = false; // Reset double jump for the next jump
                 coyoteUsable = false;
 
