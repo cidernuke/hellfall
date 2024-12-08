@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DamageZone : MonoBehaviour
 {
+    private PlayerMovement playerMovement;
     /// <summary>
     /// Called when another collider stays in the trigger collider attached to the object where this script is attached.
     /// </summary>
@@ -11,9 +12,10 @@ public class DamageZone : MonoBehaviour
     void OnTriggerStay2D(Collider2D collider)
     {
         HealthSystem playerHealthSys = collider.GetComponent<HealthSystem>();
+        playerMovement = collider.GetComponent<PlayerMovement>();
         if(playerHealthSys != null)
         {
-            playerHealthSys.TakeDamage(10);
+            playerHealthSys.TakeDamage(10,playerMovement);
         }
     }
 }

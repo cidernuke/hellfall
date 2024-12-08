@@ -67,6 +67,7 @@ public class HealthSystem : MonoBehaviour
 
     /// <summary>
     /// Reduces the current health by the specified damage amount and handles invincibility and death.
+    /// Pass in the PlayerMovement or EnemyController script to disable movement on death. 
     /// </summary>
     /// <param name="damage">The amount of damage to take.</param>
     public void TakeDamage(float damage, PlayerMovement playerMovement = null, EnemyController enemyController = null)
