@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Class for soul shard items in the game.
@@ -8,10 +9,16 @@ using UnityEngine;
 public class SoulShardSystem : MonoBehaviour
 {
     private List<SoulShardItem> soulShardItems;
+    [SerializeField] Text counter;
 
     private void Awake()
     {
         soulShardItems = new List<SoulShardItem>();
+    }
+
+    void Update()
+    {
+        counter.text = soulShardItems.Count.ToString();
     }
 
     /// <summary>
