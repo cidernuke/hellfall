@@ -886,6 +886,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: is_wall_sliding
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: is_dashing
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7123702700885687453}
   m_Solo: 0

@@ -157,6 +157,7 @@ GameObject:
   - component: {fileID: 8026818364704553123}
   - component: {fileID: 1795978731709622821}
   - component: {fileID: 6027865557405022282}
+  - component: {fileID: 7685874390314061115}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -346,7 +347,7 @@ MonoBehaviour:
   wallJumpDuration: 0.07
   coyoteTimeDuration: 0.2
   dashSpeed: 20
-  dashDuration: 0.35
+  dashDuration: 0.2
   dashCooldown: 0.7
   standing: {fileID: 691704114, guid: 22a836ecf58efa24f8d6db5ebc1c5eeb, type: 3}
   crouching: {fileID: 21300000, guid: adf511fbe02c3784e8780b1b89e29439, type: 3}
