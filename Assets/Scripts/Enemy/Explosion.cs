@@ -26,6 +26,12 @@ public class Explosion : MonoBehaviour
         // Trigger the explosion animation
         animator.SetTrigger("Explode");
 
+        // Start the explosion sequence
+        StartCoroutine(ExplosionSequence());
+    }
+
+    private System.Collections.IEnumerator ExplosionSequence()
+    {
         // Damage all objects within the explosion radius
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
 
@@ -41,9 +47,13 @@ public class Explosion : MonoBehaviour
             }
         }
 
-        // Destroy the game object after the animation finishes
+        // Wait for the animation to finish
         float animationLength = GetAnimationLength("Explosion"); // Replace with your animation name
-        Destroy(gameObject, animationLength);
+        yield return new WaitForSeconds(animationLength);
+
+        // Destroy the game object after the animation finishes
+        animator.SetTrigger("Death");
+        Destroy(gameObject);
     }
 
     private float GetAnimationLength(string animationName)
