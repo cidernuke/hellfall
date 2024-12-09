@@ -6,6 +6,7 @@ using System;
 /// Handles player movement, including walking, jumping, double jumping, wall jumping, wall sliding, dashing, and crouching.
 /// This script should be attached to a player GameObject with a Rigidbody2D, BoxCollider2D, and SpriteRenderer component.
 /// </summary>
+[Tooltip("Player's jump hight.")]
 public class PlayerMovement : MonoBehaviour
 {
     public IPlayerInput playerInput;
@@ -137,7 +138,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>        
     public void Update()
     {
-        if (!blockInput){
+        if (!blockInput)
+        {
             horizontal = playerInput.GetHorizontalInput();
         }
 
@@ -182,7 +184,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundDecay;
     private void FixedUpdate()
     {
-        if (!blockInput){
+        if (!blockInput)
+        {
             if (!isWallJumping)
             {
                 if (!isDashing)
@@ -281,7 +284,7 @@ public class PlayerMovement : MonoBehaviour
             Debug.LogError("Floor_Dust component not found!");
         if (floorDustParticleSystem == null)
             Debug.LogError("Floor_Dust Particle System component not found!");
-        
+
     }
 
     /// <summary>
@@ -406,7 +409,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void WallJump()
-    {        
+    {
         WallSlide();
         if (isWallSliding)
         {
@@ -428,7 +431,8 @@ public class PlayerMovement : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
-        if (!blockInput){
+        if (!blockInput)
+        {
             if (playerInput.GetJumpInput() && wallJumpingCounter > 0f && canWallJump)
             {
                 isWallJumping = true;
@@ -498,7 +502,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Double Jump
-        if (!blockInput){
+        if (!blockInput)
+        {
             if (playerInput.GetJumpInput())
             {
                 if (!isDoubleJumping && !IsGrounded())
@@ -522,7 +527,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleDashInput()
     {
-        if (!blockInput){
+        if (!blockInput)
+        {
             float horizontalInput = playerInput.GetHorizontalInput();
             if (playerInput.GetDashInput() && canDash && horizontalInput != 0 && !isCrouching)
             {
@@ -537,7 +543,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleCrouchInput()
     {
-        if (!blockInput){
+        if (!blockInput)
+        {
             if (playerInput.GetCrouchInput())
             {
                 if (!isCrouching)
@@ -575,11 +582,14 @@ public class PlayerMovement : MonoBehaviour
 
     public bool CanAttack()
     {
-        if (!blockInput){
+        if (!blockInput)
+        {
             float horizontalInput = playerInput.GetHorizontalInput();
 
             return horizontalInput == 0 && grounded;
-        } else {
+        }
+        else
+        {
             return false;
         }
     }
@@ -642,12 +652,14 @@ public class PlayerMovement : MonoBehaviour
         isDropping = false;
     }
 
-    private void ResetAnimation() {
+    private void ResetAnimation()
+    {
         playerFXAnimator.SetBool("resetAnimation", true);
 
         AnimatorStateInfo stateInfo = playerFXAnimator.GetCurrentAnimatorStateInfo(0);
 
-        if(stateInfo.IsName("Transition")){
+        if (stateInfo.IsName("Transition"))
+        {
             playerFXAnimator.SetBool("hasDoubleJumped", false);
         }
 

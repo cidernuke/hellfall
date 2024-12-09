@@ -22,6 +22,7 @@ public class EnemyController : MonoBehaviour
 
     [Header("Loot")]
     [SerializeField] public List<LootItem> lootTable = new List<LootItem>();
+    private bool isPlayerDead;
 
 
     // References
@@ -34,9 +35,9 @@ public class EnemyController : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
-        playerHealth  = GetComponent<HealthSystem>();
+        playerHealth = GetComponent<HealthSystem>();
         playerMovement = GetComponent<PlayerMovement>();
-        
+
     }
 
     // Update is called once per frame
@@ -53,11 +54,11 @@ public class EnemyController : MonoBehaviour
             {
                 cooldownTimer = 0;
                 anim.SetTrigger("meleeAttack");
-                  
+
             }
         }
 
-        if(enemyPatrol != null)
+        if (enemyPatrol != null)
         {
             enemyPatrol.enabled = !PlayerInSight();
         }
@@ -75,9 +76,15 @@ public class EnemyController : MonoBehaviour
             new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z),
             0, Vector2.left, 0, playerLayer);
 
-        if(hit.collider != null)
+        if (hit.collider != null)
         {
             playerHealth = hit.transform.GetComponent<HealthSystem>();
+
+            // So that the enemy stops attacking the player after death
+            if (playerHealth.currentHealth <= 0)
+            {
+                return false;
+            }
 
             //abrufen des PlayerMovemnt objektes wenn der Spieler in Sicht ist
             playerMovement = hit.transform.GetComponent<PlayerMovement>();
@@ -102,9 +109,9 @@ public class EnemyController : MonoBehaviour
     **/
     private void DamagePlayer()
     {
-        if(PlayerInSight())
-        {  
-                  
+        if (PlayerInSight())
+        {
+
             playerHealth.TakeDamage(damage, playerMovement);
         }
     }
@@ -119,7 +126,7 @@ public class EnemyController : MonoBehaviour
         {
             if (UnityEngine.Random.Range(0f, 100f) <= lootItem.dropChance)
             {
-                Vector3 lootPosition = transform.position - new Vector3(0,1,0);
+                Vector3 lootPosition = transform.position - new Vector3(0, 1, 0);
                 Instantiate(lootItem.itemPrefab, lootPosition, Quaternion.identity);
             }
         }

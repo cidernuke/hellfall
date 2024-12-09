@@ -18,7 +18,10 @@ public class SoulShardSystem : MonoBehaviour
 
     void Update()
     {
-        counter.text = soulShardItems.Count.ToString();
+        if (soulShardItems.Count > 0)
+        {
+            counter.text = soulShardItems.Count.ToString();
+        }
     }
 
     /// <summary>
