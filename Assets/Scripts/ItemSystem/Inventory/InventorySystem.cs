@@ -7,21 +7,21 @@ using ItemSystem.Items; // Add this line to include the namespace where PowerUpI
 
 public class InventorySystem : MonoBehaviour
 {
+    // Singleton-Instance
+    public static InventorySystem Instance { get; private set; }
     public InventorySlot[] slots;
     [SerializeField] protected UIDocument uiDocument;
     protected VisualElement root;
 
     // needed for the HealthItem
     public HealthSystem playerHealth;
-
     private GameObject playerSpeech;
 
     private SpriteRenderer playerSpeechSpriteRenderer;
-
+    
     private GameObject player;
 
     private PlayerMovement playerMov;
-
 
     void Update()
     {
@@ -36,6 +36,22 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+
+    //Singleton-implementation, to make global accessable
+    private void Awake()
+    {
+        // Implement the Singleton pattern
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Inventory persist across scenes
+        }
+        else
+        {
+            Destroy(gameObject);
+            Debug.LogError("Multiple InventorySystem instances detected.");
+        }
+    }
     void Start()
     {
         root = uiDocument.rootVisualElement;
@@ -81,6 +97,18 @@ public class InventorySystem : MonoBehaviour
     /// </remarks>
     public bool AddItemToFirstAvailableSlot(ItemData itemData)
     {
+        //Check from Diego
+        if (slots == null)
+        {
+            Debug.LogError("Slots array is null.");
+            return false;
+        }
+        if (slots.Length == 0)
+        {
+            Debug.LogError("Slots array is empty.");
+            return false;
+        }
+
         if (itemData == null)
         {
             Debug.LogError("Attempting to add a null item to the inventory.");
@@ -108,6 +136,7 @@ public class InventorySystem : MonoBehaviour
         StartCoroutine(InvenotryFull());
         return false;
     }
+
 
     /// <summary>
     /// Drops the item from the specified slot at the given player position with an offset.
@@ -138,7 +167,9 @@ public class InventorySystem : MonoBehaviour
     /// - For <see cref="ItemType.HealthItem"/>, it creates a <see cref="HealthItem"/> and assigns the player's health to it.
     /// Additional item types can be added by extending the switch statement.
     /// </remarks>
-    private Item CreateItemInstance(ItemData itemData)
+    //private Item CreateItemInstance(ItemData itemData)
+    //Diego changed to public, because i need to use it
+    public Item CreateItemInstance(ItemData itemData)
     {
         switch (itemData.itemType)
         {
@@ -250,4 +281,13 @@ public class InventorySystem : MonoBehaviour
         // Hide the speech bubble after the time has elapsed
         playerSpeechSpriteRenderer.sprite = null;
     }
+
+    public void ClearInventory()
+    {
+        foreach (var slot in slots)
+        {
+            slot.ClearSlot();
+        }
+    }
+
 }
