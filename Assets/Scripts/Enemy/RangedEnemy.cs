@@ -1,102 +1,95 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class RangedEnemy : MonoBehaviour
+public class RangedEnemy2 : MonoBehaviour
 {
-    [Header("Attack Parameters")]
-    [SerializeField] private float attackCooldown;
-    [SerializeField] private float range;
-    [SerializeField] private float damage;
+    public Transform player;
+    public GameObject bullet;
 
-    [Header("Ranged Attack")]
-    [SerializeField] private Transform firepoint;
-    [SerializeField] private GameObject[] fireballs;
+    [Header("Shooting Settings")]
+    public float shootingRange = 10f; // Maximum shooting range
+    private float shotCooldown;
+    public float startShotCooldown;
 
+    [Header("References")]
+    private HealthSystem healthSystem;
+    private EnemyController enemyController; // Reference to the EnemyController
 
-    [Header("Collider Parameters")]
-    [SerializeField] private float colliderDistance;
-    [SerializeField] private BoxCollider2D boxCollider;
-
-
-    [Header("Player Layer")]
-    [SerializeField] private LayerMask playerLayer;
-    private float cooldownTimer = Mathf.Infinity;
-
-
-    private Animator anim;
-    private EnemyPatrol enemyPatrol;
-
-    private void Awake()
+    private void Start()
     {
-        anim = GetComponent<Animator>();
-        enemyPatrol = GetComponentInParent<EnemyPatrol>();
-
-    }
-
-    void Update()
-    {
-        // Increments the Cooldown-Timer for the time that past since the last frame
-        cooldownTimer += Time.deltaTime;
-
-        // Only Attacks if Player is in Sight
-        if (PlayerInSight())
+        // Automatically find player by tag if not assigned
+        if (player == null)
         {
-            // Checks if Cooldown Timer has expired
-            if (cooldownTimer >= attackCooldown)
+            GameObject playerObject = GameObject.FindWithTag("Player");
+            if (playerObject != null)
             {
-                cooldownTimer = 0;
-                anim.SetTrigger("rangedAttack");
-
+                player = playerObject.transform; // Set the player Transform
+            }
+            else
+            {
+                Debug.LogError("Player GameObject not found! Ensure it is tagged correctly or assigned in the inspector.");
             }
         }
 
-        if (enemyPatrol != null)
+        // Initialize shooting cooldown
+        shotCooldown = startShotCooldown;
+
+        // Get the HealthSystem component
+        healthSystem = GetComponent<HealthSystem>();
+        if (healthSystem == null)
         {
-            enemyPatrol.enabled = !PlayerInSight();
+            Debug.LogError("No HealthSystem component found on the enemy!");
         }
 
-    }
-
-    private void RangeAttack()
-    {
-        cooldownTimer = 0;
-        //Shoot a projectile
-        fireballs[FindFireball()].transform.position = firepoint.position;
-        //fireballs[FindFireball()].GetComponent<EnemyProjectile>().ActivateProjectile();
-
-    }
-
-    private int FindFireball()
-    {
-        for (int i = 0; i < fireballs.Length; i++)
+        // Get the EnemyController component
+        enemyController = GetComponent<EnemyController>();
+        if (enemyController == null)
         {
-            if (!fireballs[i].activeInHierarchy)
-                return i;
+            Debug.LogError("No EnemyController component found on the enemy!");
         }
-        return 0;
     }
 
-    private bool PlayerInSight()
+    private void Update()
     {
+        // Aim towards the player
+        if (player != null)
+        {
+            Vector2 direction = player.position - transform.position;
+            transform.up = direction;
 
-        RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
-            new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z),
-            0, Vector2.left, 0, playerLayer);
+            // Check if the player is within shooting range
+            float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        return hit.collider != null;
+            if (distanceToPlayer <= shootingRange)
+            {
+                // Shoot bullets if cooldown is ready
+                if (shotCooldown <= 0)
+                {
+                    Instantiate(bullet, transform.position, transform.rotation);
+                    shotCooldown = startShotCooldown;
+                }
+                else
+                {
+                    shotCooldown -= Time.deltaTime;
+                }
+            }
+        }
+
+        // Check if the enemy's health is zero or less, and destroy the enemy
+        if (healthSystem != null && healthSystem.currentHealth <= 0)
+        {
+            Destroy(gameObject); // Destroy the enemy's GameObject
+        }
     }
 
-    /*
-    * --OnDrawGizmos()--
-    * Draws a Boxmodel to visualize the area of the BoxCast
-    **/
-    private void OnDrawGizmos()
+    /// <summary>
+    /// Public method to take damage, delegating to the HealthSystem.
+    /// </summary>
+    public void TakeDamage(float damage)
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
-            new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z));
+        if (healthSystem != null)
+        {
+            // Pass the reference of EnemyController to handle death behavior
+            healthSystem.TakeDamage(damage, null, enemyController);
+        }
     }
-
 }

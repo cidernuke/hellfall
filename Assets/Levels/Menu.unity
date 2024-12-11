@@ -564,7 +564,7 @@ GameObject:
   - component: {fileID: 49515507}
   - component: {fileID: 49515506}
   m_Layer: 5
-  m_Name: ControllsText
+  m_Name: ControlsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -609,7 +609,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Controlls Overview
+  m_text: 'Controls Overview
 
 '
   m_isRightToLeft: 0
@@ -851,7 +851,7 @@ GameObject:
   - component: {fileID: 117920069}
   - component: {fileID: 117920068}
   m_Layer: 5
-  m_Name: ControllsBtn
+  m_Name: ControlsBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4844,7 +4844,7 @@ GameObject:
   - component: {fileID: 721812144}
   - component: {fileID: 721812143}
   m_Layer: 5
-  m_Name: ControllsDisplay
+  m_Name: ControlsDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5061,7 +5061,7 @@ GameObject:
   - component: {fileID: 742767756}
   - component: {fileID: 742767755}
   m_Layer: 5
-  m_Name: Controlls_BackBtn
+  m_Name: Controls_BackBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6277,7 +6277,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Controlls
+  m_text: Controls
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 974f24f18b7d44b458df7f1dc43a450a, type: 2}
   m_sharedMaterial: {fileID: 6077929754339457866, guid: 974f24f18b7d44b458df7f1dc43a450a, type: 2}
