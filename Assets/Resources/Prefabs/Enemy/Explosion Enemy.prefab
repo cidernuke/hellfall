@@ -173,6 +173,7 @@ MonoBehaviour:
   isPlayer: 0
   timeInvincible: 0
   isInvincible: 0
+  respawnHealth: 0
 --- !u!114 &4951173335363587003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,8 +188,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   speed: 3
-  chaseDistance: 3
-  explosionDistance: 0.5
+  chaseDistance: 5
+  explosionDistance: 0.3
 --- !u!114 &443710547961193536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ed647887e9464f0bb90ce451696394c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerRadius: 0.5
   explosionRadius: 3
   damageAmount: 20
   explosionDelay: 1
