@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1640827152719722898}
   - component: {fileID: 929512652724414620}
   - component: {fileID: -1361051065734047616}
+  - component: {fileID: 2369845823514659618}
   m_Layer: 0
   m_Name: HealthItem(new)
   m_TagString: Item
@@ -158,3 +159,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: ce6f7c22d4d83c948bb49719187589ed, type: 2}
+--- !u!114 &2369845823514659618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2993908041947658943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1504725364c30164c8c8376f9e3828cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
