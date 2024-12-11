@@ -47,7 +47,7 @@ public class HealthSystem : MonoBehaviour
     {
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
-        
+
     }
 
     /// <summary>
@@ -90,7 +90,7 @@ public class HealthSystem : MonoBehaviour
             {
                 UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
             }
-            
+
         }
         else
         {

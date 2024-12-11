@@ -38,7 +38,7 @@ public class Projectile : MonoBehaviour
     private void SetLifeTime()
     {
         lifeTime += Time.deltaTime;
-        if(lifeTime > 5)
+        if (lifeTime > 5)
         {
             gameObject.SetActive(false);
         }
