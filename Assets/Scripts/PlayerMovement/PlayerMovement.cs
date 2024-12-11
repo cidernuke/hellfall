@@ -17,6 +17,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask platformLayer;
     #endregion
 
+    #region Checkpoint
+    private int lastCheckpointID;
+    private Vector3 respawnPosition;
+    public bool isDead = false;
+    #endregion
+
     #region Movement Variables
     // Components
     private float horizontal;
@@ -129,6 +135,9 @@ public class PlayerMovement : MonoBehaviour
         InitializeLayers();
         InitializeCrouchVariables();
         InitializeDashVariables();
+
+        // Initialise the respawnPosition to the Start Position of the Player
+        respawnPosition = transform.position;
     }
 
     /// <summary>
@@ -586,6 +595,57 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
+    #region Checkpoint
+
+    // Method to update the respawn-point
+    public void UpdateRespawnPoint(Vector3 newRespawnPosition, int checkpointID)
+    {
+        lastCheckpointID = checkpointID;
+        respawnPosition = newRespawnPosition;
+    }
+
+    // Method to get the checkpointID for the SaveManager
+    public int GetLastCheckpointID()
+    {
+        return lastCheckpointID;
+    }
+
+    public void Respawn()
+    {
+        // Set the position of the Player to the respawn-point
+        transform.position = respawnPosition;
+
+        // // Berechne den Offset zwischen dem Spieler-Pivot und dem Ground-Check
+        // float pivotToGroundCheckOffset = transform.position.y - groundCheck.position.y;
+
+        // // Passe die Respawn-Position an
+        // Vector3 adjustedRespawnPosition = new Vector3(
+        //     respawnPosition.x,
+        //     respawnPosition.y + pivotToGroundCheckOffset,
+        //     respawnPosition.z
+        // );
+
+        // // Setze die Position des Spielers
+        // transform.position = adjustedRespawnPosition;
+
+        // Reactivate the PlayerMovement-script
+        enabled = true;
+
+        // Reset death-flag
+        isDead = false;
+
+        // Reset velocity
+        body.velocity = Vector2.zero;
+
+        //TODO: Add respawn animation here
+        //Reset die trigger
+        animator.ResetTrigger("die");
+        //Set Idle animation again, if not player is invisible unitl the animation is changed
+        animator.Play("Idle");
+    }
+
+    #endregion
+
     #region Dash Coroutine
     /// <summary>
     /// Initiates the dash action in the specified direction.
@@ -663,6 +723,8 @@ public class PlayerMovement : MonoBehaviour
     public bool IsDashing => isDashing;
     public bool IsCrouching => isCrouching;
     public bool IsWallJumping => isWallJumping;
+
+    public Vector3 RespawnPosition => respawnPosition;
 
     #endregion
 }
