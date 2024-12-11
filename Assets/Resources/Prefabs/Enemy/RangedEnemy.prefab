@@ -61,7 +61,7 @@ Transform:
   m_GameObject: {fileID: 5525487138781543093}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.59, y: -0.61, z: 0.04930348}
+  m_LocalPosition: {x: -0.03, y: -1.67, z: 0.04930348}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -109,7 +109,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 1725372122, guid: 8f575fc2980f0974bbc20ba8333250f7, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
@@ -180,7 +180,7 @@ MonoBehaviour:
   currentHealth: 0
   anim: {fileID: 0}
   isPlayer: 0
-  timeInvincible: 0.5
+  timeInvincible: 0
   isInvincible: 0
 --- !u!114 &3313228700353679486
 MonoBehaviour:

@@ -6,6 +6,7 @@ public class RangedEnemy2 : MonoBehaviour
     public GameObject bullet;
 
     [Header("Shooting Settings")]
+    public float shootingRange = 10f; // Maximum shooting range
     private float shotCooldown;
     public float startShotCooldown;
 
@@ -54,17 +55,23 @@ public class RangedEnemy2 : MonoBehaviour
         {
             Vector2 direction = player.position - transform.position;
             transform.up = direction;
-        }
 
-        // Shoot bullets if cooldown is ready
-        if (shotCooldown <= 0)
-        {
-            Instantiate(bullet, transform.position, transform.rotation);
-            shotCooldown = startShotCooldown;
-        }
-        else
-        {
-            shotCooldown -= Time.deltaTime;
+            // Check if the player is within shooting range
+            float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+
+            if (distanceToPlayer <= shootingRange)
+            {
+                // Shoot bullets if cooldown is ready
+                if (shotCooldown <= 0)
+                {
+                    Instantiate(bullet, transform.position, transform.rotation);
+                    shotCooldown = startShotCooldown;
+                }
+                else
+                {
+                    shotCooldown -= Time.deltaTime;
+                }
+            }
         }
 
         // Check if the enemy's health is zero or less, and destroy the enemy

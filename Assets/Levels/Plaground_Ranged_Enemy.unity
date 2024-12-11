@@ -1413,15 +1413,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1476858978875684357, guid: a4cb67362547b4fdeb0754782e84d06b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.05
+      value: -7.5967
       objectReference: {fileID: 0}
     - target: {fileID: 1476858978875684357, guid: a4cb67362547b4fdeb0754782e84d06b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8499999
+      value: -3.3794
       objectReference: {fileID: 0}
     - target: {fileID: 1476858978875684357, guid: a4cb67362547b4fdeb0754782e84d06b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.009442385
+      value: 0.0094
       objectReference: {fileID: 0}
     - target: {fileID: 1476858978875684357, guid: a4cb67362547b4fdeb0754782e84d06b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1468,13 +1468,13 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 241786490}
+    - target: {fileID: 3313228700353679486, guid: aa73b1877a66e41ecb0347d6d2431533, type: 3}
+      propertyPath: shootingRange
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3872907224850785865, guid: aa73b1877a66e41ecb0347d6d2431533, type: 3}
       propertyPath: m_Name
       value: RangedEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 3872907224850785865, guid: aa73b1877a66e41ecb0347d6d2431533, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7848200036461248045, guid: aa73b1877a66e41ecb0347d6d2431533, type: 3}
       propertyPath: m_LocalPosition.x
