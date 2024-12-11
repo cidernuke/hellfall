@@ -39,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
     private float lastTimeJumpPressed = -1f;
 
     private int facingDirection = 1; // 1 for facing right, -1 for facing left, affects the player
-    private bool isFacingRight = true;
+    public bool isFacingRight = true;
 
     // Fall variables
     [SerializeField] private float maxFallSpeed = -20f;

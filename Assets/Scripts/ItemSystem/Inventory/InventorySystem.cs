@@ -18,6 +18,23 @@ public class InventorySystem : MonoBehaviour
 
     private SpriteRenderer playerSpeechSpriteRenderer;
 
+    private GameObject player;
+
+    private PlayerMovement playerMov;
+
+
+    void Update()
+    {
+        // Flip the speech bubble sprite if the player is facing left
+        if (playerMov.isFacingRight == false)
+        {
+            playerSpeechSpriteRenderer.flipX = true;
+        }
+        else
+        {
+            playerSpeechSpriteRenderer.flipX = false;
+        }
+    }
 
     void Start()
     {
@@ -45,6 +62,8 @@ public class InventorySystem : MonoBehaviour
 
         playerSpeech = GameObject.Find("Player_Speech_Bubble");
         playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
+        player = GameObject.Find("Player");
+        playerMov = player.GetComponent<PlayerMovement>();
 
     }
 
@@ -89,7 +108,7 @@ public class InventorySystem : MonoBehaviour
         StartCoroutine(InvenotryFull());
         return false;
     }
-    
+
     /// <summary>
     /// Drops the item from the specified slot at the given player position with an offset.
     /// </summary>
@@ -205,15 +224,20 @@ public class InventorySystem : MonoBehaviour
     public IEnumerator InvenotryFull()
     {
         var time = 1.5f;
+        // Load the sprite for the speech bubble
         Sprite speechBubble = Resources.Load<Sprite>("Sprites/Level_One/Speech_Bubbles/Inventory_full_bubble");
+        // Set the sprite and position of the speech bubble
         playerSpeechSpriteRenderer.sprite = speechBubble;
-        
+
+        // Move the speech bubble a little bit to the right
+        playerSpeechSpriteRenderer.transform.position = new Vector2(player.transform.position.x + 1.7f, playerSpeechSpriteRenderer.transform.position.y);
+
         float elapsedTime = 0f;
 
         // Wait for either the full time or until "Q" is pressed to skip
-        while (elapsedTime < time) 
+        while (elapsedTime < time)
         {
-            if (Input.GetKeyDown(KeyCode.Q)) 
+            if (Input.GetKeyDown(KeyCode.Q))
             {
                 // Hide the speech bubble and exit early if "Q" is pressed
                 playerSpeechSpriteRenderer.sprite = null;
@@ -223,7 +247,7 @@ public class InventorySystem : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null; // Wait for the next frame
         }
-
+        // Hide the speech bubble after the time has elapsed
         playerSpeechSpriteRenderer.sprite = null;
     }
 }
