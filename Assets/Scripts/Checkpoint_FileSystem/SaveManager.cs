@@ -81,15 +81,10 @@ public class SaveManager : MonoBehaviour
     // Methode zum Laden des Spiels
     public void LoadGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     {
-        if (File.Exists(saveFilePath))
+        GameData gameData = LoadGameData();
+        if (gameData != null)
         {
-            string json = File.ReadAllText(saveFilePath);
-
-            // Deserialisiere JSON zu GameData
-            GameData gameData = JsonUtility.FromJson<GameData>(json);
-
             // Wende die geladenen Daten an
-            //ApplyLoadedData(gameData, playerMovement, healthSystem, playerInventory, soulShardSystem);
             ApplyLoadedData(gameData, playerMovement, healthSystem, soulShardSystem, inventorySystem);
             Debug.Log("Spiel geladen.");
         }
@@ -97,6 +92,25 @@ public class SaveManager : MonoBehaviour
         {
             Debug.LogWarning("Keine Speicherdatei gefunden.");
         }
+
+        //Before Refactoring:
+        //TODO: Stay with Dry -> Use LoadPlayerData
+        // if (File.Exists(saveFilePath))
+        // {
+        //     string json = File.ReadAllText(saveFilePath);
+
+        //     // Deserialisiere JSON zu GameData
+        //     GameData gameData = JsonUtility.FromJson<GameData>(json);
+
+        //     // Wende die geladenen Daten an
+        //     //ApplyLoadedData(gameData, playerMovement, healthSystem, playerInventory, soulShardSystem);
+        //     ApplyLoadedData(gameData, playerMovement, healthSystem, soulShardSystem, inventorySystem);
+        //     Debug.Log("Spiel geladen.");
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("Keine Speicherdatei gefunden.");
+        // }
     }
 
     //private void ApplyLoadedData(GameData gameData, PlayerMovement playerMovement, HealthSystem healthSystem, PlayerInventory playerInventory, SoulShardSystem soulShardSystem)
@@ -151,39 +165,34 @@ public class SaveManager : MonoBehaviour
                 break;
             }
         }
-
-        // Setze die gesammelten Items
-        // playerInventory.collectedItems.Clear();
-        // foreach (var itemName in data.collectedItems)
-        // {
-        //     Item item = CreateItemByName(itemName);
-        //     //Item item = ItemFactory.createItem();
-        //     if (item != null)
-        //     {
-        //         playerInventory.collectedItems.Add(item);
-        //     }
-        // }
-
-        // // Setze die Anzahl der Soul Shards
-        // soulShardSystem.SetSoulShardCount(data.soulShardCount);
     }
 
-    // private Item CreateItemByName(string itemName)
-    // {
-    //     // Implementiert eine Logik, um ein Item anhand seines Namens zu erstellen
-    //     // Beispiel mit einer einfachen Factory-Methode:
+    public PlayerData LoadPlayerData()
+    {
+        GameData gameData = LoadGameData();
+        if (gameData != null)
+        {
+            return gameData.playerData;
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-    //     switch (itemName)
-    //     {
-    //         case "HealthItem":
-    //             return new HealthItem(itemName, null, 50f); // Passe die Parameter an
-    //         case "PowerUpItem":
-    //             return new PowerUpItem();
-    //         // Füge weitere Fälle für andere Item-Typen hinzu
-    //         default:
-    //             Debug.LogWarning("Unbekanntes Item: " + itemName);
-    //             return null;
-    //     }
-    // }
+    private GameData LoadGameData()
+    {
+        if (File.Exists(saveFilePath))
+        {
+            string json = File.ReadAllText(saveFilePath);
+            GameData gameData = JsonUtility.FromJson<GameData>(json);
+            return gameData;
+        }
+        else
+        {
+            Debug.LogWarning("Keine Speicherdatei gefunden.");
+            return null;
+        }
+    }
 
 }

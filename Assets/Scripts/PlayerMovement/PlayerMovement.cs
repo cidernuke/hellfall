@@ -706,6 +706,8 @@ public class PlayerMovement : MonoBehaviour
     public bool IsCrouching => isCrouching;
     public bool IsWallJumping => isWallJumping;
 
+    public Vector3 RespawnPosition => respawnPosition;
+
     #endregion
 }
 

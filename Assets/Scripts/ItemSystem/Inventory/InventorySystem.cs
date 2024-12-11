@@ -98,13 +98,6 @@ public class InventorySystem : MonoBehaviour
 
         foreach (var slot in slots)
         {
-            //Check from Diego
-            if (slot == null)
-            {
-                Debug.LogError("One of the slots is null.");
-                continue; // Überspringe diesen Slot, um den Fehler zu vermeiden.
-            }
-            
             if (slot.storedItem == null)
             {
                 Debug.Log($"Adding item {itemData.itemName} to the inventory.");
@@ -263,4 +256,13 @@ public class InventorySystem : MonoBehaviour
 
         playerSpeechSpriteRenderer.sprite = null;
     }
+
+    public void ClearInventory()
+    {
+        foreach (var slot in slots)
+        {
+            slot.ClearSlot();
+        }
+    }
+
 }

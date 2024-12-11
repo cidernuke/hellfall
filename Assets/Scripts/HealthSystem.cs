@@ -37,7 +37,7 @@ public class HealthSystem : MonoBehaviour
     /// </summary>
     private float damageCooldown;
 
-      //Respawn variables
+    //Respawn variables
     private bool isDead;
     public float respawnHealth;
 
@@ -49,7 +49,7 @@ public class HealthSystem : MonoBehaviour
         currentHealth = startingHealth;
         respawnHealth = startingHealth; //To avoid null-pointers
         anim = GetComponent<Animator>();
-        
+
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public class HealthSystem : MonoBehaviour
             {
                 UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
             }
-            
+
         }
         else
         {
@@ -151,25 +151,38 @@ public class HealthSystem : MonoBehaviour
     // Coroutine zum Respawnen des Spielers
     private IEnumerator RespawnPlayer(PlayerMovement playerMovement)
     {
-        // wait for the die animation
+        // Warte auf die Todesanimation
         yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
 
-        //Works so the Player get his inital LP
-        // reset health
-        //currentHealth = startingHealth;
+        // Rufe die Respawn-Methode des GameManagers auf
+        GameManager.Instance.RespawnPlayer();
 
-        currentHealth = respawnHealth;
-        print("Player health after respawn: " + currentHealth);
+        // Aktiviere die Spielerbewegung wieder
+        playerMovement.enabled = true;
 
-        // Later: Update the health-bar
-        // UIHandler.instance.SetHealthValue(currentHealth / startingHealth);
-
-        // Call the Respawn method from playerMovement
-        //SaveManager.Instance.LoadGame(playerMovement, GetComponent<HealthSystem>(), GetComponent<SoulShardSystem>(), InventorySystem.Instance);
-        playerMovement.Respawn();
-        //isInvincible = false;
-
-        // Reset isDead
+        // Setze isDead zurück
         isDead = false;
+
+        //Befor Refactoring:
+
+        // // wait for the die animation
+        // yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
+
+        // //Works so the Player get his inital LP
+        // // reset health
+        // //currentHealth = startingHealth;
+
+        // currentHealth = respawnHealth;
+        // print("Player health after respawn: " + currentHealth);
+
+        // // Later: Update the health-bar
+        // // UIHandler.instance.SetHealthValue(currentHealth / startingHealth);
+
+        // // Call the Respawn method from playerMovement
+        // playerMovement.Respawn();
+        // //isInvincible = false;
+
+        // // Reset isDead
+        // isDead = false;
     }
 }

@@ -108,4 +108,12 @@ public class InventorySlot
             }
         }
     }
+
+    public void ClearSlot()
+{
+    storedItem = null;
+    itemData = null;
+    UpdateSlotVisual();
+}
+
 }

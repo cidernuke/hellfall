@@ -30,13 +30,13 @@ public class Checkpoint : MonoBehaviour
 
                 //if (healthSystem != null)
                 //if (healthSystem != null && inventorySystem != null && soulShardSystem != null)
-                if (healthSystem != null && InventorySystem.Instance  != null && soulShardSystem != null)
+                if (healthSystem != null && InventorySystem.Instance != null && soulShardSystem != null)
                 {
                     ActivateCheckpoint();
                 }
                 else
                 {
-                    Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden. HealthSystem: "+ healthSystem+ "| SoulshardSystem: " + soulShardSystem+ "| inventorySystem: " + InventorySystem.Instance);
+                    Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden. HealthSystem: " + healthSystem + "| SoulshardSystem: " + soulShardSystem + "| inventorySystem: " + InventorySystem.Instance);
                     //Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden. HealthSystem: "+ healthSystem+ "| SoulshardSystem: " + soulShardSystem+ "| inventorySystem: " + inventorySystem);
                 }
             }
@@ -54,8 +54,11 @@ public class Checkpoint : MonoBehaviour
 
         healthSystem.respawnHealth = healthSystem.currentHealth;
 
+        // Spiel speichern über den GameManager
+        GameManager.Instance.SaveGame();
+
         // Spiel speichern
-        SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,InventorySystem.Instance);
+        //SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,InventorySystem.Instance);
         //SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,inventorySystem);
         // Add Visualisation or sound here
     }
