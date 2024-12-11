@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider;
-    private Transform transform;
+    private new Transform transform;
 
     // Movement flags and variables
     private bool grounded;
@@ -41,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
 
     private int facingDirection = 1; // 1 for facing right, -1 for facing left, affects the player
     private bool isFacingRight = true;
+    private LadderMovement ladderMovement;
 
     // Fall variables
     [SerializeField] private float maxFallSpeed = -20f;
@@ -167,11 +168,14 @@ public class PlayerMovement : MonoBehaviour
         if (!blockDash) { HandleDashInput(); }
 
         WallSlide();
-        // HandleJumpInput();
         // WallSlide(); --> moved into WallJump for performance.
         if (!blockJump) { WallJump(); }
 
-        // HandleDashInput();
+        // Necessary for jump logic not to break.
+        if (ladderMovement.jumpedOffOfLadder)
+        {
+            ladderMovement.jumpedOffOfLadder = false;
+        }
 
         if (!isWallJumping && !isWallSliding)
         {
@@ -346,6 +350,14 @@ public class PlayerMovement : MonoBehaviour
         grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer | platformLayer);
         animator.SetBool("grounded", grounded);
 
+        // Checks if player stopped climbing and is grounded. Important for animation transition
+        ladderMovement = ladderMovement = GetComponent<LadderMovement>();
+        // ladderMovement.jumpedOffOfLadder = false;
+        if (ladderMovement.isClimbing && grounded && Mathf.Abs(Input.GetAxisRaw("Vertical")) == 0f)
+        {
+            ladderMovement.isClimbing = false;
+        }
+
         if (grounded && !previouslyGrounded)
         {
             // Trigger floor dust particles when the player lands
@@ -482,17 +494,32 @@ public class PlayerMovement : MonoBehaviour
     }
     #endregion
 
-    private bool doubleJump;
     #region Input Handling Methods
-    private void HandleJumpInput()
+    public void HandleJumpInput()
     {
+        ladderMovement = ladderMovement = GetComponent<LadderMovement>();
         if ((Time.time - lastTimeJumpPressed) <= jumpBufferTime)
         {
             // First jump
-            if (IsGrounded() || CanUseCoyote())
+            if (IsGrounded() || CanUseCoyote() || (ladderMovement != null && ladderMovement.isClimbing))
             {
                 animator.SetTrigger("jump"); // Play jump animation on first jump
-                body.velocity = new Vector2(body.velocity.y, jumpPower);
+
+                if (ladderMovement != null && ladderMovement.isClimbing)
+                {
+                    print("hanldeJump, entered if to call JumpOffLadder()");
+                    ladderMovement.JumpOffLadder();
+                    print("continuing jump logic");
+                    // isDoubleJumping = true;
+                    body.velocity = new Vector2(body.velocity.y, jumpPower * 1.2f);
+                }
+                else
+                {
+                    print("too soon");
+                    body.velocity = new Vector2(body.velocity.y, jumpPower);
+                }
+
+
                 isDoubleJumping = false; // Reset double jump for the next jump
                 coyoteUsable = false;
 
@@ -506,7 +533,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if (playerInput.GetJumpInput())
             {
-                if (!isDoubleJumping && !IsGrounded())
+                // ! i need a new flag so that this isnt entered when jumping off of a ladder
+                if (!isDoubleJumping && !IsGrounded() && !ladderMovement.jumpedOffOfLadder)
                 {
                     //Double-Jump Particle Animation
                     playerFX.transform.position = new Vector2(transform.position.x + 0.1f, transform.position.y - 0.35f);
@@ -515,7 +543,6 @@ public class PlayerMovement : MonoBehaviour
                     body.velocity = new Vector2(body.velocity.x, jumpPower / 1.5f);
                     isDoubleJumping = true; // Set double jump flag to prevent further jumps
                     animator.SetBool("grounded", IsGrounded());
-
                 }
             }
         }

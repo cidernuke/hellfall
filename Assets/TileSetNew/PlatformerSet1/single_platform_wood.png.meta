@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 58d0cdf51a6f8784d95187054a10ab9f
+guid: e4d97bda99dc40d408df57db81d1ed91
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -63,9 +63,9 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 1
+  applyGammaDecoding: 0
   swizzle: 50462976
-  cookieLightType: 1
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -108,7 +108,91 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: single_platform_wood_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 18.5
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc7523d4130164f45bb54ba239322dd5
+      internalID: -851027936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: single_platform_wood_1
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 0
+        width: 18.5
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ef46f3fa6e752448ba2e3247a658a33
+      internalID: 2144234875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: single_platform_wood_2
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 0
+        width: 18.5
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be6184f8966e9f2419a81da2438b8983
+      internalID: 669000935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: single_platform_wood_3
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 0
+        width: 18.5
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 469ba095fa30fb04c89874a900d6fbe5
+      internalID: -1392274857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +203,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      single_platform_wood_0: -851027936
+      single_platform_wood_1: 2144234875
+      single_platform_wood_2: 669000935
+      single_platform_wood_3: -1392274857
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
