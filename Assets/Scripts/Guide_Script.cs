@@ -83,7 +83,7 @@ public class guide_Script : MonoBehaviour
 
             if (isTitleAnimating)
             {
-                title.transform.position = new Vector2(camera.transform.position.x, camera.transform.position.y);
+                title.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y, -1);
             }
 
             // Start title animation
@@ -145,6 +145,12 @@ public class guide_Script : MonoBehaviour
             {
                 StartCoroutine(eighthSequence());
                 sequence = 9;
+            }
+
+            if(playerPosition.x >= 158 && playerPosition.x <= 159 && sequence == 9)
+            {
+                StartCoroutine(ninthSequence());
+                sequence = 10;
             }
 
 
@@ -568,9 +574,20 @@ public class guide_Script : MonoBehaviour
         ResetAnimation();
         yield return new WaitForSeconds(1f);
 
-        guide.transform.position = new Vector2(135f, 7.32f);
+        guide.transform.position = new Vector2(3f, 7.32f);
 
         StartPlayer(5);
+    }
+
+    IEnumerator ninthSequence()
+    {
+        hintBubble.transform.position = new Vector3(159f, -4.6f, -1f);
+         // H: Use E to pick up Item.
+        StartCoroutine(someoneSpeaks(hintBubbleSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/hint_bubble_2", 2f));
+        yield return skipCheck(2f);
+         // H: press | 1 |, | 2 |, | 3 | to use items
+        StartCoroutine(someoneSpeaks(hintBubbleSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/hint_bubble_3", 2f));
+        yield return skipCheck(2f);
     }
 
 }
