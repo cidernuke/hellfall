@@ -128,7 +128,7 @@ public class guide_Script : MonoBehaviour
             }
 
             // Check if player has made it passed the platforms
-            if(playerPosition.x >= 96.5 && playerPosition.x <= 98 && playerPosition.y > 12.5&& sequence == 6) 
+            if(playerPosition.x >= 97 && playerPosition.x <= 98 && playerPosition.y > 12.5 && sequence == 6) 
             {
                 StartCoroutine(sixthSequence());
                 sequence = 7;
@@ -218,8 +218,8 @@ public class guide_Script : MonoBehaviour
         playerMovementScript.body.velocity = new Vector2(0, playerMovementScript.body.velocity.y);
 
         playerMovementScript.animator.SetBool("grounded", true);
-        playerMovementScript.animator.Play("Idle");
-
+        playerMovementScript.animator.SetBool("is_falling", false);
+        playerMovementScript.animator.SetBool("is_idle", true);
 
         playerRigidBody.constraints = RigidbodyConstraints2D.FreezePosition;
 
@@ -233,9 +233,10 @@ public class guide_Script : MonoBehaviour
     void StartPlayer(int which)
     {
         playerMovementScript.enabled = true;
+        playerMovementScript.animator.SetBool("is_idle", false);
+
         playerMovementScript.blockInput = false;
 
-        playerMovementScript.animator.SetBool("is_idle", false);
 
         if(which == 2) {
             playerRigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
@@ -417,8 +418,7 @@ public class guide_Script : MonoBehaviour
 
     IEnumerator thirdSequence()
     {
-
-        yield return new WaitForSeconds(1.1f);
+        yield return new WaitForSeconds(1f);
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.5f), 0.05f));
 
         StopPlayer();
@@ -435,9 +435,9 @@ public class guide_Script : MonoBehaviour
 
     IEnumerator fourthSequence()
     {
-        yield return new WaitForSeconds(1.1f);
+        yield return new WaitForSeconds(1f);
         StopPlayer();
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
 
         playerMovementScript.enabled = false;
 
@@ -460,7 +460,7 @@ public class guide_Script : MonoBehaviour
     {
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(77f, 1.48f), 0.2f));
         StopPlayer();
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.1f);
 
         playerMovementScript.enabled = false;
         
@@ -492,7 +492,7 @@ public class guide_Script : MonoBehaviour
     
     IEnumerator sixthSequence()
     {
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(98f, 12.502f), 0.6f));
+        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(98f, 12.502f), 0.3f));
         StopPlayer();
 
         yield return new WaitForSeconds(1f);
