@@ -564,6 +564,9 @@ public class guide_Script : MonoBehaviour
         // S: You can hit enemies with Left-Click
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_31", 3f));
         yield return skipCheck(3f);
+        // S: To hit enemies with spells, | Right-Click |
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_34", 3f));
+        yield return skipCheck(3f);
         // S: Now you are ready head down into the depths of hell.
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_32", 4f));
         yield return skipCheck(4f);
