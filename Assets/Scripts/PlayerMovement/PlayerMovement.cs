@@ -46,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
     private int facingDirection = 1; // 1 for facing right, -1 for facing left, affects the player
     public bool isFacingRight = true;
+    private LadderMovement ladderMovement;
 
     // Fall variables
     [SerializeField] private float maxFallSpeed = -20f;
@@ -174,11 +175,14 @@ public class PlayerMovement : MonoBehaviour
         if (!blockDash) { HandleDashInput(); }
 
         WallSlide();
-        // HandleJumpInput();
         // WallSlide(); --> moved into WallJump for performance.
         if (!blockJump) { WallJump(); }
 
-        // HandleDashInput();
+        // Necessary for jump logic not to break.
+        if (ladderMovement.jumpedOffOfLadder)
+        {
+            ladderMovement.jumpedOffOfLadder = false;
+        }
 
         if (!isWallJumping && !isWallSliding)
         {
@@ -352,6 +356,14 @@ public class PlayerMovement : MonoBehaviour
         grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer | platformLayer);
         animator.SetBool("grounded", grounded);
 
+        // Checks if player stopped climbing and is grounded. Important for animation transition
+        ladderMovement = ladderMovement = GetComponent<LadderMovement>();
+        // ladderMovement.jumpedOffOfLadder = false;
+        if (ladderMovement.isClimbing && grounded && Mathf.Abs(Input.GetAxisRaw("Vertical")) == 0f)
+        {
+            ladderMovement.isClimbing = false;
+        }
+
         if (grounded && !previouslyGrounded)
         {
             // Trigger floor dust particles when the player lands
@@ -490,13 +502,25 @@ public class PlayerMovement : MonoBehaviour
     #region Input Handling Methods
     private void HandleJumpInput()
     {
+        ladderMovement = ladderMovement = GetComponent<LadderMovement>();
         if ((Time.time - lastTimeJumpPressed) <= jumpBufferTime)
         {
             // First jump
-            if (IsGrounded() || CanUseCoyote())
+            if (IsGrounded() || CanUseCoyote() || (ladderMovement != null && ladderMovement.isClimbing))
             {
                 animator.SetTrigger("jump"); // Play jump animation on first jump
-                body.velocity = new Vector2(body.velocity.y, jumpPower);
+
+                // Handles logic to jump off of a ladder
+                if (ladderMovement != null && ladderMovement.isClimbing)
+                {
+                    ladderMovement.JumpOffLadder();
+                    body.velocity = new Vector2(body.velocity.y, jumpPower * 1.2f);
+                }
+                else
+                {
+                    body.velocity = new Vector2(body.velocity.y, jumpPower);
+                }
+
                 isDoubleJumping = false; // Reset double jump for the next jump
                 coyoteUsable = false;
 
@@ -509,7 +533,7 @@ public class PlayerMovement : MonoBehaviour
         if (!blockInput){
             if (playerInput.GetJumpInput())
             {
-                if (!isDoubleJumping && !IsGrounded())
+                if (!isDoubleJumping && !IsGrounded() && !ladderMovement.jumpedOffOfLadder)
                 {
                     //Double-Jump Particle Animation
                     playerFX.transform.position = new Vector2(transform.position.x + 0.1f, transform.position.y - 0.35f);
