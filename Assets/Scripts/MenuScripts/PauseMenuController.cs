@@ -18,6 +18,9 @@ public class PauseMenuController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             isPaused = !isPaused;
+
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
         }
 
         if (isPaused)
@@ -36,6 +39,9 @@ public class PauseMenuController : MonoBehaviour
         Time.timeScale = 0; // Freeze time
         pauseMenuUI.SetActive(true);
 
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         // Pause all audio sources except the music
         foreach (AudioSource audio in FindObjectsOfType<AudioSource>())
         {
@@ -51,6 +57,9 @@ public class PauseMenuController : MonoBehaviour
         Time.timeScale = 1; // Resume time
         pauseMenuUI.SetActive(false);
         isPaused = false;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
         // Resume all audio sources except the music
         foreach (AudioSource audio in FindObjectsOfType<AudioSource>())

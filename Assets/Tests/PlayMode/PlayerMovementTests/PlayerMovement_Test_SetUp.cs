@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
-public abstract class PlayerMovement_Test_SetUp
+public class PlayerMovement_Test_SetUp
 {
     protected static bool sceneLoaded = false;
     protected GameObject player;

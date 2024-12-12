@@ -39,7 +39,33 @@ public class SoulShardSystem : MonoBehaviour
     /// </summary>
     public void decreaseSoulShard(SoulShardItem soulShardItem, int amount)
     {
-        soulShardItems.Remove(soulShardItem);
+        //soulShardItems.Remove(soulShardItem);
+
+        //More flexible like this, you can just say how many you want to remove
+        for (int i = 0; i < amount && soulShardItems.Count > 0; i++)
+        {
+            soulShardItems.RemoveAt(soulShardItems.Count - 1);
+        }
+    }
+
+    public int GetSoulShardCount()
+    {
+        return soulShardItems.Count;
+    }
+
+    public void SetSoulShardCount(int count)
+    {
+        // To modify the list and being able to reduce the SoulShards in case of death
+        //soulShardItems = new List<SoulShardItem>(count);
+
+        //Create a list with the amount of soulshards
+        soulShardItems = new List<SoulShardItem>(count);
+
+        // Fill the lst with null, cause we just need the amount
+        for (int i = 0; i < count; i++)
+        {
+            soulShardItems.Add(null);
+        }
     }
 }
 

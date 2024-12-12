@@ -30,6 +30,10 @@ public class EnemyController : MonoBehaviour
     private HealthSystem playerHealth;
     private EnemyPatrol enemyPatrol;
     private PlayerMovement playerMovement;
+    private HealthSystem healthSystem;
+
+
+    private Vector3 initialPosition;
 
     private void Awake()
     {
@@ -37,6 +41,14 @@ public class EnemyController : MonoBehaviour
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
         playerHealth = GetComponent<HealthSystem>();
         playerMovement = GetComponent<PlayerMovement>();
+
+        healthSystem = GetComponent<HealthSystem>();
+        if (healthSystem == null)
+        {
+            Debug.LogError("HealthSystem-Komponente nicht am Enemy gefunden.");
+        }
+
+        initialPosition = transform.position;
 
     }
 
@@ -131,4 +143,19 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+
+    public void Respawn()
+    {
+        // Setze den Gesundheitszustand zurück -> nicht sicher ob das die Health vom Gegner ist
+        playerHealth.currentHealth = playerHealth.startingHealth;
+
+        // Setze die Position zurück (falls erforderlich)
+        transform.position = initialPosition;
+
+        // Aktiviere den Gegner
+        gameObject.SetActive(true);
+
+        // Weitere Reset-Logik (Animationen, Status etc.)
+    }
+
 }

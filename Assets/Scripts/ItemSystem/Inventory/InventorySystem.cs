@@ -7,18 +7,51 @@ using ItemSystem.Items; // Add this line to include the namespace where PowerUpI
 
 public class InventorySystem : MonoBehaviour
 {
+    // Singleton-Instance
+    public static InventorySystem Instance { get; private set; }
     public InventorySlot[] slots;
     [SerializeField] protected UIDocument uiDocument;
     protected VisualElement root;
 
     // needed for the HealthItem
     public HealthSystem playerHealth;
-
     private GameObject playerSpeech;
 
     private SpriteRenderer playerSpeechSpriteRenderer;
+    
+    private GameObject player;
+
+    private PlayerMovement playerMov;
+
+    void Update()
+    {
+        // Flip the speech bubble sprite if the player is facing left
+        if (playerMov.isFacingRight == false)
+        {
+            playerSpeechSpriteRenderer.flipX = true;
+        }
+        else
+        {
+            playerSpeechSpriteRenderer.flipX = false;
+        }
+    }
 
 
+    //Singleton-implementation, to make global accessable
+    private void Awake()
+    {
+        // Implement the Singleton pattern
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Inventory persist across scenes
+        }
+        else
+        {
+            Destroy(gameObject);
+            Debug.LogError("Multiple InventorySystem instances detected.");
+        }
+    }
     void Start()
     {
         root = uiDocument.rootVisualElement;
@@ -45,6 +78,8 @@ public class InventorySystem : MonoBehaviour
 
         playerSpeech = GameObject.Find("Player_Speech_Bubble");
         playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
+        player = GameObject.Find("Player");
+        playerMov = player.GetComponent<PlayerMovement>();
 
     }
 
@@ -62,6 +97,18 @@ public class InventorySystem : MonoBehaviour
     /// </remarks>
     public bool AddItemToFirstAvailableSlot(ItemData itemData)
     {
+        //Check from Diego
+        if (slots == null)
+        {
+            Debug.LogError("Slots array is null.");
+            return false;
+        }
+        if (slots.Length == 0)
+        {
+            Debug.LogError("Slots array is empty.");
+            return false;
+        }
+
         if (itemData == null)
         {
             Debug.LogError("Attempting to add a null item to the inventory.");
@@ -89,7 +136,8 @@ public class InventorySystem : MonoBehaviour
         StartCoroutine(InvenotryFull());
         return false;
     }
-    
+
+
     /// <summary>
     /// Drops the item from the specified slot at the given player position with an offset.
     /// </summary>
@@ -119,7 +167,9 @@ public class InventorySystem : MonoBehaviour
     /// - For <see cref="ItemType.HealthItem"/>, it creates a <see cref="HealthItem"/> and assigns the player's health to it.
     /// Additional item types can be added by extending the switch statement.
     /// </remarks>
-    private Item CreateItemInstance(ItemData itemData)
+    //private Item CreateItemInstance(ItemData itemData)
+    //Diego changed to public, because i need to use it
+    public Item CreateItemInstance(ItemData itemData)
     {
         switch (itemData.itemType)
         {
@@ -205,15 +255,20 @@ public class InventorySystem : MonoBehaviour
     public IEnumerator InvenotryFull()
     {
         var time = 1.5f;
+        // Load the sprite for the speech bubble
         Sprite speechBubble = Resources.Load<Sprite>("Sprites/Level_One/Speech_Bubbles/Inventory_full_bubble");
+        // Set the sprite and position of the speech bubble
         playerSpeechSpriteRenderer.sprite = speechBubble;
-        
+
+        // Move the speech bubble a little bit to the right
+        playerSpeechSpriteRenderer.transform.position = new Vector2(player.transform.position.x + 1.7f, playerSpeechSpriteRenderer.transform.position.y);
+
         float elapsedTime = 0f;
 
         // Wait for either the full time or until "Q" is pressed to skip
-        while (elapsedTime < time) 
+        while (elapsedTime < time)
         {
-            if (Input.GetKeyDown(KeyCode.Q)) 
+            if (Input.GetKeyDown(KeyCode.Q))
             {
                 // Hide the speech bubble and exit early if "Q" is pressed
                 playerSpeechSpriteRenderer.sprite = null;
@@ -223,7 +278,16 @@ public class InventorySystem : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null; // Wait for the next frame
         }
-
+        // Hide the speech bubble after the time has elapsed
         playerSpeechSpriteRenderer.sprite = null;
     }
+
+    public void ClearInventory()
+    {
+        foreach (var slot in slots)
+        {
+            slot.ClearSlot();
+        }
+    }
+
 }

@@ -24,13 +24,13 @@ public class LadderMovement : MonoBehaviour
     {
         if (isClimbing)
         {
-            animator.SetBool("isClimbing", isClimbing);
+            animator.SetBool("isClimbingLadder", isClimbing);
             rb.gravityScale = 0f;
             rb.velocity = new Vector2(rb.velocity.x, vertical * speed);
         }
         else
         {
-            animator.SetBool("isClimbing", false);
+            animator.SetBool("isClimbingLadder", false);
             rb.gravityScale = 1f;
         }
     }
