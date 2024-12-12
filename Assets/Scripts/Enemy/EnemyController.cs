@@ -22,6 +22,7 @@ public class EnemyController : MonoBehaviour
 
     [Header("Loot")]
     [SerializeField] public List<LootItem> lootTable = new List<LootItem>();
+    private bool isPlayerDead;
 
 
     // References
@@ -90,6 +91,12 @@ public class EnemyController : MonoBehaviour
         if (hit.collider != null)
         {
             playerHealth = hit.transform.GetComponent<HealthSystem>();
+
+            // So that the enemy stops attacking the player after death
+            if (playerHealth.currentHealth <= 0)
+            {
+                return false;
+            }
 
             //abrufen des PlayerMovemnt objektes wenn der Spieler in Sicht ist
             playerMovement = hit.transform.GetComponent<PlayerMovement>();

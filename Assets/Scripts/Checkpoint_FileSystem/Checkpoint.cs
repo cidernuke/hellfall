@@ -1,3 +1,5 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
@@ -9,6 +11,23 @@ public class Checkpoint : MonoBehaviour
     private HealthSystem healthSystem;
     private SoulShardSystem soulShardSystem;
     //private InventorySystem inventorySystem;
+    private Animator animator;
+    [SerializeField] private TMP_Text checkpointMessage;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            Debug.LogError("Animator-Component is missing on the Checkpoint.");
+        }
+
+        if (checkpointMessage != null)
+        {
+            // Zu Beginn ausblenden
+            checkpointMessage.gameObject.SetActive(false);
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -52,14 +71,39 @@ public class Checkpoint : MonoBehaviour
         isActive = true;
         Debug.Log("Checkpoint " + checkpointID + " aktiviert");
 
+        if (animator != null)
+        {
+            animator.Play("activate_checkpoint");
+        }
+
         healthSystem.respawnHealth = healthSystem.currentHealth;
 
         // Spiel speichern über den GameManager
         GameManager.Instance.SaveGame();
 
+        ShowCheckpointMessage();
+
         // Spiel speichern
         //SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,InventorySystem.Instance);
         //SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,inventorySystem);
         // Add Visualisation or sound here
+    }
+
+    private void ShowCheckpointMessage()
+    {
+        if (checkpointMessage != null)
+        {
+            checkpointMessage.text = "Checkpoint,\nSaved game.";
+            checkpointMessage.gameObject.SetActive(true);
+
+            // Optional: Nachricht nach ein paar Sekunden wieder ausblenden
+            StartCoroutine(HideMessageAfterDelay(3f));
+        }
+    }
+
+    private IEnumerator HideMessageAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        checkpointMessage.gameObject.SetActive(false);
     }
 }
