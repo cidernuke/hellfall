@@ -15,9 +15,9 @@
         <ui:VisualElement name="Hotkey3Container" style="flex-grow: 1; position: absolute; left: 12px; top: 12px; width: 75px; height: 75px; -unity-background-scale-mode: scale-to-fit;" />
     </ui:VisualElement>
     <ui:VisualElement name="Weapon1" style="flex-grow: 0; background-image: resource(&apos;Sprites/Inventory/UI/Grey_HotkeyBox_34x34 copy&apos;); width: 102px; height: 102px; position: absolute; top: 810px; left: 20px; align-self: auto; align-items: stretch;">
-        <ui:VisualElement name="Weapon1Container" style="flex-grow: 1; position: absolute; left: 12px; top: 12px; width: 75px; height: 75px; -unity-background-scale-mode: scale-to-fit; background-image: resource(&apos;Sprites/Inventory/UI/ItemsIcons_24x24&apos;);" />
+        <ui:VisualElement name="Weapon1Container" style="flex-grow: 1; position: absolute; left: 20px; top: 20px; width: 60px; height: 60px; -unity-background-scale-mode: scale-to-fit; background-image: resource(&apos;Sprites/Inventory/UI/Sword_Cutout_1&apos;);" />
     </ui:VisualElement>
     <ui:VisualElement name="Weapon2" style="flex-grow: 0; background-image: resource(&apos;Sprites/Inventory/UI/Grey_HotkeyBox_34x34 copy&apos;); width: 102px; height: 102px; position: absolute; top: 810px; left: 140px;">
-        <ui:VisualElement name="Weapon2Container" style="flex-grow: 1; position: absolute; left: 14px; top: 14px; width: 70px; height: 70px; -unity-background-scale-mode: scale-to-fit; background-image: resource(&apos;Sprites/Warped Shooting Fx/Pixel Art/Bolt/bolt1&apos;);" />
+        <ui:VisualElement name="Weapon2Container" style="flex-grow: 1; position: absolute; left: 14px; top: 14px; width: 70px; height: 70px; -unity-background-scale-mode: scale-to-fit; background-image: resource(&apos;Sprites/Warped Shooting Fx/Pixel Art/Hits/Hit-4/hits-4-3&apos;);" />
     </ui:VisualElement>
 </ui:UXML>
