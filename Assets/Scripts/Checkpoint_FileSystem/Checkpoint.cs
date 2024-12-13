@@ -96,7 +96,6 @@ public class Checkpoint : MonoBehaviour
             checkpointMessage.text = "Checkpoint,\nSaved game.";
             checkpointMessage.gameObject.SetActive(true);
 
-            // Optional: Nachricht nach ein paar Sekunden wieder ausblenden
             StartCoroutine(HideMessageAfterDelay(3f));
         }
     }

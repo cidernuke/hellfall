@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -40,6 +41,7 @@ public class HealthSystem : MonoBehaviour
     //Respawn variables
     private bool isDead;
     public float respawnHealth;
+    //[SerializeField] private TMP_Text dietMessage;
 
     /// <summary>
     /// Initializes the current health to the starting health value.
@@ -127,6 +129,10 @@ public class HealthSystem : MonoBehaviour
         if (!isDead)
         {
             Debug.Log("Player died");
+
+        //     Vector3 playerPos = transform.position;
+        // GameManager.Instance.ShowDeathMessage(playerPos);
+
             anim.SetTrigger("die");
             if (playerMovement != null)
             {

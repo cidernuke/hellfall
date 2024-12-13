@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -11,6 +13,7 @@ public class GameManager : MonoBehaviour
     public HealthSystem healthSystem;
     public SoulShardSystem soulShardSystem;
     public InventorySystem inventorySystem;
+     //[SerializeField] private TMP_Text deathMessage;
 
     private void Awake()
     {
@@ -132,4 +135,41 @@ public class GameManager : MonoBehaviour
         if (!itemRespawners.Contains(respawner))
             itemRespawners.Add(respawner);
     }
+
+    //     public void ShowDeathMessage()
+    // {
+    //     if (deathMessage != null)
+    //     {
+    //         deathMessage.text = "Rise again, or be forgotten among the damned.";
+    //         print("Setting death message active");
+    //         deathMessage.gameObject.SetActive(true);
+
+    //         StartCoroutine(HideMessageAfterDelay(3f));
+    //     }
+    // }
+
+//     public void ShowDeathMessage(Vector3 playerPosition)
+// {
+//     if (deathMessage != null)
+//     {
+//         // Spieler-Weltposition in Bildschirmkoordinaten umrechnen
+//         Vector3 screenPos = Camera.main.WorldToScreenPoint(playerPosition);
+
+//         // Position des Textes anpassen (RectTransform erforderlich)
+//         RectTransform rt = deathMessage.GetComponent<RectTransform>();
+//         rt.position = screenPos;
+        
+//         // Nachricht setzen und einblenden
+//         deathMessage.text = "Rise again, or be forgotten among the damned.";
+//         deathMessage.gameObject.SetActive(true);
+
+//         StartCoroutine(HideMessageAfterDelay(3f));
+//     }
+// }
+
+//     private IEnumerator HideMessageAfterDelay(float delay)
+//     {
+//         yield return new WaitForSeconds(delay);
+//         deathMessage.gameObject.SetActive(false);
+//     }
 }
