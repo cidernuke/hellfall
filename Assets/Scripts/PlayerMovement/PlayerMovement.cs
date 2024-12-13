@@ -623,6 +623,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public bool CanAttackRanged()
+    {
+        if (!blockInput)
+        {
+            float horizontalInput = playerInput.GetHorizontalInput();
+
+            return horizontalInput == 0 && grounded;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     #endregion
 
     #region Checkpoint
