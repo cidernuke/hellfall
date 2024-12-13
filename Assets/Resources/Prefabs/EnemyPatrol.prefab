@@ -127,6 +127,10 @@ PrefabInstance:
       propertyPath: damage
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 1776847006795675958, guid: b3d5414a0a40e2c46a9d08e7272b9363, type: 3}
+      propertyPath: lootTable.Array.data[0].itemPrefab
+      value: 
+      objectReference: {fileID: 3105599385479915624, guid: ce1ee5ec5cfd1614f8ae566b6dedbc58, type: 3}
     - target: {fileID: 3816967287189773138, guid: b3d5414a0a40e2c46a9d08e7272b9363, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.6099997
