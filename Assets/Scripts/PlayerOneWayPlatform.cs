@@ -8,7 +8,7 @@ public class PlayerOneWayPlatform : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.S))
         {
             if (currentOneWayPlatform != null)
             {
