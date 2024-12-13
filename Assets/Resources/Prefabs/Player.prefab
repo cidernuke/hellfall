@@ -333,6 +333,7 @@ MonoBehaviour:
   platformLayer:
     serializedVersion: 2
     m_Bits: 0
+  isDead: 0
   body: {fileID: 0}
   animator: {fileID: 0}
   platformed: 0
@@ -342,6 +343,7 @@ MonoBehaviour:
   groundSpeed: 7
   jumpPower: 5
   jumpBufferTime: 0.1
+  isFacingRight: 1
   maxFallSpeed: -10
   wallSlideSpeed: 5
   wallCheck: {fileID: 976393204391322360}
@@ -406,6 +408,7 @@ MonoBehaviour:
   isPlayer: 1
   timeInvincible: 0.5
   isInvincible: 0
+  respawnHealth: 0
 --- !u!114 &8026818364704553123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -494,7 +497,7 @@ MonoBehaviour:
   jumpedOffOfLadder: 0
   rb: {fileID: 8302531813951290086}
   animator: {fileID: 8335488962519607957}
-  boostOffLadder: 3
+  boostOffLadder: 3.3
 --- !u!1 &7024154592373604521
 GameObject:
   m_ObjectHideFlags: 0

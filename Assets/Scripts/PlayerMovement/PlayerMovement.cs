@@ -147,7 +147,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>        
     public void Update()
     {
-        if (!blockInput){
+        if (!blockInput)
+        {
             horizontal = playerInput.GetHorizontalInput();
         }
 
@@ -195,7 +196,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundDecay;
     private void FixedUpdate()
     {
-        if (!blockInput){
+        if (!blockInput)
+        {
             if (!isWallJumping)
             {
                 if (!isDashing)
@@ -294,7 +296,7 @@ public class PlayerMovement : MonoBehaviour
             Debug.LogError("Floor_Dust component not found!");
         if (floorDustParticleSystem == null)
             Debug.LogError("Floor_Dust Particle System component not found!");
-        
+
     }
 
     /// <summary>
@@ -378,7 +380,7 @@ public class PlayerMovement : MonoBehaviour
             isFalling = false;
             animator.SetBool("is_falling", isFalling);
             wallDustParticleSystem.Stop();
- 
+
             OnLanding(); // called here to reset wall jump logic once player lands back on ground --> player can walljump from same wall once grounded after wall jump.
             lastTimeGrounded = Time.time;
             coyoteUsable = true;
@@ -409,7 +411,7 @@ public class PlayerMovement : MonoBehaviour
             // Wall Dust Particle
             wallDustParticleSystem.Play();
             wallDust.transform.position = new Vector2(transform.position.x + 0.4f * wallSide, transform.position.y - 0.2f);
-        
+
 
             if (wallJumpDirection < 0 || wallJumpDirection > 0)
             {
@@ -426,7 +428,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void WallJump()
-    {        
+    {
         WallSlide();
         if (isWallSliding)
         {
@@ -448,7 +450,8 @@ public class PlayerMovement : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
-        if (!blockInput){
+        if (!blockInput)
+        {
             if (playerInput.GetJumpInput() && wallJumpingCounter > 0f && canWallJump)
             {
                 isWallJumping = true;
@@ -530,7 +533,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Double Jump
-        if (!blockInput){
+        if (!blockInput)
+        {
             if (playerInput.GetJumpInput())
             {
                 if (!isDoubleJumping && !IsGrounded() && !ladderMovement.jumpedOffOfLadder)
@@ -554,7 +558,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleDashInput()
     {
-        if (!blockInput){
+        if (!blockInput)
+        {
             float horizontalInput = playerInput.GetHorizontalInput();
             if (playerInput.GetDashInput() && canDash && horizontalInput != 0 && !isCrouching)
             {
@@ -569,7 +574,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void HandleCrouchInput()
     {
-        if (!blockInput){
+        if (!blockInput)
+        {
             if (playerInput.GetCrouchInput())
             {
                 if (!isCrouching)
@@ -607,11 +613,12 @@ public class PlayerMovement : MonoBehaviour
 
     public bool CanAttack()
     {
-        if (!blockInput){
-            float horizontalInput = playerInput.GetHorizontalInput();
-
-            return horizontalInput == 0 && grounded;
-        } else {
+        if (!blockInput)
+        {
+            return grounded;
+        }
+        else
+        {
             return false;
         }
     }
@@ -725,12 +732,14 @@ public class PlayerMovement : MonoBehaviour
         isDropping = false;
     }
 
-    private void ResetAnimation() {
+    private void ResetAnimation()
+    {
         playerFXAnimator.SetBool("resetAnimation", true);
 
         AnimatorStateInfo stateInfo = playerFXAnimator.GetCurrentAnimatorStateInfo(0);
 
-        if(stateInfo.IsName("Transition")){
+        if (stateInfo.IsName("Transition"))
+        {
             playerFXAnimator.SetBool("hasDoubleJumped", false);
         }
 
