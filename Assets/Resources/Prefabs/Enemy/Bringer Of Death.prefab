@@ -194,5 +194,5 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   lootTable:
-  - itemPrefab: {fileID: 0}
-    dropChance: 0
+  - itemPrefab: {fileID: 3105599385479915624, guid: ce1ee5ec5cfd1614f8ae566b6dedbc58, type: 3}
+    dropChance: 80
