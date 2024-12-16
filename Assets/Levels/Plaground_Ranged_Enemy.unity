@@ -1407,10 +1407,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 443710547961193536, guid: a4cb67362547b4fdeb0754782e84d06b, type: 3}
-      propertyPath: playerLayer.m_Bits
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 664064341779355361, guid: a4cb67362547b4fdeb0754782e84d06b, type: 3}
       propertyPath: m_Name
       value: Explosion Enemy
@@ -1454,10 +1450,6 @@ PrefabInstance:
     - target: {fileID: 1476858978875684357, guid: a4cb67362547b4fdeb0754782e84d06b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7150807212373531299, guid: a4cb67362547b4fdeb0754782e84d06b, type: 3}
-      propertyPath: anim
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
