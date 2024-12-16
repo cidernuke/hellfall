@@ -2,94 +2,146 @@ using UnityEngine;
 
 public class RangedEnemy2 : MonoBehaviour
 {
-    public Transform player;
-    public GameObject bullet;
+    public Transform player; // Referenz auf den Spieler
+    public GameObject bullet; // Bullet-Prefab
+
+    [Header("Movement Settings")]
+    public float followRange = 15f; // Reichweite, um dem Spieler zu folgen
+    public float shootingRange = 10f; // Reichweite, um zu schießen
+    public float moveSpeed = 2f; // Bewegungsgeschwindigkeit
 
     [Header("Shooting Settings")]
-    public float shootingRange = 10f; // Maximum shooting range
     private float shotCooldown;
-    public float startShotCooldown;
+    public float startShotCooldown = 2f; // Cooldown zwischen Schüssen
 
     [Header("References")]
+    private Animator animator; // Animator-Referenz
     private HealthSystem healthSystem;
-    private EnemyController enemyController; // Reference to the EnemyController
 
     private void Start()
     {
-        // Automatically find player by tag if not assigned
         if (player == null)
         {
             GameObject playerObject = GameObject.FindWithTag("Player");
             if (playerObject != null)
             {
-                player = playerObject.transform; // Set the player Transform
+                player = playerObject.transform;
             }
             else
             {
-                Debug.LogError("Player GameObject not found! Ensure it is tagged correctly or assigned in the inspector.");
+                Debug.LogError("Player GameObject nicht gefunden! Tag überprüfen.");
             }
         }
 
-        // Initialize shooting cooldown
         shotCooldown = startShotCooldown;
+        animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            Debug.LogError("Animator-Komponente fehlt!");
+        }
 
-        // Get the HealthSystem component
         healthSystem = GetComponent<HealthSystem>();
         if (healthSystem == null)
         {
-            Debug.LogError("No HealthSystem component found on the enemy!");
-        }
-
-        // Get the EnemyController component
-        enemyController = GetComponent<EnemyController>();
-        if (enemyController == null)
-        {
-            Debug.LogError("No EnemyController component found on the enemy!");
+            Debug.LogError("HealthSystem-Komponente fehlt!");
         }
     }
 
     private void Update()
     {
-        // Aim towards the player
-        if (player != null)
-        {
-            Vector2 direction = player.position - transform.position;
-            transform.up = direction;
-
-            // Check if the player is within shooting range
-            float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-
-            if (distanceToPlayer <= shootingRange)
-            {
-                // Shoot bullets if cooldown is ready
-                if (shotCooldown <= 0)
-                {
-                    Instantiate(bullet, transform.position, transform.rotation);
-                    shotCooldown = startShotCooldown;
-                }
-                else
-                {
-                    shotCooldown -= Time.deltaTime;
-                }
-            }
-        }
-
-        // Check if the enemy's health is zero or less, and destroy the enemy
         if (healthSystem != null && healthSystem.currentHealth <= 0)
         {
-            Destroy(gameObject); // Destroy the enemy's GameObject
+            HandleDeath();
+            return;
+        }
+
+        if (player != null)
+        {
+            HandleMovementAndAttack();
         }
     }
 
-    /// <summary>
-    /// Public method to take damage, delegating to the HealthSystem.
-    /// </summary>
+    private void HandleMovementAndAttack()
+    {
+        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+
+        // Richtung bestimmen und Enemy flippen
+        FlipTowardsPlayer();
+
+        if (distanceToPlayer > shootingRange && distanceToPlayer <= followRange)
+        {
+            MoveTowardsPlayer();
+            animator.SetBool("isShooting", false); // Shooting-Animation deaktivieren
+        }
+        else if (distanceToPlayer <= shootingRange)
+        {
+            StopMoving();
+            HandleShooting();
+        }
+        else
+        {
+            StopMoving();
+            animator.SetBool("isShooting", false); // Shooting-Animation deaktivieren
+        }
+    }
+
+    private void MoveTowardsPlayer()
+    {
+        Vector2 direction = (player.position - transform.position).normalized;
+        transform.position += (Vector3)direction * moveSpeed * Time.deltaTime;
+    }
+
+    private void StopMoving()
+    {
+        animator.SetBool("isShooting", false); // Animation stoppen, falls nicht schießen
+    }
+
+    private void FlipTowardsPlayer()
+    {
+        Vector3 scale = transform.localScale;
+        if (player.position.x > transform.position.x)
+        {
+            scale.x = Mathf.Abs(scale.x); // Rechts schauen
+        }
+        else
+        {
+            scale.x = -Mathf.Abs(scale.x); // Links schauen
+        }
+        transform.localScale = scale; // Nur X-Skalierung anpassen
+    }
+
+    private void HandleShooting()
+    {
+        if (shotCooldown <= 0)
+        {
+            animator.SetBool("isShooting", true);
+
+            // Richtung berechnen
+            Vector2 direction = (player.position - transform.position).normalized;
+
+            // Projektil erzeugen
+            GameObject newBullet = Instantiate(bullet, transform.position, Quaternion.identity);
+            newBullet.transform.up = direction;
+
+            shotCooldown = startShotCooldown;
+        }
+        else
+        {
+            shotCooldown -= Time.deltaTime;
+        }
+    }
+
+    private void HandleDeath()
+    {
+        animator.SetBool("isDead", true);
+        Destroy(gameObject, 1f); // Objekt nach 1 Sekunde zerstören (nach Animation)
+    }
+
     public void TakeDamage(float damage)
     {
         if (healthSystem != null)
         {
-            // Pass the reference of EnemyController to handle death behavior
-            healthSystem.TakeDamage(damage, null, enemyController);
+            healthSystem.TakeDamage(damage);
         }
     }
 }
