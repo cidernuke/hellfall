@@ -1,11 +1,13 @@
 using UnityEngine;
+using System.Collections;
 
 public class Explosion : MonoBehaviour
 {
-    [SerializeField] private float triggerRadius = 3f; // Range to trigger the explosion
-    [SerializeField] private float explosionRadius = 1f; // Radius to apply damage
+    [SerializeField] private float triggerRadius = 3f;
+    [SerializeField] private float explosionRadius = 1f;
     [SerializeField] private int damageAmount = 20;
-    [SerializeField] private float explosionDelay = 2f; // Timer before explosion
+    [SerializeField] private LayerMask playerLayer;
+
     private Animator animator;
     private bool hasExploded = false;
     private bool damageDealt = false;
@@ -17,59 +19,49 @@ public class Explosion : MonoBehaviour
 
     private void Update()
     {
-        // Check if the player is within the trigger radius
-        Collider2D playerCollider = Physics2D.OverlapCircle(transform.position, triggerRadius, LayerMask.GetMask("Player"));
+        Collider2D playerCollider = Physics2D.OverlapCircle(transform.position, triggerRadius, playerLayer);
         if (playerCollider != null && !hasExploded)
         {
+            Debug.Log("Player entered trigger radius. Triggering explosion.");
             TriggerExplosion();
         }
     }
 
     public void TriggerExplosion()
     {
-        if (hasExploded) return; // Prevent multiple triggers
-        hasExploded = true;
+        if (hasExploded) return;
 
-        // Trigger the explosion animation
+        hasExploded = true;
+        Debug.Log("Explosion triggered!");
+
         if (animator != null)
         {
             animator.SetTrigger("Explode");
         }
 
-        // Start explosion sequence
         StartCoroutine(ExplosionSequence());
     }
 
-    private System.Collections.IEnumerator ExplosionSequence()
+    private IEnumerator ExplosionSequence()
     {
-        // Wait until halfway through the animation to deal damage
-        float animationLength = GetAnimationLength("Explosion"); // Replace with your explosion animation name
-        float halfwayPoint = animationLength / 2f;
-        yield return new WaitForSeconds(halfwayPoint);
+        float animationLength = GetAnimationLength("Explosion");
+        yield return new WaitForSeconds(animationLength / 2); // Wait halfway through the animation
 
-        // Damage all objects within the explosion radius
         if (!damageDealt)
         {
             DealDamage();
             damageDealt = true;
         }
 
-        // Wait until the animation ends
-        yield return new WaitForSeconds(animationLength - halfwayPoint);
+        yield return new WaitForSeconds(animationLength / 2); // Wait for the rest of the animation
 
-        // Trigger the "Death" animation if available
         if (animator != null)
         {
             animator.SetTrigger("Death");
         }
 
-        // Ensure the renderer is disabled before destruction
-        GetComponent<SpriteRenderer>().enabled = false;
+        yield return new WaitForSeconds(0.2f); // Allow death animation to play
 
-        // Short delay for cleanup (optional)
-        yield return new WaitForSeconds(0.2f);
-
-        // Destroy the GameObject
         Destroy(gameObject);
     }
 
@@ -101,12 +93,11 @@ public class Explosion : MonoBehaviour
                 return clip.length;
             }
         }
-        return 1f; // Default value if the animation is not found
+        return 1f;
     }
 
     private void OnDrawGizmosSelected()
     {
-        // Visualize the trigger radius and explosion radius in the editor
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, triggerRadius);
 

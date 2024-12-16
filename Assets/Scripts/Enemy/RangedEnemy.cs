@@ -133,7 +133,7 @@ public class RangedEnemy2 : MonoBehaviour
 
     private void HandleDeath()
     {
-        animator.SetBool("isDead", true);
+        animator.SetTrigger("die");
         Destroy(gameObject, 1f); // Objekt nach 1 Sekunde zerstören (nach Animation)
     }
 
