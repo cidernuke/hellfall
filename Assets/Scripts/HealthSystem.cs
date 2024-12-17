@@ -41,6 +41,20 @@ public class HealthSystem : MonoBehaviour
     public float respawnHealth;
     private float deathMessageDuration = 3f;
 
+    //Death Messages
+    private string[] deathMessages =
+    {
+        "Your torment is far from over.",
+        "You are not worthy to endure the eternal flames.",
+        "Failure echoes through the inferno.",
+        "Rise again, or be forgotten among the damned.",
+        "You are not worthy to go any further.",
+        "Even hell rejects the weak.",
+        "Your torment is far from over.",
+        "The abyss spits you back out.",
+        "The flames consume your soul, yet they grant no escape."
+    };
+
     /// <summary>
     /// Initializes the current health to the starting health value.
     /// </summary>
@@ -160,8 +174,12 @@ public class HealthSystem : MonoBehaviour
         //Wait for death animation
         yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
 
+        //Pick death message
+        int randomIndex = UnityEngine.Random.Range(0, deathMessages.Length);
+        string selectedMessage = deathMessages[randomIndex];
+
         //Show death message
-        DeathUIManager.Instance.ShowDeathMessage("You are not worthy to go any further.", deathMessageDuration);
+        DeathUIManager.Instance.ShowDeathMessage(selectedMessage, deathMessageDuration);
 
         //Wait for death message being played
         yield return new WaitForSeconds(deathMessageDuration);
