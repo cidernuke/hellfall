@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     public HealthSystem healthSystem;
     public SoulShardSystem soulShardSystem;
     public InventorySystem inventorySystem;
+    private List<ItemRespawner> itemRespawners = new List<ItemRespawner>();
 
     private void Awake()
     {
@@ -32,6 +34,13 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         InitializeReferences();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // After switching scenes, reset references
+        ReinitializeReferences();
     }
 
     private void InitializeReferences()
@@ -54,6 +63,33 @@ public class GameManager : MonoBehaviour
         if (inventorySystem == null)
         {
             print("InventorySystem.Instance ist null.");
+        }
+    }
+
+    /// <summary>
+    /// Diese Methode wird nach einem Szenenwechsel aufgerufen, um Player-Referenzen erneut zu setzen.
+    /// So stellst du sicher, dass PlayerMovement, HealthSystem, etc. nicht auf zerstörte Objekte zeigen.
+    /// </summary>
+    private void ReinitializeReferences()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            playerMovement = player.GetComponent<PlayerMovement>();
+            healthSystem = player.GetComponent<HealthSystem>();
+            soulShardSystem = player.GetComponent<SoulShardSystem>();
+        }
+        else
+        {
+            Debug.LogError("Player not found after scene load.");
+        }
+
+        // InventorySystem sollte bestehen bleiben, da es ein Singleton ist.
+        // Falls du es auch neu setzen willst:
+        inventorySystem = InventorySystem.Instance;
+        if (inventorySystem == null)
+        {
+            Debug.LogError("InventorySystem.Instance ist null after scene load.");
         }
     }
 
@@ -116,8 +152,6 @@ public class GameManager : MonoBehaviour
             respawner.RespawnItem();
         }
     }
-
-    private List<ItemRespawner> itemRespawners = new List<ItemRespawner>();
 
     public void RegisterItem(ItemRespawner respawner)
     {
