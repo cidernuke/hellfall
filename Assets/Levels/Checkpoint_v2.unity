@@ -2518,10 +2518,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 9207121439723155590, guid: 5291325245c0d8547ba2ff3077683566, type: 3}
-      propertyPath: deathMessage
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
