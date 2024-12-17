@@ -40,7 +40,17 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // After switching scenes, reset references
-        ReinitializeReferences();
+        InitializeReferences();
+
+        // Delete old references
+        itemRespawners.Clear();
+
+        // Alle ItemRespawner in dieser Szene finden und registrieren
+        ItemRespawner[] respawnersInScene = FindObjectsOfType<ItemRespawner>();
+        foreach (var resp in respawnersInScene)
+        {
+            RegisterItem(resp);
+        }
     }
 
     private void InitializeReferences()
@@ -66,32 +76,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Diese Methode wird nach einem Szenenwechsel aufgerufen, um Player-Referenzen erneut zu setzen.
-    /// So stellst du sicher, dass PlayerMovement, HealthSystem, etc. nicht auf zerstörte Objekte zeigen.
-    /// </summary>
-    private void ReinitializeReferences()
-    {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-        {
-            playerMovement = player.GetComponent<PlayerMovement>();
-            healthSystem = player.GetComponent<HealthSystem>();
-            soulShardSystem = player.GetComponent<SoulShardSystem>();
-        }
-        else
-        {
-            Debug.LogError("Player not found after scene load.");
-        }
+    // private void ReinitializeReferences()
+    // {
+    //     GameObject player = GameObject.FindGameObjectWithTag("Player");
+    //     if (player != null)
+    //     {
+    //         playerMovement = player.GetComponent<PlayerMovement>();
+    //         healthSystem = player.GetComponent<HealthSystem>();
+    //         soulShardSystem = player.GetComponent<SoulShardSystem>();
+    //     }
+    //     else
+    //     {
+    //         Debug.LogError("Player not found after scene load.");
+    //     }
 
-        // InventorySystem sollte bestehen bleiben, da es ein Singleton ist.
-        // Falls du es auch neu setzen willst:
-        inventorySystem = InventorySystem.Instance;
-        if (inventorySystem == null)
-        {
-            Debug.LogError("InventorySystem.Instance ist null after scene load.");
-        }
-    }
+    //     // InventorySystem sollte bestehen bleiben, da es ein Singleton ist.
+    //     
+    // }
 
     public void SaveGame()
     {

@@ -146,16 +146,13 @@ public class EnemyController : MonoBehaviour
 
     public void Respawn()
     {
-        // Setze den Gesundheitszustand zurück -> nicht sicher ob das die Health vom Gegner ist
+        // Setzt den Gesundheitszustand zurück -> nicht sicher ob das die Health vom Gegner ist
         playerHealth.currentHealth = playerHealth.startingHealth;
 
-        // Setze die Position zurück (falls erforderlich)
+        // Setzt die Position zurück (falls erforderlich)
         transform.position = initialPosition;
 
-        // Aktiviere den Gegner
+        // Aktiviert den Gegner
         gameObject.SetActive(true);
-
-        // Weitere Reset-Logik (Animationen, Status etc.)
     }
-
 }
