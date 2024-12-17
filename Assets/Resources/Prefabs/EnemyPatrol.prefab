@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5794579647418493868}
   - component: {fileID: 3395112362240258534}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EnemyPatrol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,7 +62,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7002766480498331585}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RightEdge
   m_TagString: Untagged
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
@@ -78,7 +78,7 @@ Transform:
   m_GameObject: {fileID: 1183322396071252953}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.03, y: -0.17, z: -0.008372214}
+  m_LocalPosition: {x: 7.68, y: -0.17, z: -0.008372214}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -93,7 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9131203896544617985}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LeftEdge
   m_TagString: Untagged
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
@@ -109,7 +109,7 @@ Transform:
   m_GameObject: {fileID: 8325591416962678139}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.65, y: -0.01, z: -0.008372214}
+  m_LocalPosition: {x: 5.68, y: -0.01, z: -0.008372214}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -125,8 +125,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1776847006795675958, guid: b3d5414a0a40e2c46a9d08e7272b9363, type: 3}
       propertyPath: damage
-      value: 1
+      value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 1776847006795675958, guid: b3d5414a0a40e2c46a9d08e7272b9363, type: 3}
+      propertyPath: lootTable.Array.data[0].dropChance
+      value: 80.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1776847006795675958, guid: b3d5414a0a40e2c46a9d08e7272b9363, type: 3}
+      propertyPath: lootTable.Array.data[0].itemPrefab
+      value: 
+      objectReference: {fileID: 3105599385479915624, guid: ce1ee5ec5cfd1614f8ae566b6dedbc58, type: 3}
     - target: {fileID: 3816967287189773138, guid: b3d5414a0a40e2c46a9d08e7272b9363, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.6099997

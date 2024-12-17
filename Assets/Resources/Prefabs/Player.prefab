@@ -158,6 +158,7 @@ GameObject:
   - component: {fileID: 1795978731709622821}
   - component: {fileID: 6027865557405022282}
   - component: {fileID: 7685874390314061115}
+  - component: {fileID: 8790498602411048556}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -332,6 +333,7 @@ MonoBehaviour:
   platformLayer:
     serializedVersion: 2
     m_Bits: 0
+  isDead: 0
   body: {fileID: 0}
   animator: {fileID: 0}
   platformed: 0
@@ -341,6 +343,7 @@ MonoBehaviour:
   groundSpeed: 7
   jumpPower: 5
   jumpBufferTime: 0.1
+  isFacingRight: 1
   maxFallSpeed: -10
   wallSlideSpeed: 5
   wallCheck: {fileID: 976393204391322360}
@@ -405,6 +408,7 @@ MonoBehaviour:
   isPlayer: 1
   timeInvincible: 0.5
   isInvincible: 0
+  respawnHealth: 0
 --- !u!114 &8026818364704553123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -477,6 +481,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInventory: {fileID: 817159615300423432}
+--- !u!114 &8790498602411048556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5585758838363563765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca36090fe08e9f046a4172953c71b07c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isClimbing: 0
+  jumpedOffOfLadder: 0
+  rb: {fileID: 8302531813951290086}
+  animator: {fileID: 8335488962519607957}
+  boostOffLadder: 3.3
 --- !u!1 &7024154592373604521
 GameObject:
   m_ObjectHideFlags: 0

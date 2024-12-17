@@ -11,6 +11,7 @@ TagManager:
   - OneWayPlatform
   - BackgroundMusic
   - Wall
+  - Ladder
   layers:
   - Default
   - TransparentFX
@@ -48,10 +49,13 @@ TagManager:
   - name: Background
     uniqueID: 505792023
     locked: 0
-  - name: Houses_and_Objects
+  - name: Non_Interactable_Objects
     uniqueID: 1985207377
     locked: 0
-  - name: Ground/Walls
+  - name: Platforms
+    uniqueID: 78420279
+    locked: 0
+  - name: Ground_Walls
     uniqueID: 584759993
     locked: 0
   - name: Default
