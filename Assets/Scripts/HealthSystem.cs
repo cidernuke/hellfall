@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -41,7 +39,7 @@ public class HealthSystem : MonoBehaviour
     //Respawn variables
     private bool isDead;
     public float respawnHealth;
-    //[SerializeField] private TMP_Text dietMessage;
+    private float deathMessageDuration = 3f;
 
     /// <summary>
     /// Initializes the current health to the starting health value.
@@ -130,10 +128,11 @@ public class HealthSystem : MonoBehaviour
         {
             Debug.Log("Player died");
 
-        //     Vector3 playerPos = transform.position;
-        // GameManager.Instance.ShowDeathMessage(playerPos);
-
             anim.SetTrigger("die");
+
+            // //Show death message
+            // DeathUIManager.Instance.ShowDeathMessage("You are not worthy to go any further.", 3f);
+
             if (playerMovement != null)
             {
                 playerMovement.enabled = false;
@@ -155,41 +154,25 @@ public class HealthSystem : MonoBehaviour
     }
     #endregion
 
-    // Coroutine zum Respawnen des Spielers
+    // Coroutine to Respawnen the player
     private IEnumerator RespawnPlayer(PlayerMovement playerMovement)
     {
-        // Warte auf die Todesanimation
+        //Wait for death animation
         yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
 
+        //Show death message
+        DeathUIManager.Instance.ShowDeathMessage("You are not worthy to go any further.", deathMessageDuration);
+
+        //Wait for death message being played
+        yield return new WaitForSeconds(deathMessageDuration);
+
         // Rufe die Respawn-Methode des GameManagers auf
+        //Call the respawn method from the GameManagers
         GameManager.Instance.RespawnPlayer();
 
-        // Aktiviere die Spielerbewegung wieder
+        //Reactivate the PlayerMovement
         playerMovement.enabled = true;
 
-        // Setze isDead zurück
         isDead = false;
-
-        //Befor Refactoring:
-
-        // // wait for the die animation
-        // yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
-
-        // //Works so the Player get his inital LP
-        // // reset health
-        // //currentHealth = startingHealth;
-
-        // currentHealth = respawnHealth;
-        // print("Player health after respawn: " + currentHealth);
-
-        // // Later: Update the health-bar
-        // // UIHandler.instance.SetHealthValue(currentHealth / startingHealth);
-
-        // // Call the Respawn method from playerMovement
-        // playerMovement.Respawn();
-        // //isInvincible = false;
-
-        // // Reset isDead
-        // isDead = false;
     }
 }

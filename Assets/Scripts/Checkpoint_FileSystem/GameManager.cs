@@ -13,7 +13,6 @@ public class GameManager : MonoBehaviour
     public HealthSystem healthSystem;
     public SoulShardSystem soulShardSystem;
     public InventorySystem inventorySystem;
-     //[SerializeField] private TMP_Text deathMessage;
 
     private void Awake()
     {
@@ -32,13 +31,12 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // Initialisiere die Referenzen
         InitializeReferences();
     }
 
     private void InitializeReferences()
     {
-        // Spieler-Referenzen
+        // Player references
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
@@ -59,7 +57,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Methoden zum Speichern und Laden
     public void SaveGame()
     {
         SaveManager.Instance.SaveGame(playerMovement, healthSystem, soulShardSystem, inventorySystem);
@@ -70,29 +67,27 @@ public class GameManager : MonoBehaviour
         SaveManager.Instance.LoadGame(playerMovement, healthSystem, soulShardSystem, inventorySystem);
     }
 
-    // Methoden für Respawn-Logik
     public void RespawnPlayer()
     {
-        // Setze die Position des Spielers auf den letzten Checkpoint
-        //<playerMovement.transform.position = playerMovement.RespawnPosition;
+        // Reset the position of the player to the last checkpoint
         playerMovement.Respawn();
 
-        // Setze die Gesundheit auf volle Gesundheit
+        // Reset health to max value
         healthSystem.currentHealth = healthSystem.startingHealth;
 
-        // Aktualisiere die Gesundheitsanzeige
+        // Reset healthbar animation
         UIHandler.instance.SetHealthValue(healthSystem.currentHealth / healthSystem.startingHealth);
 
-        // Setze die Anzahl der Soul Shards auf den Wert vom letzten Checkpoint
+        // Reset shoulShards to the value while reaching the last checkpoint
         soulShardSystem.SetSoulShardCount(LoadSoulShardCountFromLastCheckpoint());
 
         // Aktualisiere die Soul Shard Anzeige
         // UIHandler.instance.UpdateSoulShardCount(soulShardSystem.GetSoulShardCount());
 
-        // Leere das Inventar
+        // Empty inventory
         inventorySystem.ClearInventory();
 
-        // Respawne Gegner und Items
+        // Respawne enemies and items
         RespawnEnemiesAndItems();
 
         print("Health: " + healthSystem.currentHealth + " soulShards: " + soulShardSystem.GetSoulShardCount());
@@ -116,12 +111,6 @@ public class GameManager : MonoBehaviour
         }
 
         // Respawne Items
-        // ItemRespawner[] itemSpawners = FindObjectsOfType<ItemRespawner>();
-        // foreach (var spawner in itemSpawners)
-        // {
-        //     spawner.RespawnItem();
-        // }
-        // Items aus der Liste respawnen
         foreach (var respawner in itemRespawners)
         {
             respawner.RespawnItem();
@@ -135,41 +124,4 @@ public class GameManager : MonoBehaviour
         if (!itemRespawners.Contains(respawner))
             itemRespawners.Add(respawner);
     }
-
-    //     public void ShowDeathMessage()
-    // {
-    //     if (deathMessage != null)
-    //     {
-    //         deathMessage.text = "Rise again, or be forgotten among the damned.";
-    //         print("Setting death message active");
-    //         deathMessage.gameObject.SetActive(true);
-
-    //         StartCoroutine(HideMessageAfterDelay(3f));
-    //     }
-    // }
-
-//     public void ShowDeathMessage(Vector3 playerPosition)
-// {
-//     if (deathMessage != null)
-//     {
-//         // Spieler-Weltposition in Bildschirmkoordinaten umrechnen
-//         Vector3 screenPos = Camera.main.WorldToScreenPoint(playerPosition);
-
-//         // Position des Textes anpassen (RectTransform erforderlich)
-//         RectTransform rt = deathMessage.GetComponent<RectTransform>();
-//         rt.position = screenPos;
-        
-//         // Nachricht setzen und einblenden
-//         deathMessage.text = "Rise again, or be forgotten among the damned.";
-//         deathMessage.gameObject.SetActive(true);
-
-//         StartCoroutine(HideMessageAfterDelay(3f));
-//     }
-// }
-
-//     private IEnumerator HideMessageAfterDelay(float delay)
-//     {
-//         yield return new WaitForSeconds(delay);
-//         deathMessage.gameObject.SetActive(false);
-//     }
 }
