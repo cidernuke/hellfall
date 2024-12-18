@@ -37,7 +37,7 @@ public class HealthSystem : MonoBehaviour
     private float damageCooldown;
 
     //Respawn variables
-    private bool isDead;
+    public bool isDead;
     public float respawnHealth;
     private float deathMessageDuration = 3f;
 
@@ -136,11 +136,10 @@ public class HealthSystem : MonoBehaviour
     /// <param name="enemyController"></param>
 
     private void Die(PlayerMovement playerMovement = null, EnemyController enemyController = null)
-
     {
         if (!isDead)
         {
-            Debug.Log("Player died");
+            Debug.Log("Player/Enemy died");
 
             anim.SetTrigger("die");
 
@@ -153,12 +152,12 @@ public class HealthSystem : MonoBehaviour
                 isDead = true;
 
                 StartCoroutine(RespawnPlayer(playerMovement));
-
             }
             else if (enemyController != null)
             {
                 enemyController.enabled = false;
-                StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
+                //StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
+                StartCoroutine(HandleEnemyDeath(anim, enemyController, 0.4f));
                 enemyController.SpawnLoot();
 
             }
@@ -184,7 +183,6 @@ public class HealthSystem : MonoBehaviour
         //Wait for death message being played
         yield return new WaitForSeconds(deathMessageDuration);
 
-        // Rufe die Respawn-Methode des GameManagers auf
         //Call the respawn method from the GameManagers
         GameManager.Instance.RespawnPlayer();
 
@@ -192,5 +190,18 @@ public class HealthSystem : MonoBehaviour
         playerMovement.enabled = true;
 
         isDead = false;
+    }
+
+    // Coroutine to Respawnen the enemies
+    private IEnumerator HandleEnemyDeath(Animator anim, EnemyController enemyController, float animDuration)
+    {
+        // Wait for death animation
+        yield return new WaitForSeconds(animDuration);
+
+        // Spawn loot
+        enemyController.SpawnLoot();
+
+        //deactivate the enemy instead of destroying him
+        enemyController.OnDeath();
     }
 }

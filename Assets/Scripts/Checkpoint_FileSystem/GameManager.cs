@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public SoulShardSystem soulShardSystem;
     public InventorySystem inventorySystem;
     private List<ItemRespawner> itemRespawners = new List<ItemRespawner>();
+    private List<EnemyController> enemyRespawners = new List<EnemyController>();
 
     private void Awake()
     {
@@ -44,12 +45,20 @@ public class GameManager : MonoBehaviour
 
         // Delete old references
         itemRespawners.Clear();
+        enemyRespawners.Clear();
 
-        // Alle ItemRespawner in dieser Szene finden und registrieren
+        //Register Items
         ItemRespawner[] respawnersInScene = FindObjectsOfType<ItemRespawner>();
         foreach (var resp in respawnersInScene)
         {
             RegisterItem(resp);
+        }
+
+        //Register enemies
+        EnemyController[] enemiesInScene = FindObjectsOfType<EnemyController>();
+        foreach (var enemy in enemiesInScene)
+        {
+            RegisterEnemy(enemy);
         }
     }
 
@@ -132,7 +141,7 @@ public class GameManager : MonoBehaviour
 
     private int LoadSoulShardCountFromLastCheckpoint()
     {
-        // Lade die gespeicherte Anzahl der Soul Shards aus dem letzten Checkpoint
+        //Load the amount of collected SoulShards from the last checkpoint
         // Hier könntest du die Daten aus dem SaveManager oder einem separaten Speicher laden
         PlayerData data = SaveManager.Instance.LoadPlayerData();
         return data != null ? data.soulShardCount : 0;
@@ -140,14 +149,13 @@ public class GameManager : MonoBehaviour
 
     private void RespawnEnemiesAndItems()
     {
-        // Respawne Gegner
-        EnemyController[] enemies = FindObjectsOfType<EnemyController>();
-        foreach (var enemy in enemies)
+        // Respawn enemies
+        foreach (var enemy in enemyRespawners)
         {
             enemy.Respawn();
         }
 
-        // Respawne Items
+        // Respawn Items
         foreach (var respawner in itemRespawners)
         {
             respawner.RespawnItem();
@@ -158,5 +166,11 @@ public class GameManager : MonoBehaviour
     {
         if (!itemRespawners.Contains(respawner))
             itemRespawners.Add(respawner);
+    }
+
+    public void RegisterEnemy(EnemyController enemy)
+    {
+        if (!enemyRespawners.Contains(enemy))
+            enemyRespawners.Add(enemy);
     }
 }

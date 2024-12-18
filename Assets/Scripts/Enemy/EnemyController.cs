@@ -32,8 +32,10 @@ public class EnemyController : MonoBehaviour
     private PlayerMovement playerMovement;
     private HealthSystem healthSystem;
 
-
+    //Respawn variables
     private Vector3 initialPosition;
+    private HealthSystem enemyHealthSystem;
+    private bool isDead = false;
 
     private void Awake()
     {
@@ -41,15 +43,24 @@ public class EnemyController : MonoBehaviour
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
         playerHealth = GetComponent<HealthSystem>();
         playerMovement = GetComponent<PlayerMovement>();
-
         healthSystem = GetComponent<HealthSystem>();
+
+        enemyHealthSystem = GetComponent<HealthSystem>();
+
         if (healthSystem == null)
         {
             Debug.LogError("HealthSystem-Komponente nicht am Enemy gefunden.");
         }
 
         initialPosition = transform.position;
-
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.RegisterEnemy(this);
+        }
+        else
+        {
+            Debug.LogError("GameManager.Instance ist null, Enemy kann nicht registriert werden.");
+        }
     }
 
     // Update is called once per frame
@@ -146,13 +157,28 @@ public class EnemyController : MonoBehaviour
 
     public void Respawn()
     {
-        // Setzt den Gesundheitszustand zurück -> nicht sicher ob das die Health vom Gegner ist
-        playerHealth.currentHealth = playerHealth.startingHealth;
+        isDead = false;
+        if (enemyHealthSystem != null)
+        {
+            enemyHealthSystem.currentHealth = enemyHealthSystem.startingHealth;
+            enemyHealthSystem.isDead = false;
+        }
 
-        // Setzt die Position zurück (falls erforderlich)
+        this.enabled = true;
+
+        EnemyPatrol enemyPatrol = GetComponentInParent<EnemyPatrol>();
+        if (enemyPatrol != null)
+        {
+            enemyPatrol.enabled = true;
+        }
+
         transform.position = initialPosition;
-
-        // Aktiviert den Gegner
         gameObject.SetActive(true);
+    }
+
+    public void OnDeath()
+    {
+        isDead = true;
+        gameObject.SetActive(false);
     }
 }
