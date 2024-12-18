@@ -118,7 +118,6 @@ public class HealthSystem : MonoBehaviour
     /// <summary>
     /// Increases the current health by the specified health amount and updates the health UI.
     /// </summary>
-
     public void AddHealth(float healthAmount)
     {
         currentHealth = Mathf.Clamp(currentHealth + healthAmount, 0, startingHealth);
@@ -134,7 +133,6 @@ public class HealthSystem : MonoBehaviour
     /// </summary>
     /// <param name="playerMovement"></param>
     /// <param name="enemyController"></param>
-
     private void Die(PlayerMovement playerMovement = null, EnemyController enemyController = null)
     {
         if (!isDead)
@@ -162,7 +160,6 @@ public class HealthSystem : MonoBehaviour
 
             }
             isDead = true;
-
         }
     }
     #endregion
@@ -203,5 +200,41 @@ public class HealthSystem : MonoBehaviour
 
         //deactivate the enemy instead of destroying him
         enemyController.OnDeath();
+    }
+
+    public void RespawnEnemy(Vector3 initialPosition)
+    {
+        // Reset values
+        currentHealth = startingHealth;
+        isDead = false;
+        isInvincible = false;
+        damageCooldown = 0f;
+
+        // Reset animations
+        if (anim != null)
+        {
+            anim.ResetTrigger("die");
+            anim.ResetTrigger("hurt");
+            anim.Play("Idle"); // ensure there is a default animation
+        }
+
+        // reactivate game-object
+        gameObject.SetActive(true);
+
+        // reset position
+        transform.position = initialPosition;
+
+        //Reactivate EnemyController and EnemyPatrol
+        EnemyController enemyController = GetComponent<EnemyController>();
+        if (enemyController != null)
+        {
+            enemyController.enabled = true;
+        }
+
+        EnemyPatrol enemyPatrol = GetComponentInParent<EnemyPatrol>();
+        if (enemyPatrol != null)
+        {
+            enemyPatrol.enabled = true;
+        }
     }
 }

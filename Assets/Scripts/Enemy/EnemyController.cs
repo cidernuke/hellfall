@@ -22,8 +22,6 @@ public class EnemyController : MonoBehaviour
 
     [Header("Loot")]
     [SerializeField] public List<LootItem> lootTable = new List<LootItem>();
-    private bool isPlayerDead;
-
 
     // References
     private Animator anim;
@@ -155,25 +153,9 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void Respawn()
+    public Vector3 GetInitialPosition()
     {
-        isDead = false;
-        if (enemyHealthSystem != null)
-        {
-            enemyHealthSystem.currentHealth = enemyHealthSystem.startingHealth;
-            enemyHealthSystem.isDead = false;
-        }
-
-        this.enabled = true;
-
-        EnemyPatrol enemyPatrol = GetComponentInParent<EnemyPatrol>();
-        if (enemyPatrol != null)
-        {
-            enemyPatrol.enabled = true;
-        }
-
-        transform.position = initialPosition;
-        gameObject.SetActive(true);
+        return initialPosition;
     }
 
     public void OnDeath()

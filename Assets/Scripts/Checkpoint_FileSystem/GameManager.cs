@@ -85,24 +85,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // private void ReinitializeReferences()
-    // {
-    //     GameObject player = GameObject.FindGameObjectWithTag("Player");
-    //     if (player != null)
-    //     {
-    //         playerMovement = player.GetComponent<PlayerMovement>();
-    //         healthSystem = player.GetComponent<HealthSystem>();
-    //         soulShardSystem = player.GetComponent<SoulShardSystem>();
-    //     }
-    //     else
-    //     {
-    //         Debug.LogError("Player not found after scene load.");
-    //     }
-
-    //     // InventorySystem sollte bestehen bleiben, da es ein Singleton ist.
-    //     
-    // }
-
     public void SaveGame()
     {
         SaveManager.Instance.SaveGame(playerMovement, healthSystem, soulShardSystem, inventorySystem);
@@ -127,9 +109,6 @@ public class GameManager : MonoBehaviour
         // Reset shoulShards to the value while reaching the last checkpoint
         soulShardSystem.SetSoulShardCount(LoadSoulShardCountFromLastCheckpoint());
 
-        // Aktualisiere die Soul Shard Anzeige
-        // UIHandler.instance.UpdateSoulShardCount(soulShardSystem.GetSoulShardCount());
-
         // Empty inventory
         inventorySystem.ClearInventory();
 
@@ -152,7 +131,18 @@ public class GameManager : MonoBehaviour
         // Respawn enemies
         foreach (var enemy in enemyRespawners)
         {
-            enemy.Respawn();
+            //enemy.Respawn();
+            if (enemy != null)
+            {
+                HealthSystem hs = enemy.GetComponent<HealthSystem>();
+                if (hs != null)
+                {
+                    //Get inital position of the enemy
+                    Vector3 initialPos = enemy.GetInitialPosition();
+                    //Set inital position of the enemy
+                    hs.RespawnEnemy(initialPos);
+                }
+            }
         }
 
         // Respawn Items
