@@ -7,7 +7,7 @@ using ItemSystem.Items;
 
 public class SaveManager : MonoBehaviour
 {
-    // Singleton-Pattern, damit es nur eine Instanz des SaveManagers gibt
+    // Singleton-Pattern
     public static SaveManager Instance;
 
     private void Awake()
@@ -16,7 +16,7 @@ public class SaveManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Damit der SaveManager über Szenen hinweg erhalten bleibt
+            DontDestroyOnLoad(gameObject);
             print("SaveManager initialisiert");
         }
         else
@@ -25,7 +25,7 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    // Pfad zur Speicherdatei
+    // Path to the save file
     private string saveFilePath;
 
     private void Start()
@@ -33,12 +33,11 @@ public class SaveManager : MonoBehaviour
         saveFilePath = Application.persistentDataPath + "/savegame.dat";
     }
 
-    // Methode zum Speichern des Spiels
-    //public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
+    // Method to save the game
     public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     {
         print("Saving Game");
-        // Erstelle ein neues PlayerData-Objekt
+        // Create new PlayerData-Object
         PlayerData playerData = new PlayerData(
             healthSystem,
             playerMovement.GetLastCheckpointID(),
@@ -46,17 +45,17 @@ public class SaveManager : MonoBehaviour
             inventorySystem
         );
 
-        // Erstelle GameData und füge PlayerData hinzu
+        // Creates GameData and adds PlayerData
         GameData gameData = new GameData
         {
             playerData = playerData
             // enviromentData = ... // später, wenn  EnviromentData hinzugefügt wird
         };
 
-        // Serialisiere GameData zu JSON
+        // Serialize GameData to JSON
         string json = JsonUtility.ToJson(gameData);
 
-        // Schreibe JSON in Datei
+        // Write JSON into file
         File.WriteAllText(saveFilePath, json);
 
         //Check if the file was written and the integrity
@@ -78,7 +77,7 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    // Methode zum Laden des Spiels
+    // Methoad to load old game
     public void LoadGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     {
         GameData gameData = LoadGameData();
@@ -113,22 +112,20 @@ public class SaveManager : MonoBehaviour
         // }
     }
 
-    //private void ApplyLoadedData(GameData gameData, PlayerMovement playerMovement, HealthSystem healthSystem, PlayerInventory playerInventory, SoulShardSystem soulShardSystem)
     private void ApplyLoadedData(GameData gameData, PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     {
         PlayerData data = gameData.playerData;
 
-        // Setzt die Gesundheit
+        // Reset Health
         healthSystem.currentHealth = data.currentHealth;
 
-        // Setzt respawnHealth
         healthSystem.respawnHealth = data.respawnHealth;
 
-        // Setzt die Anzahl der Soul Shards
+        // Set SoulShards
         soulShardSystem.SetSoulShardCount(data.soulShardCount);
 
 
-        //Setzt die Items
+        //Set Items
         for (int i = 0; i < inventorySystem.slots.Length; i++)
         {
             string itemName = data.collectedItemNames[i];
@@ -154,7 +151,7 @@ public class SaveManager : MonoBehaviour
             }
         }
 
-        // Findet den Checkpoint mit der gespeicherten ID und setze die Position
+        // Findes checkpoint with the saved ID und set the player position
         Checkpoint[] checkpoints = FindObjectsOfType<Checkpoint>();
         foreach (var checkpoint in checkpoints)
         {

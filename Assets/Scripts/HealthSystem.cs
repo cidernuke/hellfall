@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -38,8 +37,23 @@ public class HealthSystem : MonoBehaviour
     private float damageCooldown;
 
     //Respawn variables
-    private bool isDead;
+    public bool isDead;
     public float respawnHealth;
+    private float deathMessageDuration = 3f;
+
+    //Death Messages
+    private string[] deathMessages =
+    {
+        "Your torment is far from over.",
+        "You are not worthy to endure the eternal flames.",
+        "Failure echoes through the inferno.",
+        "Rise again, or be forgotten among the damned.",
+        "You are not worthy to go any further.",
+        "Even hell rejects the weak.",
+        "Your torment is far from over.",
+        "The abyss spits you back out.",
+        "The flames consume your soul, yet they grant no escape."
+    };
 
     /// <summary>
     /// Initializes the current health to the starting health value.
@@ -104,7 +118,6 @@ public class HealthSystem : MonoBehaviour
     /// <summary>
     /// Increases the current health by the specified health amount and updates the health UI.
     /// </summary>
-
     public void AddHealth(float healthAmount)
     {
         currentHealth = Mathf.Clamp(currentHealth + healthAmount, 0, startingHealth);
@@ -120,70 +133,108 @@ public class HealthSystem : MonoBehaviour
     /// </summary>
     /// <param name="playerMovement"></param>
     /// <param name="enemyController"></param>
-
     private void Die(PlayerMovement playerMovement = null, EnemyController enemyController = null)
-
     {
         if (!isDead)
         {
-            Debug.Log("Player died");
+            Debug.Log("Player/Enemy died");
+
             anim.SetTrigger("die");
+
+            // //Show death message
+            // DeathUIManager.Instance.ShowDeathMessage("You are not worthy to go any further.", 3f);
+
             if (playerMovement != null)
             {
                 playerMovement.enabled = false;
                 isDead = true;
 
                 StartCoroutine(RespawnPlayer(playerMovement));
-
             }
             else if (enemyController != null)
             {
                 enemyController.enabled = false;
-                StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
+                //StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
+                StartCoroutine(HandleEnemyDeath(anim, enemyController, 0.4f));
                 enemyController.SpawnLoot();
 
             }
             isDead = true;
-
         }
     }
     #endregion
 
-    // Coroutine zum Respawnen des Spielers
+    // Coroutine to Respawnen the player
     private IEnumerator RespawnPlayer(PlayerMovement playerMovement)
     {
-        // Warte auf die Todesanimation
+        //Wait for death animation
         yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
 
-        // Rufe die Respawn-Methode des GameManagers auf
+        //Pick death message
+        int randomIndex = UnityEngine.Random.Range(0, deathMessages.Length);
+        string selectedMessage = deathMessages[randomIndex];
+
+        //Show death message
+        DeathUIManager.Instance.ShowDeathMessage(selectedMessage, deathMessageDuration);
+
+        //Wait for death message being played
+        yield return new WaitForSeconds(deathMessageDuration);
+
+        //Call the respawn method from the GameManagers
         GameManager.Instance.RespawnPlayer();
 
-        // Aktiviere die Spielerbewegung wieder
+        //Reactivate the PlayerMovement
         playerMovement.enabled = true;
 
-        // Setze isDead zurück
         isDead = false;
+    }
 
-        //Befor Refactoring:
+    // Coroutine to Respawnen the enemies
+    private IEnumerator HandleEnemyDeath(Animator anim, EnemyController enemyController, float animDuration)
+    {
+        // Wait for death animation
+        yield return new WaitForSeconds(animDuration);
 
-        // // wait for the die animation
-        // yield return new WaitForSeconds(anim.GetCurrentAnimatorStateInfo(0).length);
+        // Spawn loot
+        enemyController.SpawnLoot();
 
-        // //Works so the Player get his inital LP
-        // // reset health
-        // //currentHealth = startingHealth;
+        //deactivate the enemy instead of destroying him
+        enemyController.OnDeath();
+    }
 
-        // currentHealth = respawnHealth;
-        // print("Player health after respawn: " + currentHealth);
+    public void RespawnEnemy(Vector3 initialPosition)
+    {
+        // Reset values
+        currentHealth = startingHealth;
+        isDead = false;
+        isInvincible = false;
+        damageCooldown = 0f;
 
-        // // Later: Update the health-bar
-        // // UIHandler.instance.SetHealthValue(currentHealth / startingHealth);
+        // Reset animations
+        if (anim != null)
+        {
+            anim.ResetTrigger("die");
+            anim.ResetTrigger("hurt");
+            anim.Play("Idle"); // ensure there is a default animation
+        }
 
-        // // Call the Respawn method from playerMovement
-        // playerMovement.Respawn();
-        // //isInvincible = false;
+        // reactivate game-object
+        gameObject.SetActive(true);
 
-        // // Reset isDead
-        // isDead = false;
+        // reset position
+        transform.position = initialPosition;
+
+        //Reactivate EnemyController and EnemyPatrol
+        EnemyController enemyController = GetComponent<EnemyController>();
+        if (enemyController != null)
+        {
+            enemyController.enabled = true;
+        }
+
+        EnemyPatrol enemyPatrol = GetComponentInParent<EnemyPatrol>();
+        if (enemyPatrol != null)
+        {
+            enemyPatrol.enabled = true;
+        }
     }
 }

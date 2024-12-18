@@ -1,5 +1,3 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
@@ -10,9 +8,8 @@ public class Checkpoint : MonoBehaviour
     private PlayerMovement playerMovement;
     private HealthSystem healthSystem;
     private SoulShardSystem soulShardSystem;
-    //private InventorySystem inventorySystem;
     private Animator animator;
-    [SerializeField] private TMP_Text checkpointMessage;
+    private float checkpointMessageDuration = 2f;
 
     private void Start()
     {
@@ -20,12 +17,6 @@ public class Checkpoint : MonoBehaviour
         if (animator == null)
         {
             Debug.LogError("Animator-Component is missing on the Checkpoint.");
-        }
-
-        if (checkpointMessage != null)
-        {
-            // Zu Beginn ausblenden
-            checkpointMessage.gameObject.SetActive(false);
         }
     }
 
@@ -35,7 +26,6 @@ public class Checkpoint : MonoBehaviour
         if (!isActive && collision.gameObject.CompareTag("Player"))
         {
             // Get access to the PlayerMovement-Script
-            //PlayerMovement player = collision.GetComponent<PlayerMovement>();
             playerMovement = collision.GetComponent<PlayerMovement>();
             if (playerMovement != null)
             {
@@ -47,8 +37,6 @@ public class Checkpoint : MonoBehaviour
                 soulShardSystem = collision.GetComponent<SoulShardSystem>();
                 //inventorySystem = collision.GetComponent<InventorySystem>();
 
-                //if (healthSystem != null)
-                //if (healthSystem != null && inventorySystem != null && soulShardSystem != null)
                 if (healthSystem != null && InventorySystem.Instance != null && soulShardSystem != null)
                 {
                     ActivateCheckpoint();
@@ -56,7 +44,6 @@ public class Checkpoint : MonoBehaviour
                 else
                 {
                     Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden. HealthSystem: " + healthSystem + "| SoulshardSystem: " + soulShardSystem + "| inventorySystem: " + InventorySystem.Instance);
-                    //Debug.LogError("Eine oder mehrere benötigte Komponenten wurden nicht gefunden. HealthSystem: "+ healthSystem+ "| SoulshardSystem: " + soulShardSystem+ "| inventorySystem: " + inventorySystem);
                 }
             }
             else
@@ -78,32 +65,15 @@ public class Checkpoint : MonoBehaviour
 
         healthSystem.respawnHealth = healthSystem.currentHealth;
 
-        // Spiel speichern über den GameManager
+        // Save game with GameManager
         GameManager.Instance.SaveGame();
 
-        ShowCheckpointMessage();
+        //ShowCheckpointMessage();
+        DeathUIManager.Instance.ShowCheckpointMessage("Checkpoint,\nSaved game.", checkpointMessageDuration);
 
         // Spiel speichern
         //SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,InventorySystem.Instance);
         //SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,inventorySystem);
         // Add Visualisation or sound here
-    }
-
-    private void ShowCheckpointMessage()
-    {
-        if (checkpointMessage != null)
-        {
-            checkpointMessage.text = "Checkpoint,\nSaved game.";
-            checkpointMessage.gameObject.SetActive(true);
-
-            // Optional: Nachricht nach ein paar Sekunden wieder ausblenden
-            StartCoroutine(HideMessageAfterDelay(3f));
-        }
-    }
-
-    private IEnumerator HideMessageAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        checkpointMessage.gameObject.SetActive(false);
     }
 }
