@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
     private SpriteRenderer spriteRenderer;
     private BoxCollider2D boxCollider;
-    private Transform transform;
+    private new Transform transform;
 
     // Movement flags and variables
     private bool grounded;
@@ -608,32 +608,6 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
             }
-        }
-    }
-
-    public bool CanAttack()
-    {
-        if (!blockInput)
-        {
-            return grounded;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public bool CanAttackRanged()
-    {
-        if (!blockInput)
-        {
-            float horizontalInput = playerInput.GetHorizontalInput();
-
-            return horizontalInput == 0 && grounded;
-        }
-        else
-        {
-            return false;
         }
     }
 

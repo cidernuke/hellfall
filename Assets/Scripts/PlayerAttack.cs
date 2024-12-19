@@ -41,6 +41,7 @@ public class PlayerAttack : MonoBehaviour
         enemyHealth = GetComponent<HealthSystem>();
         enemyController = GetComponent<EnemyController>();
     }
+
     /// <summary>
     /// Checks if the player is able to attack and if the cooldown is over.
     /// Calls the Attack() method if left mouse button is clicked.
@@ -48,15 +49,13 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && cooldownTimer >= closeRangeAttackCooldown && playerMovement.CanAttack())
+        if (Input.GetMouseButtonDown(0) && cooldownTimer >= closeRangeAttackCooldown)
         {
             Attack();
         }
-        if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown && playerMovement.CanAttackRanged())
+        if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown)
         {
-
             AttackRanged();
-
         }
         cooldownTimer += Time.deltaTime;
     }
@@ -100,8 +99,8 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private void Attack()
     {
-                
-        switch(attackIndex)
+
+        switch (attackIndex)
         {
             case 0:
                 anim.SetTrigger("attack_01");
@@ -109,7 +108,7 @@ public class PlayerAttack : MonoBehaviour
             case 1:
                 anim.SetTrigger("attack_02");
                 break;
-            
+
         }
 
         attackIndex = (attackIndex + 1) % totalAttacks;
