@@ -8,98 +8,60 @@ public class LoadPrefs : MonoBehaviour
 {
     // General settings
     [Header("General Setting")]
-    [SerializeField] private bool canUse = false;
-    [SerializeField] private MenuController menuController;
+    [SerializeField] private bool canUse = false; // Flag to determine if settings should be loaded
+    [SerializeField] private MenuController menuController; // Reference to MenuController for resetting settings
 
     // Volume settings
     [Header("Volume Setting")]
-    [SerializeField] private TMP_Text volumeTextValue = null;
-    [SerializeField] private Slider volumeSlider = null;
-
-    // Brightness settings
-    [Header("Brightness Setting")]
-    [SerializeField] private Slider brightnessSlider = null;
-    [SerializeField] private TMP_Text brightnessTextValue = null;
+    [SerializeField] private TMP_Text volumeTextValue = null; // UI Text to display volume
+    [SerializeField] private Slider volumeSlider = null; // UI Slider for adjusting volume
 
     // Quality level settings
     [Header("Quality Level Setting")]
-    [SerializeField] private TMP_Dropdown qualityDropdown;
+    [SerializeField] private TMP_Dropdown qualityDropdown; // Dropdown UI to select quality level
 
     // Fullscreen settings
     [Header("Fullscreen Setting")]
-    [SerializeField] private Toggle fullScreenToggle;
-
-    // Controller sensitivity settings
-    [Header("Sensitivity Setting")]
-    [SerializeField] private TMP_Text controllerSenTextValue = null;
-    [SerializeField] private Slider controllerSenSlider = null;
-
-    // Invert Y-axis setting
-    [Header("Invert Y Setting")]
-    [SerializeField] private Toggle invertYToggle = null;
+    [SerializeField] private Toggle fullScreenToggle; // Toggle for fullscreen setting
 
     // Load player preferences for settings on Awake
     private void Awake()
     {
+        // Check if settings should be applied
         if (canUse)
         {
-            // Load volume setting or reset to default
+            // Load volume setting from PlayerPrefs (or reset to default if not set)
             if (PlayerPrefs.HasKey("masterVolume"))
             {
-                float localVolume = PlayerPrefs.GetFloat("masterVolume");
-                volumeTextValue.text = localVolume.ToString("0.0");
-                volumeSlider.value = localVolume;
-                AudioListener.volume = localVolume;
+                float localVolume = PlayerPrefs.GetFloat("masterVolume"); // Get the saved volume
+                volumeTextValue.text = localVolume.ToString("0.0"); // Display the volume value
+                volumeSlider.value = localVolume; // Set the volume slider
+                AudioListener.volume = localVolume; // Apply the volume to the game
             }
             else
             {
-                menuController.ResetButton("Audio");
+                menuController.ResetButton("Audio"); // Reset to default volume if not set
             }
 
-            // Load quality setting or reset to default
+            // Load quality setting from PlayerPrefs (or reset to default if not set)
             if (PlayerPrefs.HasKey("masterQuality"))
             {
-                int localQuality = PlayerPrefs.GetInt("masterQuality");
-                qualityDropdown.value = localQuality;
-                QualitySettings.SetQualityLevel(localQuality);
+                int localQuality = PlayerPrefs.GetInt("masterQuality"); // Get the saved quality level
+                qualityDropdown.value = localQuality; // Set the dropdown to the saved quality level
+                QualitySettings.SetQualityLevel(localQuality); // Apply the quality level
             }
             else
             {
-                menuController.ResetButton("Graphics");
+                menuController.ResetButton("Graphics"); // Reset to default quality if not set
             }
 
-            // Load fullscreen setting
+            // Load fullscreen setting from PlayerPrefs
             if (PlayerPrefs.HasKey("masterFullscreen"))
             {
-                int localFullscreen = PlayerPrefs.GetInt("masterFullscreen");
-                Screen.fullScreen = (localFullscreen == 1);
-                fullScreenToggle.isOn = (localFullscreen == 1);
-            }
-
-            // Load brightness setting
-            if (PlayerPrefs.HasKey("masterBrightness"))
-            {
-                float localBrightness = PlayerPrefs.GetFloat("masterBrightness");
-
-                brightnessSlider.value = localBrightness;
-                // Apply brightness in the game here
-            }
-
-            // Load controller sensitivity setting
-            if (PlayerPrefs.HasKey("masterSen"))
-            {
-                float localSensitivity = PlayerPrefs.GetFloat("masterSen");
-                controllerSenTextValue.text = localSensitivity.ToString("0.0");
-                controllerSenSlider.value = localSensitivity;
-                menuController.mainControllerSen = Mathf.RoundToInt(localSensitivity);
-            }
-
-            // Load invert Y setting
-            if (PlayerPrefs.HasKey("masterInvertY"))
-            {
-                invertYToggle.isOn = (PlayerPrefs.GetInt("masterInvertY") == 1);
+                int localFullscreen = PlayerPrefs.GetInt("masterFullscreen"); // Get fullscreen setting
+                Screen.fullScreen = (localFullscreen == 1); // Set fullscreen based on saved preference
+                fullScreenToggle.isOn = (localFullscreen == 1); // Update the fullscreen toggle UI
             }
         }
     }
 }
-

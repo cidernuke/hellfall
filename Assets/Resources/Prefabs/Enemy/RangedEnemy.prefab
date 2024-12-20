@@ -45,6 +45,8 @@ GameObject:
   - component: {fileID: 6130136295967984775}
   - component: {fileID: 3740895937298057540}
   - component: {fileID: 3313228700353679486}
+  - component: {fileID: 207218659117062760}
+  - component: {fileID: 5157863765290789899}
   m_Layer: 8
   m_Name: RangedEnemyObject
   m_TagString: Enemy
@@ -60,9 +62,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5525487138781543093}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.03, y: -1.67, z: 0.04930348}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.63, y: -0.82, z: 0.04930348}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7848200036461248045}
@@ -108,7 +110,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1725372122, guid: 8f575fc2980f0974bbc20ba8333250f7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0c95faed3aa5a43d3b19f112f0843c87, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
@@ -151,18 +153,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.014706612, y: -0.66332066}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 0.5, y: 0.65625}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.81, y: 0.66}
     newSize: {x: 4.375, y: 2.90625}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.5, y: 0.7}
   m_EdgeRadius: 0
 --- !u!114 &3740895937298057540
 MonoBehaviour:
@@ -182,6 +184,7 @@ MonoBehaviour:
   isPlayer: 0
   timeInvincible: 0
   isInvincible: 0
+  respawnHealth: 0
 --- !u!114 &3313228700353679486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,4 +199,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   bullet: {fileID: 6189948764542817469, guid: 34b2ad993a4374928a29d84e67bdc7fe, type: 3}
+  followRange: 15
+  shootingRange: 6
+  moveSpeed: 2
   startShotCooldown: 3
+--- !u!95 &207218659117062760
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5525487138781543093}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2743c206c71aa4b12a713af487894ff5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5157863765290789899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5525487138781543093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a068206f9ded740f288bb037504ee6c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackCooldown: 0
+  range: 0
+  damage: 0
+  colliderDistance: 0
+  boxCollider: {fileID: 6130136295967984775}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  lootTable: []

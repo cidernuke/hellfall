@@ -169,7 +169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 3
   currentHealth: 3
-  anim: {fileID: 8525510535890942328}
+  anim: {fileID: 0}
   isPlayer: 0
   timeInvincible: 0
   isInvincible: 0
@@ -205,4 +205,6 @@ MonoBehaviour:
   triggerRadius: 0.5
   explosionRadius: 3
   damageAmount: 20
-  explosionDelay: 1
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 8

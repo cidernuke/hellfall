@@ -348,7 +348,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &177420998
@@ -361,7 +361,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -9.58, y: -0.17, z: 0}
-  m_LocalScale: {x: 0.41071793, y: 2.4371989, z: 1}
+  m_LocalScale: {x: 0.41071793, y: 2.4371989, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -997,7 +997,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1127942130
@@ -1010,7 +1010,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.4065, y: -5.3366, z: 0}
-  m_LocalScale: {x: 4.066309, y: 0.4584, z: 1}
+  m_LocalScale: {x: 4.066309, y: 0.4584, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1381,7 +1381,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &2068995274
@@ -1468,10 +1468,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 241786490}
-    - target: {fileID: 3313228700353679486, guid: aa73b1877a66e41ecb0347d6d2431533, type: 3}
-      propertyPath: shootingRange
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 3872907224850785865, guid: aa73b1877a66e41ecb0347d6d2431533, type: 3}
       propertyPath: m_Name
       value: RangedEnemy
