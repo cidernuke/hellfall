@@ -9,10 +9,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Playgrounds/Menu.unity
     guid: 36430462bdb19c841bc547a3d879a535
   - enabled: 1
-    path: Assets/Scenes/Levels/Level_One.unity
+    path: Assets/Scenes/Levels/Level_Zero.unity
     guid: ec0d48de0a4bf4ea481ef65a3567b47b
   - enabled: 1
-    path: Assets/Scenes/Levels/Level_Two/Scene_01.unity
+    path: Assets/Scenes/Levels/Level_One/Scene_01.unity
     guid: fefb36855351d6b439f85f715104125d
   - enabled: 1
     path: Assets/Scenes/Playgrounds/MenuPause.unity
@@ -30,6 +30,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Playgrounds/Playground.unity
     guid: 43a17ec3b922580438a0e8e5445cb4de
   - enabled: 1
-    path: Assets/Scenes/Levels/Level_Two/Scene_02.unity
+    path: Assets/Scenes/Levels/Level_One/Scene_02.unity
     guid: 095a4a73c6301fc43bf6f0688f46567f
   m_configObjects: {}
