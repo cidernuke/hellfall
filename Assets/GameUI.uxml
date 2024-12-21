@@ -20,4 +20,5 @@
     <ui:VisualElement name="Weapon2" style="flex-grow: 0; background-image: resource(&apos;Sprites/Inventory/UI/Grey_HotkeyBox_34x34 copy&apos;); width: 102px; height: 102px; position: absolute; top: 810px; left: 140px;">
         <ui:VisualElement name="Weapon2Container" style="flex-grow: 1; position: absolute; left: 14px; top: 14px; width: 70px; height: 70px; -unity-background-scale-mode: scale-to-fit; background-image: resource(&apos;Sprites/Warped Shooting Fx/Pixel Art/Hits/Hit-4/hits-4-3&apos;);" />
     </ui:VisualElement>
+    <ui:VisualElement name="Container_Hotkeys" style="flex-grow: 1; position: absolute;" />
 </ui:UXML>
