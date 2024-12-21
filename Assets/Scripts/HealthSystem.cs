@@ -110,6 +110,10 @@ public class HealthSystem : MonoBehaviour
         }
         else
         {
+            if(isPlayer)
+            {
+                UIHandler.instance.SetHealthValue(0f);
+            }
             Die(playerMovement, enemyController);
 
         }
