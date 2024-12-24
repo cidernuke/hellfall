@@ -154,7 +154,6 @@ GameObject:
   - component: {fileID: 5746640054634646074}
   - component: {fileID: 8335488962519607957}
   - component: {fileID: 2193375495534342346}
-  - component: {fileID: 8026818364704553123}
   - component: {fileID: 1795978731709622821}
   - component: {fileID: 6027865557405022282}
   - component: {fileID: 7685874390314061115}
@@ -408,20 +407,8 @@ MonoBehaviour:
   isPlayer: 1
   timeInvincible: 0.5
   isInvincible: 0
+  isDead: 0
   respawnHealth: 0
---- !u!114 &8026818364704553123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5585758838363563765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ba6c94739b73fd49b7395b1ba318fd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerCollider: {fileID: 8124953113361661337}
 --- !u!114 &1795978731709622821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -434,8 +421,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1122240b373e6694e909995038f8120c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closeRangeAttackCooldown: 0
-  rangedAttackCooldown: 0.25
+  closeRangeAttackCooldown: 0.15
+  rangedAttackCooldown: 1.5
   range: 2
   damage: 1
   colliderDistance: 0.5
