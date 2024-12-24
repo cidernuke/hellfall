@@ -425,7 +425,7 @@ MonoBehaviour:
   rangedAttackCooldown: 1.5
   range: 2
   damage: 1
-  colliderDistance: 0.5
+  colliderDistance: 0.25
   boxCollider: {fileID: 8124953113361661337}
   enemyLayer:
     serializedVersion: 2
