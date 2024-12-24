@@ -4114,6 +4114,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+      propertyPath: closeRangeAttackCooldown
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: projectiles.Array.data[0]
       value: 
       objectReference: {fileID: 446527012}
@@ -4221,10 +4225,7 @@ PrefabInstance:
     - {fileID: 8026818364704553123, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5585758838363563765, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1433077452}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
 --- !u!1 &690087160
 GameObject:
@@ -154128,28 +154129,6 @@ SpriteRenderer:
 --- !u!4 &1433077440 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2149054594424086871, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-  m_PrefabInstance: {fileID: 676830087}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1433077452
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 94710727}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13f07ca14a611bc40b7da8fd371449c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 94710727}
-  playerCollider: {fileID: 1433077461}
-  jumpBoost: 5
-  height: 1.2
-  time: 0.2
---- !u!61 &1433077461 stripped
-BoxCollider2D:
-  m_CorrespondingSourceObject: {fileID: 8124953113361661337, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
   m_PrefabInstance: {fileID: 676830087}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1433650626
