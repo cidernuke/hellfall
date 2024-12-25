@@ -16,13 +16,14 @@ public class SoulShardSystem : MonoBehaviour
         soulShardItems = new List<SoulShardItem>();
     }
 
-    void Update()
-    {
-        if (soulShardItems.Count > 0)
-        {
-            counter.text = soulShardItems.Count.ToString();
-        }
-    }
+    //Now using UpdateUI() instead of Update
+    // void Update()
+    // {
+    //     if (soulShardItems.Count > 0)
+    //     {
+    //         counter.text = soulShardItems.Count.ToString();
+    //     }
+    // }
 
     /// <summary>
     /// Method that increases the player's soul shard count by one.
@@ -32,6 +33,7 @@ public class SoulShardSystem : MonoBehaviour
     {
         soulShardItems.Add(soulShardItem);
         Debug.Log("Soul Shard collected: " + soulShardItems.Count);
+        UpdateUI();
     }
 
     /// <summary>
@@ -46,6 +48,7 @@ public class SoulShardSystem : MonoBehaviour
         {
             soulShardItems.RemoveAt(soulShardItems.Count - 1);
         }
+        UpdateUI();
     }
 
     public int GetSoulShardCount()
@@ -65,6 +68,15 @@ public class SoulShardSystem : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             soulShardItems.Add(null);
+        }
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        if (counter != null)
+        {
+            counter.text = soulShardItems.Count.ToString();
         }
     }
 }
