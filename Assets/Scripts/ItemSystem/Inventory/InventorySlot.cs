@@ -17,7 +17,7 @@ public class InventorySlot
         hotkey = slotVisualElement;
         if (hotkey == null)
         {
-            Debug.LogError("Could not find VisualElement with name Hotkey");
+            //Debug.LogError("Could not find VisualElement with name Hotkey");
         }
         UpdateSlotVisual();
     }
@@ -33,7 +33,7 @@ public class InventorySlot
     {
         if(storedItem == null)
         {
-            Debug.Log("No item to use");
+            //Debug.Log("No item to use");
             return;
         }
         storedItem.use();
@@ -86,7 +86,7 @@ public class InventorySlot
                     break;
             }
 
-            Debug.Log($"Dropping item: {storedItem.itemName}");
+            //Debug.Log($"Dropping item: {storedItem.itemName}");
 
             UpdateSlotVisual();
         }
@@ -100,12 +100,12 @@ public class InventorySlot
             {
                 // set image of hotkey to the image of the item
                 hotkey.style.backgroundImage = new StyleBackground(storedItem.itemSprite);
-                Debug.Log("InvSlot: Item displayed");
+                //Debug.Log("InvSlot: Item displayed");
             }
             else
             {
                 hotkey.style.backgroundImage = null;
-                Debug.Log("InvSlot: No item to display");
+                //Debug.Log("InvSlot: No item to display");
             }
         }
     }

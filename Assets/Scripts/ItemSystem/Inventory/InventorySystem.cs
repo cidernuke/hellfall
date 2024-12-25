@@ -100,18 +100,18 @@ public class InventorySystem : MonoBehaviour
         //Check from Diego
         if (slots == null)
         {
-            Debug.LogError("Slots array is null.");
+            //Debug.LogError("Slots array is null.");
             return false;
         }
         if (slots.Length == 0)
         {
-            Debug.LogError("Slots array is empty.");
+            //Debug.LogError("Slots array is empty.");
             return false;
         }
 
         if (itemData == null)
         {
-            Debug.LogError("Attempting to add a null item to the inventory.");
+            //Debug.LogError("Attempting to add a null item to the inventory.");
             return false;
         }
 
@@ -119,13 +119,13 @@ public class InventorySystem : MonoBehaviour
         {
             if (slot.storedItem == null)
             {
-                Debug.Log($"Adding item {itemData.itemName} to the inventory.");
+                //Debug.Log($"Adding item {itemData.itemName} to the inventory.");
                 // calling method to set up instance
                 Item newItem = CreateItemInstance(itemData);
                 // incase itemType isnt known, newItem is null
                 if (newItem == null)
                 {
-                    Debug.LogError("Failed to create item instance.");
+                    //Debug.LogError("Failed to create item instance.");
                     return false;
                 }
                 // pass the item-instance and itemData to the slot
@@ -184,7 +184,7 @@ public class InventorySystem : MonoBehaviour
                 return it;
             // Additional cases for other item types can be added here
             default:
-                Debug.LogError("Unknown ItemType: " + itemData.itemType);
+                //Debug.LogError("Unknown ItemType: " + itemData.itemType);
                 return null;
         }
     }
@@ -213,7 +213,7 @@ public class InventorySystem : MonoBehaviour
                 slots[2].useItem();
                 break;
             default:
-                Debug.LogError("Unknown SlotNumber: " + SlotNumber);
+                //Debug.LogError("Unknown SlotNumber: " + SlotNumber);
                 break;
         }
     }
@@ -248,7 +248,7 @@ public class InventorySystem : MonoBehaviour
         slots[secondSlot].StoreItem(firstSlotNewItem, firstSlotItemData);
         slots[firstSlot].StoreItem(secondSlotNewItem, secondSlotItemData);
 
-        Debug.Log($"AFTER SWAP: Item in first slot: {slots[firstSlot].itemData?.itemName}, Item in second slot: {slots[secondSlot].itemData?.itemName}");
+        //Debug.Log($"AFTER SWAP: Item in first slot: {slots[firstSlot].itemData?.itemName}, Item in second slot: {slots[secondSlot].itemData?.itemName}");
 
     }
 
