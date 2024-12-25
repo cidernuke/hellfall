@@ -24,7 +24,7 @@ public class HealthSystem : MonoBehaviour
     /// <summary>
     /// The duration for which the object is invincible after taking damage.
     /// </summary>
-    public float timeInvincible = 0.5f;
+    public float timeInvincible = 0f;
 
     /// <summary>
     /// Indicates whether the object is currently invincible.
@@ -67,19 +67,20 @@ public class HealthSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates the invincibility status and cooldown timer.
+    /// Updates the invincibility status and cooldown timer. 
+    /// Not needed anymore, since neither player nor enemies have a cooldown time.
     /// </summary>
-    public void Update()
-    {
-        if (isInvincible)
-        {
-            damageCooldown -= Time.deltaTime;
-            if (damageCooldown < 0)
-            {
-                isInvincible = false;
-            }
-        }
-    }
+    //public void Update()
+    //{
+    //    if (isInvincible)
+    //    {
+    //        damageCooldown -= Time.deltaTime;
+    //        if (damageCooldown < 0)
+    //        {
+    //            isInvincible = false;
+    //        }
+    //    }
+    //}
 
     /// <summary>
     /// Reduces the current health by the specified damage amount and handles invincibility and death.
@@ -88,15 +89,16 @@ public class HealthSystem : MonoBehaviour
     /// <param name="damage">The amount of damage to take.</param>
     public void TakeDamage(float damage, PlayerMovement playerMovement = null, EnemyController enemyController = null)
     {
-        if (damage > 0)
-        {
-            if (isInvincible)
-            {
-                return;
-            }
-            isInvincible = true;
-            damageCooldown = timeInvincible;
-        }
+        // not needed anymore, since player and enemies don't need a cooldown time
+        //if (damage > 0)
+        //{
+            //if (isInvincible)
+            //{
+            //    return;
+            //}
+            //isInvincible = true;
+            //damageCooldown = timeInvincible;
+        //}
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
         if (currentHealth > 0)
         {
