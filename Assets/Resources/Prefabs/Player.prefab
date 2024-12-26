@@ -92,53 +92,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2149054594424086871}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2917540015868206305
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8052408924215863405}
-  - component: {fileID: 817159615300423432}
-  m_Layer: 0
-  m_Name: InventorySystem
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8052408924215863405
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2917540015868206305}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.616575, y: 0.5647501, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2149054594424086871}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &817159615300423432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2917540015868206305}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 230dcb29e379b574a89ea9a462e11e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slots: []
-  uiDocument: {fileID: 4400391326371214075}
-  playerHealth: {fileID: 0}
 --- !u!1 &5585758838363563765
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,7 +137,6 @@ Transform:
   - {fileID: 5066102215417698851}
   - {fileID: 8381836596924870710}
   - {fileID: 391080135682950052}
-  - {fileID: 8052408924215863405}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2174369621339499416
@@ -467,7 +419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d2d2b3836e801e48b90b28248d252b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInventory: {fileID: 817159615300423432}
+  playerInventory: {fileID: 0}
 --- !u!114 &8790498602411048556
 MonoBehaviour:
   m_ObjectHideFlags: 0

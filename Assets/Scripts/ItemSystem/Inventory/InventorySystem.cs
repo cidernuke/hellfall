@@ -18,13 +18,16 @@ public class InventorySystem : MonoBehaviour
     private GameObject playerSpeech;
 
     private SpriteRenderer playerSpeechSpriteRenderer;
-    
+
     private GameObject player;
 
     private PlayerMovement playerMov;
 
     void Update()
     {
+        if (playerMov == null || playerSpeechSpriteRenderer == null)
+            return;
+            
         // Flip the speech bubble sprite if the player is facing left
         if (playerMov.isFacingRight == false)
         {

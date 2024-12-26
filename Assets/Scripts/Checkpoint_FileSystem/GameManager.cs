@@ -60,6 +60,15 @@ public class GameManager : MonoBehaviour
         {
             RegisterEnemy(enemy);
         }
+
+        if (SaveManager.Instance.isLoadingFromSave)
+        {
+            // Wir rufen das "richtige" LoadGame auf:
+            LoadGame();
+
+            // Danach nicht mehr laden
+            SaveManager.Instance.isLoadingFromSave = false;
+        }
     }
 
     private void InitializeReferences()
@@ -81,7 +90,12 @@ public class GameManager : MonoBehaviour
         inventorySystem = InventorySystem.Instance;
         if (inventorySystem == null)
         {
-            print("InventorySystem.Instance ist null.");
+            print("InventorySystem.Instance is null.");
+        }
+        else
+        {
+            if (healthSystem != null)
+                inventorySystem.playerHealth = healthSystem;
         }
     }
 
@@ -115,6 +129,7 @@ public class GameManager : MonoBehaviour
         // Respawne enemies and items
         RespawnEnemiesAndItems();
 
+        print("RespawnPlayer wurde aufgerufen");
         print("Health: " + healthSystem.currentHealth + " soulShards: " + soulShardSystem.GetSoulShardCount());
     }
 

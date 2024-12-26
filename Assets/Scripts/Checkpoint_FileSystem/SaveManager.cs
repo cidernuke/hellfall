@@ -4,11 +4,17 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using ItemSystem.Abstract;
 using ItemSystem.Items;
+using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
     // Singleton-Pattern
     public static SaveManager Instance;
+    
+    // Path to the save file
+    private string saveFilePath;
+
+    public bool isLoadingFromSave = false;
 
     private void Awake()
     {
@@ -24,9 +30,6 @@ public class SaveManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    // Path to the save file
-    private string saveFilePath;
 
     private void Start()
     {
@@ -190,6 +193,35 @@ public class SaveManager : MonoBehaviour
             Debug.LogWarning("Keine Speicherdatei gefunden.");
             return null;
         }
+    }
+
+    public void LoadSceneFromSave()
+    {
+        PlayerData data = LoadPlayerData();
+        if (data == null)
+        {
+            Debug.LogWarning("Keine Speicherdatei gefunden oder Daten null.");
+            return;
+        }
+
+        // SzeneName aus PlayerData auslesen
+        string sceneName = data.lastSceneName;
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            Debug.LogWarning("lastSceneName im Save ist leer. Lade keine Szene.");
+            return;
+        }
+
+        isLoadingFromSave = true;
+
+        // Lade die gespeicherte Szene
+        SceneManager.LoadScene(sceneName);
+
+        // Async load der gespeicherten Szene
+        // SceneManager.LoadScene(sceneName);
+
+        // // Der Rest (ApplyLoadedData) sollte im GameManager (OnSceneLoaded) oder
+        // // mithilfe einer kleinen Coroutine erfolgen.
     }
 
 }
