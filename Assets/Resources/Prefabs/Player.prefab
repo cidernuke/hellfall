@@ -341,7 +341,7 @@ MonoBehaviour:
   groundCheck: {fileID: 7624676514274553780}
   ceilingCheck: {fileID: 8381836596924870710}
   groundSpeed: 7
-  jumpPower: 5
+  jumpPower: 6
   jumpBufferTime: 0.1
   isFacingRight: 1
   maxFallSpeed: -10
@@ -408,6 +408,7 @@ MonoBehaviour:
   isPlayer: 1
   timeInvincible: 0.5
   isInvincible: 0
+  isDead: 0
   respawnHealth: 0
 --- !u!114 &8026818364704553123
 MonoBehaviour:
@@ -421,7 +422,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ba6c94739b73fd49b7395b1ba318fd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 5585758838363563765}
   playerCollider: {fileID: 8124953113361661337}
+  jumpBoost: 5
+  height: 1
+  time: 0.15
 --- !u!114 &1795978731709622821
 MonoBehaviour:
   m_ObjectHideFlags: 0

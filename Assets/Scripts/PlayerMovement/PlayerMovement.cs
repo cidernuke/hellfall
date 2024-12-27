@@ -691,10 +691,12 @@ public class PlayerMovement : MonoBehaviour
 
         float dashEndTime = Time.time + dashDuration;
 
+        HealthSystem healthSystem = GetComponent<HealthSystem>();
         while (Time.time < dashEndTime)
         {
             // Move the player in the dash direction
             body.velocity = new Vector2(dashDirection * dashSpeed, 0);
+            healthSystem.isInvincible = true;
             yield return null; // Wait for the next frame
         }
 
@@ -706,6 +708,7 @@ public class PlayerMovement : MonoBehaviour
         // Wait for dash cooldown before allowing another dash
         yield return new WaitForSeconds(dashCooldown);
 
+        healthSystem.isInvincible = false;
         canDash = true;
     }
     #endregion

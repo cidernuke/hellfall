@@ -16948,18 +16948,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 5746640054634646074, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: jumpPower
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 6027865557405022282, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: counter
       value: 
       objectReference: {fileID: 1003924113}
-    - target: {fileID: 8026818364704553123, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 965469418}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17340,11 +17332,6 @@ BoxCollider2D:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3974392336623079687, guid: 442271828e880ad48870a5eb80bac62f, type: 3}
   m_PrefabInstance: {fileID: 379245282}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &965469418 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5585758838363563765, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-  m_PrefabInstance: {fileID: 761883608}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &965722218
 PrefabInstance:
