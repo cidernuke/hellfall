@@ -358,6 +358,11 @@ public class PlayerMovement : MonoBehaviour
         grounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer | platformLayer);
         animator.SetBool("grounded", grounded);
 
+        if (grounded && IsWalled())
+        {
+            print("works in theory");
+        }
+
         // Checks if player stopped climbing and is grounded. Important for animation transition
         ladderMovement = ladderMovement = GetComponent<LadderMovement>();
         // ladderMovement.jumpedOffOfLadder = false;
