@@ -548,7 +548,7 @@ public class PlayerMovement : MonoBehaviour
                     playerFX.transform.position = new Vector2(transform.position.x + 0.1f, transform.position.y - 0.35f);
                     playerFXAnimator.SetBool("hasDoubleJumped", true);
 
-                    body.velocity = new Vector2(body.velocity.x, jumpPower / 1.5f);
+                    body.velocity = new Vector2(body.velocity.x, jumpPower / 1.3f);
                     isDoubleJumping = true; // Set double jump flag to prevent further jumps
                     animator.SetBool("grounded", IsGrounded());
 
