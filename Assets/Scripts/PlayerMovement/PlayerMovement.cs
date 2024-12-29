@@ -75,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float coyoteTimeDuration = 0.2f;
     private float lastTimeGrounded = -1f; // Set to -1 to prevent coyote time from triggering at game start
     private bool coyoteUsable = true;
+    private bool jumpedThisFrame = false; // Without this flag, player will skip coyote and just double jump
     #endregion
 
     #region Dash Variables
@@ -170,7 +171,7 @@ public class PlayerMovement : MonoBehaviour
         {
             lastTimeJumpPressed = Time.time;
         }
-
+        jumpedThisFrame = false;
         if (!blockJump) { HandleJumpInput(); }
 
         if (!blockDash) { HandleDashInput(); }
@@ -493,39 +494,45 @@ public class PlayerMovement : MonoBehaviour
 
     private bool CanUseCoyote()
     {
-        if (IsGrounded())
+        //if (IsGrounded())
         {
             return coyoteUsable && !grounded && Time.time < lastTimeGrounded + coyoteTimeDuration;
         }
-        else return false;
+        //else return false;
     }
     #endregion
 
-    private bool doubleJump;
     #region Input Handling Methods
     private void HandleJumpInput()
     {
+        if(jumpedThisFrame) return;
         ladderMovement = ladderMovement = GetComponent<LadderMovement>();
         if ((Time.time - lastTimeJumpPressed) <= jumpBufferTime)
         {
+            bool coyoteAvailable = CanUseCoyote();
+            //print($"Grounded? {IsGrounded()}, Coyote? {coyoteAvailable}");
+
             // First jump
             if (IsGrounded() || CanUseCoyote() || (ladderMovement != null && ladderMovement.isClimbing))
             {
+                //print(">>> Attempting first jump");
                 animator.SetTrigger("jump"); // Play jump animation on first jump
 
                 // Handles logic to jump off of a ladder
                 if (ladderMovement != null && ladderMovement.isClimbing)
                 {
                     ladderMovement.JumpOffLadder();
-                    body.velocity = new Vector2(body.velocity.y, jumpPower * 1.2f);
+                    //body.velocity = new Vector2(body.velocity.y, jumpPower * 1.2f); -> Otis du hattest .y aber ich bin mir sicher korrekt ist .x (Diego, sorry falls falsch :P)
+                    body.velocity = new Vector2(body.velocity.x, jumpPower * 1.2f);
                 }
                 else
                 {
-                    body.velocity = new Vector2(body.velocity.y, jumpPower);
+                    body.velocity = new Vector2(body.velocity.x, jumpPower);
                 }
 
                 isDoubleJumping = false; // Reset double jump for the next jump
                 coyoteUsable = false;
+                jumpedThisFrame = true; // Without this flag, player will skip coyote and just double jump
 
                 // Reset von lastTimeJumpPressed
                 lastTimeJumpPressed = -1f;
@@ -535,10 +542,12 @@ public class PlayerMovement : MonoBehaviour
         // Double Jump
         if (!blockInput)
         {
-            if (playerInput.GetJumpInput())
+            if (playerInput.GetJumpInput()&&!jumpedThisFrame)
             {
                 if (!isDoubleJumping && !IsGrounded() && !ladderMovement.jumpedOffOfLadder)
                 {
+                    //print(">>> Attempting double jump");
+                    
                     //Double-Jump Particle Animation
                     playerFX.transform.position = new Vector2(transform.position.x + 0.1f, transform.position.y - 0.35f);
                     playerFXAnimator.SetBool("hasDoubleJumped", true);
@@ -546,7 +555,6 @@ public class PlayerMovement : MonoBehaviour
                     body.velocity = new Vector2(body.velocity.x, jumpPower / 1.5f);
                     isDoubleJumping = true; // Set double jump flag to prevent further jumps
                     animator.SetBool("grounded", IsGrounded());
-
                 }
             }
         }
