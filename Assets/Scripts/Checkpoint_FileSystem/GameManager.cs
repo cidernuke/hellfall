@@ -32,12 +32,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        InitializeReferences();
+        // Bei jedem Szenenwechsel OnSceneLoaded aufrufen
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
+    private void OnDisable()
+    {
+        // Abmelden, damit kein Memory Leak entsteht
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void Start()
+    {
+        InitializeReferences();
+        //SceneManager.sceneLoaded += OnSceneLoaded;
+        RegisterSceneObjects();
+    }
+
+    /// <summary>
+    /// Wird aufgerufen, sobald eine neue Szene geladen wurde.
+    /// </summary>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // After switching scenes, reset references
@@ -47,19 +63,21 @@ public class GameManager : MonoBehaviour
         itemRespawners.Clear();
         enemyRespawners.Clear();
 
-        //Register Items
-        ItemRespawner[] respawnersInScene = FindObjectsOfType<ItemRespawner>();
-        foreach (var resp in respawnersInScene)
-        {
-            RegisterItem(resp);
-        }
+        RegisterSceneObjects();
 
-        //Register enemies
-        EnemyController[] enemiesInScene = FindObjectsOfType<EnemyController>();
-        foreach (var enemy in enemiesInScene)
-        {
-            RegisterEnemy(enemy);
-        }
+        //Register Items
+        // ItemRespawner[] respawnersInScene = FindObjectsOfType<ItemRespawner>();
+        // foreach (var resp in respawnersInScene)
+        // {
+        //     RegisterItem(resp);
+        // }
+
+        // //Register enemies
+        // EnemyController[] enemiesInScene = FindObjectsOfType<EnemyController>();
+        // foreach (var enemy in enemiesInScene)
+        // {
+        //     RegisterEnemy(enemy);
+        // }
 
         if (SaveManager.Instance.isLoadingFromSave)
         {
@@ -71,6 +89,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sucht dynamisch Player, InventorySystem und verknüpft sie.
+    /// </summary>
     private void InitializeReferences()
     {
         // Player references
@@ -84,6 +105,9 @@ public class GameManager : MonoBehaviour
         else
         {
             print("Player not found.");
+            playerMovement = null;
+            healthSystem = null;
+            soulShardSystem = null;
         }
 
         // InventorySystem (Singleton)
@@ -99,18 +123,57 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sucht alle relevanten Objekte (ItemRespawner, EnemyController) in der aktuellen Szene und registriert sie.
+    /// </summary>
+    private void RegisterSceneObjects()
+    {
+        // Items in der Szene finden
+        ItemRespawner[] respawnersInScene = FindObjectsOfType<ItemRespawner>();
+        foreach (var resp in respawnersInScene)
+        {
+            RegisterItem(resp);
+        }
+
+        // Enemies in der Szene finden
+        EnemyController[] enemiesInScene = FindObjectsOfType<EnemyController>();
+        foreach (var enemy in enemiesInScene)
+        {
+            RegisterEnemy(enemy);
+        }
+    }
+
     public void SaveGame()
     {
-        SaveManager.Instance.SaveGame(playerMovement, healthSystem, soulShardSystem, inventorySystem);
+        if (SaveManager.Instance)
+        {
+            SaveManager.Instance.SaveGame(playerMovement, healthSystem, soulShardSystem, inventorySystem);
+        }
+        else
+        {
+            Debug.LogWarning("SaveManager.Instance is null. Cannot save.");
+        }
     }
 
     public void LoadGame()
     {
-        SaveManager.Instance.LoadGame(playerMovement, healthSystem, soulShardSystem, inventorySystem);
+        if (SaveManager.Instance)
+        {
+            SaveManager.Instance.LoadGame(playerMovement, healthSystem, soulShardSystem, inventorySystem);
+        }
+        else
+        {
+            Debug.LogWarning("SaveManager.Instance is null. Cannot load.");
+        }
     }
 
     public void RespawnPlayer()
     {
+        if (playerMovement == null || healthSystem == null)
+        {
+            Debug.LogWarning("Cannot respawn player because references are missing.");
+            return;
+        }
         // Reset the position of the player to the last checkpoint
         playerMovement.Respawn();
 

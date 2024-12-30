@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ItemSystem.Abstract;
-using ItemSystem.Items; // Add this line to include the namespace where PowerUpItem is defined
+using ItemSystem.Items;
+using UnityEngine.SceneManagement; // Add this line to include the namespace where PowerUpItem is defined
 
 public class InventorySystem : MonoBehaviour
 {
     // Singleton-Instance
     public static InventorySystem Instance { get; private set; }
     public InventorySlot[] slots;
-    [SerializeField] protected UIDocument uiDocument;
+    //[SerializeField] protected UIDocument uiDocument;
     protected VisualElement root;
 
-    // needed for the HealthItem
-    public HealthSystem playerHealth;
-    private GameObject playerSpeech;
 
-    private SpriteRenderer playerSpeechSpriteRenderer;
-
+    // Dynamische Felder
+    private UIDocument uiDocument;
     private GameObject player;
-
     private PlayerMovement playerMov;
+    public HealthSystem playerHealth;  // public, damit GameManager sie überschreiben kann
+    private GameObject playerSpeech;
+    private SpriteRenderer playerSpeechSpriteRenderer;
 
     //Singleton-implementation
     // private void Awake()
@@ -54,37 +54,116 @@ public class InventorySystem : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void OnEnable()
+    {
+        // Bei jedem Szenenwechsel "OnSceneLoaded" aufrufen
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        // Abmelden vom Event
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     void Start()
     {
+        // if (uiDocument == null)
+        // {
+        //     Debug.LogError("Could not find UIDocument component on GameObject");
+        //     return;
+        // }
+
+        // root = uiDocument.rootVisualElement;
+
+        // //Create 3 InventorySlots 
+        // slots = new InventorySlot[3];
+        // //For the 3 Itemslots "Hotkey1", "Hotkey2", "Hotkey3"
+        // for (int i = 0; i < slots.Length; i++)
+        // {
+        //     //Regex to find the VisualElement with the name "Hotkey" + i
+        //     VisualElement hotkey = root.Q<VisualElement>($"Hotkey{i + 1}Container");
+        //     if (hotkey == null)
+        //     {
+        //         Debug.LogError("Could not find VisualElement with name Hotkey" + i + 1);
+        //     }
+        //     // Initialize a new InventorySlot and assign it to the slots array
+        //     slots[i] = new InventorySlot();
+        //     slots[i].Initialize(hotkey);
+        // }
+
+        // playerSpeech = GameObject.Find("Player_Speech_Bubble");
+        // playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
+        // player = GameObject.Find("Player");
+        // playerMov = player.GetComponent<PlayerMovement>();
+        SetupReferences();
+
+    }
+
+    /// <summary>
+    /// Wird jedes Mal aufgerufen, nachdem eine neue Szene geladen wurde.
+    /// </summary>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Jedes Mal neu die Referenzen suchen
+        SetupReferences();
+    }
+
+    /// <summary>
+    /// Sucht dynamisch den Player, HealthSystem, UI-Dokument etc. in der aktuellen Szene.
+    /// </summary>
+    private void SetupReferences()
+    {
+        // 1) UI suchen
+        uiDocument = FindObjectOfType<UIDocument>();
         if (uiDocument == null)
         {
-            Debug.LogError("Could not find UIDocument component on GameObject");
+            Debug.LogWarning("No UIDocument found in this scene. InventoryUI might not be available.");
             return;
         }
 
+        // root holen
         root = uiDocument.rootVisualElement;
+        if (root == null)
+        {
+            Debug.LogError("UIDocument rootVisualElement is null!");
+            return;
+        }
 
-        //Create 3 InventorySlots 
+        // 2) Slots anlegen/neu initialisieren
+        // Achtung: Falls du das nur EINMAL machen willst, solltest du erst checken,
+        // ob slots schon angelegt sind. Oder du löscht sie und legst sie neu an.
         slots = new InventorySlot[3];
-        //For the 3 Itemslots "Hotkey1", "Hotkey2", "Hotkey3"
         for (int i = 0; i < slots.Length; i++)
         {
-            //Regex to find the VisualElement with the name "Hotkey" + i
             VisualElement hotkey = root.Q<VisualElement>($"Hotkey{i + 1}Container");
             if (hotkey == null)
             {
-                Debug.LogError("Could not find VisualElement with name Hotkey" + i + 1);
+                Debug.LogError("Could not find VisualElement with name Hotkey" + (i + 1));
             }
-            // Initialize a new InventorySlot and assign it to the slots array
             slots[i] = new InventorySlot();
             slots[i].Initialize(hotkey);
         }
 
-        playerSpeech = GameObject.Find("Player_Speech_Bubble");
-        playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
-        player = GameObject.Find("Player");
-        playerMov = player.GetComponent<PlayerMovement>();
+        // 3) Player suchen
+        var playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            player = playerObj;
+            playerMov = player.GetComponent<PlayerMovement>();
+            playerHealth = player.GetComponent<HealthSystem>();
+        }
+        else
+        {
+            Debug.LogWarning("No Player found in this scene!");
+        }
 
+        // 4) Speech Bubble
+        playerSpeech = GameObject.Find("Player_Speech_Bubble");
+        if (playerSpeech != null)
+        {
+            playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
+        }
     }
 
     void Update()
