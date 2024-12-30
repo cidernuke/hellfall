@@ -696,6 +696,7 @@ public class PlayerMovement : MonoBehaviour
 
         float dashEndTime = Time.time + dashDuration;
 
+        // Used to make player invincible during a dash
         HealthSystem healthSystem = GetComponent<HealthSystem>();
         while (Time.time < dashEndTime)
         {

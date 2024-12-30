@@ -348,6 +348,7 @@ MonoBehaviour:
   wallSlideSpeed: 5
   wallCheck: {fileID: 976393204391322360}
   wallJumpDuration: 0.07
+  isFalling: 0
   coyoteTimeDuration: 0.2
   dashSpeed: 20
   dashDuration: 0.2
