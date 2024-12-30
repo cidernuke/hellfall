@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 [Serializable]
 public class PlayerData
@@ -17,11 +18,15 @@ public class PlayerData
     // Current amount of soulShards
     public int soulShardCount;
 
+    public string lastSceneName;
+
     //public PlayerData(HealthSystem healthSystem, List<ItemSystem.Abstract.Item> playerItems, SoulShardSystem soulShardSystem, int lastCheckpointID)
     public PlayerData(HealthSystem healthSystem, int lastCheckpointID, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     {
         // Save latest checkpointID
         this.lastCheckpointID = lastCheckpointID;
+
+        lastSceneName = SceneManager.GetActiveScene().name;
 
         // Save health
         currentHealth = healthSystem.currentHealth;

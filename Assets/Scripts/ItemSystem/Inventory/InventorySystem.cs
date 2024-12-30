@@ -18,48 +18,52 @@ public class InventorySystem : MonoBehaviour
     private GameObject playerSpeech;
 
     private SpriteRenderer playerSpeechSpriteRenderer;
-    
+
     private GameObject player;
 
     private PlayerMovement playerMov;
 
-    void Update()
-    {
-        // Flip the speech bubble sprite if the player is facing left
-        if (playerMov.isFacingRight == false)
-        {
-            playerSpeechSpriteRenderer.flipX = true;
-        }
-        else
-        {
-            playerSpeechSpriteRenderer.flipX = false;
-        }
-    }
+    //Singleton-implementation
+    // private void Awake()
+    // {
+    //     // Implement the Singleton pattern
+    //     if (Instance == null)
+    //     {
+    //         Instance = this;
+    //         DontDestroyOnLoad(gameObject); // Inventory persist across scenes
+    //     }
+    //     else
+    //     {
+    //         Destroy(gameObject);
+    //         Debug.LogError("Multiple InventorySystem instances detected.");
+    //     }
+    // }
 
-
-    //Singleton-implementation, to make global accessable
+    //New Singleton-implementation
     private void Awake()
     {
-        // Implement the Singleton pattern
-        if (Instance == null)
+        // Kurzzeit-Lösung: Destroy-Duplicate-Check
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // Inventory persist across scenes
-        }
-        else
-        {
+            Debug.LogWarning($"Duplicate InventorySystem found on {gameObject.name}. Destroying it.");
             Destroy(gameObject);
-            Debug.LogError("Multiple InventorySystem instances detected.");
+            return; // Wichtig: Hier abbrechen, damit der Rest von Awake nicht mehr ausgeführt wird.
         }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
+
     void Start()
     {
-        root = uiDocument.rootVisualElement;
         if (uiDocument == null)
         {
             Debug.LogError("Could not find UIDocument component on GameObject");
             return;
         }
+
+        root = uiDocument.rootVisualElement;
+
         //Create 3 InventorySlots 
         slots = new InventorySlot[3];
         //For the 3 Itemslots "Hotkey1", "Hotkey2", "Hotkey3"
@@ -82,6 +86,23 @@ public class InventorySystem : MonoBehaviour
         playerMov = player.GetComponent<PlayerMovement>();
 
     }
+
+    void Update()
+    {
+        if (playerMov == null || playerSpeechSpriteRenderer == null)
+            return;
+
+        // Flip the speech bubble sprite if the player is facing left
+        if (playerMov.isFacingRight == false)
+        {
+            playerSpeechSpriteRenderer.flipX = true;
+        }
+        else
+        {
+            playerSpeechSpriteRenderer.flipX = false;
+        }
+    }
+
 
     /// <summary>
     /// Adds an item to the first available slot in the inventory.

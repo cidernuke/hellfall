@@ -92,4 +92,37 @@ public class PauseMenuController : MonoBehaviour
     {
         SceneManager.LoadScene(_mainMenu); // Replace with the actual name of the main menu scene
     }
+
+    // public void LoadGameYes()
+    // {
+    //     // Zuerst sicherstellen, dass das Spiel nicht mehr pausiert ist.
+    //     Time.timeScale = 1f;
+    //     DeactivateMenu();
+
+    //     // Prüfen, ob ein Spielstand existiert
+    //     var data = SaveManager.Instance.LoadPlayerData();
+    //     if (data == null)
+    //     {
+    //         Debug.LogWarning("Kein gespeicherter Spielstand gefunden!");
+    //         // Ggf. Dialog anzeigen oder Meldung ausgeben
+    //         return;
+    //     }
+
+    //     // Die gespeicherte Szene auslesen
+    //     string sceneName = data.lastSceneName;
+    //     if (string.IsNullOrEmpty(sceneName))
+    //     {
+    //         Debug.LogWarning("Der gespeicherte Szenenname ist leer. Kein Szenenwechsel möglich.");
+    //         return;
+    //     }
+
+    //     // Szene laden, in der zuletzt gespeichert wurde
+    //     SceneManager.LoadScene(sceneName);
+
+    //     // Der Rest (ApplyLoadedData) erfolgt entweder über:
+    //     // a) OnSceneLoaded im GameManager, oder
+    //     // b) eine kleine Coroutine nach dem Szenenwechsel
+    //     //    z.B. StartCoroutine(LoadGameCoroutine())
+    //     //    -> SaveManager.Instance.LoadGame(...)
+    // }
 }
