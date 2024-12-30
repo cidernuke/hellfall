@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -51,6 +52,7 @@ public class PlayerAttack : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && cooldownTimer >= closeRangeAttackCooldown)
         {
+
             Attack();
         }
         if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown)
@@ -99,6 +101,11 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private void Attack()
     {
+        if (!playerMovement.isFalling)
+        {
+            playerMovement.blockInput = true;
+            playerMovement.body.constraints = RigidbodyConstraints2D.FreezePosition;
+        }
 
         switch (attackIndex)
         {
@@ -108,11 +115,20 @@ public class PlayerAttack : MonoBehaviour
             case 1:
                 anim.SetTrigger("attack_02");
                 break;
-
         }
 
         attackIndex = (attackIndex + 1) % totalAttacks;
         cooldownTimer = 0;
+    }
+
+    /// <summary>
+    /// Enables player movement after the attack animation (either melee or ranged) completes
+    /// </summary>
+    public void OnAttackComplete()
+    {
+        playerMovement.blockInput = false;
+        playerMovement.body.constraints = RigidbodyConstraints2D.None;
+        playerMovement.body.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     /// <summary>
@@ -121,13 +137,17 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private void AttackRanged()
     {
+        if (!playerMovement.isFalling)
+        {
+            playerMovement.blockInput = true;
+            playerMovement.body.constraints = RigidbodyConstraints2D.FreezePosition;
+        }
 
         anim.SetTrigger("attack_ranged");
         cooldownTimer = 0;
         int projectileIndex = FindProjectile();
         projectiles[projectileIndex].transform.position = firePoint.position;
         projectiles[projectileIndex].GetComponent<Projectile>().SetDirection(Math.Sign(transform.localScale.x));
-
     }
 
     /// <summary>

@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
     private float wallJumpingTime = 0.2f;
     private float wallJumpingCounter;
     [SerializeField] private float wallJumpDuration = 0.09f;  // Duration during which horizontal input is ignored after a wall jump
-    private bool isFalling = false;
+    public bool isFalling = false;
 
     // Double Jump
     private bool isDoubleJumping;
