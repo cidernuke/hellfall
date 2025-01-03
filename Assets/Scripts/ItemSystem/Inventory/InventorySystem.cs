@@ -133,15 +133,33 @@ public class InventorySystem : MonoBehaviour
         // 2) Slots anlegen/neu initialisieren
         // Achtung: Falls du das nur EINMAL machen willst, solltest du erst checken,
         // ob slots schon angelegt sind. Oder du löscht sie und legst sie neu an.
-        slots = new InventorySlot[3];
+
+        // slots = new InventorySlot[3];
+        // for (int i = 0; i < slots.Length; i++)
+        // {
+        //     VisualElement hotkey = root.Q<VisualElement>($"Hotkey{i + 1}Container");
+        //     if (hotkey == null)
+        //     {
+        //         Debug.LogError("Could not find VisualElement with name Hotkey" + (i + 1));
+        //     }
+        //     slots[i] = new InventorySlot();
+        //     slots[i].Initialize(hotkey);
+        // }
+
+        //Slots nicht neu zuweisen, sondern nur die UI-Elemente
+        if (slots == null || slots.Length == 0)
+        {
+            slots = new InventorySlot[3];
+            for (int i = 0; i < slots.Length; i++)
+            {
+                slots[i] = new InventorySlot();
+            }
+        }
+
+        // Jetzt nur die UI-Elemente neu suchen und binden
         for (int i = 0; i < slots.Length; i++)
         {
-            VisualElement hotkey = root.Q<VisualElement>($"Hotkey{i + 1}Container");
-            if (hotkey == null)
-            {
-                Debug.LogError("Could not find VisualElement with name Hotkey" + (i + 1));
-            }
-            slots[i] = new InventorySlot();
+            var hotkey = root.Q<VisualElement>($"Hotkey{i + 1}Container");
             slots[i].Initialize(hotkey);
         }
 

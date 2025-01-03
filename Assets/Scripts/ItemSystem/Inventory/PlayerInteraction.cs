@@ -30,6 +30,7 @@ public class PlayerInteraction : MonoBehaviour
     void Start()
     {
         playerHealth = GetComponent<HealthSystem>();
+        playerInventory = InventorySystem.Instance;
         //playerInventory.playerHealth = playerHealth;
         InventorySystem.Instance.playerHealth = playerHealth;
 
