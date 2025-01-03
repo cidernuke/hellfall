@@ -172,6 +172,7 @@ MonoBehaviour:
   isPlayer: 0
   timeInvincible: 0.5
   isInvincible: 0
+  isDead: 0
   respawnHealth: 0
 --- !u!114 &1776847006795675958
 MonoBehaviour:
@@ -186,9 +187,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackCooldown: 2
-  range: 2
+  range: 1.5
   damage: 1
-  colliderDistance: 1
+  colliderDistance: 0.6
   boxCollider: {fileID: 4933993273647594472}
   playerLayer:
     serializedVersion: 2
