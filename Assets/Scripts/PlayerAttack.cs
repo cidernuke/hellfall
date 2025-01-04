@@ -10,6 +10,8 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float rangedAttackCooldown;
     [SerializeField] private float range;
     [SerializeField] private float damage;
+    [SerializeField] private boolean fireDamage;
+    [SerializeField] private boolean iceDamage;
 
     [Header("Collider Parameters")]
     [SerializeField] private float colliderDistance;

@@ -40,6 +40,9 @@ public class HealthSystem : MonoBehaviour
     private bool isDamageZoneCooldown = false;
     private float damageZoneCooldownDuration = 1f; // 1 second
 
+    // Flags for damage over time
+    private bool isOnFire = false;
+
 
     //Respawn variables
     public bool isDead;
@@ -120,8 +123,8 @@ public class HealthSystem : MonoBehaviour
         {
             return;
         }
-            //isInvincible = true;
-            //damageCooldown = timeInvincible;
+        //isInvincible = true;
+        //damageCooldown = timeInvincible;
         //}
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
         if (currentHealth > 0)
@@ -136,7 +139,7 @@ public class HealthSystem : MonoBehaviour
         }
         else
         {
-            if(isPlayer)
+            if (isPlayer)
             {
                 UIHandler.instance.SetHealthValue(0f);
             }
@@ -267,4 +270,38 @@ public class HealthSystem : MonoBehaviour
             enemyPatrol.enabled = true;
         }
     }
+}
+
+
+/// <summary>
+/// Applies fire damage over time.
+/// </summary>
+/// <param name="damagePerTick">Damage dealt per tick.</param>
+/// <param name="duration">Total duration of the effect.</param>
+/// <param name="tickInterval">Time between damage ticks.</param>
+
+public void ApplyFireDamage(float damagePerTick, float duration, float tickInterval)
+{
+    if (!isOnFire)
+    {
+        StartCoroutine(FireDamageCoroutine(damagePerTick, duration, tickInterval));
+    }
+}
+
+private IEnumerator FireDamageCoroutine(float damagePerTick, float duration, float tickInterval)
+{
+    isOnFire = true;
+    float elapsedTime = 0f;
+
+    while (elapsedTime < duration)
+    {
+        TakeDamage(damagePerTick);
+        Debug.Log("Enemy takes fire damage.");
+        yield return new WaitForSeconds(tickInterval);
+        elapsedTime += tickInterval;
+    }
+
+    isOnFire = false;
+    Debug.Log("Fire damage effect ended.");
+}
 }
