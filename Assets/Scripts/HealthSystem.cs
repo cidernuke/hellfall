@@ -111,7 +111,7 @@ public class HealthSystem : MonoBehaviour
         }
         else
         {
-            if(isPlayer)
+            if (isPlayer)
             {
                 UIHandler.instance.SetHealthValue(0f);
             }
@@ -245,10 +245,10 @@ public class HealthSystem : MonoBehaviour
     }
 
     public void UpdateHealthUI()
-{
-    if (isPlayer && UIHandler.instance != null)
     {
-        UIHandler.instance.SetHealthValue(currentHealth / startingHealth);
+        if (isPlayer && UIHandler.instance != null)
+        {
+            UIHandler.instance.SetHealthValue(currentHealth / startingHealth);
+        }
     }
-}
 }

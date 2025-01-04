@@ -254,5 +254,4 @@ public class GameManager : MonoBehaviour
 
         SaveManager.Instance.isLoadingFromSave = false;
     }
-
 }
