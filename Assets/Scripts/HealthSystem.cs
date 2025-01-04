@@ -24,7 +24,7 @@ public class HealthSystem : MonoBehaviour
     /// <summary>
     /// The duration for which the object is invincible after taking damage.
     /// </summary>
-    public float timeInvincible = 0f;
+    public float timeInvincible = 0.5f;
 
     /// <summary>
     /// Indicates whether the object is currently invincible.
@@ -35,6 +35,11 @@ public class HealthSystem : MonoBehaviour
     /// The remaining cooldown time for invincibility.
     /// </summary>
     private float damageCooldown;
+
+    // Cooldown for taking damage from damage zones
+    private bool isDamageZoneCooldown = false;
+    private float damageZoneCooldownDuration = 1f; // 1 second
+
 
     //Respawn variables
     public bool isDead;
@@ -67,6 +72,25 @@ public class HealthSystem : MonoBehaviour
     }
 
     /// <summary>
+    /// Takes damage from damage zones with a global cooldown.
+    /// </summary>
+    /// <param name="damage">The amount of damage to take.</param>
+    public void TakeDamageFromDamageZone(float damage)
+    {
+        if (isDamageZoneCooldown) return;
+
+        TakeDamage(damage);
+        StartCoroutine(DamageZoneCooldown());
+    }
+
+    private IEnumerator DamageZoneCooldown()
+    {
+        isDamageZoneCooldown = true;
+        yield return new WaitForSeconds(damageZoneCooldownDuration);
+        isDamageZoneCooldown = false;
+    }
+
+    /// <summary>
     /// Updates the invincibility status and cooldown timer. 
     /// Not needed anymore, since neither player nor enemies have a cooldown time.
     /// </summary>
@@ -92,10 +116,10 @@ public class HealthSystem : MonoBehaviour
         // not needed anymore, since player and enemies don't need a cooldown time
         //if (damage > 0)
         //{
-            //if (isInvincible)
-            //{
-            //    return;
-            //}
+        if (isInvincible)
+        {
+            return;
+        }
             //isInvincible = true;
             //damageCooldown = timeInvincible;
         //}
