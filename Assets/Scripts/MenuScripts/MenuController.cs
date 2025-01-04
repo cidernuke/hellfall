@@ -71,7 +71,7 @@ public class MenuController : MonoBehaviour
     // Load game scene
     public void LoadGame()
     {
-        SceneManager.LoadScene("Menu"); // Replace with the actual game scene name
+        SceneManager.LoadScene("Level_Zero"); // Replace with the actual game scene name
     }
 
     // Start a new game, loading a specified level

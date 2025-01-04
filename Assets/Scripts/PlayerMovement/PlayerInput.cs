@@ -19,11 +19,11 @@ public class PlayerInput : IPlayerInput
 
     public bool GetCrouchInput()
     {
-        return Input.GetKey(KeyCode.C);
+        return Input.GetKey(KeyCode.S);
     }
 
     public bool GetDropDownInput()
     {
-        return Input.GetKeyDown(KeyCode.S);
+        return Input.GetKeyDown(KeyCode.C);
     }
 }
