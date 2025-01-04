@@ -1324,6 +1324,11 @@ Transform:
   - {fileID: 1211782587}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &1541334959 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5217249396687188595, guid: e157cdd619666cb42983f832714623b8, type: 3}
+  m_PrefabInstance: {fileID: 1910048721}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1548976640
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1919,13 +1924,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6273805593477899221, guid: fac2980baa124954b851147a365e2142, type: 3}
-      propertyPath: range
-      value: 1.5
+    - target: {fileID: 7488354036633323685, guid: fac2980baa124954b851147a365e2142, type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 1541334959}
+    - target: {fileID: 7923619934566443984, guid: fac2980baa124954b851147a365e2142, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6273805593477899221, guid: fac2980baa124954b851147a365e2142, type: 3}
-      propertyPath: colliderDistance
-      value: 0.6
+    - target: {fileID: 7923619934566443984, guid: fac2980baa124954b851147a365e2142, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
