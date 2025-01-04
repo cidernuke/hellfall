@@ -104,7 +104,8 @@ public class HealthSystem : MonoBehaviour
             anim.SetTrigger("hurt");
             if (isPlayer)
             {
-                UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
+                UpdateHealthUI();
+                //UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
             }
 
         }
@@ -126,7 +127,8 @@ public class HealthSystem : MonoBehaviour
     {
         currentHealth = Mathf.Clamp(currentHealth + healthAmount, 0, startingHealth);
         Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
-        UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
+        //UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
+        UpdateHealthUI();
     }
 
     #region Death funtionality
@@ -241,4 +243,12 @@ public class HealthSystem : MonoBehaviour
             enemyPatrol.enabled = true;
         }
     }
+
+    public void UpdateHealthUI()
+{
+    if (isPlayer && UIHandler.instance != null)
+    {
+        UIHandler.instance.SetHealthValue(currentHealth / startingHealth);
+    }
+}
 }

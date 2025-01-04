@@ -81,11 +81,13 @@ public class GameManager : MonoBehaviour
 
         if (SaveManager.Instance.isLoadingFromSave)
         {
-            // Wir rufen das "richtige" LoadGame auf:
-            LoadGame();
+            // LoadGame();
 
-            // Danach nicht mehr laden
-            SaveManager.Instance.isLoadingFromSave = false;
+            // // Danach nicht mehr laden
+            // SaveManager.Instance.isLoadingFromSave = false;
+
+            //SaveManager.Instance.isLoadingFromSave = false;
+            StartCoroutine(LoadGameAfterUIIsReady());
         }
     }
 
@@ -241,4 +243,16 @@ public class GameManager : MonoBehaviour
         if (!enemyRespawners.Contains(enemy))
             enemyRespawners.Add(enemy);
     }
+
+    private IEnumerator LoadGameAfterUIIsReady()
+    {
+        // Warte solange, bis UIHandler.instance != null ist
+        yield return new WaitUntil(() => UIHandler.instance != null);
+
+        LoadGame();
+        healthSystem?.UpdateHealthUI();
+
+        SaveManager.Instance.isLoadingFromSave = false;
+    }
+
 }
