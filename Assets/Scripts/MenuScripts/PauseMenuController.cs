@@ -125,4 +125,11 @@ public class PauseMenuController : MonoBehaviour
     //     //    z.B. StartCoroutine(LoadGameCoroutine())
     //     //    -> SaveManager.Instance.LoadGame(...)
     // }
+
+    public void RespawnYes()
+    {
+        print("Start respawn");
+        GameManager.Instance.RespawnPlayer();
+        DeactivateMenu();
+    }
 }

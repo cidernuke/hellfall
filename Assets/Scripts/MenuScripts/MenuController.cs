@@ -71,30 +71,18 @@ public class MenuController : MonoBehaviour
     // Load game scene
     public void LoadGame()
     {
-        SceneManager.LoadScene("Menu"); // Replace with the actual game scene name
+        SceneManager.LoadScene("Menu");
     }
 
     // Start a new game, loading a specified level
     public void NewGameDialogYes()
     {
         SceneManager.LoadScene(_newGameLevel); // Load the new game level
-        // var data = SaveManager.Instance.LoadPlayerData();
-        // if(data == null)
-        // {
-        //     print("No saved game found!");
-        //     noSavedGameDialog.SetActive(true);
-        //     return;
-        // }
-        // SaveManager.Instance.LoadSceneFromSave();
     }
 
     // Load the saved game if a saved level exists
     public void LoadGameDialogYes()
     {
-        // if (PlayerPrefs.HasKey("SavedLevel"))
-        // {
-        //     // levelToLoad = PlayerPrefs.GetString("SavedLevel"); // Get the saved level
-        //     // SceneManager.LoadScene(levelToLoad); // Load the saved level
             var data = SaveManager.Instance.LoadPlayerData();
             if (data == null)
             {
@@ -103,11 +91,6 @@ public class MenuController : MonoBehaviour
                 return;
             }
             SaveManager.Instance.LoadSceneFromSave();
-        // }
-        // else
-        // {
-        //     noSavedGameDialog.SetActive(true); // Show the "no saved game" dialog
-        // }
     }
 
     // Exit the game

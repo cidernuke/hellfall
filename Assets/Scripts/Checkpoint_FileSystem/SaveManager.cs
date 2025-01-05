@@ -86,7 +86,7 @@ public class SaveManager : MonoBehaviour
         GameData gameData = LoadGameData();
         if (gameData != null)
         {
-            // Wende die geladenen Daten an
+            // Anwenden der geladenen Daten
             ApplyLoadedData(gameData, playerMovement, healthSystem, soulShardSystem, inventorySystem);
             Debug.Log("Spiel geladen.");
         }
@@ -94,25 +94,6 @@ public class SaveManager : MonoBehaviour
         {
             Debug.LogWarning("Keine Speicherdatei gefunden.");
         }
-
-        //Before Refactoring:
-        //TODO: Stay with Dry -> Use LoadPlayerData
-        // if (File.Exists(saveFilePath))
-        // {
-        //     string json = File.ReadAllText(saveFilePath);
-
-        //     // Deserialisiere JSON zu GameData
-        //     GameData gameData = JsonUtility.FromJson<GameData>(json);
-
-        //     // Wende die geladenen Daten an
-        //     //ApplyLoadedData(gameData, playerMovement, healthSystem, playerInventory, soulShardSystem);
-        //     ApplyLoadedData(gameData, playerMovement, healthSystem, soulShardSystem, inventorySystem);
-        //     Debug.Log("Spiel geladen.");
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("Keine Speicherdatei gefunden.");
-        // }
     }
 
     private void ApplyLoadedData(GameData gameData, PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
@@ -216,12 +197,6 @@ public class SaveManager : MonoBehaviour
 
         // Lade die gespeicherte Szene
         SceneManager.LoadScene(sceneName);
-
-        // Async load der gespeicherten Szene
-        // SceneManager.LoadScene(sceneName);
-
-        // // Der Rest (ApplyLoadedData) sollte im GameManager (OnSceneLoaded) oder
-        // // mithilfe einer kleinen Coroutine erfolgen.
     }
 
 }
