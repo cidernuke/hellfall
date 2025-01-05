@@ -170,7 +170,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 //Note: TakeDamage still needs to be called, since ice damage only freezes the opponent
                 enemyHealth.TakeDamage(damage, null, enemyController);
-                FreezeEnemy();
+                //FreezeEnemy();
             }
             else
             {
@@ -182,14 +182,19 @@ public class PlayerAttack : MonoBehaviour
     /// <summary>
     /// Freezes the Enemy, by disabling the EnemyPatrol Script for a certain amount of time.
     /// </summary>
-    private IEnumerator FreezeEnemy()
+    /* private IEnumerator FreezeEnemy()
     {
         if (!isFrozen)
         {
-            enemyController.enemyPatrol.enabled = false;
-            yield return new WaitForSeconds(1f);
-            enemyController.enemyPatrol.enabled = true;
-        }
+            //broken
+            //enemyController.enemyPatrol.enabled = false
+            //CooldownTimer set to 0, so the enemy can't attack for a second
 
-    }
+            enemyController.cooldownTimer = 0;
+            yield return new WaitForSeconds(1f);
+            //enemyController.GetComponent<EnemyPatrol>().enabled = true;
+        }
+        yield return null;
+
+    }*/
 }
