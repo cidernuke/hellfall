@@ -26,7 +26,7 @@ public class EnemyController : MonoBehaviour
     // References
     private Animator anim;
     private HealthSystem playerHealth;
-    private EnemyPatrol enemyPatrol;
+    public EnemyPatrol enemyPatrol;
     private PlayerMovement playerMovement;
     private HealthSystem healthSystem;
 

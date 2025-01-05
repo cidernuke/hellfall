@@ -270,38 +270,42 @@ public class HealthSystem : MonoBehaviour
             enemyPatrol.enabled = true;
         }
     }
-}
 
 
-/// <summary>
-/// Applies fire damage over time.
-/// </summary>
-/// <param name="damagePerTick">Damage dealt per tick.</param>
-/// <param name="duration">Total duration of the effect.</param>
-/// <param name="tickInterval">Time between damage ticks.</param>
 
-public void ApplyFireDamage(float damagePerTick, float duration, float tickInterval)
-{
-    if (!isOnFire)
+    /// <summary>
+    /// Applies fire damage over time. Is not primary damage
+    /// </summary>
+    /// <param name="damagePerTick">Damage dealt per tick.</param>
+    /// <param name="duration">Total duration of the effect.</param>
+    /// <param name="tickInterval">Time between damage ticks.</param>
+
+    public void ApplyFireDamage(float damagePerTick, float duration, float tickInterval)
     {
-        StartCoroutine(FireDamageCoroutine(damagePerTick, duration, tickInterval));
-    }
-}
-
-private IEnumerator FireDamageCoroutine(float damagePerTick, float duration, float tickInterval)
-{
-    isOnFire = true;
-    float elapsedTime = 0f;
-
-    while (elapsedTime < duration)
-    {
-        TakeDamage(damagePerTick);
-        Debug.Log("Enemy takes fire damage.");
-        yield return new WaitForSeconds(tickInterval);
-        elapsedTime += tickInterval;
+        if (!isOnFire)
+        {
+            StartCoroutine(FireDamageCoroutine(damagePerTick, duration, tickInterval));
+        }
     }
 
-    isOnFire = false;
-    Debug.Log("Fire damage effect ended.");
-}
+    /// <summary>
+    /// Handles the fire damage over time effect. Is only there for fire damage, doesn't deal
+    /// primary damage.
+    /// </summary>
+    private IEnumerator FireDamageCoroutine(float damagePerTick, float duration, float tickInterval)
+    {
+        isOnFire = true;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            yield return new WaitForSeconds(tickInterval); // wait first, then deal damage
+            TakeDamage(damagePerTick * 0.75); // reduced by 25%
+            Debug.Log("Enemy takes fire damage.");
+            elapsedTime += tickInterval; // update the elapsed time
+        }
+
+        isOnFire = false;
+        Debug.Log("Fire damage effect ended.");
+    }
 }

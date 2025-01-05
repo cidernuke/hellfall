@@ -10,8 +10,13 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float rangedAttackCooldown;
     [SerializeField] private float range;
     [SerializeField] private float damage;
-    [SerializeField] private boolean fireDamage;
-    [SerializeField] private boolean iceDamage;
+
+    // for special attacks
+    [SerializeField] private bool fireDamage = false;
+    [SerializeField] private bool iceDamage = false;
+    [SerializeField] private bool isFrozen = false;
+
+
 
     [Header("Collider Parameters")]
     [SerializeField] private float colliderDistance;
@@ -148,15 +153,43 @@ public class PlayerAttack : MonoBehaviour
         return 0;
     }
 
-    /*
-    * --DamageEnemy()--
-    * If Enemy is in Sight, the Enemy takes damage.
-    **/
+    /// <summary>
+    /// Deals damage to the enemy if it is in sight.
+    /// </summary>
     private void DamageEnemy()
     {
         if (EnemyInSight())
         {
-            enemyHealth.TakeDamage(damage, null, enemyController);
+            if (fireDamage)
+            {
+                //Note: TakeDamage still needs to be called, since fire damage is only secondary and applied over time
+                enemyHealth.TakeDamage(damage, null, enemyController);
+                enemyHealth.ApplyFireDamage(damage, 2f, 1f);
+            }
+            else if (iceDamage)
+            {
+                //Note: TakeDamage still needs to be called, since ice damage only freezes the opponent
+                enemyHealth.TakeDamage(damage, null, enemyController);
+                FreezeEnemy();
+            }
+            else
+            {
+                enemyHealth.TakeDamage(damage, null, enemyController);
+            }
         }
+    }
+
+    /// <summary>
+    /// Freezes the Enemy, by disabling the EnemyPatrol Script for a certain amount of time.
+    /// </summary>
+    private IEnumerator FreezeEnemy()
+    {
+        if (!isFrozen)
+        {
+            enemyController.enemyPatrol.enabled = false;
+            yield return new WaitForSeconds(1f);
+            enemyController.enemyPatrol.enabled = true;
+        }
+
     }
 }
