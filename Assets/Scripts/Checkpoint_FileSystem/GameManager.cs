@@ -250,12 +250,14 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator LoadGameAfterUIIsReady()
     {
-        // Warte solange, bis UIHandler.instance != null ist
+        //Wait until UIHandler.instance != null 
         yield return new WaitUntil(() => UIHandler.instance != null);
 
         LoadGame();
         healthSystem?.UpdateHealthUI();
 
         SaveManager.Instance.isLoadingFromSave = false;
+        var pmc = GameObject.Find("PauseMenuController");
+        pmc.GetComponent<PauseMenuController>().DeactivateMenu();
     }
 }
