@@ -72,6 +72,17 @@ public class GameManager : MonoBehaviour
             playerMovement.transform.position = spawnPoint.transform.position;
         }
 
+        if (scene.name == "Menu")
+        {
+            //Hide UI in Menu
+            InventorySystem.Instance.HideInventoryUI();
+        }
+        else
+        {
+            //Show UI in game
+            InventorySystem.Instance.ShowInventoryUI();
+        }
+
         if (SaveManager.Instance.isLoadingFromSave)
         {
             // LoadGame();

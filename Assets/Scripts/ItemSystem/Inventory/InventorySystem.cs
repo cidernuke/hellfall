@@ -408,4 +408,16 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    public void HideInventoryUI()
+    {
+        if (root != null)
+            root.style.display = DisplayStyle.None;
+    }
+
+    public void ShowInventoryUI()
+    {
+        if (root != null)
+            root.style.display = DisplayStyle.Flex;
+    }
+
 }

@@ -15,12 +15,12 @@ public class UIHandler : MonoBehaviour
     {
         instance = this;
     }
-    
+
     // Start is called before the first frame update
     void Start()
     {
         UIDocument uiDocument = GetComponent<UIDocument>();
-        if(uiDocument == null)
+        if (uiDocument == null)
         {
             Debug.LogError("Could not find UIDocument component");
             return;
@@ -33,6 +33,4 @@ public class UIHandler : MonoBehaviour
     {
         m_Healthbar.style.width = Length.Percent(100 * percentage);
     }
-
-
 }
