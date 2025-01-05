@@ -1,45 +1,3 @@
-// using UnityEngine;
-// using UnityEngine.SceneManagement;
-
-// public class BootstrapLoader : MonoBehaviour
-// {
-//     void Start()
-//     {
-//         // Annahme: Die Hauptmenü-Szene heißt "MainMenuScene"
-//         SceneManager.LoadScene("Menu", LoadSceneMode.Single);
-
-//         void Start()
-//         {
-//             if (player == null)
-//             {
-//                 var playerObj = GameObject.FindWithTag("Player");
-//                 if (playerObj != null)
-//                 {
-//                     player = playerObj;
-//                     playerMov = player.GetComponent<PlayerMovement>();
-//                     playerHealth = player.GetComponent<HealthSystem>();
-//                 }
-//                 else
-//                 {
-//                     Debug.LogWarning("No Player found in scene.");
-//                 }
-//             }
-
-//             if (uiDocument == null)
-//             {
-//                 uiDocument = FindObjectOfType<UIDocument>();
-//                 if (uiDocument == null)
-//                 {
-//                     Debug.LogError("No UIDocument found in this scene!");
-//                     return;
-//                 }
-//             }
-
-//             root = uiDocument.rootVisualElement;
-//         }
-//     }
-// }
-
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -53,6 +11,9 @@ public class BootstrapLoader : MonoBehaviour
 
     [Header("Scenes to Load")]
     public string sceneToLoad = "Menu";
+
+    // [SerializeField] private GameObject playerPrefab;
+    // private static bool playerSpawned = false;
 
     private void Awake()
     {
@@ -71,12 +32,14 @@ public class BootstrapLoader : MonoBehaviour
 
     private void Start()
     {
-        // 3) Hier kannst du optional Manager initialisieren, z.B. 
-        //    gameManager.Init();
-        //    inventorySystem.Init();
-        //    etc.
+        // if (!playerSpawned && playerPrefab != null)
+        // {
+        //     GameObject player = Instantiate(playerPrefab);
+        //     DontDestroyOnLoad(player);     // Player überlebt Szenenwechsel
+        //     playerSpawned = true;
+        // }
 
-        // 4) Szene laden ("Menu")
+        // Load Scene
         if (!string.IsNullOrEmpty(sceneToLoad))
         {
             SceneManager.LoadScene(sceneToLoad, LoadSceneMode.Single);

@@ -65,19 +65,12 @@ public class GameManager : MonoBehaviour
 
         RegisterSceneObjects();
 
-        //Register Items
-        // ItemRespawner[] respawnersInScene = FindObjectsOfType<ItemRespawner>();
-        // foreach (var resp in respawnersInScene)
-        // {
-        //     RegisterItem(resp);
-        // }
-
-        // //Register enemies
-        // EnemyController[] enemiesInScene = FindObjectsOfType<EnemyController>();
-        // foreach (var enemy in enemiesInScene)
-        // {
-        //     RegisterEnemy(enemy);
-        // }
+        //Sets the spawn location after switching scene
+        GameObject spawnPoint = GameObject.FindWithTag("SpawnPoint");
+        if (spawnPoint != null)
+        {
+            playerMovement.transform.position = spawnPoint.transform.position;
+        }
 
         if (SaveManager.Instance.isLoadingFromSave)
         {

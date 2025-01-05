@@ -12,6 +12,7 @@ TagManager:
   - BackgroundMusic
   - Wall
   - Ladder
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX

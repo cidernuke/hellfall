@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages the health system for a game object, including taking damage and temporary invincibility.
@@ -78,6 +79,19 @@ public class HealthSystem : MonoBehaviour
             {
                 isInvincible = false;
             }
+        }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Rufe die Logik auf, wenn eine neue Szene geladen wurde
+        if (this != null)
+        {
+            this.UpdateHealthUI();
+        }
+        else
+        {
+            Debug.LogWarning("HealthSystem reference is missing!");
         }
     }
 
