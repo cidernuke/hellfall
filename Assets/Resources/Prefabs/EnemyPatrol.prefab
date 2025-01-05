@@ -104,7 +104,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 3785278121908905849}
   camera: {fileID: 5217249396687188595, guid: e157cdd619666cb42983f832714623b8, type: 3}
-  transform: {fileID: 8881449778222055857}
+  target: {fileID: 8881449778222055857}
+  offset: {x: 0, y: 0.5, z: 0}
 --- !u!1 &1055039037414487990
 GameObject:
   m_ObjectHideFlags: 0
