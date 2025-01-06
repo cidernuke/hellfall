@@ -4,5 +4,5 @@ using System;
 public class GameData
 {
     public PlayerData playerData;
-    // public EnviromentData enviromentData; // Optional, falls benötigt
+    // public EnviromentData enviromentData;
 }

@@ -12,9 +12,6 @@ public class BootstrapLoader : MonoBehaviour
     [Header("Scenes to Load")]
     public string sceneToLoad = "Menu";
 
-    // [SerializeField] private GameObject playerPrefab;
-    // private static bool playerSpawned = false;
-
     private void Awake()
     {
         //Verhindern, dass Bootstrap mehrfach existiert

@@ -70,10 +70,5 @@ public class Checkpoint : MonoBehaviour
 
         //ShowCheckpointMessage();
         DeathUIManager.Instance.ShowCheckpointMessage("Checkpoint,\nSaved game.", checkpointMessageDuration);
-
-        // Spiel speichern
-        //SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,InventorySystem.Instance);
-        //SaveManager.Instance.SaveGame(playerMovement, healthSystem,soulShardSystem,inventorySystem);
-        // Add Visualisation or sound here
     }
 }

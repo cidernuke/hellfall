@@ -6,14 +6,6 @@ public class ItemRespawner : MonoBehaviour
     private Quaternion initialRotation;
     private bool isCollected = false;
 
-
-    // private void Awake()
-    // {
-    //     initialPosition = transform.position;
-    //     initialRotation = transform.rotation;
-    //     GameManager.Instance.RegisterItem(this);
-    // }
-
     private void Start()
     {
         initialPosition = transform.position;
@@ -32,10 +24,6 @@ public class ItemRespawner : MonoBehaviour
     {
         isCollected = true;
         gameObject.SetActive(false);
-        // if (renderer != null) renderer.enabled = false;
-
-        // var collider = GetComponent<Collider2D>();
-        // if (collider != null) collider.enabled = false;
     }
 
     public void RespawnItem()

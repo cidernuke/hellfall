@@ -10,7 +10,7 @@ public class SaveManager : MonoBehaviour
 {
     // Singleton-Pattern
     public static SaveManager Instance;
-    
+
     // Path to the save file
     private string saveFilePath;
 
@@ -52,7 +52,6 @@ public class SaveManager : MonoBehaviour
         GameData gameData = new GameData
         {
             playerData = playerData
-            // enviromentData = ... // später, wenn  EnviromentData hinzugefügt wird
         };
 
         // Serialize GameData to JSON
@@ -198,5 +197,4 @@ public class SaveManager : MonoBehaviour
         // Lade die gespeicherte Szene
         SceneManager.LoadScene(sceneName);
     }
-
 }
