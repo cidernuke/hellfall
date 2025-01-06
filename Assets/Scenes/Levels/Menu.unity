@@ -2195,13 +2195,8 @@ MonoBehaviour:
   menuController: {fileID: 442774683}
   volumeTextValue: {fileID: 493175241}
   volumeSlider: {fileID: 554339601}
-  brightnessSlider: {fileID: 0}
-  brightnessTextValue: {fileID: 0}
   qualityDropdown: {fileID: 268211023}
   fullScreenToggle: {fileID: 384643049}
-  controllerSenTextValue: {fileID: 0}
-  controllerSenSlider: {fileID: 554339601}
-  invertYToggle: {fileID: 0}
 --- !u!4 &343792945
 Transform:
   m_ObjectHideFlags: 0
@@ -2797,18 +2792,10 @@ MonoBehaviour:
   volumeTextValue: {fileID: 1627322134}
   volumeSlider: {fileID: 554339601}
   defaultVolume: 1
-  ControllerSenTextValue: {fileID: 0}
-  controllerSenSlider: {fileID: 0}
-  defaultSen: 4
-  mainControllerSen: 4
-  invertYToggle: {fileID: 0}
-  brightnessSlider: {fileID: 0}
-  brightnessTextValue: {fileID: 0}
-  defaultBrightness: 1
   qualityDropdown: {fileID: 268211023}
   fullScreenToggle: {fileID: 384643049}
   confirmationPrompt: {fileID: 1912816273}
-  _newGameLevel: Level_One
+  _newGameLevel: Scene_01
   noSavedGameDialog: {fileID: 25361277}
   resolutionDropdown: {fileID: 809471535}
 --- !u!4 &442774684
@@ -7815,7 +7802,6 @@ MonoBehaviour:
   aheadDistance: 1
   aheadY: 0
   cameraSpeed: 2.4
-  player: {fileID: 1622098727}
 --- !u!114 &1024486581
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 public class BootstrapLoader : MonoBehaviour
 {
-    // Optional: Falls du hier direkt Zugriff auf deine Manager willst
+    //Für direkten Zugriff auf die Manager
     // private InventorySystem inventorySystem = InventorySystem.Instance;
     // private GameManager gameManager = GameManager.Instance;
     // private SaveManager saveManager = SaveManager.Instance;
@@ -26,7 +26,7 @@ public class BootstrapLoader : MonoBehaviour
             return;
         }
 
-        //Markiert dieses ganze GameObject (und seine Kinder) als "dont destroy"
+        //Markiert dieses GameObject (und seine Kinder) als "dont destroy"
         DontDestroyOnLoad(gameObject);
     }
 
@@ -35,7 +35,7 @@ public class BootstrapLoader : MonoBehaviour
         // if (!playerSpawned && playerPrefab != null)
         // {
         //     GameObject player = Instantiate(playerPrefab);
-        //     DontDestroyOnLoad(player);     // Player überlebt Szenenwechsel
+        //     DontDestroyOnLoad(player);     
         //     playerSpawned = true;
         // }
 
