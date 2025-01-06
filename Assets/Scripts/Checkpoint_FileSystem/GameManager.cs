@@ -186,7 +186,7 @@ public class GameManager : MonoBehaviour
                 return;
             }
         }
-        
+
         //Reset Health
         healthSystem.currentHealth = healthSystem.startingHealth;
         if (UIHandler.instance != null)
@@ -238,7 +238,6 @@ public class GameManager : MonoBehaviour
     private int LoadSoulShardCountFromLastCheckpoint()
     {
         //Load the amount of collected SoulShards from the last checkpoint
-        // Hier könntest du die Daten aus dem SaveManager oder einem separaten Speicher laden
         PlayerData data = SaveManager.Instance.LoadPlayerData();
         return data != null ? data.soulShardCount : 0;
     }
