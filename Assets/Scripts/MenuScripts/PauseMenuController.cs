@@ -91,6 +91,7 @@ public class PauseMenuController : MonoBehaviour
     public void LoadMainMenuYes()
     {
         SceneManager.LoadScene(_mainMenu); // Replace with the actual name of the main menu scene
+        DeactivateMenu();
     }
 
     public void RespawnYes()

@@ -173,6 +173,39 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void StartNewGame()
+    {
+        //Check player references
+        if (playerMovement == null || healthSystem == null || soulShardSystem == null)
+        {
+            Debug.LogWarning("StartNewGame: Player references are missing trying to reInitialize references.");
+            InitializeReferences();
+            if (playerMovement == null || healthSystem == null || soulShardSystem == null)
+            {
+                Debug.LogWarning("StartNewGame: Player references are missing, cannot start new Game");
+                return;
+            }
+        }
+        
+        //Reset Health
+        healthSystem.currentHealth = healthSystem.startingHealth;
+        if (UIHandler.instance != null)
+        {
+            UIHandler.instance.SetHealthValue(1.0f);
+        }
+
+        //SoulShards to 0
+        soulShardSystem.SetSoulShardCount(0);
+
+        //Empty Inventory
+        inventorySystem.ClearInventory();
+
+        //Rest Checkpoint-Status
+        //Need more logic, not done yet
+
+        Debug.Log("StartNewGame: Values reset to default.");
+    }
+
     public void RespawnPlayer()
     {
         if (playerMovement == null || healthSystem == null)

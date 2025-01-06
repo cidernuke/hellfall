@@ -77,20 +77,32 @@ public class MenuController : MonoBehaviour
     // Start a new game, loading a specified level
     public void NewGameDialogYes()
     {
-        SceneManager.LoadScene(_newGameLevel); // Load the new game level
+        //Deactivate MenuPause if activ
+        Time.timeScale = 1f;
+        var pauseMenuController = FindObjectOfType<PauseMenuController>();
+        if (pauseMenuController != null)
+        {
+            pauseMenuController.DeactivateMenu();
+        }
+
+        // Rest values
+        GameManager.Instance.StartNewGame();
+
+        // Load the new game level
+        SceneManager.LoadScene(_newGameLevel); 
     }
 
     // Load the saved game if a saved level exists
     public void LoadGameDialogYes()
     {
-            var data = SaveManager.Instance.LoadPlayerData();
-            if (data == null)
-            {
-                print("No saved game found!");
-                noSavedGameDialog.SetActive(true);
-                return;
-            }
-            SaveManager.Instance.LoadSceneFromSave();
+        var data = SaveManager.Instance.LoadPlayerData();
+        if (data == null)
+        {
+            print("No saved game found!");
+            noSavedGameDialog.SetActive(true);
+            return;
+        }
+        SaveManager.Instance.LoadSceneFromSave();
     }
 
     // Exit the game
