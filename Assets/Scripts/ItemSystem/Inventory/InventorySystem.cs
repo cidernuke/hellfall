@@ -34,6 +34,8 @@ public class InventorySystem : MonoBehaviour
         {
             playerSpeechSpriteRenderer.flipX = false;
         }
+
+
     }
 
 
@@ -51,6 +53,11 @@ public class InventorySystem : MonoBehaviour
             Destroy(gameObject);
             Debug.LogError("Multiple InventorySystem instances detected.");
         }
+
+        //let player start with short and long range weapons
+        ItemData basicData = Resources.Load<ItemData>(Assets/Resources/ItemData/BasicSword.asset);
+        Item sword = new WeaponItem(basicData.itemName, basicData.itemSprite);
+        slot[i].StoreItem(sword, basicData);
     }
     void Start()
     {
@@ -61,9 +68,9 @@ public class InventorySystem : MonoBehaviour
             return;
         }
         //Create 3 InventorySlots 
-        slots = new InventorySlot[3];
+        slots = new InventorySlot[5];
         //For the 3 Itemslots "Hotkey1", "Hotkey2", "Hotkey3"
-        for (int i = 0; i < slots.Length; i++)
+        for (int i = 0; i < 3; i++)
         {
             //Regex to find the VisualElement with the name "Hotkey" + i
             VisualElement hotkey = root.Q<VisualElement>($"Hotkey{i + 1}Container");
@@ -75,7 +82,16 @@ public class InventorySystem : MonoBehaviour
             slots[i] = new InventorySlot();
             slots[i].Initialize(hotkey);
         }
+        //For Slots 4 and 5 which are weapon slots
+        VisualElement shortRangeWeaponHotkey = root.Q<VisualElement>("Weapon1");
+        VisualElement longRangeWeaponHotkey = root.Q<VisualElement>("Weapon2");
 
+        slots[3] = new InventorySlot();
+        slots[3].Initialize(shortRangeWeaponHotkey);
+
+        slots[4] = new InventorySlot();
+        slots[4].Initialize(longRangeWeaponHotkey);
+        
         playerSpeech = GameObject.Find("Player_Speech_Bubble");
         playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
         player = GameObject.Find("Player");
@@ -115,9 +131,9 @@ public class InventorySystem : MonoBehaviour
             return false;
         }
 
-        foreach (var slot in slots)
+        for(int i = 0; i < 3; i++)
         {
-            if (slot.storedItem == null)
+            if (slot[i].storedItem == null)
             {
                 //Debug.Log($"Adding item {itemData.itemName} to the inventory.");
                 // calling method to set up instance
@@ -129,7 +145,7 @@ public class InventorySystem : MonoBehaviour
                     return false;
                 }
                 // pass the item-instance and itemData to the slot
-                slot.StoreItem(newItem, itemData);
+                slot[i].StoreItem(newItem, itemData);
                 return true;
             }
         }
@@ -183,6 +199,8 @@ public class InventorySystem : MonoBehaviour
                 it.playerHealth = playerHealth;
                 return it;
             // Additional cases for other item types can be added here
+            case ItemType.WeaponItem:
+                return new WeaponItem(itemData.itemName, itemData.itemSprite);
             default:
                 //Debug.LogError("Unknown ItemType: " + itemData.itemType);
                 return null;

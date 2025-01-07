@@ -300,7 +300,7 @@ public class HealthSystem : MonoBehaviour
         while (elapsedTime < duration)
         {
             yield return new WaitForSeconds(tickInterval); // wait first, then deal damage
-            TakeDamage(damagePerTick * 0.75); // reduced by 25%
+            TakeDamage(damagePerTick * 0.75f); // reduced by 25%
             Debug.Log("Enemy takes fire damage.");
             elapsedTime += tickInterval; // update the elapsed time
         }
