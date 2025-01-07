@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BasicSword
   m_EditorClassIdentifier: 
   itemName: BasicSword
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 21300000, guid: 182983447427804439c41051d9fe4ce8, type: 3}
   itemType: 2
   healthAmount: 0
   duration: 0
