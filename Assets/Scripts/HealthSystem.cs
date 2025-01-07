@@ -88,6 +88,7 @@ public class HealthSystem : MonoBehaviour
     /// <param name="damage">The amount of damage to take.</param>
     public void TakeDamage(float damage, PlayerMovement playerMovement = null, EnemyController enemyController = null)
     {
+        print("entered take damage");
         if (damage > 0)
         {
             if (isInvincible)

@@ -12,6 +12,8 @@ TagManager:
   - BackgroundMusic
   - Wall
   - Ladder
+  - enemy_p
+  - player_p
   layers:
   - Default
   - TransparentFX

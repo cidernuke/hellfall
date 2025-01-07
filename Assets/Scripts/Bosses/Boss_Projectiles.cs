@@ -1,8 +1,7 @@
 using System.Data.Common;
 using UnityEngine;
 
-
-public class Projectile : MonoBehaviour
+public class Boss_Projectiles : MonoBehaviour
 {
     // variables
     [SerializeField] private float speed;
@@ -53,36 +52,16 @@ public class Projectile : MonoBehaviour
     /// <param name="collision"></param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print("entered player projectile collision");
-        if (collision.tag == "Wall")
-        {
-            hit = true;
-            boxCollider.enabled = false;
-            animator.SetTrigger("explode");
-        }
-        if (collision.tag == "Enemy")
-        {
-            EnemyController enemyController = collision.GetComponent<EnemyController>();
-            if (collision.GetComponent<HealthSystem>() == null)
-            {
-                return;
-            }
-            collision.GetComponent<HealthSystem>().TakeDamage(damage, null, enemyController);
-            hit = true;
-            boxCollider.enabled = false;
-            animator.SetTrigger("explode");
-        }
+        print("entered");
         if (collision.tag == "Player")
         {
+            print("collision with player detected, damage is: "+damage);
             PlayerMovement playerMovement = collision.GetComponent<PlayerMovement>();
-            if (collision.GetComponent<HealthSystem>() == null)
-            {
-                return;
-            }
             collision.GetComponent<HealthSystem>().TakeDamage(damage, playerMovement, null);
             hit = true;
             boxCollider.enabled = false;
-            animator.SetTrigger("blood_bullet_hit");
+            print(animator.CompareTag("enemy_p"));
+            animator.SetTrigger("explode");
         }
 
     }
@@ -106,6 +85,7 @@ public class Projectile : MonoBehaviour
             localScaleX = -localScaleX;
         }
         transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
+        print("sucessfully set direction");
     }
 
     /// <summary>
@@ -115,5 +95,6 @@ public class Projectile : MonoBehaviour
     private void Deactivate()
     {
         gameObject.SetActive(false);
+        print("sucessfully deactivated projectile");
     }
 }
