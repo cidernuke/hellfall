@@ -6,12 +6,29 @@ using UnityEngine;
 [System.Serializable]
 public class Stat 
 {
-    [SerializeField] private int modifier = 0;
     [SerializeField] private float baseValue;
+    [SerializeField] private float modifier = 0f;
 
-    public float GetValue () 
+
+    public Stat (float baseValue, float modifier = 0)
     {
-        return baseValue + modifier;
+        this.baseValue = baseValue;
+        this.modifier = modifier;
+    }
+
+    public float GetBaseValue () 
+    {
+        return baseValue;
+    }
+
+    public void SetBaseValue (float value)
+    {
+        baseValue = value;
+    }
+
+    public float GetModifier ()
+    {
+        return modifier;
     }
 
     // public void SetModifier (int modifierInPercent)
@@ -20,13 +37,6 @@ public class Stat
     //     amount = amount * modifierInPercent;
     //     modifier = amount;
     // }
-
-    public float GetModifier ()
-    {
-        return modifier;
-    }
-
-
 
 
 

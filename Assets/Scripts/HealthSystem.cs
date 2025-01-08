@@ -10,6 +10,9 @@ public class HealthSystem : MonoBehaviour
     /// <summary>
     /// The initial amount of health the object starts with.
     /// </summary>
+    
+    
+    
     [SerializeField] public float startingHealth = 100;
 
     /// <summary>
