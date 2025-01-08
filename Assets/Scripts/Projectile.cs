@@ -1,6 +1,4 @@
-using System.Data.Common;
 using UnityEngine;
-
 
 public class Projectile : MonoBehaviour
 {
@@ -9,7 +7,9 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float damage;
     private bool hit;
     private float direction;
+    private float directionY;
     private float lifeTime;
+    private readonly float maxLifetime = 3f;
 
     // references
     private BoxCollider2D boxCollider;
@@ -28,8 +28,18 @@ public class Projectile : MonoBehaviour
         {
             return;
         }
-        float movementSpeed = speed * Time.deltaTime * direction;
-        transform.Translate(movementSpeed, 0, 0);
+
+        if (transform.CompareTag("blood_bullet_up"))
+        {
+            float movementSpeed = speed * Time.deltaTime * directionY;
+            transform.Translate(0, movementSpeed, 0);
+        }
+        else
+        {
+            float movementSpeed = speed * Time.deltaTime * direction;
+            transform.Translate(movementSpeed, 0, 0);
+        }
+
         SetLifeTime();
     }
 
@@ -39,7 +49,7 @@ public class Projectile : MonoBehaviour
     private void SetLifeTime()
     {
         lifeTime += Time.deltaTime;
-        if (lifeTime > 5)
+        if (lifeTime > maxLifetime)
         {
             gameObject.SetActive(false);
         }
@@ -53,14 +63,14 @@ public class Projectile : MonoBehaviour
     /// <param name="collision"></param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print("entered player projectile collision");
-        if (collision.tag == "Wall")
+        if (collision.CompareTag("Wall"))
         {
             hit = true;
             boxCollider.enabled = false;
             animator.SetTrigger("explode");
         }
-        if (collision.tag == "Enemy")
+
+        if (collision.CompareTag("Enemy"))
         {
             EnemyController enemyController = collision.GetComponent<EnemyController>();
             if (collision.GetComponent<HealthSystem>() == null)
@@ -72,7 +82,8 @@ public class Projectile : MonoBehaviour
             boxCollider.enabled = false;
             animator.SetTrigger("explode");
         }
-        if (collision.tag == "Player")
+        
+        if (collision.CompareTag("Player"))
         {
             PlayerMovement playerMovement = collision.GetComponent<PlayerMovement>();
             if (collision.GetComponent<HealthSystem>() == null)
@@ -80,11 +91,13 @@ public class Projectile : MonoBehaviour
                 return;
             }
             collision.GetComponent<HealthSystem>().TakeDamage(damage, playerMovement, null);
-            hit = true;
-            boxCollider.enabled = false;
-            animator.SetTrigger("blood_bullet_hit");
+            if (!transform.CompareTag("blood_bullet_up"))
+            {
+                hit = true;
+                boxCollider.enabled = false;
+                animator.SetTrigger("blood_bullet_hit");
+            }
         }
-
     }
 
     /// <summary>
@@ -92,19 +105,21 @@ public class Projectile : MonoBehaviour
     /// Sets the lifetime to 0.
     /// </summary>
     /// <param name="_direction">The direction of the projectile.</param>
-    public void SetDirection(float _direction)
+    public void SetDirection(Vector2 _direction)
     {
         lifeTime = 0;
-        direction = _direction;
+        direction = _direction.x;
+        directionY = _direction.y;
         gameObject.SetActive(true);
         hit = false;
         boxCollider.enabled = true;
 
         float localScaleX = transform.localScale.x;
-        if (Mathf.Sign(localScaleX) != _direction)
+        if (Mathf.Sign(localScaleX) != _direction.x)
         {
             localScaleX = -localScaleX;
         }
+
         transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
     }
 

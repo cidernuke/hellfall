@@ -12,8 +12,7 @@ TagManager:
   - BackgroundMusic
   - Wall
   - Ladder
-  - enemy_p
-  - player_p
+  - blood_bullet_up
   layers:
   - Default
   - TransparentFX
@@ -25,7 +24,7 @@ TagManager:
   - Ground
   - Enemy
   - Platform
-  - 
+  - Projectile
   - 
   - 
   - 

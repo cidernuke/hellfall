@@ -52,7 +52,6 @@ public class PlayerAttack : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && cooldownTimer >= closeRangeAttackCooldown)
         {
-
             Attack();
         }
         if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown)
@@ -147,7 +146,9 @@ public class PlayerAttack : MonoBehaviour
         cooldownTimer = 0;
         int projectileIndex = FindProjectile();
         projectiles[projectileIndex].transform.position = firePoint.position;
-        projectiles[projectileIndex].GetComponent<Projectile>().SetDirection(Math.Sign(transform.localScale.x));
+
+        int directionX = Math.Sign(transform.localScale.x);
+        projectiles[projectileIndex].GetComponent<Projectile>().SetDirection(new Vector2(directionX, 0));
     }
 
     /// <summary>

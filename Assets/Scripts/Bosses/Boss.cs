@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,32 +6,40 @@ public class Boss : MonoBehaviour
 {
 	public bool isFlipped = false;
 	[SerializeField] private Transform firePoint;
-	[SerializeField] private GameObject[] projectiles;
-	private Animator animator;
+	[SerializeField] private GameObject[] projectilesForward;
+	[SerializeField] private GameObject[] projectilesUpward;
+	private Transform player;
+	private Vector3 playerPosition;
+	private readonly float groundCoordinates = 30.25f;
+    [SerializeField] private readonly float upwardAttackCooldown = 3f;
+    private float cooldownTimer = Mathf.Infinity;
 
-    private void Awake()
+	private void Awake()
 	{
-		animator = GetComponent<Animator>();
+		player = GameObject.FindGameObjectWithTag("Player").transform;
+	}
+
+	private void Update()
+	{
+		cooldownTimer += Time.deltaTime;
 	}
 
 	public void LookAtPlayer(Transform player)
 	{
 		Vector3 flipped = transform.localScale;
 
-		//* boss is left of player
+		// boss is left of player
 		if (transform.position.x < player.position.x && isFlipped)
 		{
 			flipped.x *= -1f;
 			transform.localScale = flipped;
-			// transform.Rotate(0f, 180f, 0f);
 			isFlipped = false;
 		}
-		//* boss is right of player
+		// boss is right of player
 		else if (transform.position.x > player.position.x && !isFlipped)
 		{
 			flipped.x *= -1f;
 			transform.localScale = flipped;
-			// transform.Rotate(0f, 180f, 0f);
 			isFlipped = true;
 		}
 	}
@@ -43,9 +50,9 @@ public class Boss : MonoBehaviour
 	/// <returns></returns>
 	private int FindProjectile()
 	{
-		for (int i = 0; i < projectiles.Length; i++)
+		for (int i = 0; i < projectilesForward.Length; i++)
 		{
-			if (!projectiles[i].activeInHierarchy)
+			if (!projectilesForward[i].activeInHierarchy)
 			{
 				return i;
 			}
@@ -54,18 +61,78 @@ public class Boss : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Triggers the ranged attack animation and resets the cooldown timer.
+	/// Finds n projectiles that are currently not in use
+	/// </summary>
+	/// <returns></returns>
+	private List<GameObject> FindProjectilesUpward(int n)
+	{
+		List<GameObject> usableProjectilesUpward = new();
+		for (int i = 0; i < n; i++)
+		{
+			if (!projectilesUpward[i].activeInHierarchy)
+			{
+				usableProjectilesUpward.Add(projectilesUpward[i]);
+			}
+		}
+
+		return usableProjectilesUpward;
+	}
+
+	/// <summary>
+	/// Executes the ranged attack of the vampire countess boss
 	/// Spawns a projectile and sets the direction.
+	/// Called by animation event in attack_01
 	/// </summary>
 	private void AttackRanged()
 	{
-		// cooldownTimer = 0;
 		int projectileIndex = FindProjectile();
-		projectiles[projectileIndex].transform.position = firePoint.position;
-		projectiles[projectileIndex].GetComponent<Projectile>().SetDirection(Math.Sign(transform.localScale.x));
+		projectilesForward[projectileIndex].transform.position = firePoint.position;
 
-		
+		int directionX = Math.Sign(transform.localScale.x);
+		projectilesForward[projectileIndex].GetComponent<Projectile>().SetDirection(new Vector2(directionX, 0));
+	}
 
+	/// <summary>
+	/// Executes the upward attack of the vampire countess boss
+	/// Called by animation event in attack_02
+	/// </summary>
+	private void AttackUpwards()
+	{
+		if (cooldownTimer < upwardAttackCooldown)
+		{
+			return;
+		}
+		List<GameObject> availableProjectiles = FindProjectilesUpward(5);
+
+		GameObject projectile_1 = availableProjectiles[0];
+		GameObject projectile_2 = availableProjectiles[1];
+		GameObject projectile_3 = availableProjectiles[2];
+		GameObject projectile_4 = availableProjectiles[3];
+		GameObject projectile_5 = availableProjectiles[4];
+
+		projectile_1.transform.position = new Vector2(playerPosition.x - 0.5f, groundCoordinates);
+		projectile_2.transform.position = new Vector2(playerPosition.x - 0.25f, groundCoordinates);
+		projectile_3.transform.position = new Vector2(playerPosition.x, groundCoordinates);
+		projectile_4.transform.position = new Vector2(playerPosition.x + 0.25f, groundCoordinates);
+		projectile_5.transform.position = new Vector2(playerPosition.x + 0.5f, groundCoordinates);
+
+		int directionY = Math.Sign(transform.localScale.y);
+		projectile_1.GetComponent<Projectile>().SetDirection(new Vector2(0, directionY));
+		projectile_2.GetComponent<Projectile>().SetDirection(new Vector2(0, directionY));
+		projectile_3.GetComponent<Projectile>().SetDirection(new Vector2(0, directionY));
+		projectile_4.GetComponent<Projectile>().SetDirection(new Vector2(0, directionY));
+		projectile_5.GetComponent<Projectile>().SetDirection(new Vector2(0, directionY));
+
+		cooldownTimer = 0;
+	}
+
+	/// <summary>
+	/// Grabs the current player position
+	/// Called by animation event in attack_02
+	/// </summary>
+	private void GrabPlayerPosition()
+	{
+		playerPosition = player.position;
 	}
 
 }

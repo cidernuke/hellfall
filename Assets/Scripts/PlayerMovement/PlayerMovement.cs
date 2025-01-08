@@ -700,7 +700,7 @@ public class PlayerMovement : MonoBehaviour
         float dashEndTime = Time.time + dashDuration;
 
         // Used to make player invincible during a dash
-        HealthSystem healthSystem = GetComponent<HealthSystem>();
+        var healthSystem = body.GetComponent<HealthSystem>();
         while (Time.time < dashEndTime)
         {
             // Move the player in the dash direction
