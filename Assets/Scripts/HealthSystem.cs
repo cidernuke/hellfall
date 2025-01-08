@@ -12,6 +12,8 @@ public class HealthSystem : MonoBehaviour
     /// </summary>
     [SerializeField] public float startingHealth = 100;
 
+    [SerializeField] private EnemyHealthBar enemyHealthBar;
+
     /// <summary>
     /// The current amount of health the object has.
     /// </summary>
@@ -63,6 +65,7 @@ public class HealthSystem : MonoBehaviour
         currentHealth = startingHealth;
         respawnHealth = startingHealth; //To avoid null-pointers
         anim = GetComponent<Animator>();
+        enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
 
     }
 
@@ -106,6 +109,7 @@ public class HealthSystem : MonoBehaviour
             {
                 UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
             }
+            enemyHealthBar.updateHealthBar(currentHealth,startingHealth);
 
         }
         else

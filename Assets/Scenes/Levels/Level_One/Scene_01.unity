@@ -73765,6 +73765,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 10.4
       objectReference: {fileID: 0}
+    - target: {fileID: 7488354036633323685, guid: fac2980baa124954b851147a365e2142, type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 2030275752}
     - target: {fileID: 7593671398415433142, guid: fac2980baa124954b851147a365e2142, type: 3}
       propertyPath: m_SortingOrder
       value: -1

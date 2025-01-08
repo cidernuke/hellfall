@@ -9,6 +9,7 @@ public class EnemyController : MonoBehaviour
     [Header("Attack Parameters")]
     [SerializeField] private float attackCooldown;
     [SerializeField] private float range;
+    [SerializeField] private float height;
     [SerializeField] private float damage;
 
     [Header("Collider Parameters")]
@@ -94,7 +95,7 @@ public class EnemyController : MonoBehaviour
     {
 
         RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
-            new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z),
+            new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y * height, boxCollider.bounds.size.z),
             0, Vector2.left, 0, playerLayer);
 
         if (hit.collider != null)
@@ -121,7 +122,7 @@ public class EnemyController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
-            new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z));
+            new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y * height, boxCollider.bounds.size.z));
     }
 
     /*
