@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
     private float wallJumpingTime = 0.2f;
     private float wallJumpingCounter;
     [SerializeField] private float wallJumpDuration = 0.09f;  // Duration during which horizontal input is ignored after a wall jump
-    private bool isFalling = false;
+    public bool isFalling = false;
 
     // Double Jump
     private bool isDoubleJumping;
@@ -552,7 +552,7 @@ public class PlayerMovement : MonoBehaviour
                     playerFX.transform.position = new Vector2(transform.position.x + 0.1f, transform.position.y - 0.35f);
                     playerFXAnimator.SetBool("hasDoubleJumped", true);
 
-                    body.velocity = new Vector2(body.velocity.x, jumpPower / 1.5f);
+                    body.velocity = new Vector2(body.velocity.x, jumpPower / 1.3f);
                     isDoubleJumping = true; // Set double jump flag to prevent further jumps
                     animator.SetBool("grounded", IsGrounded());
                 }
@@ -699,10 +699,13 @@ public class PlayerMovement : MonoBehaviour
 
         float dashEndTime = Time.time + dashDuration;
 
+        // Used to make player invincible during a dash
+        var healthSystem = body.GetComponent<HealthSystem>();
         while (Time.time < dashEndTime)
         {
             // Move the player in the dash direction
             body.velocity = new Vector2(dashDirection * dashSpeed, 0);
+            healthSystem.isInvincible = true;
             yield return null; // Wait for the next frame
         }
 
@@ -714,6 +717,7 @@ public class PlayerMovement : MonoBehaviour
         // Wait for dash cooldown before allowing another dash
         yield return new WaitForSeconds(dashCooldown);
 
+        healthSystem.isInvincible = false;
         canDash = true;
     }
     #endregion

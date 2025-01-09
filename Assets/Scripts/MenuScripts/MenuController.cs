@@ -89,7 +89,7 @@ public class MenuController : MonoBehaviour
         GameManager.Instance.StartNewGame();
 
         // Load the new game level
-        SceneManager.LoadScene(_newGameLevel); 
+        SceneManager.LoadScene(_newGameLevel);
     }
 
     // Load the saved game if a saved level exists
@@ -103,6 +103,21 @@ public class MenuController : MonoBehaviour
             return;
         }
         SaveManager.Instance.LoadSceneFromSave();
+
+        //Update EnemyHealthUI
+        var enemyObject = GameObject.FindGameObjectsWithTag("Enemy");
+        if (enemyObject != null)
+        {
+            foreach (var enemy in enemyObject)
+            {
+                //print("we da champs");
+                enemy.GetComponent<HealthSystem>().ResetEnemySliderToFullHealth();
+            }
+        }
+        else
+        {
+            Debug.Log("HealthSystem not found on enemyObject");
+        }
     }
 
     // Exit the game

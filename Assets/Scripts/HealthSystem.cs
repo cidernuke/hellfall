@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// Manages the health system for a game object, including taking damage and temporary invincibility.
@@ -12,6 +13,8 @@ public class HealthSystem : MonoBehaviour
     /// The initial amount of health the object starts with.
     /// </summary>
     [SerializeField] public float startingHealth = 100;
+
+    [SerializeField] private EnemyHealthBar enemyHealthBar;
 
     /// <summary>
     /// The current amount of health the object has.
@@ -64,6 +67,7 @@ public class HealthSystem : MonoBehaviour
         currentHealth = startingHealth;
         respawnHealth = startingHealth; //To avoid null-pointers
         anim = GetComponent<Animator>();
+        enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
 
     }
 
@@ -121,7 +125,10 @@ public class HealthSystem : MonoBehaviour
                 UpdateHealthUI();
                 //UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
             }
-
+            if (!isPlayer)
+            {
+                enemyHealthBar.updateHealthBar(currentHealth, startingHealth);
+            }
         }
         else
         {
@@ -161,7 +168,7 @@ public class HealthSystem : MonoBehaviour
 
             anim.SetTrigger("die");
 
-            // //Show death message
+            //Show death message
             // DeathUIManager.Instance.ShowDeathMessage("You are not worthy to go any further.", 3f);
 
             if (playerMovement != null)
@@ -170,6 +177,22 @@ public class HealthSystem : MonoBehaviour
                 isDead = true;
 
                 StartCoroutine(RespawnPlayer(playerMovement));
+
+                //Update enemies health ui
+                var enemyObject = GameObject.FindGameObjectsWithTag("Enemy");
+                if (enemyObject != null)
+                {
+                    foreach (var enemy in enemyObject)
+                    {
+                        //print("we da champs");
+                        enemy.GetComponent<HealthSystem>().ResetEnemySliderToFullHealth();
+                        // enemy.ResetEnemySliderToFullHealth();
+                    }
+                }
+                else
+                {
+                    Debug.Log("HealthSystem not found on enemyObject");
+                }
             }
             else if (enemyController != null)
             {
@@ -264,5 +287,10 @@ public class HealthSystem : MonoBehaviour
         {
             UIHandler.instance.SetHealthValue(currentHealth / startingHealth);
         }
+    }
+
+    public void ResetEnemySliderToFullHealth()
+    {
+        enemyHealthBar.slider.value = startingHealth;
     }
 }

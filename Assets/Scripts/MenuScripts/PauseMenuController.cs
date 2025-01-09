@@ -96,8 +96,22 @@ public class PauseMenuController : MonoBehaviour
 
     public void RespawnYes()
     {
-        //print("Start respawn");
         GameManager.Instance.RespawnPlayer();
-        DeactivateMenu();
+        // DeactivateMenu();
+        var enemyObject = GameObject.FindGameObjectsWithTag("Enemy");
+        if (enemyObject != null)
+        {
+            foreach (var enemy in enemyObject)
+            {
+                //print("we da champs");
+                enemy.GetComponent<HealthSystem>().ResetEnemySliderToFullHealth();
+            }
+            DeactivateMenu();
+        }
+        else
+        {
+            Debug.Log("HealthSystem not found on enemyObject");
+        }
+
     }
 }

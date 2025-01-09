@@ -292,13 +292,14 @@ MonoBehaviour:
   groundCheck: {fileID: 7624676514274553780}
   ceilingCheck: {fileID: 8381836596924870710}
   groundSpeed: 7
-  jumpPower: 5
+  jumpPower: 6
   jumpBufferTime: 0.1
   isFacingRight: 1
   maxFallSpeed: -10
   wallSlideSpeed: 5
   wallCheck: {fileID: 976393204391322360}
   wallJumpDuration: 0.07
+  isFalling: 0
   coyoteTimeDuration: 0.2
   dashSpeed: 20
   dashDuration: 0.2
@@ -361,6 +362,23 @@ MonoBehaviour:
   isInvincible: 0
   isDead: 0
   respawnHealth: 0
+--- !u!114 &8026818364704553123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5585758838363563765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba6c94739b73fd49b7395b1ba318fd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 5585758838363563765}
+  playerCollider: {fileID: 8124953113361661337}
+  jumpBoost: 5
+  height: 1
+  time: 0.15
 --- !u!114 &1795978731709622821
 MonoBehaviour:
   m_ObjectHideFlags: 0
