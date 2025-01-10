@@ -26,6 +26,7 @@ public class InventorySlot
     {
         this.storedItem = item;
         this.itemData = itemData;
+        Debug.Log($"Item stored: {storedItem.itemName}");
         UpdateSlotVisual();
     }
 

@@ -94,13 +94,12 @@ public class InventorySystem : MonoBehaviour
         slots[4] = new InventorySlot();
         slots[4].Initialize(longRangeWeaponHotkey);
 
-        //let player start with short and long range weapons
+        //let player start with short (and to-do: long) range weapon 
         try
         {
-            ItemData basicData = Resources.Load<ItemData>("ItemData/BasicSword");
+            ItemData basicSword = Resources.Load<ItemData>("ItemData/BasicSword");
             //Debug.Log("Trying to create item instance: " + basicData.itemName + " " + basicData.itemType);
-            Item sword = CreateItemInstance(basicData);
-            slots[3].StoreItem(sword, basicData);
+            AddItemToFirstAvailableSlot(basicSword);
         }
         catch (System.Exception e)
         {
@@ -147,11 +146,11 @@ public class InventorySystem : MonoBehaviour
         }
 
         //Special Case for weapons
-        if(itemData.itemType == ItemType.ShortRangeWeapon)
+        if(itemData.itemType == ItemType.ShortRangeWeapon || slots[3].storedItem == null)
         {
             //Debug.Log("Weapon added to inventory");
             Item newItem = CreateItemInstance(itemData);
-            slots[4].StoreItem(newItem, itemData);
+            slots[3].StoreItem(newItem, itemData);
             return true;
         }
 
