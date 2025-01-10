@@ -53,11 +53,6 @@ public class InventorySystem : MonoBehaviour
             Destroy(gameObject);
             Debug.LogError("Multiple InventorySystem instances detected.");
         }
-
-        //let player start with short and long range weapons
-        ItemData basicData = Resources.Load<ItemData>("Assets/Resources/ItemData/BasicSword.asset");
-        Item sword = CreateItemInstance(basicData);
-        slots[3].StoreItem(sword, basicData);
     }
     void Start()
     {
@@ -67,7 +62,7 @@ public class InventorySystem : MonoBehaviour
             Debug.LogError("Could not find UIDocument component on GameObject");
             return;
         }
-        //Create 3 InventorySlots 
+        //Create 5 InventorySlots 
         slots = new InventorySlot[5];
         //For the 3 Itemslots "Hotkey1", "Hotkey2", "Hotkey3"
         for (int i = 0; i < 3; i++)
@@ -98,6 +93,19 @@ public class InventorySystem : MonoBehaviour
 
         slots[4] = new InventorySlot();
         slots[4].Initialize(longRangeWeaponHotkey);
+
+        //let player start with short and long range weapons
+        try
+        {
+            ItemData basicData = Resources.Load<ItemData>("ItemData/BasicSword");
+            //Debug.Log("Trying to create item instance: " + basicData.itemName + " " + basicData.itemType);
+            Item sword = CreateItemInstance(basicData);
+            slots[3].StoreItem(sword, basicData);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Could not load ItemData/BasicSword");
+        }
 
         playerSpeech = GameObject.Find("Player_Speech_Bubble");
         playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
@@ -138,6 +146,15 @@ public class InventorySystem : MonoBehaviour
             return false;
         }
 
+        //Special Case for weapons
+        if(itemData.itemType == ItemType.ShortRangeWeapon)
+        {
+            //Debug.Log("Weapon added to inventory");
+            Item newItem = CreateItemInstance(itemData);
+            slots[4].StoreItem(newItem, itemData);
+            return true;
+        }
+
         for (int i = 0; i < 3; i++)
         {
             if (slots[i].storedItem == null)
@@ -169,7 +186,7 @@ public class InventorySystem : MonoBehaviour
     /// <param name="dropOffset">The offset from the player's position where the item will be dropped.</param>
     public void DropItemFromSlot(int slotIndex, Vector3 playerPosition, Vector3 dropOffset)
     {
-        // dropps item from the respective slot
+        // drops item from the respective slot
         if (slotIndex >= 0 && slotIndex < slots.Length)
         {
             slots[slotIndex].DropItem(playerPosition, dropOffset);
@@ -195,6 +212,11 @@ public class InventorySystem : MonoBehaviour
     //Diego changed to public, because i need to use it
     public Item CreateItemInstance(ItemData itemData)
     {
+        if (itemData == null)
+        {
+            Debug.LogError("ItemData is null.");
+            return null;
+        }
         switch (itemData.itemType)
         {
             case ItemType.ModifierItem:
@@ -207,7 +229,7 @@ public class InventorySystem : MonoBehaviour
                 it.playerHealth = playerHealth;
                 return it;
             // Additional cases for other item types can be added here
-            case ItemType.WeaponItem:
+            case ItemType.ShortRangeWeapon:
                 return new ShortRangeWeapon(itemData.itemName, itemData.itemSprite);
             default:
                 //Debug.LogError("Unknown ItemType: " + itemData.itemType);

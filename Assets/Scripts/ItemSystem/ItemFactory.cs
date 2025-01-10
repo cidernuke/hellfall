@@ -30,6 +30,10 @@ public class ItemFactory : MonoBehaviour
             case ItemType.HealthItem:
                 healthItem = new HealthItem(itemData.itemName, itemData.itemSprite, itemData.healthAmount);
                 break;
+            
+            case ItemType.ShortRangeWeapon:
+                healthItem = new ShortRangeWeapon(itemData.itemName, itemData.itemSprite);
+                break;
 
             // Weitere Fälle für andere Item-Typen können hier hinzugefügt werden
             default:

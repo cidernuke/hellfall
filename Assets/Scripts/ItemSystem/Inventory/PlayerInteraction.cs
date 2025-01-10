@@ -137,7 +137,18 @@ public class PlayerInteraction : MonoBehaviour
                 //playerInventory.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
                 InventorySystem.Instance.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
             }
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                //playerInventory.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
+                InventorySystem.Instance.DropItemFromSlot(3, playerPosition, dropOffset); // Drop from slot 3
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                //playerInventory.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
+                InventorySystem.Instance.DropItemFromSlot(4, playerPosition, dropOffset); // Drop from slot 3
+            }
         }
+        
     }
 
     /// <summary>

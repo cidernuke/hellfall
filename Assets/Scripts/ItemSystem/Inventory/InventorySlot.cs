@@ -17,7 +17,7 @@ public class InventorySlot
         hotkey = slotVisualElement;
         if (hotkey == null)
         {
-            //Debug.LogError("Could not find VisualElement with name Hotkey");
+            Debug.LogError("Could not find VisualElement with name: " + slotVisualElement);
         }
         UpdateSlotVisual();
     }
@@ -31,7 +31,7 @@ public class InventorySlot
 
     public void useItem()
     {
-        if(storedItem == null)
+        if (storedItem == null)
         {
             //Debug.Log("No item to use");
             return;
@@ -60,12 +60,14 @@ public class InventorySlot
                     // check if loading of resource worked
                     if (resource == null)
                     {
-                        Debug.LogError("Failed to load HealthItem(new) prefab");
+                        Debug.LogError("Failed to load PowerUp prefab");
                         return;
                     }
 
                     // create instance of the prefab
                     GameObject.Instantiate(resource, dropPosition, Quaternion.identity);
+                    // clear the slot, so the visual representation is updated and the slot can't be dropped multiple times
+                    ClearSlot();
                     break;
 
                 case ItemType.HealthItem:
@@ -79,6 +81,19 @@ public class InventorySlot
                     }
                     // create instance of the prefab
                     GameObject.Instantiate(resourceH, dropPosition, Quaternion.identity);
+                    ClearSlot();
+                    break;
+
+                case ItemType.ShortRangeWeapon:
+                    Debug.Log("WeaponItem was dropped");
+                    GameObject resourceW = Resources.Load<GameObject>("Prefabs/Weapons/Weapon");
+                    if (resourceW == null)
+                    {
+                        Debug.LogError("Failed to load WeaponItem prefab");
+                        return;
+                    }
+                    GameObject.Instantiate(resourceW, dropPosition, Quaternion.identity);
+                    ClearSlot();
                     break;
 
                 default:
@@ -88,7 +103,11 @@ public class InventorySlot
 
             //Debug.Log($"Dropping item: {storedItem.itemName}");
 
-            UpdateSlotVisual();
+            //UpdateSlotVisual();
+        }
+        else
+        {
+            Debug.Log("No item to drop");
         }
     }
 
@@ -111,10 +130,10 @@ public class InventorySlot
     }
 
     public void ClearSlot()
-{
-    storedItem = null;
-    itemData = null;
-    UpdateSlotVisual();
-}
+    {
+        storedItem = null;
+        itemData = null;
+        UpdateSlotVisual();
+    }
 
 }
