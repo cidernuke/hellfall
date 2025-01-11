@@ -286,18 +286,23 @@ public class InventorySystem : MonoBehaviour
     public void SwitchItems(int firstSlot, int secondSlot)
     {
 
-        Debug.Log($"First slot: {firstSlot}, second slot: {secondSlot}");
-        Debug.Log($"BEFORE SWAP: Item in first slot: {slots[firstSlot].itemData?.itemName}, Item in second slot: {slots[secondSlot].itemData?.itemName}");
+        //Debug.Log($"First slot: {firstSlot}, second slot: {secondSlot}");
+        //Debug.Log($"BEFORE SWAP: Item in first slot: {slots[firstSlot].itemData?.itemName}, Item in second slot: {slots[secondSlot].itemData?.itemName}");
         // Retrieve item data from the first slot
         var firstSlotItemData = slots[firstSlot].itemData;
         // Allow switching even if the first slot is empty
         Item firstSlotNewItem = firstSlotItemData != null ? CreateItemInstance(firstSlotItemData) : null;
-
+        //Debug.Log($"First slot item: {firstSlotNewItem}");
 
         // Retrieve item data from the second slot
         var secondSlotItemData = slots[secondSlot].itemData;
         // Allow switching even if the second slot is empty
         Item secondSlotNewItem = secondSlotItemData != null ? CreateItemInstance(secondSlotItemData) : null;
+        //Debug.Log($"Second slot item: {secondSlotNewItem}");
+
+        //clear InventorySlots
+        slots[firstSlot].ClearSlot();
+        slots[secondSlot].ClearSlot();
 
 
         // Store the new item instances in the opposite slots

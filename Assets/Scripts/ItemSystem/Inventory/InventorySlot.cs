@@ -24,10 +24,19 @@ public class InventorySlot
 
     public void StoreItem(Item item, ItemData itemData)
     {
-        this.storedItem = item;
-        this.itemData = itemData;
-        Debug.Log($"Item stored: {storedItem.itemName}");
-        UpdateSlotVisual();
+        if (item == null || itemData == null)
+        {
+            Debug.Log("Item or itemData is null");
+            UpdateSlotVisual();
+            return;
+        }
+        else
+        {
+            this.storedItem = item;
+            this.itemData = itemData;
+            //Debug.Log($"Item stored: {storedItem.itemName}");
+            UpdateSlotVisual();
+        }
     }
 
     public void useItem()
@@ -120,7 +129,7 @@ public class InventorySlot
             {
                 // set image of hotkey to the image of the item
                 hotkey.style.backgroundImage = new StyleBackground(storedItem.itemSprite);
-                Debug.Log("InvSlot: Item displayed");
+                //Debug.Log("InvSlot: Item displayed");
             }
             else
             {

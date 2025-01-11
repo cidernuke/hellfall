@@ -44,7 +44,7 @@ public class PlayerInteraction : MonoBehaviour
             itemToPickUp = other.GetComponent<InventoryItem>();
             if (itemToPickUp != null)
             {
-                Debug.Log($"Item in range to pick up: {itemToPickUp.item.itemName}");
+                //Debug.Log($"Item in range to pick up: {itemToPickUp.item.itemName}");
             }
         }
     }
@@ -54,7 +54,7 @@ public class PlayerInteraction : MonoBehaviour
         // Clear the reference when the player leaves the item's trigger zone
         if (other.CompareTag("Item") && itemToPickUp != null && other.GetComponent<InventoryItem>() == itemToPickUp)
         {
-            Debug.Log($"Item out of range: {itemToPickUp.item.itemName}");
+            //Debug.Log($"Item out of range: {itemToPickUp.item.itemName}");
             itemToPickUp = null;
         }
     }
