@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4740882965803463931}
   - component: {fileID: 2521890195086758489}
   m_Layer: 0
-  m_Name: Weapon
+  m_Name: BasicSword
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -96,7 +96,19 @@ public class InventorySlot
 
                 case ItemType.ShortRangeWeapon:
                     Debug.Log("WeaponItem was dropped");
-                    GameObject resourceW = Resources.Load<GameObject>("Prefabs/Weapons/Weapon");
+                    GameObject resourceW = Resources.Load<GameObject>("Prefabs/Weapons/BasicSword");
+                    if (resourceW == null)
+                    {
+                        Debug.LogError("Failed to load WeaponItem prefab");
+                        return;
+                    }
+                    GameObject.Instantiate(resourceW, dropPosition, Quaternion.identity);
+                    ClearSlot();
+                    break;
+                
+                case ItemType.LongRangeWeapon:
+                    Debug.Log("WeaponItem was dropped");
+                    GameObject resourceW = Resources.Load<GameObject>("Prefabs/Weapons/BasicLongRange");
                     if (resourceW == null)
                     {
                         Debug.LogError("Failed to load WeaponItem prefab");

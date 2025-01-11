@@ -34,5 +34,7 @@ public enum ItemType
     HealthItem,
     WeaponItem,
     // Weitere Item-Typen können hier hinzugefügt werden
-    ShortRangeWeapon
+    ShortRangeWeapon,
+
+    LongRangeWeapon
 }

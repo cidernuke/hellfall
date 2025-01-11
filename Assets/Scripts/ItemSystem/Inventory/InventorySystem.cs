@@ -82,12 +82,12 @@ public class InventorySystem : MonoBehaviour
         VisualElement shortRangeWeaponHotkey = root.Q<VisualElement>("Weapon1Container");
         if (shortRangeWeaponHotkey == null)
         {
-            Debug.LogError("Could not find VisualElement with name shortRangeWeaponHotkey");
+            Debug.LogError("Could not find VisualElement with name Weapon1Container");
         }
         VisualElement longRangeWeaponHotkey = root.Q<VisualElement>("Weapon2Container");
         if (longRangeWeaponHotkey == null)
         {
-            Debug.LogError("Could not find VisualElement with name longRangeWeaponHotkey");
+            Debug.LogError("Could not find VisualElement with name Weapon2Container");
         }
         slots[3] = new InventorySlot();
         slots[3].Initialize(shortRangeWeaponHotkey);
@@ -105,6 +105,17 @@ public class InventorySystem : MonoBehaviour
         catch (System.Exception e)
         {
             Debug.LogError("Could not load ItemData/BasicSword");
+        }
+        
+        try
+        {
+            ItemData basicLongRange = Resources.Load<ItemData>("ItemData/BasicLongRange");
+            //Debug.Log("Trying to create item instance: " + basicData.itemName + " " + basicData.itemType);
+            AddItemToFirstAvailableSlot(basicLongRange);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Could not load ItemData/BasicLongRange");
         }
 
         playerSpeech = GameObject.Find("Player_Speech_Bubble");
@@ -155,6 +166,22 @@ public class InventorySystem : MonoBehaviour
                 //Debug.Log("Weapon added to inventory");
                 Item newItem = CreateItemInstance(itemData);
                 slots[3].StoreItem(newItem, itemData);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
+        if (itemData.itemType == ItemType.LongRangeWeapon)
+        {
+            //check if the slot is empty, else return false so weapons don't get added to other slots
+            if (slots[4].storedItem == null)
+            {
+                //Debug.Log("Weapon added to inventory");
+                Item newItem = CreateItemInstance(itemData);
+                slots[4].StoreItem(newItem, itemData);
                 return true;
             }
             else
@@ -237,8 +264,14 @@ public class InventorySystem : MonoBehaviour
                 it.playerHealth = playerHealth;
                 return it;
             // Additional cases for other item types can be added here
+
+            //Short Range Weapon
             case ItemType.ShortRangeWeapon:
                 return new ShortRangeWeapon(itemData.itemName, itemData.itemSprite);
+            
+            //Long Range Weapon
+            case ItemType.LongRangeWeapon:
+                return new LongRangeWeapon(itemData.itemName, itemData.itemSprite);
             default:
                 //Debug.LogError("Unknown ItemType: " + itemData.itemType);
                 return null;
