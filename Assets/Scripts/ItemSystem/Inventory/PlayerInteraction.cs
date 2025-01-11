@@ -32,7 +32,7 @@ public class PlayerInteraction : MonoBehaviour
         playerHealth = GetComponent<HealthSystem>();
         //playerInventory.playerHealth = playerHealth;
         InventorySystem.Instance.playerHealth = playerHealth;
-        
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -86,22 +86,22 @@ public class PlayerInteraction : MonoBehaviour
             if (playerInventory.AddItemToFirstAvailableSlot(itemToPickUp.item)) // Attempt to add the item to the inventory
             {
                 ItemRespawner respawner = itemToPickUp.GetComponent<ItemRespawner>();
-            if (respawner != null)
-            {
-                respawner.CollectItem();
+                if (respawner != null)
+                {
+                    respawner.CollectItem();
+                }
+                else
+                {
+                    // Falls kein respawner vorhanden ist, zerstören wir es wie bisher
+                    Destroy(itemToPickUp.gameObject);
+                }
+
+                itemToPickUp = null; // Clear the reference
             }
             else
             {
-                // Falls kein respawner vorhanden ist, zerstören wir es wie bisher
-                Destroy(itemToPickUp.gameObject);
+                print("Failed to pick up item. Inventory is full!");
             }
-
-            itemToPickUp = null; // Clear the reference
-        }
-        else
-        {
-            print("Failed to pick up item. Inventory is full!");
-        }
         }
     }
 
@@ -148,7 +148,7 @@ public class PlayerInteraction : MonoBehaviour
                 InventorySystem.Instance.DropItemFromSlot(4, playerPosition, dropOffset); // Drop from slot 3
             }
         }
-        
+
     }
 
     /// <summary>

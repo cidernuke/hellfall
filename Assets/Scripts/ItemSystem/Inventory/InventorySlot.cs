@@ -120,7 +120,7 @@ public class InventorySlot
             {
                 // set image of hotkey to the image of the item
                 hotkey.style.backgroundImage = new StyleBackground(storedItem.itemSprite);
-                //Debug.Log("InvSlot: Item displayed");
+                Debug.Log("InvSlot: Item displayed");
             }
             else
             {

@@ -78,12 +78,13 @@ public class InventorySystem : MonoBehaviour
             slots[i].Initialize(hotkey);
         }
         //For Slots 4 and 5 which are weapon slots
-        VisualElement shortRangeWeaponHotkey = root.Q<VisualElement>("Weapon1");
+        //Get the Containers!
+        VisualElement shortRangeWeaponHotkey = root.Q<VisualElement>("Weapon1Container");
         if (shortRangeWeaponHotkey == null)
         {
             Debug.LogError("Could not find VisualElement with name shortRangeWeaponHotkey");
         }
-        VisualElement longRangeWeaponHotkey = root.Q<VisualElement>("Weapon2");
+        VisualElement longRangeWeaponHotkey = root.Q<VisualElement>("Weapon2Container");
         if (longRangeWeaponHotkey == null)
         {
             Debug.LogError("Could not find VisualElement with name longRangeWeaponHotkey");
@@ -145,13 +146,21 @@ public class InventorySystem : MonoBehaviour
             return false;
         }
 
-        //Special Case for weapons
-        if(itemData.itemType == ItemType.ShortRangeWeapon || slots[3].storedItem == null)
+        // Special Case for weapons
+        if (itemData.itemType == ItemType.ShortRangeWeapon)
         {
-            //Debug.Log("Weapon added to inventory");
-            Item newItem = CreateItemInstance(itemData);
-            slots[3].StoreItem(newItem, itemData);
-            return true;
+            //check if the slot is empty, else return false so weapons don't get added to other slots
+            if (slots[3].storedItem == null)
+            {
+                //Debug.Log("Weapon added to inventory");
+                Item newItem = CreateItemInstance(itemData);
+                slots[3].StoreItem(newItem, itemData);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         for (int i = 0; i < 3; i++)
