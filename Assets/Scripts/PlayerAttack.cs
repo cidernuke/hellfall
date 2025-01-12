@@ -146,6 +146,9 @@ public class PlayerAttack : MonoBehaviour
         anim.SetTrigger("attack_ranged");
         cooldownTimer = 0;
         int projectileIndex = FindProjectile();
+        
+        // important because projectiles are children of Player. Setting them to null makes them independant of the Players Transform
+        projectiles[projectileIndex].transform.parent = null;
         projectiles[projectileIndex].transform.position = firePoint.position;
         projectiles[projectileIndex].GetComponent<Projectile>().SetDirection(Math.Sign(transform.localScale.x));
     }

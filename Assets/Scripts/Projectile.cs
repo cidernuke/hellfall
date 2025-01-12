@@ -27,6 +27,7 @@ public class Projectile : MonoBehaviour
         {
             return;
         }
+
         float movementSpeed = speed * Time.deltaTime * direction;
         transform.Translate(movementSpeed, 0, 0);
         SetLifeTime();
@@ -82,11 +83,7 @@ public class Projectile : MonoBehaviour
         hit = false;
         boxCollider.enabled = true;
 
-        float localScaleX = transform.localScale.x;
-        if (Mathf.Sign(localScaleX) != _direction)
-        {
-            localScaleX = -localScaleX;
-        }
+        float localScaleX = Mathf.Abs(transform.localScale.x) * _direction;
         transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
     }
 
