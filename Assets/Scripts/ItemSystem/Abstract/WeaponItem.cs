@@ -12,5 +12,6 @@ namespace ItemSystem.Abstract
    {
       public int damage { get; set; }
 
+
    }
 }

@@ -45,7 +45,7 @@ public class PlayerInteraction : MonoBehaviour
             itemToPickUp = other.GetComponent<InventoryItem>();
             if (itemToPickUp != null)
             {
-                Debug.Log($"Item in range to pick up: {itemToPickUp.item.itemName}");
+                //Debug.Log($"Item in range to pick up: {itemToPickUp.item.itemName}");
             }
         }
     }
@@ -55,7 +55,7 @@ public class PlayerInteraction : MonoBehaviour
         // Clear the reference when the player leaves the item's trigger zone
         if (other.CompareTag("Item") && itemToPickUp != null && other.GetComponent<InventoryItem>() == itemToPickUp)
         {
-            Debug.Log($"Item out of range: {itemToPickUp.item.itemName}");
+            //Debug.Log($"Item out of range: {itemToPickUp.item.itemName}");
             itemToPickUp = null;
         }
     }
@@ -138,7 +138,18 @@ public class PlayerInteraction : MonoBehaviour
                 //playerInventory.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
                 InventorySystem.Instance.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
             }
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                //playerInventory.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
+                InventorySystem.Instance.DropItemFromSlot(3, playerPosition, dropOffset); // Drop from slot 3
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                //playerInventory.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
+                InventorySystem.Instance.DropItemFromSlot(4, playerPosition, dropOffset); // Drop from slot 3
+            }
         }
+
     }
 
     /// <summary>

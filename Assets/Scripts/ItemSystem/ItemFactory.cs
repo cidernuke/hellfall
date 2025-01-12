@@ -13,6 +13,9 @@ public class ItemFactory : MonoBehaviour
     Item weaponItem;
     Item healthItem;
 
+    Item shortRangeWeapon;
+    Item longRangeWeapon;
+
 
     public void Awake()
     {
@@ -29,6 +32,14 @@ public class ItemFactory : MonoBehaviour
 
             case ItemType.HealthItem:
                 healthItem = new HealthItem(itemData.itemName, itemData.itemSprite, itemData.healthAmount);
+                break;
+            
+            case ItemType.ShortRangeWeapon:
+                shortRangeWeapon = new ShortRangeWeapon(itemData.itemName, itemData.itemSprite);
+                break;
+
+            case ItemType.LongRangeWeapon:
+                longRangeWeapon = new LongRangeWeapon(itemData.itemName, itemData.itemSprite);
                 break;
 
             // Weitere Fälle für andere Item-Typen können hier hinzugefügt werden

@@ -17,23 +17,33 @@ public class InventorySlot
         hotkey = slotVisualElement;
         if (hotkey == null)
         {
-            Debug.LogError("Could not find VisualElement with name Hotkey");
+            Debug.LogError("Could not find VisualElement with name: " + slotVisualElement);
         }
         UpdateSlotVisual();
     }
 
     public void StoreItem(Item item, ItemData itemData)
     {
-        this.storedItem = item;
-        this.itemData = itemData;
-        UpdateSlotVisual();
+        if (item == null || itemData == null)
+        {
+            Debug.Log("Item or itemData is null");
+            UpdateSlotVisual();
+            return;
+        }
+        else
+        {
+            this.storedItem = item;
+            this.itemData = itemData;
+            //Debug.Log($"Item stored: {storedItem.itemName}");
+            UpdateSlotVisual();
+        }
     }
 
     public void useItem()
     {
-        if(storedItem == null)
+        if (storedItem == null)
         {
-            Debug.Log("No item to use");
+            //Debug.Log("No item to use");
             return;
         }
         storedItem.use();
@@ -60,12 +70,14 @@ public class InventorySlot
                     // check if loading of resource worked
                     if (resource == null)
                     {
-                        Debug.LogError("Failed to load HealthItem(new) prefab");
+                        Debug.LogError("Failed to load PowerUp prefab");
                         return;
                     }
 
                     // create instance of the prefab
                     GameObject.Instantiate(resource, dropPosition, Quaternion.identity);
+                    // clear the slot, so the visual representation is updated and the slot can't be dropped multiple times
+                    ClearSlot();
                     break;
 
                 case ItemType.HealthItem:
@@ -79,6 +91,31 @@ public class InventorySlot
                     }
                     // create instance of the prefab
                     GameObject.Instantiate(resourceH, dropPosition, Quaternion.identity);
+                    ClearSlot();
+                    break;
+
+                case ItemType.ShortRangeWeapon:
+                    Debug.Log("WeaponItem was dropped");
+                    GameObject resourceW = Resources.Load<GameObject>("Prefabs/Weapons/BasicSword");
+                    if (resourceW == null)
+                    {
+                        Debug.LogError("Failed to load WeaponItem prefab");
+                        return;
+                    }
+                    GameObject.Instantiate(resourceW, dropPosition, Quaternion.identity);
+                    ClearSlot();
+                    break;
+                
+                case ItemType.LongRangeWeapon:
+                    Debug.Log("WeaponItem was dropped");
+                    GameObject resourceLR = Resources.Load<GameObject>("Prefabs/Weapons/BasicLongRange");
+                    if (resourceLR == null)
+                    {
+                        Debug.LogError("Failed to load WeaponItem prefab");
+                        return;
+                    }
+                    GameObject.Instantiate(resourceLR, dropPosition, Quaternion.identity);
+                    ClearSlot();
                     break;
 
                 default:
@@ -86,9 +123,13 @@ public class InventorySlot
                     break;
             }
 
-            Debug.Log($"Dropping item: {storedItem.itemName}");
+            //Debug.Log($"Dropping item: {storedItem.itemName}");
 
-            UpdateSlotVisual();
+            //UpdateSlotVisual();
+        }
+        else
+        {
+            Debug.Log("No item to drop");
         }
     }
 
@@ -100,21 +141,21 @@ public class InventorySlot
             {
                 // set image of hotkey to the image of the item
                 hotkey.style.backgroundImage = new StyleBackground(storedItem.itemSprite);
-                Debug.Log("InvSlot: Item displayed");
+                //Debug.Log("InvSlot: Item displayed");
             }
             else
             {
                 hotkey.style.backgroundImage = null;
-                Debug.Log("InvSlot: No item to display");
+                //Debug.Log("InvSlot: No item to display");
             }
         }
     }
 
     public void ClearSlot()
-{
-    storedItem = null;
-    itemData = null;
-    UpdateSlotVisual();
-}
+    {
+        storedItem = null;
+        itemData = null;
+        UpdateSlotVisual();
+    }
 
 }

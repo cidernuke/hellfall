@@ -25,12 +25,16 @@ public class ItemData : ScriptableObject
     [Header("Weapon Item")]
     public float damage;
 
+
 }
 
 public enum ItemType
 {
     ModifierItem,
     HealthItem,
-    WeaponItem
+    WeaponItem,
     // Weitere Item-Typen können hier hinzugefügt werden
+    ShortRangeWeapon,
+
+    LongRangeWeapon
 }

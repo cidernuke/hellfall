@@ -40,6 +40,14 @@ public class HealthSystem : MonoBehaviour
     /// </summary>
     private float damageCooldown;
 
+    // Cooldown for taking damage from damage zones
+    private bool isDamageZoneCooldown = false;
+    private float damageZoneCooldownDuration = 1f; // 1 second
+
+    // Flags for damage over time
+    private bool isOnFire = false;
+
+
     //Respawn variables
     public bool isDead;
     public float respawnHealth;
@@ -72,19 +80,39 @@ public class HealthSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Updates the invincibility status and cooldown timer.
+    /// Takes damage from damage zones with a global cooldown.
     /// </summary>
-    public void Update()
+    /// <param name="damage">The amount of damage to take.</param>
+    public void TakeDamageFromDamageZone(float damage)
     {
-        if (isInvincible)
-        {
-            damageCooldown -= Time.deltaTime;
-            if (damageCooldown < 0)
-            {
-                isInvincible = false;
-            }
-        }
+        if (isDamageZoneCooldown) return;
+
+        TakeDamage(damage);
+        StartCoroutine(DamageZoneCooldown());
     }
+
+    private IEnumerator DamageZoneCooldown()
+    {
+        isDamageZoneCooldown = true;
+        yield return new WaitForSeconds(damageZoneCooldownDuration);
+        isDamageZoneCooldown = false;
+    }
+
+    /// <summary>
+    /// Updates the invincibility status and cooldown timer. 
+    /// Not needed anymore, since neither player nor enemies have a cooldown time.
+    /// </summary>
+    //public void Update()
+    //{
+    //    if (isInvincible)
+    //    {
+    //        damageCooldown -= Time.deltaTime;
+    //        if (damageCooldown < 0)
+    //        {
+    //            isInvincible = false;
+    //        }
+    //    }
+    //}
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -106,15 +134,16 @@ public class HealthSystem : MonoBehaviour
     /// <param name="damage">The amount of damage to take.</param>
     public void TakeDamage(float damage, PlayerMovement playerMovement = null, EnemyController enemyController = null)
     {
-        if (damage > 0)
+        // not needed anymore, since player and enemies don't need a cooldown time
+        //if (damage > 0)
+        //{
+        if (isInvincible)
         {
-            if (isInvincible)
-            {
-                return;
-            }
-            isInvincible = true;
-            damageCooldown = timeInvincible;
+            return;
         }
+        //isInvincible = true;
+        //damageCooldown = timeInvincible;
+        //}
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
         if (currentHealth > 0)
         {
@@ -279,6 +308,44 @@ public class HealthSystem : MonoBehaviour
         {
             enemyPatrol.enabled = true;
         }
+    }
+
+
+
+    /// <summary>
+    /// Applies fire damage over time. Is not primary damage
+    /// </summary>
+    /// <param name="damagePerTick">Damage dealt per tick.</param>
+    /// <param name="duration">Total duration of the effect.</param>
+    /// <param name="tickInterval">Time between damage ticks.</param>
+
+    public void ApplyFireDamage(float damagePerTick, float duration, float tickInterval)
+    {
+        if (!isOnFire)
+        {
+            StartCoroutine(FireDamageCoroutine(damagePerTick, duration, tickInterval));
+        }
+    }
+
+    /// <summary>
+    /// Handles the fire damage over time effect. Is only there for fire damage, doesn't deal
+    /// primary damage.
+    /// </summary>
+    private IEnumerator FireDamageCoroutine(float damagePerTick, float duration, float tickInterval)
+    {
+        isOnFire = true;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            yield return new WaitForSeconds(tickInterval); // wait first, then deal damage
+            TakeDamage(damagePerTick * 0.75f); // reduced by 25%
+            Debug.Log("Enemy takes fire damage.");
+            elapsedTime += tickInterval; // update the elapsed time
+        }
+
+        isOnFire = false;
+        Debug.Log("Fire damage effect ended.");
     }
 
     public void UpdateHealthUI()
