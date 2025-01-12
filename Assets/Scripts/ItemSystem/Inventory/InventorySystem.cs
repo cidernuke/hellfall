@@ -23,21 +23,9 @@ public class InventorySystem : MonoBehaviour
     private GameObject playerSpeech;
     private SpriteRenderer playerSpeechSpriteRenderer;
 
-    //Singleton-implementation
-    // private void Awake()
-    // {
-    //     // Implement the Singleton pattern
-    //     if (Instance == null)
-    //     {
-    //         Instance = this;
-    //         DontDestroyOnLoad(gameObject); // Inventory persist across scenes
-    //     }
-    //     else
-    //     {
-    //         Destroy(gameObject);
-    //         Debug.LogError("Multiple InventorySystem instances detected.");
-    //     }
-    // }
+    //Flaga
+
+    private bool isLoaded = false;
 
     //New Singleton-implementation
     private void Awake()
@@ -68,36 +56,9 @@ public class InventorySystem : MonoBehaviour
 
     void Start()
     {
-        // if (uiDocument == null)
-        // {
-        //     Debug.LogError("Could not find UIDocument component on GameObject");
-        //     return;
-        // }
-
-        // root = uiDocument.rootVisualElement;
-
-        // //Create 3 InventorySlots 
-        // slots = new InventorySlot[3];
-        // //For the 3 Itemslots "Hotkey1", "Hotkey2", "Hotkey3"
-        // for (int i = 0; i < slots.Length; i++)
-        // {
-        //     //Regex to find the VisualElement with the name "Hotkey" + i
-        //     VisualElement hotkey = root.Q<VisualElement>($"Hotkey{i + 1}Container");
-        //     if (hotkey == null)
-        //     {
-        //         Debug.LogError("Could not find VisualElement with name Hotkey" + i + 1);
-        //     }
-        //     // Initialize a new InventorySlot and assign it to the slots array
-        //     slots[i] = new InventorySlot();
-        //     slots[i].Initialize(hotkey);
-        // }
-
-        // playerSpeech = GameObject.Find("Player_Speech_Bubble");
-        // playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
-        // player = GameObject.Find("Player");
-        // playerMov = player.GetComponent<PlayerMovement>();
+        Debug.Log("Start");
+        // Sucht die Referenzen in der aktuellen Szene
         SetupReferences();
-
     }
 
     /// <summary>
@@ -105,14 +66,16 @@ public class InventorySystem : MonoBehaviour
     /// </summary>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log("Scene loaded: " + scene.name);
+        isLoaded = true;
         // Jedes Mal neu die Referenzen suchen
-        SetupReferences();
+        //SetupReferences();
     }
 
     /// <summary>
     /// Sucht dynamisch den Player, HealthSystem, UI-Dokument etc. in der aktuellen Szene.
     /// </summary>
-    private void SetupReferences()
+    public void SetupReferences()
     {
         // 1) UI suchen
         uiDocument = FindObjectOfType<UIDocument>();
@@ -149,15 +112,16 @@ public class InventorySystem : MonoBehaviour
         //Slots nicht neu zuweisen, sondern nur die UI-Elemente
         if (slots == null || slots.Length == 0)
         {
-            slots = new InventorySlot[3];
-            for (int i = 0; i < slots.Length; i++)
+            slots = new InventorySlot[5];
+            //For the 5 Itemslots "Hotkey1", "Hotkey2", "Hotkey3", Weapon1, Weapon2
+            for (int i = 0; i < 5; i++)
             {
                 slots[i] = new InventorySlot();
             }
         }
 
-        // Jetzt nur die UI-Elemente neu suchen und binden
-        for (int i = 0; i < slots.Length; i++)
+        // Jetzt nur die UI-Elemente der Hotkeys neu suchen und binden
+        for (int i = 0; i < 3; i++)
         {
             var hotkey = root.Q<VisualElement>($"Hotkey{i + 1}Container");
             slots[i].Initialize(hotkey);
@@ -182,6 +146,54 @@ public class InventorySystem : MonoBehaviour
         {
             playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
         }
+
+        // 5) Initialize Weaponslots and add default weapons
+
+        //For Slots 4 and 5 which are weapon slots
+        //Get the Containers!
+        VisualElement shortRangeWeaponHotkey = root.Q<VisualElement>("Weapon1Container");
+        if (shortRangeWeaponHotkey == null)
+        {
+            Debug.LogError("Could not find VisualElement with name Weapon1Container");
+        }
+        VisualElement longRangeWeaponHotkey = root.Q<VisualElement>("Weapon2Container");
+        if (longRangeWeaponHotkey == null)
+        {
+            Debug.LogError("Could not find VisualElement with name Weapon2Container");
+        }
+
+        //Initialisieren
+        slots[3] = new InventorySlot();
+        slots[3].Initialize(shortRangeWeaponHotkey);
+
+        slots[4] = new InventorySlot();
+        slots[4].Initialize(longRangeWeaponHotkey);
+
+        
+            //let player start with short (and to-do: long) range weapon 
+            try
+            {
+                ItemData basicSword = Resources.Load<ItemData>("ItemData/BasicSword");
+                //Debug.Log("Trying to create item instance: " + basicData.itemName + " " + basicData.itemType);
+                AddItemToFirstAvailableSlot(basicSword);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Could not load ItemData/BasicSword");
+            }
+
+            try
+            {
+                ItemData basicLongRange = Resources.Load<ItemData>("ItemData/BasicLongRange");
+                //Debug.Log("Trying to create item instance: " + basicData.itemName + " " + basicData.itemType);
+                AddItemToFirstAvailableSlot(basicLongRange);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Could not load ItemData/BasicLongRange");
+            }
+        
+
     }
 
     void Update()
@@ -199,93 +211,6 @@ public class InventorySystem : MonoBehaviour
             playerSpeechSpriteRenderer.flipX = false;
         }
 
-
-    }
-
-
-    //Singleton-implementation, to make global accessable
-    private void Awake()
-    {
-        // Implement the Singleton pattern
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // Inventory persist across scenes
-        }
-        else
-        {
-            Destroy(gameObject);
-            Debug.LogError("Multiple InventorySystem instances detected.");
-        }
-    }
-    void Start()
-    {
-        root = uiDocument.rootVisualElement;
-        if (uiDocument == null)
-        {
-            Debug.LogError("Could not find UIDocument component on GameObject");
-            return;
-        }
-        //Create 5 InventorySlots 
-        slots = new InventorySlot[5];
-        //For the 3 Itemslots "Hotkey1", "Hotkey2", "Hotkey3"
-        for (int i = 0; i < 3; i++)
-        {
-            //Regex to find the VisualElement with the name "Hotkey" + i
-            VisualElement hotkey = root.Q<VisualElement>($"Hotkey{i + 1}Container");
-            if (hotkey == null)
-            {
-                Debug.LogError("Could not find VisualElement with name Hotkey" + i + 1);
-            }
-            // Initialize a new InventorySlot and assign it to the slots array
-            slots[i] = new InventorySlot();
-            slots[i].Initialize(hotkey);
-        }
-        //For Slots 4 and 5 which are weapon slots
-        //Get the Containers!
-        VisualElement shortRangeWeaponHotkey = root.Q<VisualElement>("Weapon1Container");
-        if (shortRangeWeaponHotkey == null)
-        {
-            Debug.LogError("Could not find VisualElement with name Weapon1Container");
-        }
-        VisualElement longRangeWeaponHotkey = root.Q<VisualElement>("Weapon2Container");
-        if (longRangeWeaponHotkey == null)
-        {
-            Debug.LogError("Could not find VisualElement with name Weapon2Container");
-        }
-        slots[3] = new InventorySlot();
-        slots[3].Initialize(shortRangeWeaponHotkey);
-
-        slots[4] = new InventorySlot();
-        slots[4].Initialize(longRangeWeaponHotkey);
-
-        //let player start with short (and to-do: long) range weapon 
-        try
-        {
-            ItemData basicSword = Resources.Load<ItemData>("ItemData/BasicSword");
-            //Debug.Log("Trying to create item instance: " + basicData.itemName + " " + basicData.itemType);
-            AddItemToFirstAvailableSlot(basicSword);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Could not load ItemData/BasicSword");
-        }
-        
-        try
-        {
-            ItemData basicLongRange = Resources.Load<ItemData>("ItemData/BasicLongRange");
-            //Debug.Log("Trying to create item instance: " + basicData.itemName + " " + basicData.itemType);
-            AddItemToFirstAvailableSlot(basicLongRange);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Could not load ItemData/BasicLongRange");
-        }
-
-        playerSpeech = GameObject.Find("Player_Speech_Bubble");
-        playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
-        player = GameObject.Find("Player");
-        playerMov = player.GetComponent<PlayerMovement>();
 
     }
 
@@ -337,7 +262,7 @@ public class InventorySystem : MonoBehaviour
                 return false;
             }
         }
-        
+
         if (itemData.itemType == ItemType.LongRangeWeapon)
         {
             //check if the slot is empty, else return false so weapons don't get added to other slots
@@ -432,7 +357,7 @@ public class InventorySystem : MonoBehaviour
             //Short Range Weapon
             case ItemType.ShortRangeWeapon:
                 return new ShortRangeWeapon(itemData.itemName, itemData.itemSprite);
-            
+
             //Long Range Weapon
             case ItemType.LongRangeWeapon:
                 return new LongRangeWeapon(itemData.itemName, itemData.itemSprite);
@@ -542,9 +467,9 @@ public class InventorySystem : MonoBehaviour
 
     public void ClearInventory()
     {
-        foreach (var slot in slots)
+        for (int i = 0; i < 3; i++)
         {
-            slot.ClearSlot();
+            slots[i].ClearSlot();
         }
     }
 

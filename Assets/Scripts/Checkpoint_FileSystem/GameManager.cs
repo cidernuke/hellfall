@@ -199,6 +199,7 @@ public class GameManager : MonoBehaviour
 
         //Empty Inventory
         inventorySystem.ClearInventory();
+        inventorySystem.SetupReferences();
 
         //Rest Checkpoint-Status
         //Need more logic, not done yet
