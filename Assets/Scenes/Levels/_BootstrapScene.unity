@@ -693,7 +693,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cec7177fca08d64d86563bec816df55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: Menu
+  sceneToLoad: Scene_01
 --- !u!1001 &1322347938
 PrefabInstance:
   m_ObjectHideFlags: 0
