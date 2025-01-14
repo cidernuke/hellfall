@@ -1,18 +1,25 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Boss : MonoBehaviour
 {
-	public bool isFlipped = false;
+	[HideInInspector] public bool isFlipped = false;
 	[SerializeField] private Transform firePoint;
 	[SerializeField] private GameObject[] projectilesForward;
 	[SerializeField] private GameObject[] projectilesUpward;
+	[SerializeField] private GameObject[] projectilesDownward;
+	[SerializeField] private int projectilesCount;
 	private Transform player;
 	private Vector3 playerPosition;
-	private readonly float groundCoordinates = 30.25f;
-    [SerializeField] private readonly float upwardAttackCooldown = 3f;
-    private float cooldownTimer = Mathf.Infinity;
+	private readonly float groundCoordinates = 29.7f;
+	public float upwardAttackCooldown;
+	[HideInInspector] public float cooldownTimer = Mathf.Infinity;
+	
+
+	// [HideInInspector] public bool isInSecondPhase = false;
+	public bool isInSecondPhase = false;
 
 	private void Awake()
 	{
@@ -22,6 +29,12 @@ public class Boss : MonoBehaviour
 	private void Update()
 	{
 		cooldownTimer += Time.deltaTime;
+		// playerPosition = player.position;
+
+		if (gameObject.GetComponent<HealthSystem>().currentHealth == 10)
+		{
+			isInSecondPhase = true;
+		}
 	}
 
 	public void LookAtPlayer(Transform player)
@@ -64,18 +77,26 @@ public class Boss : MonoBehaviour
 	/// Finds n projectiles that are currently not in use
 	/// </summary>
 	/// <returns></returns>
-	private List<GameObject> FindProjectilesUpward(int n)
+	private List<GameObject> FindProjectilesUpward(int n, GameObject[] projectiles)
 	{
-		List<GameObject> usableProjectilesUpward = new();
-		for (int i = 0; i < n; i++)
+		// print($"projectiles param contains {projectiles.Length} projectiles");
+		List<GameObject> usableProjectiles = new();
+		foreach (var projectile in projectiles)
 		{
-			if (!projectilesUpward[i].activeInHierarchy)
+			if (!projectile.activeInHierarchy)
 			{
-				usableProjectilesUpward.Add(projectilesUpward[i]);
+				usableProjectiles.Add(projectile);
+
+				// Stop searching once we've found n projectiles.
+				if (usableProjectiles.Count == n)
+				{
+					// print($"found {usableProjectiles.Count} projectiles, exiting function, n is {n}");
+					break;
+				}
 			}
 		}
 
-		return usableProjectilesUpward;
+		return usableProjectiles;
 	}
 
 	/// <summary>
@@ -92,47 +113,88 @@ public class Boss : MonoBehaviour
 		projectilesForward[projectileIndex].GetComponent<Projectile>().SetDirection(new Vector2(directionX, 0));
 	}
 
+	//? for second phase: projectiles dissapear and reappear again over the player --> forces double dodge
 	/// <summary>
 	/// Executes the upward attack of the vampire countess boss
 	/// Called by animation event in attack_02
 	/// </summary>
 	private void AttackUpwards()
 	{
-		if (cooldownTimer < upwardAttackCooldown)
+		List<GameObject> availableProjectiles = FindProjectilesUpward(projectilesCount, projectilesUpward);
+		int count = availableProjectiles.Count;
+		// print($"found {count} projectiles");
+
+		if (count == 0)
 		{
+			Debug.LogWarning("No projectiles available for upward attack.");
 			return;
 		}
-		List<GameObject> availableProjectiles = FindProjectilesUpward(5);
 
-		GameObject projectile_1 = availableProjectiles[0];
-		GameObject projectile_2 = availableProjectiles[1];
-		GameObject projectile_3 = availableProjectiles[2];
-		GameObject projectile_4 = availableProjectiles[3];
-		GameObject projectile_5 = availableProjectiles[4];
+		// Set spacing based on the number of projectiles
+		float spacing = 0.3f; // Adjust this value to control how far apart the projectiles are
+		float totalWidth = spacing * (count - 1); // Total width covered by projectiles
+		Vector3 playerPositionLocal = player.position;
+		float startX = playerPositionLocal.x - totalWidth / 2f; // Center the projectiles around the player
 
-		projectile_1.transform.position = new Vector2(playerPosition.x - 0.5f, groundCoordinates);
-		projectile_2.transform.position = new Vector2(playerPosition.x - 0.25f, groundCoordinates);
-		projectile_3.transform.position = new Vector2(playerPosition.x, groundCoordinates);
-		projectile_4.transform.position = new Vector2(playerPosition.x + 0.25f, groundCoordinates);
-		projectile_5.transform.position = new Vector2(playerPosition.x + 0.5f, groundCoordinates);
+		float globalDelay = 0.5f; // Delay before all projectiles start moving
+		// Loop through projectiles and position them dynamically
+		for (int i = 0; i < count; i++)
+		{
+			float xPosition = startX + i * spacing;
+			availableProjectiles[i].transform.position = new Vector2(xPosition, groundCoordinates);
 
-		int directionY = Math.Sign(transform.localScale.y);
-		projectile_1.GetComponent<Projectile>().SetDirection(new Vector2(0, directionY));
-		projectile_2.GetComponent<Projectile>().SetDirection(new Vector2(0, directionY));
-		projectile_3.GetComponent<Projectile>().SetDirection(new Vector2(0, directionY));
-		projectile_4.GetComponent<Projectile>().SetDirection(new Vector2(0, directionY));
-		projectile_5.GetComponent<Projectile>().SetDirection(new Vector2(0, directionY));
+			// Combine global delay with staggered delay based on index
+			availableProjectiles[i].GetComponent<Projectile>().SetDirection(new Vector2(0, 1), globalDelay);
+		}
+	}
 
-		cooldownTimer = 0;
+	private void AttackDownwards()
+	{
+		List<GameObject> availableProjectiles = FindProjectilesUpward(projectilesCount, projectilesDownward);
+		int count = availableProjectiles.Count;
+		// print($"found {count} projectiles");
+
+		if (count == 0)
+		{
+			Debug.LogWarning("No projectiles available for upward attack.");
+			return;
+		}
+
+		// Set spacing based on the number of projectiles
+		float spacing = 0.3f; // Adjust this value to control how far apart the projectiles are
+		float totalWidth = spacing * (count - 1); // Total width covered by projectiles
+		Vector3 playerPositionLocal = player.position;
+		float startX = playerPositionLocal.x - totalWidth / 2f; // Center the projectiles around the player
+		float startY = 36f;
+
+		// Loop through projectiles and position them dynamically
+		for (int i = 0; i < count; i++)
+		{
+			float xPosition = startX + i * spacing;
+			availableProjectiles[i].transform.position = new Vector2(xPosition, startY);
+
+			availableProjectiles[i].GetComponent<Projectile>().SetDirection(new Vector2(0, -1));
+		}
 	}
 
 	/// <summary>
 	/// Grabs the current player position
 	/// Called by animation event in attack_02
 	/// </summary>
-	private void GrabPlayerPosition()
+	private Vector3 GrabPlayerPosition()
 	{
-		playerPosition = player.position;
+		// playerPosition = player.position;
+		return player.position;
+		// print($"grabbed player pos: {playerPosition}");
 	}
 
+	public void OnDeath()
+	{
+		gameObject.SetActive(false);
+	}
+
+	public void PrinterForBossRun(string message)
+	{
+		print(message);
+	}
 }

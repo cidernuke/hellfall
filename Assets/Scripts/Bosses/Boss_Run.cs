@@ -1,4 +1,4 @@
-  using UnityEngine;
+using UnityEngine;
 
 public class Boss_Run : StateMachineBehaviour
 {
@@ -22,7 +22,7 @@ public class Boss_Run : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         boss.LookAtPlayer(player);
-        
+
         Vector2 target = new Vector2(player.position.x, rb.position.y);
         Vector2 newPos = Vector2.MoveTowards(rb.position, target, speed * Time.fixedDeltaTime);
 
@@ -38,18 +38,48 @@ public class Boss_Run : StateMachineBehaviour
             animator.SetTrigger("attack_01");
         }
 
-        if (Vector2.Distance(player.position, rb.position) >= attackRangeCC)
+        //! problem with cooldown, not really working
+        // if (boss.cooldownTimer < boss.upwardAttackCooldown)
+        // {
+        //     boss.PrinterForBossRun("still cooling down");
+        //     return;
+        // }
+        if (boss.cooldownTimer >= boss.upwardAttackCooldown)
         {
-            animator.SetTrigger("attack_02");
+            if (Vector2.Distance(player.position, rb.position) >= attackRangeCC && !boss.isInSecondPhase)
+            {
+                // boss.PrinterForBossRun("cooldown reached: "+boss.cooldownTimer);
+                // animator.SetTrigger("attack_02");
+                animator.SetTrigger("attack_02.5");
+                boss.cooldownTimer = 0;
+            }
+            // else if (Vector2.Distance(player.position, rb.position) >= attackRangeCC && boss.isInSecondPhase)
+            // {
+            //     boss.PrinterForBossRun("attack 2.5");
+            //     animator.SetTrigger("attack_02.5");
+            // }
         }
-        
+        // if (Vector2.Distance(player.position, rb.position) >= attackRangeCC && !boss.isInSecondPhase)
+        // {
+        //     animator.SetTrigger("attack_02");
+        //     boss.cooldownTimer = 0;
+        // }
+        // else if (Vector2.Distance(player.position, rb.position) >= attackRangeCC && boss.isInSecondPhase)
+        // {
+        //     animator.SetTrigger("attack_02.5");
+        // }
+
         animator.SetBool("isRunning", false);
     }
+
+    
+
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.ResetTrigger("attack_01");
         animator.ResetTrigger("attack_02");
+        animator.ResetTrigger("attack_02.5");
     }
 }

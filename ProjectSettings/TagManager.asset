@@ -13,6 +13,8 @@ TagManager:
   - Wall
   - Ladder
   - blood_bullet_up
+  - Boss
+  - blood_bullet_down
   layers:
   - Default
   - TransparentFX

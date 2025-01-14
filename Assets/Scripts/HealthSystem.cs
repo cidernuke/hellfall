@@ -100,7 +100,7 @@ public class HealthSystem : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
         if (currentHealth > 0)
         {
-            Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
+            // Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
             anim.SetTrigger("hurt");
             if (isPlayer)
             {
@@ -157,10 +157,11 @@ public class HealthSystem : MonoBehaviour
             }
             else if (enemyController != null)
             {
+                print("death of enemy");
                 enemyController.enabled = false;
                 //StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
                 StartCoroutine(HandleEnemyDeath(anim, enemyController, 0.4f));
-                enemyController.SpawnLoot();
+                // enemyController.SpawnLoot();
 
             }
             isDead = true;

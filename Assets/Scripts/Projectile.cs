@@ -5,22 +5,28 @@ public class Projectile : MonoBehaviour
     // variables
     [SerializeField] private float speed;
     [SerializeField] private float damage;
+    [SerializeField] private float maxLifetime;
     private bool hit;
-    private float direction;
+    private float directionX;
     private float directionY;
     private float lifeTime;
-    private readonly float maxLifetime = 3f;
+    private float waitTime;
+    private bool isWaiting;
 
     // references
     private BoxCollider2D boxCollider;
     private Animator animator;
+    Transform player;
+    Boss boss;
+
 
     private void Awake()
     {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         animator = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider2D>();
+        boss = animator.GetComponent<Boss>();
     }
-
 
     private void Update()
     {
@@ -29,15 +35,32 @@ public class Projectile : MonoBehaviour
             return;
         }
 
+        // Handle waiting before movement
+        if (isWaiting)
+        {
+            waitTime -= Time.deltaTime;
+            if (waitTime <= 0)
+            {
+                isWaiting = false; // Stop waiting
+            }
+            return; // Skip movement during the wait
+        }
+
+        float movementSpeed = speed * Time.deltaTime;
         if (transform.CompareTag("blood_bullet_up"))
         {
-            float movementSpeed = speed * Time.deltaTime * directionY;
-            transform.Translate(0, movementSpeed, 0);
+            // float movementSpeed = speed * Time.deltaTime * directionY;
+            transform.Translate(0, movementSpeed * directionY, 0);
+        }
+        else if (transform.CompareTag("blood_bullet_down"))
+        {
+            // float movementSpeed = speed * Time.deltaTime * directionY;
+            transform.Translate(0, movementSpeed * directionY, 0);
         }
         else
         {
-            float movementSpeed = speed * Time.deltaTime * direction;
-            transform.Translate(movementSpeed, 0, 0);
+            // float movementSpeed = speed * Time.deltaTime * directionX;
+            transform.Translate(movementSpeed * directionX, 0, 0);
         }
 
         SetLifeTime();
@@ -49,7 +72,7 @@ public class Projectile : MonoBehaviour
     private void SetLifeTime()
     {
         lifeTime += Time.deltaTime;
-        if (lifeTime > maxLifetime)
+        if (lifeTime >= maxLifetime)
         {
             gameObject.SetActive(false);
         }
@@ -63,6 +86,10 @@ public class Projectile : MonoBehaviour
     /// <param name="collision"></param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.CompareTag("blood_bullet_down"))
+        {
+            print("collision triggered");
+        }
         if (collision.CompareTag("Wall"))
         {
             hit = true;
@@ -82,16 +109,17 @@ public class Projectile : MonoBehaviour
             boxCollider.enabled = false;
             animator.SetTrigger("explode");
         }
-        
+
         if (collision.CompareTag("Player"))
         {
+            // print("collided with player");
             PlayerMovement playerMovement = collision.GetComponent<PlayerMovement>();
             if (collision.GetComponent<HealthSystem>() == null)
             {
                 return;
             }
             collision.GetComponent<HealthSystem>().TakeDamage(damage, playerMovement, null);
-            if (!transform.CompareTag("blood_bullet_up"))
+            if (!transform.CompareTag("blood_bullet_up") && !transform.CompareTag("blood_bullet_down"))
             {
                 hit = true;
                 boxCollider.enabled = false;
@@ -105,11 +133,13 @@ public class Projectile : MonoBehaviour
     /// Sets the lifetime to 0.
     /// </summary>
     /// <param name="_direction">The direction of the projectile.</param>
-    public void SetDirection(Vector2 _direction)
+    public void SetDirection(Vector2 _direction, float _waitTime = 0)
     {
         lifeTime = 0;
-        direction = _direction.x;
+        directionX = _direction.x;
         directionY = _direction.y;
+        waitTime = _waitTime; // Set the wait time
+        isWaiting = waitTime > 0; // Determine if the projectile should wait
         gameObject.SetActive(true);
         hit = false;
         boxCollider.enabled = true;
@@ -121,6 +151,16 @@ public class Projectile : MonoBehaviour
         }
 
         transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
+    }
+
+    public void SpawnProjectiles(Vector2 _direction)
+    {
+        lifeTime = 0;
+        directionX = _direction.x;
+        directionY = _direction.y;
+        gameObject.SetActive(true);
+        hit = false;
+        boxCollider.enabled = true;
     }
 
     /// <summary>
