@@ -9,7 +9,8 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] public float closeRangeAttackCooldown;
     [SerializeField] public float rangedAttackCooldown;
     [SerializeField] public float range;
-    [SerializeField] public float damage;
+    [SerializeField] public float closeDamage;
+    [SerializeField] public float rangedDamage;
 
     [Header("Collider Parameters")]
     [SerializeField] private float colliderDistance;
@@ -121,7 +122,6 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private void AttackRanged()
     {
-
         anim.SetTrigger("attack_ranged");
         cooldownTimer = 0;
         int projectileIndex = FindProjectile();
@@ -154,7 +154,7 @@ public class PlayerAttack : MonoBehaviour
     {
         if (EnemyInSight())
         {
-            enemyHealth.TakeDamage(damage, null, enemyController);
+            enemyHealth.TakeDamage(closeDamage, null, enemyController);
         }
     }
 }

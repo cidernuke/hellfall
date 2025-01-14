@@ -9,18 +9,18 @@ public class CharacterStats : MonoBehaviour
 
     // Attack
     // -- Close-Combat
-    public Stat strength; 
-    public Stat closeDamage; // Damage that the player attacks with
-    public Stat closeAccuracy; // ?
-    public Stat closeCooldown;
-    public Stat closeRange;
+    public Stat strength;       // Strength Attribute (influences all closeRange values)
+    public Stat closeDamage;    // Damage that the player makes with closeRange weapon
+    public Stat closeAccuracy;  // Accuracy for closeRange Attack (StandardValue = 100f)
+    public Stat closeCooldown;  // Cooldown for closeRange Attack (StandardValue = 0f)
+    // public Stat closeRange;
 
     // -- Ranged
-    public Stat intelligence;
-    public Stat rangedDamage;
-    public Stat rangedAccuracy; // ?
-    public Stat rangedCooldown;
-    public Stat rangedRange;
+    public Stat intelligence;   // Intelligence Attribute (influences all longRange values)
+    public Stat rangedDamage;   // Damage that the player makes with longRange weapon
+    public Stat rangedAccuracy; // Accuracy for longRange Attack (StandardValue = 100f)
+    public Stat rangedCooldown; // Cooldown for longRange Attack (StandardValue = ?)
+    public Stat rangedRange;    // Range for longRange Attack (StandardValue = ?)
 
     public CharacterStats(
         float maxHealth,
@@ -28,7 +28,7 @@ public class CharacterStats : MonoBehaviour
         float closeDamage,
         float closeAccuracy,
         float closeCooldown,
-        float closeRange,
+        // float closeRange,
         float intelligence,
         float rangedDamage,
         float rangedAccuracy,
@@ -40,33 +40,11 @@ public class CharacterStats : MonoBehaviour
         this.closeDamage = new Stat(closeDamage);
         this.closeAccuracy = new Stat(closeAccuracy);
         this.closeCooldown = new Stat(closeCooldown);
-        this.closeRange = new Stat(closeRange);
+        // this.closeRange = new Stat(closeRange);
         this.intelligence = new Stat(intelligence);
         this.rangedDamage = new Stat(rangedDamage);
         this.rangedAccuracy = new Stat(rangedAccuracy);
         this.rangedCooldown = new Stat(rangedCooldown);
         this.rangedRange = new Stat(rangedRange);
     }
-
-
-    // void Awake ()
-    // {
-
-    // }
-
-    // void Update ()
-    // {
-
-    // }
-
-
-    
-
-    // public void TakeDamage (int damage)
-    // {
-    //     currentHealth -= damage;
-    //     Debug.Log(transform.name + " took " + damage + "damage.");
-    // }
-
-
 }

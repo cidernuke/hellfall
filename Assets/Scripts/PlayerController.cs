@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Codice.CM.Triggers;
+using ItemSystem.Abstract;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -12,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] public HealthSystem healthSystem;
     [SerializeField] public PlayerAttack playerAttackSystem;
+    [SerializeField] public InventorySystem inventorySystem;
     public CharacterStats playerStats;
 
     [Header("Player Components")]
@@ -27,7 +29,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float closeDamage = 5f;
     [SerializeField] public float closeAccuracy = 100f; 
     [SerializeField] public float closeCooldown = 0f;
-    [SerializeField] public float closeRange = 2f;
+    // [SerializeField] public float closeRange = 2f;
 
     // -- Ranged
     [SerializeField] public float intelligence = 1f;
@@ -46,7 +48,7 @@ public class PlayerController : MonoBehaviour
             closeDamage,
             closeAccuracy,
             closeCooldown,
-            closeRange,
+            // closeRange,
             intelligence,
             rangedDamage,
             rangedAccuracy,
@@ -64,54 +66,27 @@ public class PlayerController : MonoBehaviour
         {
             playerAttackSystem = GetComponent<PlayerAttack>();
         }
+
+        if(inventorySystem == null)
+        {
+            inventorySystem = GetComponent<InventorySystem>();
+        }
     }
 
     void Update()
     {
-        // Checking and updating the stats for each relevant variable
-        // if (maxHealth != playerStats.maxHealth.GetBaseValue()) {
-        //     playerStats.maxHealth.SetBaseValue(maxHealth);
-        // }
-
-        // if (strength != playerStats.strength.GetBaseValue()) {
-        //     playerStats.strength.SetBaseValue(strength);
-        // }
-        // if (closeDamage != playerStats.closeDamage.GetBaseValue()) {
-        //     playerStats.closeDamage.SetBaseValue(closeDamage);
-        // }
-        // if (closeAccuracy != playerStats.closeAccuracy.GetBaseValue()) {
-        //     playerStats.closeAccuracy.SetBaseValue(closeAccuracy);
-        // }
-        // if (closeCooldown != playerStats.closeCooldown.GetBaseValue()) {
-        //     playerStats.closeCooldown.SetBaseValue(closeCooldown);
-        // }
-        // if (closeRange != playerStats.closeRange.GetBaseValue()) {
-        //     playerStats.closeRange.SetBaseValue(closeRange);
-        // }
-
-        // if (intelligence != playerStats.intelligence.GetBaseValue()) {
-        //     playerStats.intelligence.SetBaseValue(intelligence);
-        // }
-        // if (rangedDamage != playerStats.rangedDamage.GetBaseValue()) {
-        //     playerStats.rangedDamage.SetBaseValue(rangedDamage);
-        // }
-        // if (rangedAccuracy != playerStats.rangedAccuracy.GetBaseValue()) {
-        //     playerStats.rangedAccuracy.SetBaseValue(rangedAccuracy);
-        // }
-        // if (rangedCooldown != playerStats.rangedCooldown.GetBaseValue()) {
-        //     playerStats.rangedCooldown.SetBaseValue(rangedCooldown);
-        // }
-        // if (rangedRange != playerStats.rangedRange.GetBaseValue()) {
-        //     playerStats.rangedRange.SetBaseValue(rangedRange);
-        // }
-
+        
         // Update HealthSystem values
         if (healthSystem != null)
         {
-            if (healthSystem.startingHealth != playerStats.maxHealth.GetBaseValue()) 
+            // if startingHealth in healthSystem isn't the same as in playerStats, then value in HealthSystem is changed
+            // Example: maxHealth value is increased through Upgrade Altar
+            if (healthSystem.startingHealth != playerStats.maxHealth.GetCalcValue()) 
             {
-                healthSystem.startingHealth = playerStats.maxHealth.GetBaseValue();
+                healthSystem.startingHealth = playerStats.maxHealth.GetCalcValue();
             }
+
+            // if currentHealth is changed in healthSystem, then new value is set for local variable currentHealth in PlayerControllerx
             if (healthSystem.currentHealth != currentHealth) 
             {
                 currentHealth = healthSystem.currentHealth;
@@ -121,26 +96,78 @@ public class PlayerController : MonoBehaviour
         // Update AttackSystem values
         if (playerAttackSystem != null)
         {
-            if(playerAttackSystem.damage != playerStats.closeDamage.GetBaseValue())
+            // if closeDamage value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
+            if(playerAttackSystem.closeDamage != playerStats.closeDamage.GetCalcValue())
             {
-                playerAttackSystem.damage = playerStats.closeDamage.GetBaseValue();
+                playerAttackSystem.closeDamage = playerStats.closeDamage.GetCalcValue();
             }
 
-            if(playerAttackSystem.range != playerStats.closeRange.GetBaseValue())
+            // if closeRangeCooldown value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
+            if(playerAttackSystem.closeRangeAttackCooldown != playerStats.closeCooldown.GetCalcValue())
             {
-                playerAttackSystem.range = playerStats.closeRange.GetBaseValue();
+                playerAttackSystem.closeRangeAttackCooldown = playerStats.closeCooldown.GetCalcValue();
             }
 
-            if(playerAttackSystem.closeRangeAttackCooldown != playerStats.closeCooldown.GetBaseValue())
+            // if rangedDamage value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
+            if(playerAttackSystem.rangedDamage != playerStats.rangedDamage.GetCalcValue())
             {
-                playerAttackSystem.closeRangeAttackCooldown = playerStats.closeCooldown.GetBaseValue();
+                playerAttackSystem.rangedDamage = playerStats.rangedDamage.GetCalcValue();
             }
 
-            if(playerAttackSystem.rangedAttackCooldown != playerStats.rangedCooldown.GetBaseValue())
+            // if rangedAttackCooldown value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
+            if(playerAttackSystem.rangedAttackCooldown != playerStats.rangedCooldown.GetCalcValue())
             {
-                playerAttackSystem.rangedAttackCooldown = playerStats.rangedCooldown.GetBaseValue();
+                playerAttackSystem.rangedAttackCooldown = playerStats.rangedCooldown.GetCalcValue();
+            }
+
+            // if rangedAttackRange value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
+            if(playerAttackSystem.range != playerStats.rangedRange.GetCalcValue())
+            {
+                playerAttackSystem.range = playerStats.rangedRange.GetCalcValue();
             }
         }
+
+        // Update CharacterStats based on active Weapons
+        if(inventorySystem != null)
+        {
+            // slots[4] in Inventory = Close Range Weapon
+            ItemData closeRangeWeapon = inventorySystem.slots[4].itemData;
+
+            // Checks if there is a closeRangeWeapon
+            if(closeRangeWeapon)
+            {
+                // Communicates the Modifier values from the close range weapon to the player Stats, if they have changed
+                if (closeRangeWeapon.weaponStats.GetDamageModifier() != playerStats.closeDamage.GetModifier()) 
+                {
+                    playerStats.closeDamage.SetModifier(closeRangeWeapon.weaponStats.GetDamageModifier());
+                }
+                if (closeRangeWeapon.weaponStats.GetCooldownModifier() != playerStats.closeCooldown.GetModifier()) 
+                {
+                    playerStats.closeCooldown.SetModifier(closeRangeWeapon.weaponStats.GetCooldownModifier());
+                }
+            }
+            // slots[4] in Inventory = Long Range Weapon
+            ItemData longRangeWeapon = inventorySystem.slots[5].itemData;
+
+            // Checks if there is a longRangeWeapon
+            if(longRangeWeapon)
+            {
+                // Communicates the Modifier values from the long range weapon to the player Stats, if they have changed
+                if (longRangeWeapon.weaponStats.GetDamageModifier() != playerStats.closeDamage.GetModifier()) 
+                {
+                    playerStats.rangedDamage.SetModifier(longRangeWeapon.weaponStats.GetDamageModifier());
+                }
+                if (longRangeWeapon.weaponStats.GetCooldownModifier() != playerStats.closeCooldown.GetModifier()) 
+                {
+                    playerStats.rangedCooldown.SetModifier(longRangeWeapon.weaponStats.GetCooldownModifier());
+                }
+                if (longRangeWeapon.weaponStats.GetRangeModifier() != playerStats.closeCooldown.GetModifier()) 
+                {
+                    playerStats.rangedRange.SetModifier(longRangeWeapon.weaponStats.GetRangeModifier());
+                }
+            }
+        }
+
 
     }
 }

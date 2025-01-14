@@ -5,14 +5,11 @@ using UnityEngine.PlayerLoop;
 public class WeaponStats : MonoBehaviour 
 {
 
-
-    [SerializeField] PlayerController playerController;
-
     // Modifiers in Percent
-    [SerializeField] public bool isCloseRangeWeapon;
-    [SerializeField] public float damageModifier = 0f;
-    [SerializeField] public float cooldownModifier = 0f;
-    [SerializeField] public float rangeModifier = 0f;
+    [SerializeField] public bool isCloseRangeWeapon;        // decides if Weapons is close or long ranged
+    [SerializeField] public float damageModifier = 0f;      // modiferValue for damage Stat
+    [SerializeField] public float cooldownModifier = 0f;    // modifierValue for cooldown Stat
+    [SerializeField] public float rangeModifier = 0f;       // modifierValue for range Stat (only in long Range Weapon)
 
     public WeaponStats (bool isCloseRangeWeapon, float damageModifier = 0, float cooldownModifier = 0, float rangeModifier = 0)
     {
@@ -22,28 +19,41 @@ public class WeaponStats : MonoBehaviour
         this.rangeModifier = rangeModifier;
     }
 
-    void Update()
+    // Returns damageModifier 
+    public float GetDamageModifier()
     {
-        if (playerController != null)
-        {
-            if(isCloseRangeWeapon)
-            {
-                if (damageModifier != playerController.playerStats.closeDamage.GetModifier()) 
-                {
-                    playerController.playerStats.closeDamage.SetModifier(damageModifier);
-                }
-                if (cooldownModifier != playerController.playerStats.closeCooldown.GetModifier()) 
-                {
-                    playerController.playerStats.closeCooldown.SetModifier(cooldownModifier);
-                }
-                if (rangeModifier != playerController.playerStats.closeRange.GetModifier()) 
-                {
-                    playerController.playerStats.closeRange.SetModifier(rangeModifier);
-                }
-            }
-            
-        }
+        return damageModifier;
     }
 
+    // Sets damageModifierValue equal to provided value (modifier)
+
+    public void SetDamageModifier(float modifier)
+    {
+        damageModifier = modifier;
+    }
+
+    // Returns cooldownModifier 
+    public float GetCooldownModifier()
+    {
+        return cooldownModifier;
+    }
+
+    // Sets cooldownModifierValue equal to provided value (modifier)
+    public void SetCooldownModifier(float modifier)
+    {
+        cooldownModifier = modifier;
+    }
+
+    // Returns rangeModifier 
+    public float GetRangeModifier()
+    {
+        return rangeModifier;
+    }
+
+    // Sets rangeModifierValue equal to provided value (modifier)
+    public void SetRangeModifier(float modifier)
+    {
+        rangeModifier = modifier;
+    }
 
 }
