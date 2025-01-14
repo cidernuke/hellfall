@@ -20,25 +20,22 @@ public class PauseMenuController : MonoBehaviour
 
     // Checks for input during every frame
     private void Update()
-    {
+    {        
+        
         // Toggle pause status when the Escape key is pressed
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             isPaused = !isPaused;
 
-            // Make the cursor visible and unlock it
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-
-        // Activate or deactivate the menu depending on the pause state
-        if (isPaused)
-        {
-            ActivateMenu();
-        }
-        else
-        {
-            DeactivateMenu();
+            // Activate or deactivate the menu depending on the pause state 
+            if (isPaused)
+            {
+                ActivateMenu();
+            }
+            else
+            {
+                DeactivateMenu();
+            }
         }
     }
 
