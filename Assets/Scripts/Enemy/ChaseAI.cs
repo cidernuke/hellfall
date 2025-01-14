@@ -68,4 +68,15 @@ public class ChaseAi : MonoBehaviour
         isExploding = true; // Set explosion flag to true
         GetComponent<Explosion>()?.TriggerExplosion(); // Trigger the explosion using the Explosion script (if attached)
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // Ignore collision between AI and player
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), collision.collider);
+        }
+    }
+
+
 }
