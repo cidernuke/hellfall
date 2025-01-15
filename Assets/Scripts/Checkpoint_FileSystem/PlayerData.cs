@@ -20,8 +20,10 @@ public class PlayerData
 
     public string lastSceneName;
 
-    //public PlayerData(HealthSystem healthSystem, List<ItemSystem.Abstract.Item> playerItems, SoulShardSystem soulShardSystem, int lastCheckpointID)
-    public PlayerData(HealthSystem healthSystem, int lastCheckpointID, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
+    //Key-Logic
+    public int keyCounter;
+
+    public PlayerData(HealthSystem healthSystem, int lastCheckpointID, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, KeySystem keySystem)
     {
         // Save latest checkpointID
         this.lastCheckpointID = lastCheckpointID;
@@ -37,6 +39,10 @@ public class PlayerData
         //Save the current amout of Soul Shards
         soulShardCount = soulShardSystem.GetSoulShardCount();
 
+        //Save keyCounter
+        keyCounter = keySystem.GetKeyCount();
+
+        //Save Items
         collectedItemNames = new List<string>();
         foreach (var slot in inventorySystem.slots)
         {
