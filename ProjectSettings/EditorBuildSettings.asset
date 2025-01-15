@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/Level_One/Scene_02.unity
     guid: 095a4a73c6301fc43bf6f0688f46567f
+  - enabled: 1
+    path: Assets/Scenes/Playgrounds/Plaground_Ranged_Enemy.unity
+    guid: 3e41b5acb04ba4dbfa4970c565d8494b
   m_configObjects: {}

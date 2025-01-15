@@ -6118,7 +6118,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &2044823960188480190
 MonoBehaviour:
@@ -8247,13 +8247,8 @@ MonoBehaviour:
   menuController: {fileID: 222621895174888137}
   volumeTextValue: {fileID: 3140271850321649691}
   volumeSlider: {fileID: 1550772064158640390}
-  brightnessSlider: {fileID: 0}
-  brightnessTextValue: {fileID: 0}
   qualityDropdown: {fileID: 4091913475864320305}
   fullScreenToggle: {fileID: 8544657545027144869}
-  controllerSenTextValue: {fileID: 0}
-  controllerSenSlider: {fileID: 0}
-  invertYToggle: {fileID: 0}
 --- !u!1 &6676516601286432313
 GameObject:
   m_ObjectHideFlags: 0
@@ -9285,14 +9280,6 @@ MonoBehaviour:
   volumeTextValue: {fileID: 3140271850321649691}
   volumeSlider: {fileID: 1550772064158640390}
   defaultVolume: 1
-  ControllerSenTextValue: {fileID: 0}
-  controllerSenSlider: {fileID: 0}
-  defaultSen: 4
-  mainControllerSen: 4
-  invertYToggle: {fileID: 0}
-  brightnessSlider: {fileID: 0}
-  brightnessTextValue: {fileID: 0}
-  defaultBrightness: 1
   qualityDropdown: {fileID: 4091913475864320305}
   fullScreenToggle: {fileID: 8544657545027144869}
   confirmationPrompt: {fileID: 3559212379268877723}

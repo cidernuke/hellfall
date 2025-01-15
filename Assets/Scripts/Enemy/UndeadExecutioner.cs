@@ -12,9 +12,10 @@ public class UndeadExecutioner : MonoBehaviour
     [SerializeField] private LayerMask playerLayer;
 
     [Header("Summoning Settings")]
-    [SerializeField] private GameObject miniEnemyPrefab;
-    [SerializeField] private Transform[] summonPoints;
-    [SerializeField] private int maxMiniEnemies = 3;
+    [SerializeField] private GameObject miniEnemyPrefab;  // Mini enemy prefab
+    [SerializeField] private Transform[] summonPoints;  // Points around the boss to spawn mini enemies
+    [SerializeField] private int maxMiniEnemies = 3;  // Max number of mini enemies that can be summoned
+    private List<GameObject> spawnedMiniEnemies = new List<GameObject>();  // List to track spawned mini enemies
 
     [Header("Skill Parameters")]
     [SerializeField] private float healAmount = 50f;
@@ -25,9 +26,12 @@ public class UndeadExecutioner : MonoBehaviour
     private EnemyController enemyController;
     private Transform playerTransform;
 
-    private List<GameObject> spawnedMiniEnemies = new List<GameObject>();
     private bool facingRight = true;
     private bool isDead = false;
+
+    [Header("Boss Behavior")]
+    [SerializeField] private float maxFollowDistance = 15f;  // The distance at which the boss will stop following and start summoning
+    private bool isFollowingPlayer = true;  // Tracks if the boss is currently following the player
 
     private void Start()
     {
@@ -52,16 +56,28 @@ public class UndeadExecutioner : MonoBehaviour
             HandleDeath();
         }
 
-        // Follow the player if in sight
-        if (PlayerInSight())
+        // Follow the player if in sight and within following range
+        if (PlayerInSight() && isFollowingPlayer)
         {
             FollowPlayer();
         }
 
-        // Summon mini-enemies if below 50% health
+        // Summon mini-enemies if below 50% health or if the player is too far
         if (healthSystem.currentHealth < healthSystem.startingHealth * 0.5f && spawnedMiniEnemies.Count < maxMiniEnemies)
         {
             SummonMiniEnemies();
+        }
+
+        // If the player is too far away, stop following and start summoning mini-enemies
+        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+        if (distanceToPlayer > maxFollowDistance && isFollowingPlayer)
+        {
+            StopFollowingAndSummon();
+        }
+        // If the player is back in range, start following again
+        else if (distanceToPlayer <= maxFollowDistance && !isFollowingPlayer)
+        {
+            ResumeFollowingPlayer();
         }
     }
 
@@ -105,6 +121,35 @@ public class UndeadExecutioner : MonoBehaviour
         }
     }
 
+    private void StopFollowingAndSummon()
+    {
+        // Stop the boss's movement
+        isFollowingPlayer = false;
+        moveSpeed = 0f;
+
+        // Summon mini-enemies if not already done
+        if (spawnedMiniEnemies.Count < maxMiniEnemies)
+        {
+            SummonMiniEnemies();
+        }
+    }
+
+    private void ResumeFollowingPlayer()
+    {
+        // Resume following the player
+        isFollowingPlayer = true;
+        moveSpeed = 2f; // You can set this to the desired speed
+
+        // Optional: Flip to face the player if needed
+        if (playerTransform.position.x > transform.position.x && !facingRight)
+        {
+            Flip();
+        }
+        else if (playerTransform.position.x < transform.position.x && facingRight)
+        {
+            Flip();
+        }
+    }
 
     private void Flip()
     {
@@ -121,16 +166,18 @@ public class UndeadExecutioner : MonoBehaviour
 
         foreach (var point in summonPoints)
         {
+            // Only spawn mini-enemies if there are less than the max
             if (spawnedMiniEnemies.Count >= maxMiniEnemies) break;
 
+            // Instantiate mini enemy at the summon point
             GameObject miniEnemy = Instantiate(miniEnemyPrefab, point.position, Quaternion.identity);
             spawnedMiniEnemies.Add(miniEnemy);
 
             // Ensure spawned enemies use existing EnemyController and HealthSystem
-            var enemyController = miniEnemy.GetComponent<EnemyController>();
-            if (enemyController)
+            var miniEnemyController = miniEnemy.GetComponent<EnemyController>();
+            if (miniEnemyController)
             {
-                enemyController.enabled = true;
+                miniEnemyController.enabled = true;
             }
 
             var miniHealthSystem = miniEnemy.GetComponent<HealthSystem>();
@@ -141,6 +188,32 @@ public class UndeadExecutioner : MonoBehaviour
         }
     }
 
+    private void RespawnMiniEnemy(GameObject deadMiniEnemy)
+    {
+        // Remove the dead mini enemy from the list and destroy it
+        spawnedMiniEnemies.Remove(deadMiniEnemy);
+        Destroy(deadMiniEnemy);
+
+        // Respawn a new mini enemy at a random spawn point
+        foreach (var point in summonPoints)
+        {
+            if (spawnedMiniEnemies.Count >= maxMiniEnemies) break;
+
+            GameObject miniEnemy = Instantiate(miniEnemyPrefab, point.position, Quaternion.identity);
+            spawnedMiniEnemies.Add(miniEnemy);
+            var miniEnemyController = miniEnemy.GetComponent<EnemyController>();
+            if (miniEnemyController)
+            {
+                miniEnemyController.enabled = true;
+            }
+
+            var miniHealthSystem = miniEnemy.GetComponent<HealthSystem>();
+            if (miniHealthSystem)
+            {
+                miniHealthSystem.enabled = true;
+            }
+        }
+    }
 
     public void UseSkill1()
     {
@@ -179,12 +252,6 @@ public class UndeadExecutioner : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-    }
-
     private IEnumerator HealPeriodically()
     {
         while (!isDead)
@@ -197,4 +264,9 @@ public class UndeadExecutioner : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, detectionRange);
+    }
 }
