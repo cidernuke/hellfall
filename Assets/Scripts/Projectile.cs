@@ -10,22 +10,19 @@ public class Projectile : MonoBehaviour
     private float directionX;
     private float directionY;
     private float lifeTime;
+
+    // Relevant for Vampire Countess Boss
     private float waitTime;
     private bool isWaiting;
 
     // references
     private BoxCollider2D boxCollider;
     private Animator animator;
-    Transform player;
-    Boss boss;
-
 
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
         animator = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider2D>();
-        boss = animator.GetComponent<Boss>();
     }
 
     private void Update()
@@ -35,7 +32,7 @@ public class Projectile : MonoBehaviour
             return;
         }
 
-        // Handle waiting before movement
+        // Handle waiting before movement. Used for downward attack of the Vampire Countess Boss. Stops projectiles from immediatly moving after spawning.
         if (isWaiting)
         {
             waitTime -= Time.deltaTime;
@@ -49,17 +46,14 @@ public class Projectile : MonoBehaviour
         float movementSpeed = speed * Time.deltaTime;
         if (transform.CompareTag("blood_bullet_up"))
         {
-            // float movementSpeed = speed * Time.deltaTime * directionY;
             transform.Translate(0, movementSpeed * directionY, 0);
         }
         else if (transform.CompareTag("blood_bullet_down"))
         {
-            // float movementSpeed = speed * Time.deltaTime * directionY;
             transform.Translate(0, movementSpeed * directionY, 0);
         }
-        else
+        else // Default movement speed of a horizontal projectile, mainly from the player.
         {
-            // float movementSpeed = speed * Time.deltaTime * directionX;
             transform.Translate(movementSpeed * directionX, 0, 0);
         }
 
@@ -86,10 +80,6 @@ public class Projectile : MonoBehaviour
     /// <param name="collision"></param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("blood_bullet_down"))
-        {
-            print("collision triggered");
-        }
         if (collision.CompareTag("Wall"))
         {
             hit = true;
@@ -112,7 +102,6 @@ public class Projectile : MonoBehaviour
 
         if (collision.CompareTag("Player"))
         {
-            // print("collided with player");
             PlayerMovement playerMovement = collision.GetComponent<PlayerMovement>();
             if (collision.GetComponent<HealthSystem>() == null)
             {
@@ -151,16 +140,6 @@ public class Projectile : MonoBehaviour
         }
 
         transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
-    }
-
-    public void SpawnProjectiles(Vector2 _direction)
-    {
-        lifeTime = 0;
-        directionX = _direction.x;
-        directionY = _direction.y;
-        gameObject.SetActive(true);
-        hit = false;
-        boxCollider.enabled = true;
     }
 
     /// <summary>

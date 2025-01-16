@@ -15,6 +15,7 @@ TagManager:
   - blood_bullet_up
   - Boss
   - blood_bullet_down
+  - bullet_forward#
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - Enemy
   - Platform
   - Projectile
-  - 
+  - Background
   - 
   - 
   - 
