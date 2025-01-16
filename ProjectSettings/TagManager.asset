@@ -12,6 +12,10 @@ TagManager:
   - BackgroundMusic
   - Wall
   - Ladder
+  - blood_bullet_up
+  - Boss
+  - blood_bullet_down
+  - bullet_forward#
   - SpawnPoint
   - CurrentWeapon
   layers:
@@ -26,7 +30,8 @@ TagManager:
   - Enemy
   - Platform
   - CurrentWeapon
-  - 
+  - Projectile
+  - Background
   - 
   - 
   - 

@@ -59,7 +59,6 @@ public class PlayerAttack : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && cooldownTimer >= closeRangeAttackCooldown)
         {
-
             Attack();
         }
         if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown)
@@ -157,7 +156,9 @@ public class PlayerAttack : MonoBehaviour
         // important because projectiles are children of Player. Setting them to null makes them independant of the Players Transform
         projectiles[projectileIndex].transform.parent = null;
         projectiles[projectileIndex].transform.position = firePoint.position;
-        projectiles[projectileIndex].GetComponent<Projectile>().SetDirection(Math.Sign(transform.localScale.x));
+
+        int directionX = Math.Sign(transform.localScale.x);
+        projectiles[projectileIndex].GetComponent<Projectile>().SetDirection(new Vector2(directionX, 0));
     }
 
     /// <summary>
