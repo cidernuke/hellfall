@@ -21,20 +21,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public BoxCollider boxCollider;
 
     [Header("Character Stats")]
+    [SerializeField] public float vitality = 1f;
     [SerializeField] public float maxHealth = 100f;
     [SerializeField] public float currentHealth = 100f;
 
     // -- Close
     [SerializeField] public float strength = 1f;
     [SerializeField] public float closeDamage = 5f;
-    [SerializeField] public float closeAccuracy = 100f; 
-    [SerializeField] public float closeCooldown = 0f;
-    // [SerializeField] public float closeRange = 2f;
 
     // -- Ranged
     [SerializeField] public float intelligence = 1f;
     [SerializeField] public float rangedDamage = 5f;
-    [SerializeField] public float rangedAccuracy = 100f;
     [SerializeField] public float rangedCooldown = 0.25f;
     [SerializeField] public float rangedRange = 2f;
 
@@ -43,15 +40,12 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         playerStats = new CharacterStats(
+            vitality,
             maxHealth,
             strength,
             closeDamage,
-            closeAccuracy,
-            closeCooldown,
-            // closeRange,
             intelligence,
             rangedDamage,
-            rangedAccuracy,
             rangedCooldown,
             rangedRange
         );
@@ -102,12 +96,6 @@ public class PlayerController : MonoBehaviour
                 playerAttackSystem.closeDamage = playerStats.closeDamage.GetCalcValue();
             }
 
-            // if closeRangeCooldown value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
-            if(playerAttackSystem.closeRangeAttackCooldown != playerStats.closeCooldown.GetCalcValue())
-            {
-                playerAttackSystem.closeRangeAttackCooldown = playerStats.closeCooldown.GetCalcValue();
-            }
-
             // if rangedDamage value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
             if(playerAttackSystem.rangedDamage != playerStats.rangedDamage.GetCalcValue())
             {
@@ -141,10 +129,7 @@ public class PlayerController : MonoBehaviour
                 {
                     playerStats.closeDamage.SetModifier(closeRangeWeapon.weaponStats.GetDamageModifier());
                 }
-                if (closeRangeWeapon.weaponStats.GetCooldownModifier() != playerStats.closeCooldown.GetModifier()) 
-                {
-                    playerStats.closeCooldown.SetModifier(closeRangeWeapon.weaponStats.GetCooldownModifier());
-                }
+                
             }
             // slots[4] in Inventory = Long Range Weapon
             ItemData longRangeWeapon = inventorySystem.slots[5].itemData;
@@ -153,15 +138,15 @@ public class PlayerController : MonoBehaviour
             if(longRangeWeapon)
             {
                 // Communicates the Modifier values from the long range weapon to the player Stats, if they have changed
-                if (longRangeWeapon.weaponStats.GetDamageModifier() != playerStats.closeDamage.GetModifier()) 
+                if (longRangeWeapon.weaponStats.GetDamageModifier() != playerStats.rangedDamage.GetModifier()) 
                 {
                     playerStats.rangedDamage.SetModifier(longRangeWeapon.weaponStats.GetDamageModifier());
                 }
-                if (longRangeWeapon.weaponStats.GetCooldownModifier() != playerStats.closeCooldown.GetModifier()) 
+                if (longRangeWeapon.weaponStats.GetCooldownModifier() != playerStats.rangedCooldown.GetModifier()) 
                 {
                     playerStats.rangedCooldown.SetModifier(longRangeWeapon.weaponStats.GetCooldownModifier());
                 }
-                if (longRangeWeapon.weaponStats.GetRangeModifier() != playerStats.closeCooldown.GetModifier()) 
+                if (longRangeWeapon.weaponStats.GetRangeModifier() != playerStats.rangedCooldown.GetModifier()) 
                 {
                     playerStats.rangedRange.SetModifier(longRangeWeapon.weaponStats.GetRangeModifier());
                 }
