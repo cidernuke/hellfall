@@ -1,17 +1,15 @@
 using System;
-using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
     // for the merge
     [Header("Attack Parameters")]
-    [SerializeField] public float closeRangeAttackCooldown;
-    [SerializeField] public float rangedAttackCooldown;
-    [SerializeField] public float range;
-    [SerializeField] public float closeDamage;
-    [SerializeField] public float rangedDamage;
+    public float closeRangeAttackCooldown;
+    public float rangedAttackCooldown;
+    public float range;
+    public float closeDamage;
+    public float rangedDamage;
     [SerializeField] private float damage;
 
     // for special attacks
@@ -63,6 +61,7 @@ public class PlayerAttack : MonoBehaviour
         {
             Attack();
         }
+        print(cooldownTimer >= rangedAttackCooldown);
         if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown)
         {
             AttackRanged();
