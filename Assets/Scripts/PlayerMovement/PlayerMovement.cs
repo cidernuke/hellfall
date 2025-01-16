@@ -103,10 +103,6 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Blocking variables
-    [SerializeField] public bool blockWalk = false;     // blocks Player from walking, if true
-    [SerializeField] public bool blockJump = false;     // blocks Player from jumping, if true
-    [SerializeField] public bool blockCrouch = false;   // blocks Player from crouching, if true
-    [SerializeField] public bool blockDash = false;     // blocks Player from dashing, if true
     [SerializeField] public bool blockInput = false;    // blocks UserInput, if true
     #endregion
 
@@ -178,7 +174,7 @@ public class PlayerMovement : MonoBehaviour
 
         WallSlide();
         // WallSlide(); --> moved into WallJump for performance.
-        if (!blockJump) { WallJump(); }
+        WallJump();
 
         // Necessary for jump logic not to break.
         if (ladderMovement.jumpedOffOfLadder)
@@ -210,7 +206,7 @@ public class PlayerMovement : MonoBehaviour
                 animator.SetBool("run", isWalking);
 
 
-                if (!blockCrouch) { HandleCrouchInput(); }
+                HandleCrouchInput(); 
                 bool isCrouchWalking = isWalking && isCrouching;
 
                 animator.SetBool("crouch", !isCrouchWalking && isCrouching);

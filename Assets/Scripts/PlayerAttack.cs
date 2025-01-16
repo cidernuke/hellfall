@@ -7,9 +7,11 @@ public class PlayerAttack : MonoBehaviour
 {
     // for the merge
     [Header("Attack Parameters")]
-    [SerializeField] private float closeRangeAttackCooldown;
-    [SerializeField] private float rangedAttackCooldown;
-    [SerializeField] private float range;
+    [SerializeField] public float closeRangeAttackCooldown;
+    [SerializeField] public float rangedAttackCooldown;
+    [SerializeField] public float range;
+    [SerializeField] public float closeDamage;
+    [SerializeField] public float rangedDamage;
     [SerializeField] private float damage;
 
     // for special attacks

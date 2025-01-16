@@ -63,10 +63,6 @@ public class guide_Script : MonoBehaviour
         hintBubble = GameObject.Find("Hint_Bubble");
         hintBubbleSpriteRenderer = hintBubble.GetComponent<SpriteRenderer>();
 
-        playerMovementScript.blockCrouch = true;
-        playerMovementScript.blockJump = true;
-        playerMovementScript.blockDash = true;
-
         sequence = 0;
         isTitleAnimating = false;
 
@@ -159,29 +155,41 @@ public class guide_Script : MonoBehaviour
         
     }
 
-    IEnumerator someoneSpeaks(SpriteRenderer someonesSpriteRenderer, string spriteURL, float time)
+    IEnumerator someoneSpeaks(SpriteRenderer someonesSpriteRenderer, string spriteURL, bool skippable)
     {
         Sprite speechBubble = Resources.Load<Sprite>(spriteURL);
         someonesSpriteRenderer.sprite = speechBubble;
+
+        skipped = false;
         
-        float elapsedTime = 0f;
-
-        // Wait for either the full time or until "Q" is pressed to skip
-        while (elapsedTime < time) 
-        {
-            if (Input.GetKeyDown(KeyCode.Q)) 
+        if(skippable) {
+            // Wait for either the full time or until "Q" is pressed to skip
+            while (!skipped) 
             {
-                // Hide the speech bubble and exit early if "Q" is pressed
-                someonesSpriteRenderer.sprite = null;
-                skipped = true;
-                yield break;
-            }
+                if (Input.GetKeyDown(KeyCode.Q)) 
+                {
+                    // Hide the speech bubble and exit early if "Q" is pressed
+                    someonesSpriteRenderer.sprite = null;
+                    skipped = true;
+                    yield break;
+                }
 
-            elapsedTime += Time.deltaTime;
-            yield return null; // Wait for the next frame
+                yield return null; // Wait for the next frame
+            }
+            
+            someonesSpriteRenderer.sprite = null;
+
         }
 
-        someonesSpriteRenderer.sprite = null;
+    }
+
+    IEnumerator skipCheck()
+    {
+        while(!skipped)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+
     }
 
     IEnumerator moveSomeone(GameObject someone, Vector2 start, Vector2 end, float duration)
@@ -202,23 +210,8 @@ public class guide_Script : MonoBehaviour
         someone.transform.position = end;
     }
 
-    IEnumerator skipCheck(float time)
-    {
-        for(float i = 0f; i < time; i += 0.2f)
-        {
-            if(skipped) {
-                    skipped = false;
-                    break;
-                }
-            yield return new WaitForSeconds(0.2f);    
-        }
-    }
-
     void StopPlayer() 
     {
-        playerMovementScript.blockWalk = true;
-        playerMovementScript.blockJump = true;
-        playerMovementScript.blockCrouch = true;
         playerMovementScript.blockInput = true;
 
         playerMovementScript.body.velocity = new Vector2(0, playerMovementScript.body.velocity.y);
@@ -229,6 +222,8 @@ public class guide_Script : MonoBehaviour
 
         playerRigidBody.constraints = RigidbodyConstraints2D.FreezePosition;
 
+        hintBubble.transform.position = new Vector3(playerSpeech.transform.position.x, playerSpeech.transform.position.y - 3, -1);
+
         guideAnimator.SetBool("hasDisappeared", false);
         guideAnimator.SetBool("playerArrived", true);
         guideAnimator.SetBool("isIdle", true);
@@ -236,53 +231,20 @@ public class guide_Script : MonoBehaviour
         
     }
 
-    void StartPlayer(int which)
+    void StartPlayer(bool jumpStop)
     {
         playerMovementScript.enabled = true;
         playerMovementScript.animator.SetBool("is_idle", false);
 
         playerMovementScript.blockInput = false;
 
+        playerRigidBody.constraints = RigidbodyConstraints2D.None;
 
-        if(which == 2) {
+        if(jumpStop) {
             playerRigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         } else {
-            playerRigidBody.constraints = RigidbodyConstraints2D.None;
             playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
-       
-
-        switch(which)
-        {
-            case 1:
-                playerMovementScript.blockWalk = false;
-                break;
-            case 2:
-                playerMovementScript.blockJump = false;
-                break;
-            case 3:
-                playerMovementScript.blockWalk = false;
-                playerMovementScript.blockJump = false;
-                break;
-            case 4:
-                playerMovementScript.blockWalk = false;
-                playerMovementScript.blockJump = false;
-                playerMovementScript.blockCrouch = false;
-                break;
-            case 5:
-                playerMovementScript.blockWalk = false;
-                playerMovementScript.blockJump = false;
-                playerMovementScript.blockCrouch = false;
-                playerMovementScript.blockDash = false;
-                break;
-            default:
-                playerMovementScript.blockWalk = false;
-                playerMovementScript.blockJump = false;
-                playerMovementScript.blockCrouch = false;
-                playerMovementScript.blockDash = false;
-                break;
-        }
-
     }
 
     IEnumerator titleAnimation()
@@ -312,88 +274,87 @@ public class guide_Script : MonoBehaviour
         StopPlayer();
 
         // Hint: Use | Q | to skip dialogue. (7 words)
-        StartCoroutine(someoneSpeaks(hintBubbleSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/hint_bubble_1", 3.5f));
-        yield return skipCheck(1f);
+        StartCoroutine(someoneSpeaks(hintBubbleSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/hint_bubble_1", false));
         
         // S: Death may be the greatest of all human blessings (9 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_2", 4.0f));
-        yield return skipCheck(4.1f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_2", true));
+        yield return skipCheck();
 
         // P: What? (1 word)
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_2", 0.7f));
-        yield return skipCheck(0.8f);
+        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_2", true));
+        yield return skipCheck();
 
         // P: Where am I?
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_2a", 1.6f));
-        yield return skipCheck(1.7f);
+        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_2a", true));
+        yield return skipCheck();
 
         // S: Welcome to the first circle of hell! (9 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_5", 4.0f));
-        yield return skipCheck(4.1f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_5", true));
+        yield return skipCheck();
 
         // P: What? (1 Word)
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_2", 1.2f));
-        yield return skipCheck(1.3f);
+        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_2", true));
+        yield return skipCheck();
 
         // P: Hell?
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_6", 1.2f));
-        yield return skipCheck(1.3f);
+        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_6", true));
+        yield return skipCheck();
 
         // P: Why?
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_5", 1.2f));
-        yield return skipCheck(1.3f);
+        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_5", true));
+        yield return skipCheck();
 
         // S: Well like I always say: "It's ... (9 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_6", 4.0f));
-        yield return skipCheck(4.1f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_6", true));
+        yield return skipCheck();
 
         // S: Aaaaand you apparently did not my friend. (7 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_7", 3.5f));
-        yield return skipCheck(3.6f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_7", true));
+        yield return skipCheck();
 
         // P: Who are you to judge my life? (8 words)
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_7", 3.5f));
-        yield return skipCheck(3.6f);
+        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_7", true));
+        yield return skipCheck();
 
         // S: I did not judge your life...
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_9", 3.5f));
-        yield return skipCheck(3.6f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_9", true));
+        yield return skipCheck();
 
         // S: God did! (2 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_10", 1.5f));
-        yield return skipCheck(1.6f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_10", true));
+        yield return skipCheck();
 
         // P: Okay... Okay... (2 words)
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_8", 1.5f));
-        yield return skipCheck(1.6f);
+        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_8", true));
+        yield return skipCheck();
 
         // P: How the hell do I get out of here? (9 words)
-        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_9", 4.0f));
-        yield return skipCheck(4.1f);
+        StartCoroutine(someoneSpeaks(playerSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/player_speech_9", true));
+        yield return skipCheck();
 
         // // S: Well, that's a more difficult question. (6 words)
         // StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_11", 3.0f));
         // yield return skipCheck(3.1f);
 
         // S: At the moment you're in the first of eight circles. (10 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_12", 4.5f));
-        yield return skipCheck(4.6f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_12", true));
+        yield return skipCheck();
 
         // G: I suppose you can try and fight your way out of hell. (11 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_12a", 5.0f));
-        yield return skipCheck(5.1f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_12a", true));
+        yield return skipCheck();
 
         // S: But if you decide to leave I'll have to teach you a few things first. (14 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_16", 5.5f));
-        yield return skipCheck(5.6f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_16", true));
+        yield return skipCheck();
 
         // S: Let's get started! (3 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_18", 2.0f));
-        yield return skipCheck(2.1f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_18", true));
+        yield return skipCheck();
 
         // S: Try moving forwards and backwards with | A | and | D |. (10 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_19", 3.5f));
-        yield return skipCheck(3.6f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_19", true));
+        yield return skipCheck();
 
 
         ResetAnimation();
@@ -401,7 +362,7 @@ public class guide_Script : MonoBehaviour
 
         guide.transform.position = new Vector2(30f, guide.transform.position.y);
 
-        StartPlayer(1);
+        StartPlayer(false);
     }
 
     
@@ -416,25 +377,26 @@ public class guide_Script : MonoBehaviour
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.5f), 0.05f));
 
         // S: you can jump with | space |...
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_20", 1.5f));
-        yield return skipCheck(1.5f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_20", true));
+        yield return skipCheck();
 
-        StartPlayer(2);
+        StartPlayer(true);
     }
 
     IEnumerator thirdSequence()
     {
         yield return new WaitForSeconds(1f);
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.5f), 0.05f));
+        yield return new WaitForSeconds(0.05f);
 
         StopPlayer();
         playerMovementScript.enabled = false;
 
         // S: ...you can also double-jump by hitting | space | twice.
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_21", 1.5f));
-        yield return skipCheck(1.5f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_21", true));
+        yield return skipCheck();
 
-        StartPlayer(2);
+        StartPlayer(true);
 
         sequence = 4;
     }
@@ -450,14 +412,14 @@ public class guide_Script : MonoBehaviour
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.5f), 0.2f));
 
         // S: Follow me for your next lesson.
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_22", 1f));
-        yield return skipCheck(1f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_22", true));
+        yield return skipCheck();
 
         ResetAnimation();
         yield return new WaitForSeconds(1f);
         guide.transform.position = new Vector2(80.8f, 1.4f);
 
-        StartPlayer(3);
+        StartPlayer(false);
 
         sequence = 5;
     }
@@ -465,6 +427,7 @@ public class guide_Script : MonoBehaviour
     IEnumerator fifthSequence()
     {
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(77f, 1.48f), 0.2f));
+        yield return new WaitForSeconds(0.2f);
         StopPlayer();
         yield return new WaitForSeconds(1.1f);
 
@@ -477,28 +440,29 @@ public class guide_Script : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         // S: You can move through certain platforms with | SPACE | and | S | (9 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_23", 4.0f));
-        yield return skipCheck(4.1f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_23", true));
+        yield return skipCheck();
 
         // S: You can Wall-Jump by jumping against a wall (8 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_24", 3.5f));
-        yield return skipCheck(3.6f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_24", true));
+        yield return skipCheck();
 
         // S: Let's see if you can make it past this next part! (11 words)
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_25", 4.5f));
-        yield return skipCheck(4.6f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_25", true));
+        yield return skipCheck();
 
         ResetAnimation();
         yield return new WaitForSeconds(1f);
 
         guide.transform.position = new Vector2(101.3f, 12.89f);
 
-        StartPlayer(3);
+        StartPlayer(false);
     }
     
     IEnumerator sixthSequence()
     {
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(98f, 12.502f), 0.3f));
+        yield return new WaitForSeconds(0.3f);
         StopPlayer();
 
         yield return new WaitForSeconds(1f);
@@ -506,23 +470,25 @@ public class guide_Script : MonoBehaviour
         guideSpeech.transform.position = new Vector2(100.2f, 13f);
 
         // S: Try crouching using | S |
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_26", 2f));
-        yield return skipCheck(2f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_26", true));
+        yield return skipCheck();
 
 
         ResetAnimation();
         yield return new WaitForSeconds(2f);
 
-        guide.transform.position = new Vector2(123f, 7.32f);
+        guide.transform.position = new Vector2(124f, 7.32f);
 
-        StartPlayer(4);
+        StartPlayer(false);
 
     }
 
     IEnumerator seventhSequence()
     {
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(119f, 7.5f), 0.4f));
-        guideSpeech.transform.position = new Vector2(121.5f, 8f);
+        guideSpeech.transform.position = new Vector3(122.5f, 8f, -1f);
+        yield return new WaitForSeconds(0.4f);
+
 
         StopPlayer();
         yield return new WaitForSeconds(1f);
@@ -530,14 +496,17 @@ public class guide_Script : MonoBehaviour
 
 
         // S: You can also Dash using | Shift | 
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_27", 2f));
-        yield return skipCheck(2f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_27", true));
+        yield return skipCheck();
+        // S: You can also Dash using | Shift | 
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_27a", true));
+        yield return skipCheck();
 
         ResetAnimation();
         yield return new WaitForSeconds(1f);
         guide.transform.position = new Vector2(146f, -1.75f);
 
-        StartPlayer(5);
+        StartPlayer(false);
     }
 
     IEnumerator eighthSequence()
@@ -553,44 +522,44 @@ public class guide_Script : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         // S: Didn't think you'd manage all that.
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_28", 3f));
-        yield return skipCheck(3f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_28", true));
+        yield return skipCheck();
         // S: Maybe you do have a chance to make it out.
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_29", 3f));
-        yield return skipCheck(3f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_29", true));
+        yield return skipCheck();
         // S: Finally, before you go, you'll have to do some fighting in the next circles
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_30", 5f));
-        yield return skipCheck(5f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_30", true));
+        yield return skipCheck();
         // S: You can hit enemies with Left-Click
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_31", 3f));
-        yield return skipCheck(3f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_31", true));
+        yield return skipCheck();
         // S: To hit enemies with spells, | Right-Click |
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_34", 3f));
-        yield return skipCheck(3f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_34", true));
+        yield return skipCheck();
         // S: Now you are ready head down into the depths of hell.
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_32", 4f));
-        yield return skipCheck(4f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_32", true));
+        yield return skipCheck();
         // S: Try not to die again!
-        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_33", 2.5f));
-        yield return skipCheck(2.5f);
+        StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_33", true));
+        yield return skipCheck();
 
         ResetAnimation();
         yield return new WaitForSeconds(1f);
 
         guide.transform.position = new Vector2(3f, 7.32f);
 
-        StartPlayer(5);
+        StartPlayer(false);
     }
 
     IEnumerator ninthSequence()
     {
         hintBubble.transform.position = new Vector3(159f, -4.6f, -1f);
          // H: Use E to pick up Item.
-        StartCoroutine(someoneSpeaks(hintBubbleSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/hint_bubble_2", 2f));
-        yield return skipCheck(2f);
+        StartCoroutine(someoneSpeaks(hintBubbleSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/hint_bubble_2", true));
+        yield return skipCheck();
          // H: press | 1 |, | 2 |, | 3 | to use items
-        StartCoroutine(someoneSpeaks(hintBubbleSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/hint_bubble_3", 2f));
-        yield return skipCheck(2f);
+        StartCoroutine(someoneSpeaks(hintBubbleSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/hint_bubble_3", true));
+        yield return skipCheck();
     }
 
 }

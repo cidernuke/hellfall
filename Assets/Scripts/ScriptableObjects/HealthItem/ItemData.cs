@@ -23,7 +23,7 @@ public class ItemData : ScriptableObject
     public string description;
 
     [Header("Weapon Item")]
-    public float damage;
+    public WeaponStats weaponStats;
 
 
 }
