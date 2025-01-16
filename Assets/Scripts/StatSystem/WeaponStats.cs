@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 
 
-public class WeaponStats : MonoBehaviour 
+public class WeaponStats 
 {
 
     // Modifiers in Percent

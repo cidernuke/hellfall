@@ -168,10 +168,8 @@ public class PlayerMovement : MonoBehaviour
             lastTimeJumpPressed = Time.time;
         }
         jumpedThisFrame = false;
-        if (!blockJump) { HandleJumpInput(); }
-
-        if (!blockDash) { HandleDashInput(); }
-
+        HandleJumpInput();
+        HandleDashInput(); 
         WallSlide();
         // WallSlide(); --> moved into WallJump for performance.
         WallJump();

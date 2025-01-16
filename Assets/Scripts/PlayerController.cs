@@ -39,17 +39,6 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        playerStats = new CharacterStats(
-            vitality,
-            maxHealth,
-            strength,
-            closeDamage,
-            intelligence,
-            rangedDamage,
-            rangedCooldown,
-            rangedRange
-        );
-
         // Ensure that HealthSystem is assigned either via inspector or automatically
         if (healthSystem == null)
         {
@@ -69,6 +58,20 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (playerStats == null)
+        {
+            playerStats = new CharacterStats(
+                vitality,
+                maxHealth,
+                strength,
+                closeDamage,
+                intelligence,
+                rangedDamage,
+                rangedCooldown,
+                rangedRange
+            );
+        }
+
         
         // Update HealthSystem values
         if (healthSystem != null)
@@ -116,42 +119,42 @@ public class PlayerController : MonoBehaviour
         }
 
         // Update CharacterStats based on active Weapons
-        if(inventorySystem != null)
-        {
-            // slots[4] in Inventory = Close Range Weapon
-            ItemData closeRangeWeapon = inventorySystem.slots[4].itemData;
+        // if(inventorySystem != null)
+        // {
+        //     // slots[4] in Inventory = Close Range Weapon
+        //     ItemData closeRangeWeapon = inventorySystem.slots[4].itemData;
 
-            // Checks if there is a closeRangeWeapon
-            if(closeRangeWeapon)
-            {
-                // Communicates the Modifier values from the close range weapon to the player Stats, if they have changed
-                if (closeRangeWeapon.weaponStats.GetDamageModifier() != playerStats.closeDamage.GetModifier()) 
-                {
-                    playerStats.closeDamage.SetModifier(closeRangeWeapon.weaponStats.GetDamageModifier());
-                }
+        //     // Checks if there is a closeRangeWeapon
+        //     if(closeRangeWeapon)
+        //     {
+        //         // Communicates the Modifier values from the close range weapon to the player Stats, if they have changed
+        //         if (closeRangeWeapon.weaponStats.GetDamageModifier() != playerStats.closeDamage.GetModifier()) 
+        //         {
+        //             playerStats.closeDamage.SetModifier(closeRangeWeapon.weaponStats.GetDamageModifier());
+        //         }
                 
-            }
-            // slots[4] in Inventory = Long Range Weapon
-            ItemData longRangeWeapon = inventorySystem.slots[5].itemData;
+        //     }
+        //     // slots[4] in Inventory = Long Range Weapon
+        //     ItemData longRangeWeapon = inventorySystem.slots[5].itemData;
 
-            // Checks if there is a longRangeWeapon
-            if(longRangeWeapon)
-            {
-                // Communicates the Modifier values from the long range weapon to the player Stats, if they have changed
-                if (longRangeWeapon.weaponStats.GetDamageModifier() != playerStats.rangedDamage.GetModifier()) 
-                {
-                    playerStats.rangedDamage.SetModifier(longRangeWeapon.weaponStats.GetDamageModifier());
-                }
-                if (longRangeWeapon.weaponStats.GetCooldownModifier() != playerStats.rangedCooldown.GetModifier()) 
-                {
-                    playerStats.rangedCooldown.SetModifier(longRangeWeapon.weaponStats.GetCooldownModifier());
-                }
-                if (longRangeWeapon.weaponStats.GetRangeModifier() != playerStats.rangedCooldown.GetModifier()) 
-                {
-                    playerStats.rangedRange.SetModifier(longRangeWeapon.weaponStats.GetRangeModifier());
-                }
-            }
-        }
+        //     // Checks if there is a longRangeWeapon
+        //     if(longRangeWeapon)
+        //     {
+        //         // Communicates the Modifier values from the long range weapon to the player Stats, if they have changed
+        //         if (longRangeWeapon.weaponStats.GetDamageModifier() != playerStats.rangedDamage.GetModifier()) 
+        //         {
+        //             playerStats.rangedDamage.SetModifier(longRangeWeapon.weaponStats.GetDamageModifier());
+        //         }
+        //         if (longRangeWeapon.weaponStats.GetCooldownModifier() != playerStats.rangedCooldown.GetModifier()) 
+        //         {
+        //             playerStats.rangedCooldown.SetModifier(longRangeWeapon.weaponStats.GetCooldownModifier());
+        //         }
+        //         if (longRangeWeapon.weaponStats.GetRangeModifier() != playerStats.rangedCooldown.GetModifier()) 
+        //         {
+        //             playerStats.rangedRange.SetModifier(longRangeWeapon.weaponStats.GetRangeModifier());
+        //         }
+        //     }
+        // }
 
 
     }

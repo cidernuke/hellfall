@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterStats : MonoBehaviour 
+public class CharacterStats : ScriptableObject 
 {
 
     // Overall Stats
