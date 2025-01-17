@@ -39,16 +39,23 @@ public class SoulShardSystem : MonoBehaviour
     /// <summary>
     /// Method that decreases the player's soul shard count by the specified amount.
     /// </summary>
-    public void decreaseSoulShard(SoulShardItem soulShardItem, int amount)
+    public bool decreaseSoulShard(SoulShardItem soulShardItem, int amount)
     {
         //soulShardItems.Remove(soulShardItem);
 
         //More flexible like this, you can just say how many you want to remove
+        if(soulShardItems.Count == 0)
+        {
+            Debug.Log("You dont have enough Soul Shards");
+            return false;
+        }
+
         for (int i = 0; i < amount && soulShardItems.Count > 0; i++)
         {
             soulShardItems.RemoveAt(soulShardItems.Count - 1);
         }
         UpdateUI();
+        return true;            
     }
 
     public int GetSoulShardCount()
