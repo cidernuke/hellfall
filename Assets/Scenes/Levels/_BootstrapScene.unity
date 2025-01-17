@@ -623,6 +623,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AltarGUI
       objectReference: {fileID: 0}
+    - target: {fileID: 1428928786929778382, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
+      propertyPath: m_Alpha
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6568490763506401671, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
       propertyPath: m_Pivot.x
       value: 0
