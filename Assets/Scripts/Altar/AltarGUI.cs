@@ -89,6 +89,7 @@ public class AltarGUI : MonoBehaviour
                             
             if (textElement.name == "VitalityValueText")
             {
+                Debug.Log("VitalityValueText : " + playerController.playerStats.vitality.GetBaseValue());
                 textElement.text = playerController.playerStats.vitality.GetBaseValue().ToString();
             }
             if(textElement.name == "maxHealtValueText")

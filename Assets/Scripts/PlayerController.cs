@@ -54,10 +54,7 @@ public class PlayerController : MonoBehaviour
         {
             inventorySystem = GetComponent<InventorySystem>();
         }
-    }
 
-    void Update()
-    {
         if (playerStats == null)
         {
             playerStats = new CharacterStats(
@@ -71,6 +68,11 @@ public class PlayerController : MonoBehaviour
                 rangedRange
             );
         }
+    }
+
+    void Update()
+    {
+        
 
         
         // Update HealthSystem values

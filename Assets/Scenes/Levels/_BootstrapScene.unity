@@ -640,6 +640,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: VitalityValueText
       objectReference: {fileID: 0}
+    - target: {fileID: 6153200234573344527, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 149.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 6153200234573344527, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -25.855
+      objectReference: {fileID: 0}
     - target: {fileID: 6568490763506401671, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -719,6 +727,14 @@ PrefabInstance:
     - target: {fileID: 6568490763506401671, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6886319001142833610, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6886319001142833610, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 27.2
       objectReference: {fileID: 0}
     - target: {fileID: 8726994458687464653, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
       propertyPath: m_Name
@@ -1183,7 +1199,6 @@ MonoBehaviour:
   healthSystem: {fileID: 1627913580}
   playerAttackSystem: {fileID: 1627913579}
   inventorySystem: {fileID: 549623651}
-  playerStats: {fileID: 0}
   anim: {fileID: 0}
   boxCollider: {fileID: 0}
   vitality: 1

@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
+
 public class Stat 
 {
 
@@ -21,10 +18,10 @@ public class Stat
     */
 
     // baseValue: base Stat value, influenced by strength (closeRange) or intelligence (longRange)
-    [SerializeField] private float baseValue;
+    private float baseValue;
 
     // modifier: modifier value, influenced by equipped Weapon (closeRange or longRange)
-    [SerializeField] private float modifier = 0f;
+    private float modifier = 0f;
 
     // calculated Value = baseValue * modifier (in percent)
     private float calcValue = 0f;

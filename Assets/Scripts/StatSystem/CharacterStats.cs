@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterStats : ScriptableObject 
+public class CharacterStats  
 {
 
     // Overall Stats
@@ -38,4 +38,6 @@ public class CharacterStats : ScriptableObject
         this.rangedCooldown = new Stat(rangedCooldown);
         this.rangedRange = new Stat(rangedRange);
     }
+
+   
 }
