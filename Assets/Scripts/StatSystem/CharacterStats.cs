@@ -38,4 +38,37 @@ public class CharacterStats
         this.rangedCooldown = new Stat(rangedCooldown);
         this.rangedRange = new Stat(rangedRange);
     }
+
+    public void IncrementVitality()
+    {
+        if(vitality.GetBaseValue() <= 10)
+        {
+            vitality.SetBaseValue(vitality.GetBaseValue() + 1f);
+
+            maxHealth.SetBaseValue(maxHealth.GetBaseValue() + 10f);
+        }
+    }
+
+    public void IncrementStrength()
+    {
+        if(strength.GetBaseValue() <= 10)
+        {
+            strength.SetBaseValue(strength.GetBaseValue() + 1f);
+
+            closeDamage.SetBaseValue(closeDamage.GetBaseValue() + 5f);
+        }
+    }
+
+    public void IncrementIntelligence()
+    {
+        if(intelligence.GetBaseValue() <= 10)
+        {
+            intelligence.SetBaseValue(intelligence.GetBaseValue() + 1f);
+
+            rangedDamage.SetBaseValue(rangedDamage.GetBaseValue() + 3f);
+            rangedCooldown.SetBaseValue(rangedCooldown.GetBaseValue() - 0.1f);
+            rangedRange.SetBaseValue(rangedRange.GetBaseValue() + 0.1f);
+        }
+    }
+
 }
