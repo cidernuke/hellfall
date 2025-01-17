@@ -411,7 +411,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 590382955975310257}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -449,8 +449,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -13.7923}
-  m_SizeDelta: {x: 45, y: -32.5846}
+  m_AnchoredPosition: {x: 0, y: -16.292}
+  m_SizeDelta: {x: 45, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &295860480023218015
 CanvasRenderer:
@@ -4187,7 +4187,7 @@ GameObject:
   - component: {fileID: 4297231360577432734}
   - component: {fileID: 5853136870216271462}
   m_Layer: 5
-  m_Name: StatCanvas
+  m_Name: VitalityCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5712,7 +5712,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -51.292}
-  m_SizeDelta: {x: 45, y: -32.5846}
+  m_SizeDelta: {x: 45, y: 32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7819296294812298087
 CanvasRenderer:
@@ -7280,7 +7280,7 @@ GameObject:
   - component: {fileID: 8500184917170988075}
   - component: {fileID: 3189844455852733199}
   m_Layer: 5
-  m_Name: StatCanvas (1)
+  m_Name: 'StrengthCanvas '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7576,7 +7576,7 @@ GameObject:
   - component: {fileID: 5835990211317997013}
   - component: {fileID: 6730340345404252961}
   m_Layer: 5
-  m_Name: StatCanvas (2)
+  m_Name: 'IntelligenceCanvas '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

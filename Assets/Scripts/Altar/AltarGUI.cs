@@ -5,20 +5,26 @@ using UnityEngine.UI;
 public class AltarGUI : MonoBehaviour
 {
     private bool active = false;
-    [SerializeField] private CanvasGroup guiElement;    
+    [SerializeField] private CanvasGroup guiElement;
+    private PlayerController playerController;
+        
     private Button[] buttons;
     private TextMeshProUGUI[] textValueElements;
+    
 
     private void Start()
-    {
-        // Setzen Sie den Button-Listener
+    {       
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        textValueElements = GetComponentsInChildren<TextMeshProUGUI>();        
         buttons = GetComponentsInChildren<Button>();
+        SetBaseValues();        
+
         foreach (Button button in buttons)
         {
             button.onClick.AddListener(() => OnButtonClick(button));
         }
+
         
-        textValueElements = GetComponentsInChildren<TextMeshProUGUI>();         
         
     }
 
@@ -51,10 +57,11 @@ public class AltarGUI : MonoBehaviour
         {
             foreach (TextMeshProUGUI textElement in textValueElements)
             {
-                if (textElement.name == button.name + "ValueText")
+                if (textElement.name == "LevelValueText")
                 {
                     updateValueText(textElement);
                 }
+                
             }
 
         }
@@ -62,9 +69,33 @@ public class AltarGUI : MonoBehaviour
 
    private void updateValueText(TextMeshProUGUI textElement)
     {
-        int count = int.Parse(textElement.text);
-        count++;
-        textElement.text = count.ToString();
+
+        /*
+        Das Text-Element des Stat Levels wird geupdated.
+        das Text-Element der zum Stat gehörigen werte wird geupdated.
+        */
+        if(textElement == null)
+        {
+            Debug.Log("textElement is null");
+        }        
+            textElement.text = playerController.playerStats.vitality.GetBaseValue().ToString();
+            //textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();
+    }
+
+    private void SetBaseValues(){
+        foreach (TextMeshProUGUI textElement in textValueElements)
+        {
+            
+                            
+            if (textElement.name == "VitalityValueText")
+            {
+                textElement.text = playerController.playerStats.vitality.GetBaseValue().ToString();
+            }
+            if(textElement.name == "maxHealtValueText")
+            {
+                textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();
+            }
+        }
     }
 
     
