@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class KeySystem : MonoBehaviour
 {
-    [SerializeField] private int currentKeyCount = 0;
+    [SerializeField] public int currentKeyCount = 0;
     [SerializeField] private int totalKeysNeeded = 3;  // In each level player must find 3 keys
 
     // Save the keys persistent
