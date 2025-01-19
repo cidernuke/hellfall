@@ -69,12 +69,14 @@ public class GameManager : MonoBehaviour
 
         //Sets the spawn location after switching scene
         GameObject spawnPoint = GameObject.FindWithTag("SpawnPoint");
-        if (setPlayerCoordinates != null)
+        if (setPlayerCoordinates != new Vector3(0, 0, 0))
         {
-            print("registered");
+            print("spawning at: "+setPlayerCoordinates);
+            playerMovement.transform.position = setPlayerCoordinates;
         }
         else if (spawnPoint != null)
         {
+            print("spawning at spawn point");
             playerMovement.transform.position = spawnPoint.transform.position;
         }
 
