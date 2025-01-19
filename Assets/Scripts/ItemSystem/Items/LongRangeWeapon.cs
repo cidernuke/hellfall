@@ -5,6 +5,8 @@ public class LongRangeWeapon : Item
 {
     public HealthSystem playerHealth; // reference to healthsystem
 
+    public WeaponStats weaponStats; // reference to weapon stats
+
     public LongRangeWeapon(string itemName, Sprite itemSprite) 
     {
         this.itemName = itemName;

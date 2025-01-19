@@ -11,6 +11,8 @@ public class ShortRangeWeapon : Item
 {
     public HealthSystem playerHealth; // reference to healthsystem
 
+    public WeaponStats weaponStats; // reference to weapon stats
+
     public ShortRangeWeapon(string itemName, Sprite itemSprite) 
     {
         this.itemName = itemName;
