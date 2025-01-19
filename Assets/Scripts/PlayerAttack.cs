@@ -166,6 +166,16 @@ public class PlayerAttack : MonoBehaviour
 
         int directionX = Math.Sign(transform.localScale.x);
         projectiles[projectileIndex].GetComponent<Projectile>().SetDirection(new Vector2(directionX, 0));
+
+        // Set fire or ice flags
+        if(fireDamageRange)
+        {
+            projectiles[projectileIndex].GetComponent<Projectile>().isFireBullet = true;
+        }
+        if(iceDamageRange)
+        {
+            projectiles[projectileIndex].GetComponent<Projectile>().isIceBullet = true;
+        }
     }
 
     /// <summary>
