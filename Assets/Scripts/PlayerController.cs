@@ -69,11 +69,7 @@ public class PlayerController : MonoBehaviour
             );
         }
     }
-
-    void Update()
-    {
-        
-    }
+   
 
     void Update()
     {
