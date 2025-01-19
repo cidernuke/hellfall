@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cc0c4acd6bfa5c4786f79389bb96a16, type: 3}
   m_Name: FireLongRange
   m_EditorClassIdentifier: 
-  itemName: 
-  itemSprite: {fileID: 0}
-  itemType: 0
+  itemName: FireLongRange
+  itemSprite: {fileID: 21300000, guid: d5e3988cacb5346db8efe0d6f8745731, type: 3}
+  itemType: 4
   healthAmount: 0
   duration: 0
   amount: 0
   description: 
-  isFire: 0
+  isFire: 1
   isIce: 0
