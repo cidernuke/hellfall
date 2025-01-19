@@ -35,11 +35,11 @@ public class ItemFactory : MonoBehaviour
                 break;
             
             case ItemType.ShortRangeWeapon:
-                shortRangeWeapon = new ShortRangeWeapon(itemData.itemName, itemData.itemSprite);
+                shortRangeWeapon = new ShortRangeWeapon(itemData.itemName, itemData.itemSprite, itemData.isFire, itemData.isIce);
                 break;
 
             case ItemType.LongRangeWeapon:
-                longRangeWeapon = new LongRangeWeapon(itemData.itemName, itemData.itemSprite);
+                longRangeWeapon = new LongRangeWeapon(itemData.itemName, itemData.itemSprite, itemData.isFire, itemData.isIce);
                 break;
 
             // Weitere Fälle für andere Item-Typen können hier hinzugefügt werden

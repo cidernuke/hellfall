@@ -11,20 +11,19 @@ public class LongRangeWeapon : Item
     {
         this.itemName = itemName;
         this.itemSprite = itemSprite;
-        this.weaponStats = new WeaponStats();
-        this.weaponStats.isCloseRangeWeapon = true;
+        this.weaponStats = new WeaponStats(false);
         //change modifiers based on the type of weapon
         if(isFire)
         {
             //Example Values
-            this.weaponStats.damageModifier = 0;
-            this.weaponStats.cooldownModifier = 5;
+            this.weaponStats.SetDamageModifier(0);
+            this.weaponStats.SetCooldownModifier(5);
         }
         if(isIce)
         {
             //Example Values
-            this.weaponStats.damageModifier = 10;
-            this.weaponStats.cooldownModifier = 0;
+            this.weaponStats.SetDamageModifier(10);
+            this.weaponStats.SetCooldownModifier(0);
         }
     }
     public override bool use(){
