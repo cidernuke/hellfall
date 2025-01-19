@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     private List<ItemRespawner> itemRespawners = new List<ItemRespawner>();
     private List<EnemyController> enemyRespawners = new List<EnemyController>();
 
+    public Vector3 setPlayerCoordinates;
+
     private void Awake()
     {
         // Singleton-Implementierung
@@ -67,7 +69,11 @@ public class GameManager : MonoBehaviour
 
         //Sets the spawn location after switching scene
         GameObject spawnPoint = GameObject.FindWithTag("SpawnPoint");
-        if (spawnPoint != null)
+        if (setPlayerCoordinates != new Vector3(0, 0, 0))
+        {
+            playerMovement.transform.position = setPlayerCoordinates;
+        }
+        else if (spawnPoint != null)
         {
             playerMovement.transform.position = spawnPoint.transform.position;
         }
