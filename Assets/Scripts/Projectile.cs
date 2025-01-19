@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour
 
     //damage variants
     public bool isFireBullet = false;
-    public bool iceIceBullet = false;
+    public bool isIceBullet = false;
 
     private void Awake()
     {
