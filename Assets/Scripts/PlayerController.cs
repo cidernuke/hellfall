@@ -6,7 +6,7 @@ using ItemSystem.Abstract;
 using UnityEngine;
 using UnityEngine.Playables;
 
-public class PlayerController : MonoBehaviour 
+public class PlayerController : MonoBehaviour
 {
     // Script References
     [Header("Scripts")]
@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float rangedCooldown = 0.25f;
     [SerializeField] public float rangedRange = 2f;
 
-    
+
 
     void Awake()
     {
@@ -45,12 +45,12 @@ public class PlayerController : MonoBehaviour
             healthSystem = GetComponent<HealthSystem>();  // Automatically find it
         }
 
-        if(playerAttackSystem == null)
+        if (playerAttackSystem == null)
         {
             playerAttackSystem = GetComponent<PlayerAttack>();
         }
 
-        if(inventorySystem == null)
+        if (inventorySystem == null)
         {
             inventorySystem = GetComponent<InventorySystem>();
         }
@@ -77,13 +77,13 @@ public class PlayerController : MonoBehaviour
         {
             // if startingHealth in healthSystem isn't the same as in playerStats, then value in HealthSystem is changed
             // Example: maxHealth value is increased through Upgrade Altar
-            if (healthSystem.startingHealth != playerStats.maxHealth.GetCalcValue()) 
+            if (healthSystem.startingHealth != playerStats.maxHealth.GetCalcValue())
             {
                 healthSystem.startingHealth = playerStats.maxHealth.GetCalcValue();
             }
 
             // if currentHealth is changed in healthSystem, then new value is set for local variable currentHealth in PlayerControllerx
-            if (healthSystem.currentHealth != currentHealth) 
+            if (healthSystem.currentHealth != currentHealth)
             {
                 currentHealth = healthSystem.currentHealth;
             }
@@ -93,67 +93,91 @@ public class PlayerController : MonoBehaviour
         if (playerAttackSystem != null)
         {
             // if closeDamage value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
-            if(playerAttackSystem.closeDamage != playerStats.closeDamage.GetCalcValue())
+            if (playerAttackSystem.closeDamage != playerStats.closeDamage.GetCalcValue())
             {
                 playerAttackSystem.closeDamage = playerStats.closeDamage.GetCalcValue();
             }
 
             // if rangedDamage value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
-            if(playerAttackSystem.rangedDamage != playerStats.rangedDamage.GetCalcValue())
+            if (playerAttackSystem.rangedDamage != playerStats.rangedDamage.GetCalcValue())
             {
                 playerAttackSystem.rangedDamage = playerStats.rangedDamage.GetCalcValue();
             }
 
             // if rangedAttackCooldown value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
-            if(playerAttackSystem.rangedAttackCooldown != playerStats.rangedCooldown.GetCalcValue())
+            if (playerAttackSystem.rangedAttackCooldown != playerStats.rangedCooldown.GetCalcValue())
             {
                 playerAttackSystem.rangedAttackCooldown = playerStats.rangedCooldown.GetCalcValue();
             }
 
             // if rangedAttackRange value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
-            if(playerAttackSystem.range != playerStats.rangedRange.GetCalcValue())
+            if (playerAttackSystem.range != playerStats.rangedRange.GetCalcValue())
             {
                 playerAttackSystem.range = playerStats.rangedRange.GetCalcValue();
             }
         }
 
-        // Update CharacterStats based on active Weapons
-        // if(inventorySystem != null)
-        // {
-        //     // slots[4] in Inventory = Close Range Weapon
-        //     ItemData closeRangeWeapon = inventorySystem.slots[4].itemData;
+        //Update CharacterStats based on active Weapons
+        if (inventorySystem != null)
+        {
+            // slots[4] in Inventory = Close Range Weapon
+            ShortRangeWeapon closeRangeWeapon = inventorySystem.slots[4].storedItem as ShortRangeWeapon;
+            ItemData itemDataClose = inventorySystem.slots[4].itemData;
+            // Checks if there is a closeRangeWeapon
+            if (closeRangeWeapon != null)
+            {
+                // Communicates the Modifier values from the close range weapon to the player Stats, if they have changed
+                if (closeRangeWeapon.weaponStats.GetDamageModifier() != playerStats.closeDamage.GetModifier())
+                {
+                    playerStats.closeDamage.SetModifier(closeRangeWeapon.weaponStats.GetDamageModifier());
+                }
 
-        //     // Checks if there is a closeRangeWeapon
-        //     if(closeRangeWeapon)
-        //     {
-        //         // Communicates the Modifier values from the close range weapon to the player Stats, if they have changed
-        //         if (closeRangeWeapon.weaponStats.GetDamageModifier() != playerStats.closeDamage.GetModifier()) 
-        //         {
-        //             playerStats.closeDamage.SetModifier(closeRangeWeapon.weaponStats.GetDamageModifier());
-        //         }
-                
-        //     }
-        //     // slots[4] in Inventory = Long Range Weapon
-        //     ItemData longRangeWeapon = inventorySystem.slots[5].itemData;
+                //Communicate the type of the weapon equipped, to the player Attack Script
+                if (itemDataClose.isFire == true)
+                {
+                    playerAttackSystem.iceDamageClose = false;
+                    playerAttackSystem.fireDamageClose = true;
+                }
+                if (itemDataClose.isIce == true)
+                {
+                    playerAttackSystem.iceDamageClose = true;
+                    playerAttackSystem.fireDamageClose = false;
+                }
 
-        //     // Checks if there is a longRangeWeapon
-        //     if(longRangeWeapon)
-        //     {
-        //         // Communicates the Modifier values from the long range weapon to the player Stats, if they have changed
-        //         if (longRangeWeapon.weaponStats.GetDamageModifier() != playerStats.rangedDamage.GetModifier()) 
-        //         {
-        //             playerStats.rangedDamage.SetModifier(longRangeWeapon.weaponStats.GetDamageModifier());
-        //         }
-        //         if (longRangeWeapon.weaponStats.GetCooldownModifier() != playerStats.rangedCooldown.GetModifier()) 
-        //         {
-        //             playerStats.rangedCooldown.SetModifier(longRangeWeapon.weaponStats.GetCooldownModifier());
-        //         }
-        //         if (longRangeWeapon.weaponStats.GetRangeModifier() != playerStats.rangedCooldown.GetModifier()) 
-        //         {
-        //             playerStats.rangedRange.SetModifier(longRangeWeapon.weaponStats.GetRangeModifier());
-        //         }
-        //     }
-        // }
+            }
+            // slots[4] in Inventory = Long Range Weapon
+            LongRangeWeapon longRangeWeapon = inventorySystem.slots[5].storedItem as LongRangeWeapon;
+            ItemData itemDataRange = inventorySystem.slots[4].itemData;
+            // Checks if there is a longRangeWeapon
+            if (longRangeWeapon != null)
+            {
+                // Communicates the Modifier values from the long range weapon to the player Stats, if they have changed
+                if (longRangeWeapon.weaponStats.GetDamageModifier() != playerStats.rangedDamage.GetModifier())
+                {
+                    playerStats.rangedDamage.SetModifier(longRangeWeapon.weaponStats.GetDamageModifier());
+                }
+                if (longRangeWeapon.weaponStats.GetCooldownModifier() != playerStats.rangedCooldown.GetModifier())
+                {
+                    playerStats.rangedCooldown.SetModifier(longRangeWeapon.weaponStats.GetCooldownModifier());
+                }
+                if (longRangeWeapon.weaponStats.GetRangeModifier() != playerStats.rangedCooldown.GetModifier())
+                {
+                    playerStats.rangedRange.SetModifier(longRangeWeapon.weaponStats.GetRangeModifier());
+                }
+
+                //Communicate the type of the weapon equipped, to the player Attack Script
+                if (itemDataRange.isFire == true)
+                {
+                    playerAttackSystem.iceDamageRange = false;
+                    playerAttackSystem.fireDamageRange = true;
+                }
+                if (itemDataRange.isIce == true)
+                {
+                    playerAttackSystem.iceDamageRange = true;
+                    playerAttackSystem.fireDamageRange = false;
+                }
+            }
+        }
 
 
     }

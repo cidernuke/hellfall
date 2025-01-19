@@ -1,5 +1,9 @@
 using System;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -13,8 +17,10 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float damage;
 
     // for special attacks
-    [SerializeField] private bool fireDamage = false;
-    [SerializeField] private bool iceDamage = false;
+    [SerializeField] public bool fireDamageClose = false;
+    [SerializeField] public bool iceDamageClose = false;
+    [SerializeField] public bool fireDamageRange = false;
+    [SerializeField] public bool iceDamageRange = false;
     [SerializeField] private bool isFrozen = false;
 
 
@@ -153,7 +159,7 @@ public class PlayerAttack : MonoBehaviour
         anim.SetTrigger("attack_ranged");
         cooldownTimer = 0;
         int projectileIndex = FindProjectile();
-        
+
         // important because projectiles are children of Player. Setting them to null makes them independant of the Players Transform
         projectiles[projectileIndex].transform.parent = null;
         projectiles[projectileIndex].transform.position = firePoint.position;
@@ -185,17 +191,17 @@ public class PlayerAttack : MonoBehaviour
     {
         if (EnemyInSight())
         {
-            if (fireDamage)
+            if (fireDamageClose)
             {
                 //Note: TakeDamage still needs to be called, since fire damage is only secondary and applied over time
                 enemyHealth.TakeDamage(damage, null, enemyController);
                 enemyHealth.ApplyFireDamage(damage, 2f, 1f);
             }
-            else if (iceDamage)
+            else if (iceDamageClose)
             {
                 //Note: TakeDamage still needs to be called, since ice damage only freezes the opponent
                 enemyHealth.TakeDamage(damage, null, enemyController);
-                //FreezeEnemy();
+                FreezeEnemy(enemyController);
             }
             else
             {
@@ -207,19 +213,30 @@ public class PlayerAttack : MonoBehaviour
     /// <summary>
     /// Freezes the Enemy, by disabling the EnemyPatrol Script for a certain amount of time.
     /// </summary>
-    /* private IEnumerator FreezeEnemy()
+    public IEnumerator FreezeEnemy(EnemyController enemyController)
     {
-        if (!isFrozen)
+        if (enemyController != null)
         {
-            //broken
-            //enemyController.enemyPatrol.enabled = false
-            //CooldownTimer set to 0, so the enemy can't attack for a second
+            if (!isFrozen)
+            {
+                isFrozen = true;
 
-            enemyController.cooldownTimer = 0;
-            yield return new WaitForSeconds(1f);
-            //enemyController.GetComponent<EnemyPatrol>().enabled = true;
+                //slow down speed for duration of freeze
+                enemyController.enemyPatrol.speed = 0.3f;
+
+
+                //CooldownTimer set to 0, so the enemy can't attack for a second
+                enemyController.cooldownTimer = 0;
+                yield return new WaitForSeconds(1f);
+                
+                
+                enemyController.enemyPatrol.speed = 2.5f;
+
+                isFrozen = false;
+            }
         }
         yield return null;
 
-    }*/
+
+    }
 }

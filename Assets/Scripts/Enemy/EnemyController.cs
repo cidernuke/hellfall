@@ -19,7 +19,7 @@ public class EnemyController : MonoBehaviour
 
     [Header("Player Layer")]
     [SerializeField] private LayerMask playerLayer;
-    private float cooldownTimer = Mathf.Infinity;
+    public float cooldownTimer = Mathf.Infinity;
 
     [Header("Loot")]
     [SerializeField] public List<LootItem> lootTable = new List<LootItem>();
