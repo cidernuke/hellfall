@@ -62,40 +62,42 @@ public class AltarGUI : MonoBehaviour
 
     private void OnButtonClick(Button button)
     {
-        if(button.name == "PlusButton")
-        {
+        
             Debug.Log("PlusButton clicked: " + button.name);
             if(GameManager.Instance.soulShardSystem.decreaseSoulShard(null,1))
             {
                 foreach (TextMeshProUGUI textElement in textValueElements)
-                {                    
+                {
+                    if(button.name == "PlusButton1")
+                    {                    
 
-                    if (textElement.name == "VitalityValueText")
-                    {
-                        
-                        updateValueText(textElement);            
-                        
+                        if (textElement.name == "VitalityValueText")
+                        {                        
+                            updateValueText(textElement);   
+                            
+                        }
                     }
-                    if (textElement.name == "StrengthValueText")
+                    if (button.name == "PlusButton2")
                     {
-                        updateValueText(textElement);            
-                        
+                        if (textElement.name == "StrengthValueText")
+                        {
+                            updateValueText(textElement);
+                        }
                     }
-                    if (textElement.name == "IntelligenceValueText")
+                    if (button.name == "PlusButton3")
                     {
-                        updateValueText(textElement);
-                    }                   
-                                 
+                        if (textElement.name == "IntelligenceValueText")
+                        {
+                            updateValueText(textElement);
+                        }
+                    } 
+                                
                     
                 }
 
             }
             
-        }
-        else if(button.name == "MinusButton")
-        {
-            Debug.Log("MinusButton clicked: " + button.name);            
-        }
+       
     }
 
     /// <summary>
@@ -116,22 +118,91 @@ public class AltarGUI : MonoBehaviour
         switch (textElement.name)
         {
             case "VitalityValueText":
-                playerController.playerStats.vitality.SetBaseValue(1);
+                playerController.playerStats.IncrementVitality();
                 textElement.text = playerController.playerStats.vitality.GetBaseValue().ToString();
+                UpdateMaxHealthText();
                 break;
             case "StrengthValueText":
-                playerController.playerStats.strength.SetBaseValue(1);
+                playerController.playerStats.IncrementStrength();
                 textElement.text = playerController.playerStats.strength.GetBaseValue().ToString();
+                UpdateCloseDamage();
                 break;
             case "IntelligenceValueText":
-                playerController.playerStats.intelligence.SetBaseValue(1);
+                playerController.playerStats.IncrementIntelligence();
                 textElement.text = playerController.playerStats.intelligence.GetBaseValue().ToString();
+                UpdateRangedDamage();
+                UpdateRangedCooldown();
+                UpdateRangedRange();
                 break;
             default:
                 Debug.Log("No matching textElement found");
                 break;
         }                
             
+    }
+
+    private void UpdateMaxHealthText()
+    {
+        foreach (TextMeshProUGUI textElement in textValueElements)
+        {
+            if (textElement.name == "maxHealthValueText")
+            {
+                textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();
+                break;
+            }
+        }
+    }
+
+    private void UpdateCloseDamage()
+    {
+        foreach (TextMeshProUGUI textElement in textValueElements)
+        {
+            if (textElement.name == "damageValueText")
+            {
+                textElement.text = playerController.playerStats.closeDamage.GetBaseValue().ToString();
+                break;
+            }
+            
+        }
+    }
+
+    private void UpdateRangedDamage()
+    {
+        foreach (TextMeshProUGUI textElement in textValueElements)
+        {
+            if (textElement.name == "rangeDamageValueText")
+            {
+                textElement.text = playerController.playerStats.rangedDamage.GetBaseValue().ToString();
+                break;
+            }
+            
+        }
+    }
+
+    private void UpdateRangedCooldown()
+    {
+        foreach (TextMeshProUGUI textElement in textValueElements)
+        {
+            if (textElement.name == "rangeCooldownValueText")
+            {
+                textElement.text = playerController.playerStats.rangedCooldown.GetBaseValue().ToString();
+                break;
+            }           
+            
+        }
+    }
+
+    private void UpdateRangedRange()
+    {
+        foreach (TextMeshProUGUI textElement in textValueElements)
+        {
+            if (textElement.name == "rangedRangeValueText")
+            {
+                textElement.text = playerController.playerStats.rangedRange.GetBaseValue().ToString();
+                break;
+            }           
+            
+        }
     }
 
     /// <summary>
@@ -145,7 +216,7 @@ public class AltarGUI : MonoBehaviour
             {                
                 textElement.text = playerController.playerStats.vitality.GetBaseValue().ToString();
             }
-            if(textElement.name == "maxHealtValueText")
+            if(textElement.name == "maxHealthValueText")
             {
                 textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();
             }
