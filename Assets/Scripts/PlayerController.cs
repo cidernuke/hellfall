@@ -121,8 +121,8 @@ public class PlayerController : MonoBehaviour
         if (inventorySystem != null)
         {
             // slots[4] in Inventory = Close Range Weapon
-            ShortRangeWeapon closeRangeWeapon = inventorySystem.slots[4].storedItem as ShortRangeWeapon;
-            ItemData itemDataClose = inventorySystem.slots[4].itemData;
+            ShortRangeWeapon closeRangeWeapon = inventorySystem.slots[3].storedItem as ShortRangeWeapon;
+            ItemData itemDataClose = inventorySystem.slots[3].itemData;
             // Checks if there is a closeRangeWeapon
             if (closeRangeWeapon != null)
             {
@@ -146,7 +146,7 @@ public class PlayerController : MonoBehaviour
 
             }
             // slots[4] in Inventory = Long Range Weapon
-            LongRangeWeapon longRangeWeapon = inventorySystem.slots[5].storedItem as LongRangeWeapon;
+            LongRangeWeapon longRangeWeapon = inventorySystem.slots[4].storedItem as LongRangeWeapon;
             ItemData itemDataRange = inventorySystem.slots[4].itemData;
             // Checks if there is a longRangeWeapon
             if (longRangeWeapon != null)

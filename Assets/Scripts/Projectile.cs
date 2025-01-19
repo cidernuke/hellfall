@@ -19,6 +19,10 @@ public class Projectile : MonoBehaviour
     private BoxCollider2D boxCollider;
     private Animator animator;
 
+    //damage variants
+    public bool isFireBullet = false;
+    public bool iceIceBullet = false;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();

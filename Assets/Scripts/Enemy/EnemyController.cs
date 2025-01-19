@@ -25,7 +25,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public List<LootItem> lootTable = new List<LootItem>();
 
     // References
-    private Animator anim;
+    public Animator anim;
     private HealthSystem playerHealth;
     public EnemyPatrol enemyPatrol;
     private PlayerMovement playerMovement;
