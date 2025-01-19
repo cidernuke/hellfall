@@ -21,16 +21,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public BoxCollider boxCollider;
 
     [Header("Character Stats")]
-    [SerializeField] public float vitality = 1f;
+    [SerializeField] public float vitality = 0f;
     [SerializeField] public float maxHealth = 100f;
     [SerializeField] public float currentHealth = 100f;
 
     // -- Close
-    [SerializeField] public float strength = 1f;
+    [SerializeField] public float strength = 0f;
     [SerializeField] public float closeDamage = 5f;
 
     // -- Ranged
-    [SerializeField] public float intelligence = 1f;
+    [SerializeField] public float intelligence = 0f;
     [SerializeField] public float rangedDamage = 5f;
     [SerializeField] public float rangedCooldown = 0.25f;
     [SerializeField] public float rangedRange = 2f;
