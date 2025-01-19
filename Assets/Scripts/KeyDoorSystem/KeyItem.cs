@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class KeyItem : MonoBehaviour
 {
-    private bool playerInRange = false; // Merkt, ob der Player in Trigger-Reichweite ist
+    private bool playerInRange = false;
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
@@ -47,10 +47,9 @@ public class KeyItem : MonoBehaviour
 
     private void Update()
     {
-        // Nur reagieren, wenn Player in Reichweite ist
+        // Only react if player is in range
         if (playerInRange)
         {
-            // Check Tastendruck
             if (Input.GetKeyDown(KeyCode.E))
             {
                 PickupKey();
@@ -60,7 +59,6 @@ public class KeyItem : MonoBehaviour
 
     private void PickupKey()
     {
-        // Player holen
         var playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj == null)
         {
@@ -73,7 +71,7 @@ public class KeyItem : MonoBehaviour
         {
             keySystem.AddKey();
             Debug.Log("Key picked up via E-press!");
-            Destroy(gameObject); // Schlüssel entfernen (oder ItemRespawner-Logik)
+            Destroy(gameObject); // Destroy key when picked-up
         }
         else
         {

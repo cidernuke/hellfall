@@ -1,17 +1,19 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Controls a door that can be visually opened if the player has enough keys.
 /// This script should be placed on the same GameObject that has the Animator and a trigger collider.
 /// The player can open the door only if he has enough keys 
 /// </summary>
-public class DoorController2 : MonoBehaviour
+public class DoorController : MonoBehaviour
 {
     [SerializeField] private Animator doorAnimator;
     private bool isDoorOpen = false;
-
-    // True if the player is currently within the door's trigger zone
     private bool playerInRange = false;
+
+    [SerializeField] private string sceneToLoad = "Scene_02";
+    [SerializeField] private float doorOpenDuration = 1.5f;
 
 
     /// <summary>
@@ -99,7 +101,28 @@ public class DoorController2 : MonoBehaviour
         var keySystem = FindObjectOfType<KeySystem>();
         if (keySystem != null)
         {
-            keySystem.SetKeyCount(0);
+            keySystem.ResetKeyCount();
+        }
+
+        StartCoroutine(WaitAndLoadScene());
+    }
+
+    /// <summary>
+    /// Waits 'doorOpenDuration' seconds to simulate the door animation finishing, 
+    /// then loads the specified scene.
+    /// </summary>
+    private System.Collections.IEnumerator WaitAndLoadScene()
+    {
+        yield return new WaitForSeconds(doorOpenDuration);
+
+        if (!string.IsNullOrEmpty(sceneToLoad))
+        {
+            Debug.Log("Loading scene: " + sceneToLoad);
+            SceneManager.LoadScene(sceneToLoad);
+        }
+        else
+        {
+            Debug.LogWarning("No scene name specified. Door stays open, but no scene is loaded.");
         }
     }
 }
