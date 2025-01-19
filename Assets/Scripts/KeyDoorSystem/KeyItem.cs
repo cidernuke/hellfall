@@ -3,6 +3,14 @@ using UnityEngine;
 public class KeyItem : MonoBehaviour
 {
     private bool playerInRange = false;
+    private ItemRespawner respawner;
+
+    private void Awake()
+    {
+        // Get the ItemRespawner on the same object
+        respawner = GetComponent<ItemRespawner>();
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
@@ -13,28 +21,28 @@ public class KeyItem : MonoBehaviour
         }
     }
 
-// Version where the Player can just walk over the Key instead of pressing E
-//    private void OnTriggerEnter2D(Collider2D collider)
-// {
-//     if (collider.CompareTag("Player"))
-//     {
-//         playerInRange = true;
-//         Version where the Player can just walk into the key
-//         var keySystem = collider.GetComponent<KeySystem>();
-//         if (keySystem != null)
-//         {
-//             //Player collect key with collision
-//             keySystem.AddKey();
+    // Version where the Player can just walk over the Key instead of pressing E
+    //    private void OnTriggerEnter2D(Collider2D collider)
+    // {
+    //     if (collider.CompareTag("Player"))
+    //     {
+    //         playerInRange = true;
+    //         Version where the Player can just walk into the key
+    //         var keySystem = collider.GetComponent<KeySystem>();
+    //         if (keySystem != null)
+    //         {
+    //             //Player collect key with collision
+    //             keySystem.AddKey();
 
-//             // Destroy this key || respawner technique
-//             Destroy(gameObject);
-//         }
-//         else
-//         {
-//             Debug.LogWarning("KeySystem component not found on the player!");
-//         }
-//     }
-// }
+    //             // Destroy this key || respawner technique
+    //             Destroy(gameObject);
+    //         }
+    //         else
+    //         {
+    //             Debug.LogWarning("KeySystem component not found on the player!");
+    //         }
+    //     }
+    // }
 
     private void OnTriggerExit2D(Collider2D collider)
     {
@@ -71,7 +79,17 @@ public class KeyItem : MonoBehaviour
         {
             keySystem.AddKey();
             Debug.Log("Key picked up via E-press!");
-            Destroy(gameObject); // Destroy key when picked-up
+            //Destroy(gameObject); // Destroy key when picked-up
+
+            if (respawner != null)
+            {
+                respawner.CollectItem();
+            }
+            else
+            {
+                // Fallback: if no respawner, just destroy the key
+                Destroy(gameObject);
+            }
         }
         else
         {
