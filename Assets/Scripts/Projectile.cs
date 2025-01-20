@@ -1,4 +1,7 @@
 using UnityEngine;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Projectile : MonoBehaviour
 {
@@ -18,10 +21,12 @@ public class Projectile : MonoBehaviour
     // references
     private BoxCollider2D boxCollider;
     private Animator animator;
+    public PlayerAttack attackSys;
 
     //damage variants
     public bool isFireBullet = false;
     public bool isIceBullet = false;
+    [SerializeField] private bool isFrozen = false;
 
     private void Awake()
     {
@@ -93,12 +98,34 @@ public class Projectile : MonoBehaviour
 
         if (collision.CompareTag("Enemy"))
         {
+            //Get Components and check if they exist
             EnemyController enemyController = collision.GetComponent<EnemyController>();
-            if (collision.GetComponent<HealthSystem>() == null)
+            if(enemyController == null)
             {
+                Debug.Log("EnemyController is null");
                 return;
             }
-            collision.GetComponent<HealthSystem>().TakeDamage(damage, null, enemyController);
+            HealthSystem enemyHealth = collision.GetComponent<HealthSystem>();
+            if (enemyHealth == null)
+            {
+                Debug.Log("EnemyHealthSystem is null");
+                return;
+            }
+
+            //Apply Damage
+            enemyHealth.TakeDamage(damage, null, enemyController);
+
+            //für den fall dass es ice bullets sind
+            if(isIceBullet)
+            {
+                StartCoroutine(attackSys.FreezeEnemy(enemyController));
+            }
+            //für den fall dass es ice bullets sind
+            if(isFireBullet)
+            {
+                enemyHealth.ApplyFireDamage(damage, 2f, 1f);
+            }
+
             hit = true;
             boxCollider.enabled = false;
             animator.SetTrigger("explode");
@@ -153,5 +180,44 @@ public class Projectile : MonoBehaviour
     private void Deactivate()
     {
         gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Freezes the Enemy, by disabling the EnemyPatrol Script for a certain amount of time.
+    /// </summary>
+    public IEnumerator FreezeEnemy(EnemyController enemyController)
+    {
+        if (enemyController != null)
+        {
+            if (!isFrozen)
+            {
+                isFrozen = true;
+
+                //slow down speed for duration of freeze
+                enemyController.enemyPatrol.speed = 0.3f;
+                //slow down animation for duration of freeze
+                enemyController.anim.speed = 0.3f;
+
+                //Save the initial color of the enemy
+                var initial = enemyController.GetComponent<SpriteRenderer>().material.color;
+                //Change the color of the enemy to blue
+                enemyController.GetComponent<SpriteRenderer>().material.color = new Color(0.5f, 0.8f, 0.98f);   
+
+                //CooldownTimer set to 0, so the enemy can't attack for a second
+                enemyController.cooldownTimer = 0;
+                Debug.Log("Enemy is frozen");
+                yield return new WaitForSeconds(1f);
+                
+                //reset changed fields
+                enemyController.enemyPatrol.speed = 2.5f;
+                enemyController.anim.speed = 1f;
+                enemyController.GetComponent<SpriteRenderer>().material.color = initial;
+
+                isFrozen = false;
+            }
+        }
+        yield return null;
+
+
     }
 }

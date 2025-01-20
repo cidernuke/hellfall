@@ -170,11 +170,16 @@ public class PlayerAttack : MonoBehaviour
         // Set fire or ice flags
         if(fireDamageRange)
         {
+
+            projectiles[projectileIndex].GetComponent<Projectile>().attackSys = this;
             projectiles[projectileIndex].GetComponent<Projectile>().isFireBullet = true;
+            projectiles[projectileIndex].GetComponent<Projectile>().isIceBullet = false;
         }
         if(iceDamageRange)
         {
+            projectiles[projectileIndex].GetComponent<Projectile>().attackSys = this;
             projectiles[projectileIndex].GetComponent<Projectile>().isIceBullet = true;
+            projectiles[projectileIndex].GetComponent<Projectile>().isFireBullet = false;
         }
     }
 
