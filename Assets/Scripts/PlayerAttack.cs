@@ -216,51 +216,12 @@ public class PlayerAttack : MonoBehaviour
             {
                 //Note: TakeDamage still needs to be called, since ice damage only freezes the opponent
                 enemyHealth.TakeDamage(damage, null, enemyController);
-                StartCoroutine(FreezeEnemy(enemyController));
+                enemyController.ApplyIceEffect();
             }
             else
             {
                 enemyHealth.TakeDamage(damage, null, enemyController);
             }
         }
-    }
-
-    /// <summary>
-    /// Freezes the Enemy, by disabling the EnemyPatrol Script for a certain amount of time.
-    /// </summary>
-    public IEnumerator FreezeEnemy(EnemyController enemyController)
-    {
-        if (enemyController != null)
-        {
-            if (!isFrozen)
-            {
-                isFrozen = true;
-
-                //slow down speed for duration of freeze
-                enemyController.enemyPatrol.speed = 0.3f;
-                //slow down animation for duration of freeze
-                enemyController.anim.speed = 0.3f;
-
-                //Save the initial color of the enemy
-                var initial = enemyController.GetComponent<SpriteRenderer>().material.color;
-                //Change the color of the enemy to blue
-                enemyController.GetComponent<SpriteRenderer>().material.color = new Color(0.5f, 0.8f, 0.98f);   
-
-                //CooldownTimer set to 0, so the enemy can't attack for a second
-                enemyController.cooldownTimer = 0;
-                Debug.Log("Enemy is frozen");
-                yield return new WaitForSeconds(1f);
-                
-                //reset changed fields
-                enemyController.enemyPatrol.speed = 2.5f;
-                enemyController.anim.speed = 1f;
-                enemyController.GetComponent<SpriteRenderer>().material.color = initial;
-
-                isFrozen = false;
-            }
-        }
-        yield return null;
-
-
     }
 }

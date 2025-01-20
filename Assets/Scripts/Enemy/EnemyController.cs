@@ -36,6 +36,9 @@ public class EnemyController : MonoBehaviour
     private HealthSystem enemyHealthSystem;
     private bool isDead = false;
 
+    //Flag for Freeze
+    private bool isFrozen = false;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -163,5 +166,50 @@ public class EnemyController : MonoBehaviour
     {
         isDead = true;
         gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Starts the FreezeEnemy Coroutine
+    /// </summary>
+    public void ApplyIceEffect()
+    {
+        if (!enemyPatrol.enabled) return; // Prevent multiple freezes
+
+        StartCoroutine(FreezeEnemy());
+    }
+
+    /// <summary>
+    /// Freezes the Enemy, by disabling the EnemyPatrol Script for a certain amount of time.
+    /// </summary>
+    private IEnumerator FreezeEnemy()
+    {
+        if (!isFrozen)
+        {
+            isFrozen = true;
+
+            //slow down speed for duration of freeze
+            this.enemyPatrol.speed = 0.3f;
+            //slow down animation for duration of freeze
+            this.anim.speed = 0.3f;
+
+            //Save the initial color of the enemy
+            var initial = this.GetComponent<SpriteRenderer>().material.color;
+            //Change the color of the enemy to blue
+            this.GetComponent<SpriteRenderer>().material.color = new Color(0.5f, 0.8f, 0.98f);
+
+            //CooldownTimer set to 0, so the enemy can't attack for a second
+            this.cooldownTimer = 0;
+            Debug.Log("Enemy is frozen");
+            yield return new WaitForSeconds(1f);
+
+            //reset changed fields
+            this.enemyPatrol.speed = 2.5f;
+            this.anim.speed = 1f;
+            this.GetComponent<SpriteRenderer>().material.color = initial;
+
+            isFrozen = false;
+        }
+
+
     }
 }

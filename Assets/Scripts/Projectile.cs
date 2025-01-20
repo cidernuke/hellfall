@@ -118,7 +118,7 @@ public class Projectile : MonoBehaviour
             //für den fall dass es ice bullets sind
             if(isIceBullet)
             {
-                StartCoroutine(attackSys.FreezeEnemy(enemyController));
+                enemyController.ApplyIceEffect();
             }
             //für den fall dass es ice bullets sind
             if(isFireBullet)
