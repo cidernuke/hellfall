@@ -40,6 +40,12 @@ public class SaveManager : MonoBehaviour
     public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     {
         print("Saving Game");
+
+        // //Load existing GameData
+        GameData existingData = LoadGameData();
+        if (existingData == null)
+            existingData = new GameData(); // in case there is none
+
         // Create new PlayerData-Object
         PlayerData playerData = new PlayerData(
             healthSystem,
@@ -48,14 +54,22 @@ public class SaveManager : MonoBehaviour
             inventorySystem
         );
 
+        //Merge existingData with PlayerData
+        existingData.playerData = playerData;
+
+        // // 4) Bestzeiten + Zwischenzeiten vom TimerSystem (nur wenn du sie dort verwaltest)
+        // existingData.bestLevelTimes = TimerSystem.Instance.GetAllBestTimes();
+        existingData.currentLevelTimes = TimerSystem.Instance.GetAllCurrentTimes();
+
         // Creates GameData and adds PlayerData
-        GameData gameData = new GameData
-        {
-            playerData = playerData
-        };
+        // GameData gameData = new GameData
+        // {
+        //     playerData = playerData
+        // };
 
         // Serialize GameData to JSON
-        string json = JsonUtility.ToJson(gameData);
+        //string json = JsonUtility.ToJson(gameData);
+        string json = JsonUtility.ToJson(existingData);
 
         // Write JSON into file
         File.WriteAllText(saveFilePath, json);
@@ -79,6 +93,37 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Diese Methode wird vom TimerSystem oder anderen Klassen aufgerufen,
+    /// um TEIL-Bereiche von GameData zu ändern (z.B. nur Bestzeiten).
+    /// </summary>
+    public void SaveGameData(GameData partialData)
+    {
+        // 1) Vorhandene Daten laden
+        GameData existingData = LoadGameData();
+        if (existingData == null)
+            existingData = new GameData();
+
+        // 2) Nur die Felder überschreiben, die in partialData != null sind
+        // (So wird nichts gelöscht, was du nicht aktualisieren willst.)
+        if (partialData.playerData != null)
+            existingData.playerData = partialData.playerData;
+
+        if (partialData.bestLevelTimes != null)
+            existingData.bestLevelTimes = partialData.bestLevelTimes;
+
+        if (partialData.currentLevelTimes != null)
+            existingData.currentLevelTimes = partialData.currentLevelTimes;
+
+        // Optional: Weitere Felder in GameData hier ergänzen, falls vorhanden.
+
+        // 3) Jetzt alles wieder speichern
+        string json = JsonUtility.ToJson(existingData);
+        File.WriteAllText(saveFilePath, json);
+
+        Debug.Log("SaveGameData: Teil-Daten übernommen und gespeichert unter: " + saveFilePath);
+    }
+
     // Methoad to load old game
     public void LoadGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
     {
@@ -87,6 +132,15 @@ public class SaveManager : MonoBehaviour
         {
             // Anwenden der geladenen Daten
             ApplyLoadedData(gameData, playerMovement, healthSystem, soulShardSystem, inventorySystem);
+
+            if (gameData.bestLevelTimes != null)
+            {
+                TimerSystem.Instance.SetAllBestTimes(gameData.bestLevelTimes);
+            }
+            if (gameData.currentLevelTimes != null)
+            {
+                TimerSystem.Instance.SetAllCurrentTimes(gameData.currentLevelTimes);
+            }
             Debug.Log("Spiel geladen.");
         }
         else
@@ -147,6 +201,9 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Liefert lediglich die PlayerData zurück
+    /// </summary>
     public PlayerData LoadPlayerData()
     {
         GameData gameData = LoadGameData();
@@ -160,7 +217,7 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    private GameData LoadGameData()
+    public GameData LoadGameData()
     {
         if (File.Exists(saveFilePath))
         {
@@ -175,6 +232,9 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Laden der GameData als Objekt
+    /// </summary>
     public void LoadSceneFromSave()
     {
         PlayerData data = LoadPlayerData();
@@ -198,3 +258,62 @@ public class SaveManager : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 }
+
+
+
+
+// // Method to save the game
+// public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
+// {
+//     print("Saving Game");
+
+//     // //Load existing GameData
+//     // GameData existingData = LoadGameData();
+//     // if (existingData == null)
+//     //     existingData = new GameData(); // in case there is none
+
+//     // Create new PlayerData-Object
+//     PlayerData playerData = new PlayerData(
+//         healthSystem,
+//         playerMovement.GetLastCheckpointID(),
+//         soulShardSystem,
+//         inventorySystem
+//     );
+
+//     //Merge existingData with PlayerData
+//     // existingData.playerData = playerData;
+
+//     // // 4) Bestzeiten + Zwischenzeiten vom TimerSystem (nur wenn du sie dort verwaltest)
+//     // existingData.bestLevelTimes = TimerSystem.Instance.GetAllBestTimes();
+//     // existingData.currentLevelTimes = TimerSystem.Instance.GetAllCurrentTimes();
+
+//     // Creates GameData and adds PlayerData
+//     GameData gameData = new GameData
+//     {
+//         playerData = playerData
+//     };
+
+//     // Serialize GameData to JSON
+//     string json = JsonUtility.ToJson(gameData);
+
+//     // Write JSON into file
+//     File.WriteAllText(saveFilePath, json);
+
+//     //Check if the file was written and the integrity
+//     if (File.Exists(saveFilePath))
+//     {
+//         string writtenContent = File.ReadAllText(saveFilePath);
+//         if (writtenContent == json)
+//         {
+//             print("Das Spiel wurde erfolgreich gespeichert und überprüft.");
+//         }
+//         else
+//         {
+//             print("Der Dateiinhalt stimmt nicht mit dem erwarteten Inhalt überein.");
+//         }
+//     }
+//     else
+//     {
+//         print("Das Spiel wurde nicht gespeichert.");
+//     }
+// }

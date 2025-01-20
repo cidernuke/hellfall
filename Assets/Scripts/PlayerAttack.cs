@@ -61,7 +61,7 @@ public class PlayerAttack : MonoBehaviour
         {
             Attack();
         }
-        print(cooldownTimer >= rangedAttackCooldown);
+        //print(cooldownTimer >= rangedAttackCooldown);
         if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown)
         {
             AttackRanged();
