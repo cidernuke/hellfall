@@ -18,7 +18,7 @@ public class SoulShardItem : MonoBehaviour
             SoulShardSystem soulShardSystem = collider.GetComponent<SoulShardSystem>();
             if (soulShardSystem != null)
             {
-                soulShardSystem.inreaseSoulShard(this);
+                soulShardSystem.inreaseSoulShard(this,1);
                 Destroy(gameObject);
             }
             else

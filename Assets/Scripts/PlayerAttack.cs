@@ -37,6 +37,7 @@ public class PlayerAttack : MonoBehaviour
     private HealthSystem enemyHealth;
     private PlayerMovement playerMovement;
     private EnemyController enemyController;
+    private PlayerController playerController;
 
     //variables for attack
     private int attackIndex = 0;
@@ -48,6 +49,8 @@ public class PlayerAttack : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         enemyHealth = GetComponent<HealthSystem>();
         enemyController = GetComponent<EnemyController>();
+        playerController = GetComponent<PlayerController>();
+        
     }
 
     /// <summary>
@@ -61,7 +64,7 @@ public class PlayerAttack : MonoBehaviour
         {
             Attack();
         }
-        print(cooldownTimer >= rangedAttackCooldown);
+        //print(cooldownTimer >= rangedAttackCooldown);
         if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown)
         {
             AttackRanged();

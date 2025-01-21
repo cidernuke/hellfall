@@ -380,7 +380,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 894527979223811459, guid: c8dd822283d79954fa0c24446a0f59b2, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 30
+      value: 65.1736
       objectReference: {fileID: 0}
     - target: {fileID: 894527979223811459, guid: c8dd822283d79954fa0c24446a0f59b2, type: 3}
       propertyPath: m_SizeDelta.y
@@ -388,7 +388,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 894527979223811459, guid: c8dd822283d79954fa0c24446a0f59b2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 194.90007
+      value: 177.31328
       objectReference: {fileID: 0}
     - target: {fileID: 894527979223811459, guid: c8dd822283d79954fa0c24446a0f59b2, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -512,11 +512,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7893680206407511805, guid: c8dd822283d79954fa0c24446a0f59b2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -278.1
+      value: -278.09988
       objectReference: {fileID: 0}
     - target: {fileID: 7893680206407511805, guid: c8dd822283d79954fa0c24446a0f59b2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 77.6
+      value: 77.600006
       objectReference: {fileID: 0}
     - target: {fileID: 8653076260104261497, guid: c8dd822283d79954fa0c24446a0f59b2, type: 3}
       propertyPath: m_Texture
@@ -628,10 +628,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: AltarGUI
       objectReference: {fileID: 0}
-    - target: {fileID: 1428928786929778382, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Alpha
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6568490763506401671, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -742,6 +738,10 @@ PrefabInstance:
       propertyPath: maxLifetime
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+      propertyPath: closeDamage
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2149054594424086871, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -802,6 +802,10 @@ PrefabInstance:
       propertyPath: counter
       value: 
       objectReference: {fileID: 612249766}
+    - target: {fileID: 6027865557405022282, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+      propertyPath: soulShardCount
+      value: 2000
+      objectReference: {fileID: 0}
     - target: {fileID: 6243606006489939958, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: maxLifetime
       value: 1.5
@@ -1171,15 +1175,14 @@ MonoBehaviour:
   healthSystem: {fileID: 1627913580}
   playerAttackSystem: {fileID: 1627913579}
   inventorySystem: {fileID: 549623651}
-  playerStats: {fileID: 0}
   anim: {fileID: 0}
   boxCollider: {fileID: 0}
-  vitality: 1
+  vitality: 0
   maxHealth: 100
   currentHealth: 100
-  strength: 1
+  strength: 0
   closeDamage: 5
-  intelligence: 1
+  intelligence: 0
   rangedDamage: 5
   rangedCooldown: 1.5
   rangedRange: 2
