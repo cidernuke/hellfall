@@ -33,7 +33,7 @@ public class AltarGUI : MonoBehaviour
 
     //Max Values
 
-   
+
 
 
 
@@ -88,7 +88,7 @@ public class AltarGUI : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
     }
-   
+
     /// <summary>
     /// Updates the soul shard cost for the corresponding attribute
     /// </summary>
@@ -104,7 +104,7 @@ public class AltarGUI : MonoBehaviour
             if (multiplierCount < 10)
             {
                 costArray[multiplierCount] = shCost; // Speichern Sie den aktuellen Preis
-                shCost +=15;
+                shCost += 15;
                 multiplierCount++;
             }
         }
@@ -133,7 +133,7 @@ public class AltarGUI : MonoBehaviour
     /// </summary>
     /// <param name="button"></param>
     private void OnPlusButtonClick(Button button)
-    {        
+    {
 
         foreach (TextMeshProUGUI textElement in textValueElements)
         {
@@ -149,7 +149,7 @@ public class AltarGUI : MonoBehaviour
                 {
                     GameManager.Instance.soulShardSystem.decreaseSoulShard(null, vitalityCost);
                     incrementValueText(textElement);
-                    updateSoulShardCost("SHValueText1", ref vitalityCost, ref vitalityMultiplierCount,true,vitalityCosts);
+                    updateSoulShardCost("SHValueText1", ref vitalityCost, ref vitalityMultiplierCount, true, vitalityCosts);
 
                 }
             }
@@ -164,7 +164,7 @@ public class AltarGUI : MonoBehaviour
                 {
                     GameManager.Instance.soulShardSystem.decreaseSoulShard(null, strengthCost);
                     incrementValueText(textElement);
-                    updateSoulShardCost("SHValueText2", ref strengthCost, ref strengthMultiplierCount,true,strengthCosts);
+                    updateSoulShardCost("SHValueText2", ref strengthCost, ref strengthMultiplierCount, true, strengthCosts);
                 }
             }
             if (button.name == "PlusButton3")
@@ -178,7 +178,7 @@ public class AltarGUI : MonoBehaviour
                 {
                     GameManager.Instance.soulShardSystem.decreaseSoulShard(null, intelligenceCost);
                     incrementValueText(textElement);
-                    updateSoulShardCost("SHValueText3", ref intelligenceCost, ref intelligenceMultiplierCount,true, intelligenceCosts);
+                    updateSoulShardCost("SHValueText3", ref intelligenceCost, ref intelligenceMultiplierCount, true, intelligenceCosts);
                 }
             }
 
@@ -208,7 +208,7 @@ public class AltarGUI : MonoBehaviour
                     {
                         GameManager.Instance.soulShardSystem.inreaseSoulShard(null, vitalityCosts[vitalityMultiplierCount - 1]);
                         decreaseValueText(textElement);
-                        updateSoulShardCost("SHValueText1", ref vitalityCost, ref vitalityMultiplierCount,false, vitalityCosts);
+                        updateSoulShardCost("SHValueText1", ref vitalityCost, ref vitalityMultiplierCount, false, vitalityCosts);
 
                     }
                 }
@@ -218,7 +218,7 @@ public class AltarGUI : MonoBehaviour
                     {
                         GameManager.Instance.soulShardSystem.inreaseSoulShard(null, strengthCosts[strengthMultiplierCount - 1]);
                         decreaseValueText(textElement);
-                        updateSoulShardCost("SHValueText2", ref strengthCost, ref strengthMultiplierCount,false, strengthCosts);
+                        updateSoulShardCost("SHValueText2", ref strengthCost, ref strengthMultiplierCount, false, strengthCosts);
                     }
                 }
                 if (button.name == "MinusButton3")
@@ -227,7 +227,7 @@ public class AltarGUI : MonoBehaviour
                     {
                         GameManager.Instance.soulShardSystem.inreaseSoulShard(null, intelligenceCosts[intelligenceMultiplierCount - 1]);
                         decreaseValueText(textElement);
-                        updateSoulShardCost("SHValueText3", ref intelligenceCost, ref intelligenceMultiplierCount,false,intelligenceCosts);
+                        updateSoulShardCost("SHValueText3", ref intelligenceCost, ref intelligenceMultiplierCount, false, intelligenceCosts);
                     }
                 }
 
@@ -257,7 +257,7 @@ public class AltarGUI : MonoBehaviour
                 playerController.playerStats.IncrementVitality();
                 textElement.text = playerController.playerStats.vitality.GetBaseValue().ToString();
                 UpdateVITstats();
-                updateProgressBar("Health", true);                
+                updateProgressBar("Health", true);
                 break;
             case "StrengthValueText":
                 playerController.playerStats.IncrementStrength();
@@ -268,7 +268,7 @@ public class AltarGUI : MonoBehaviour
             case "IntelligenceValueText":
                 playerController.playerStats.IncrementIntelligence();
                 textElement.text = playerController.playerStats.intelligence.GetBaseValue().ToString();
-                UpdateINTstats();               
+                UpdateINTstats();
                 updateProgressBar("Intelligence", true);
                 break;
             default:
@@ -295,7 +295,7 @@ public class AltarGUI : MonoBehaviour
                 playerController.playerStats.DecreaseVitality();
                 textElement.text = playerController.playerStats.vitality.GetBaseValue().ToString();
                 UpdateVITstats();
-                updateProgressBar("Health", false);                
+                updateProgressBar("Health", false);
                 break;
             case "StrengthValueText":
                 playerController.playerStats.DecreaseStrength();
@@ -306,7 +306,7 @@ public class AltarGUI : MonoBehaviour
             case "IntelligenceValueText":
                 playerController.playerStats.DecreaseIntelligence();
                 textElement.text = playerController.playerStats.intelligence.GetBaseValue().ToString();
-                UpdateINTstats();                
+                UpdateINTstats();
                 updateProgressBar("Intelligence", false);
                 break;
             default:
@@ -325,8 +325,11 @@ public class AltarGUI : MonoBehaviour
         {
             if (textElement.name == "maxHealthValueText")
             {
-                textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();
-                break;
+                textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();                
+            }
+            if (textElement.name == "healthPBValueText")
+            {
+                textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();                
             }
         }
     }
@@ -341,7 +344,12 @@ public class AltarGUI : MonoBehaviour
             if (textElement.name == "damageValueText")
             {
                 textElement.text = playerController.playerStats.closeDamage.GetBaseValue().ToString();
-                break;
+                
+            }
+            if (textElement.name == "damagePBValueText")
+            {
+                textElement.text = (playerController.playerStats.closeDamage.GetBaseValue() * 1.1f).ToString() ;
+                
             }
 
         }
@@ -358,23 +366,39 @@ public class AltarGUI : MonoBehaviour
             if (textElement.name == "rangeDamageValueText")
             {
                 textElement.text = playerController.playerStats.rangedDamage.GetBaseValue().ToString();
-                
+
             }
             if (textElement.name == "cooldownValueText")
             {
-                textElement.text = Math.Round(playerController.playerStats.rangedCooldown.GetBaseValue(),2).ToString();
-                
+                textElement.text = Math.Round(playerController.playerStats.rangedCooldown.GetBaseValue(), 2).ToString();
+
             }
             if (textElement.name == "rangedRangeValueText")
             {
                 textElement.text = Math.Round(playerController.playerStats.rangedRange.GetBaseValue(), 2).ToString();
+
+            }
+            if (textElement.name == "r_damagePBValueText")
+            {
+                textElement.text = (playerController.playerStats.rangedDamage.GetBaseValue() * 1.1f).ToString();
+
+            }
+            if (textElement.name == "r_cooldownPBValueText")
+            {
                 
+                textElement.text = Math.Round(playerController.playerStats.rangedCooldown.GetBaseValue() * 0.95f, 2).ToString();
+
+            }
+            if (textElement.name == "r_rangePBValueText")
+            {
+                textElement.text = Math.Round(playerController.playerStats.rangedRange.GetBaseValue() * 1.05f, 2).ToString();
+
             }
 
         }
     }
 
-    
+
 
     /// <summary>
     /// Set the base values of the player stats to the text elements in the Altar GUI
@@ -384,11 +408,15 @@ public class AltarGUI : MonoBehaviour
         foreach (TextMeshProUGUI textElement in textValueElements)
         {
             /// Health values                
-            if (textElement.name == "VitalityValueText")
+            if (textElement.name == "VitalityValueText" )
             {
                 textElement.text = playerController.playerStats.vitality.GetBaseValue().ToString();
             }
             if (textElement.name == "maxHealthValueText")
+            {
+                textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();
+            }
+            if (textElement.name == "healthPBValueText")
             {
                 textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();
             }
@@ -399,6 +427,10 @@ public class AltarGUI : MonoBehaviour
                 textElement.text = playerController.playerStats.strength.GetBaseValue().ToString();
             }
             if (textElement.name == "damageValueText")
+            {
+                textElement.text = playerController.playerStats.closeDamage.GetBaseValue().ToString();
+            }
+            if (textElement.name == "damagePBValueText")
             {
                 textElement.text = playerController.playerStats.closeDamage.GetBaseValue().ToString();
             }
@@ -420,6 +452,18 @@ public class AltarGUI : MonoBehaviour
             {
                 textElement.text = playerController.playerStats.rangedRange.GetBaseValue().ToString();
             }
+            if (textElement.name == "r_damagePBValueText")
+            {
+                textElement.text = playerController.playerStats.rangedDamage.GetBaseValue().ToString();
+            }
+            if (textElement.name == "r_cooldownPBValueText")
+            {
+                textElement.text = playerController.playerStats.rangedCooldown.GetBaseValue().ToString();
+            }
+            if (textElement.name == "r_rangePBValueText")
+            {
+                textElement.text = playerController.playerStats.rangedRange.GetBaseValue().ToString();
+            }
 
             /// Soul Shard values
             if (textElement.name == "SHValueText1" || textElement.name == "SHValueText2" || textElement.name == "SHValueText3")
@@ -427,23 +471,23 @@ public class AltarGUI : MonoBehaviour
                 textElement.text = defaultSoulShardCost.ToString();
             }
             /// Modifier values
-            if(textElement.name == "damageModifierText")
+            if (textElement.name == "damageModifierText")
             {
                 textElement.text = damageModifier.ToString();
             }
-            if(textElement.name == "cooldownModifierText")
+            if (textElement.name == "cooldownModifierText")
             {
                 textElement.text = cooldownModifier.ToString();
             }
-            if(textElement.name == "rangeModifierText")
+            if (textElement.name == "rangeModifierText")
             {
                 textElement.text = rangeModifier.ToString();
             }
-            if(textElement.name == "rangeDamageModifierText")
+            if (textElement.name == "rangeDamageModifierText")
             {
                 textElement.text = damageModifier.ToString();
             }
-            
+
         }
     }
 
@@ -454,21 +498,33 @@ public class AltarGUI : MonoBehaviour
             switch (image.name)
             {
                 case "healthPBValue":
-                    image.fillAmount = 0.1f;
+                    image.fillAmount = 0f;
                     break;
-                case "damagePBValue":                    
-                    image.fillAmount = 0.1f;                                    
+                case "damagePBValue":
+                    image.fillAmount = 0f;
                     break;
                 case "rangeDamagePBValue":
-                    image.fillAmount = 0.1f; 
+                    image.fillAmount = 0f;
                     break;
                 case "cooldownPBValue":
-                    image.fillAmount = 1f; 
+                    image.fillAmount = 1f;
                     break;
                 case "rangePBValue":
-                    image.fillAmount = 0.1f; 
+                    image.fillAmount = 0f;
                     break;
             }
+        }
+    }
+
+    private void fillImage(Image image, bool isIncrement)
+    {
+        if (!isIncrement)
+        {
+            image.fillAmount -= 0.1f;
+        }
+        else
+        {
+            image.fillAmount += 0.1f;
         }
     }
 
@@ -482,45 +538,24 @@ public class AltarGUI : MonoBehaviour
                 case "Health":
                     if (image.name == "healthPBValue")
                     {
-                        if(!isIncrement)
-                        {
-                            image.fillAmount -= 0.1f;
-                        }
-                        else
-                        {
-                            image.fillAmount += 0.1f;
-                        }
+                        fillImage(image, isIncrement);
                     }
                     break;
                 case "Strength":
                     if (image.name == "damagePBValue")
                     {
-                        if(!isIncrement)
-                        {
-                            image.fillAmount -= 0.1f;
-                        }
-                        else
-                        {
-                            image.fillAmount += 0.1f;
-                        }
-                        
+                        fillImage(image, isIncrement);
+
                     }
                     break;
                 case "Intelligence":
                     if (image.name == "rangeDamagePBValue")
                     {
-                        if(!isIncrement)
-                        {
-                            image.fillAmount -= 0.1f;
-                        }
-                        else
-                        {
-                            image.fillAmount += 0.1f;
-                        }
+                        fillImage(image, isIncrement);
                     }
                     if (image.name == "cooldownPBValue")
                     {
-                        if(!isIncrement)
+                        if (!isIncrement)
                         {
                             image.fillAmount += 0.1f;
                         }
@@ -531,17 +566,10 @@ public class AltarGUI : MonoBehaviour
                     }
                     if (image.name == "rangePBValue")
                     {
-                        if(!isIncrement)
-                        {
-                            image.fillAmount -= 0.1f;
-                        }
-                        else
-                        {
-                            image.fillAmount += 0.1f;
-                        }
+                       fillImage(image, isIncrement);
                     }
                     break;
-                
+
             }
         }
     }
