@@ -9,6 +9,8 @@ using System;
 public class PlayerMovement : MonoBehaviour
 {
     public IPlayerInput playerInput;
+    // for smash attack so that i can use functions
+    private PlayerAttack playerAttack;
 
     #region Layer Masks
     // Layer masks to identify ground and wall layers for collision detection
@@ -69,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isFalling = false;
 
     // Double Jump
-    private bool isDoubleJumping;
+    public bool isDoubleJumping;
 
     // Coyote Time
     [SerializeField] private float coyoteTimeDuration = 0.2f;
@@ -123,6 +125,9 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void Awake()
     {
+        // asigns playerAttack Skript
+        playerAttack = GetComponent<PlayerAttack>();
+
         // If no input is assigned, use the default input implementation
         if (playerInput == null)
         {
@@ -227,6 +232,13 @@ public class PlayerMovement : MonoBehaviour
         if (IsGrounded() && playerInput.GetHorizontalInput() == 0)
         {
             body.velocity *= groundDecay;
+        }
+
+        // triggers smash attack damage when grounded 
+        if (IsGrounded() && playerAttack.isSmashing)
+        {
+            playerAttack.ApplySmashDamage(); // Call the method from PlayerAttack
+            playerAttack.isSmashing = false; // Reset the smash state
         }
 
         // Sort of like gravity. Accelerates player fall speed when apex is reached.
@@ -346,7 +358,7 @@ public class PlayerMovement : MonoBehaviour
         lastWallJumped = 0; // Reset the last wall        
     }
 
-    private bool IsGrounded()
+    public bool IsGrounded()
     {
         // Check if the player is currently grounded
         bool previouslyGrounded = grounded; // Store the previous grounded state
@@ -499,7 +511,7 @@ public class PlayerMovement : MonoBehaviour
     #region Input Handling Methods
     private void HandleJumpInput()
     {
-        if(jumpedThisFrame) return;
+        if (jumpedThisFrame) return;
         ladderMovement = ladderMovement = GetComponent<LadderMovement>();
         if ((Time.time - lastTimeJumpPressed) <= jumpBufferTime)
         {
@@ -536,12 +548,12 @@ public class PlayerMovement : MonoBehaviour
         // Double Jump
         if (!blockInput)
         {
-            if (playerInput.GetJumpInput()&&!jumpedThisFrame)
+            if (playerInput.GetJumpInput() && !jumpedThisFrame)
             {
                 if (!isDoubleJumping && !IsGrounded() && !ladderMovement.jumpedOffOfLadder)
                 {
                     //print(">>> Attempting double jump");
-                    
+
                     //Double-Jump Particle Animation
                     playerFX.transform.position = new Vector2(transform.position.x + 0.1f, transform.position.y - 0.35f);
                     playerFXAnimator.SetBool("hasDoubleJumped", true);

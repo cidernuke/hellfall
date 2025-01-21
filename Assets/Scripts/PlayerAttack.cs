@@ -17,7 +17,13 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private bool iceDamage = false;
     [SerializeField] private bool isFrozen = false;
 
-
+    //for smash attack
+    [Header("Smash Attack")]
+    [SerializeField] private float smashDamage; // Damage for smash attack
+    [SerializeField] private float smashRange = 3f; // Range of the smash attack
+    [SerializeField] private float smashCooldown = 5f; // Cooldown for the smash attack
+    private float smashCooldownTimer = Mathf.Infinity; // Timer for smash attack cooldown
+    public bool isSmashing = false; // Track if smash attack is active
 
     [Header("Collider Parameters")]
     [SerializeField] private float colliderDistance;
@@ -69,7 +75,16 @@ public class PlayerAttack : MonoBehaviour
         {
             AttackRanged();
         }
+
+        if (playerMovement.isDoubleJumping && Input.GetKey(KeyCode.LeftShift) && cooldownTimer >= smashCooldown)
+        {
+            SmashAttack();
+        }
+
+
         cooldownTimer += Time.deltaTime;
+
+        smashCooldownTimer += Time.deltaTime; // Update smash attack cooldown
     }
 
 
@@ -103,6 +118,13 @@ public class PlayerAttack : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
             new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z));
+
+        // Smash Range Gizmo (Dynamic based on smashRange)
+        Gizmos.color = Color.blue;
+        // Use the dynamic smashRange instead of the hardcoded value
+        Vector2 boxSize = new Vector2(smashRange, 1f);  // Adjust this for the desired smash width
+        Vector2 boxPosition = new Vector2(transform.position.x, transform.position.y - 1.5f);  // Position below player
+        Gizmos.DrawWireCube(boxPosition, boxSize);
     }
 
     /// <summary>
@@ -156,7 +178,7 @@ public class PlayerAttack : MonoBehaviour
         anim.SetTrigger("attack_ranged");
         cooldownTimer = 0;
         int projectileIndex = FindProjectile();
-        
+
         // important because projectiles are children of Player. Setting them to null makes them independant of the Players Transform
         projectiles[projectileIndex].transform.parent = null;
         projectiles[projectileIndex].transform.position = firePoint.position;
@@ -180,6 +202,39 @@ public class PlayerAttack : MonoBehaviour
         }
         return 0;
     }
+
+
+    // Smash Attack - Deals area damage around the player
+    private void SmashAttack()
+    {
+        if (cooldownTimer < smashCooldown || playerMovement.IsGrounded()) return;
+
+        Debug.Log("Smash attack triggered!");
+        anim.SetTrigger("smashAttack");
+        smashCooldownTimer = 0;
+
+        isSmashing = true;  // Set smash state (damage will be applied on landing)
+    }
+
+    public void ApplySmashDamage()
+    {
+        Debug.Log("Smash attack hits the ground!");
+
+        Vector2 boxSize = new Vector2(3f, 1f); // Adjust width & height
+        Vector2 boxPosition = new Vector2(transform.position.x, transform.position.y - 1.5f); // Position below player
+
+        Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(boxPosition, boxSize, 0, enemyLayer);
+
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            HealthSystem enemyHealth = enemy.GetComponent<HealthSystem>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(smashDamage, null, enemy.GetComponent<EnemyController>());
+            }
+        }
+    }
+
 
     /// <summary>
     /// Deals damage to the enemy if it is in sight.

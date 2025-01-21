@@ -1165,7 +1165,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 108}
+  m_AnchoredPosition: {x: 0, y: 67}
   m_SizeDelta: {x: 242.0808, y: 45.3899}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1020716097467914816
@@ -1396,7 +1396,6 @@ RectTransform:
   - {fileID: 4762096179259768574}
   - {fileID: 239341003100172845}
   - {fileID: 6468959164749536363}
-  - {fileID: 6913703480376729931}
   - {fileID: 4124722907527359804}
   m_Father: {fileID: 7969090475918451687}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2485,7 +2484,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.1631, y: -111}
+  m_AnchoredPosition: {x: -2.1631, y: -94}
   m_SizeDelta: {x: 242.0808, y: 45.3899}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1674372943198322070
@@ -3062,7 +3061,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.1631, y: -145}
+  m_AnchoredPosition: {x: -2.1631, y: -224}
   m_SizeDelta: {x: 242.0808, y: 45.3899}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4054912409790331080
@@ -3207,7 +3206,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00003624, y: 35}
+  m_AnchoredPosition: {x: 0.00003624, y: -14}
   m_SizeDelta: {x: 242.0808, y: 45.3899}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5351916422207127125
@@ -3975,11 +3974,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6543871000871314704}
-  m_Father: {fileID: 9137542858463261197}
+  m_Father: {fileID: 41213444202964481}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.1631, y: -42}
+  m_AnchoredPosition: {x: -2.1631, y: -147}
   m_SizeDelta: {x: 242.0808, y: 45.3899}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7845018853467420075
@@ -4076,7 +4075,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 791210964942204544}
+      - m_Target: {fileID: 5824099086182855676}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -6118,7 +6117,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &2044823960188480190
 MonoBehaviour:
@@ -7016,6 +7015,7 @@ RectTransform:
   - {fileID: 4095102811291233738}
   - {fileID: 4064881344815716012}
   - {fileID: 3054993080672006219}
+  - {fileID: 6913703480376729931}
   - {fileID: 3756435808705190344}
   m_Father: {fileID: 7969090475918451687}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8247,13 +8247,8 @@ MonoBehaviour:
   menuController: {fileID: 222621895174888137}
   volumeTextValue: {fileID: 3140271850321649691}
   volumeSlider: {fileID: 1550772064158640390}
-  brightnessSlider: {fileID: 0}
-  brightnessTextValue: {fileID: 0}
   qualityDropdown: {fileID: 4091913475864320305}
   fullScreenToggle: {fileID: 8544657545027144869}
-  controllerSenTextValue: {fileID: 0}
-  controllerSenSlider: {fileID: 0}
-  invertYToggle: {fileID: 0}
 --- !u!1 &6676516601286432313
 GameObject:
   m_ObjectHideFlags: 0
@@ -9285,14 +9280,6 @@ MonoBehaviour:
   volumeTextValue: {fileID: 3140271850321649691}
   volumeSlider: {fileID: 1550772064158640390}
   defaultVolume: 1
-  ControllerSenTextValue: {fileID: 0}
-  controllerSenSlider: {fileID: 0}
-  defaultSen: 4
-  mainControllerSen: 4
-  invertYToggle: {fileID: 0}
-  brightnessSlider: {fileID: 0}
-  brightnessTextValue: {fileID: 0}
-  defaultBrightness: 1
   qualityDropdown: {fileID: 4091913475864320305}
   fullScreenToggle: {fileID: 8544657545027144869}
   confirmationPrompt: {fileID: 3559212379268877723}
@@ -9616,7 +9603,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 791210964942204544}
+      - m_Target: {fileID: 5824099086182855676}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
