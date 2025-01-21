@@ -491,6 +491,9 @@ public class AltarGUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets the base values of the progress bars to 0 or 1
+    /// </summary>
     private void setBaseProgressBarValues()
     {
         foreach (Image image in progressBar)
@@ -516,6 +519,12 @@ public class AltarGUI : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Fills the image of the progress bar by 0.1f
+    /// </summary>
+    /// <param name="image"></param>
+    /// <param name="isIncrement"></param>
     private void fillImage(Image image, bool isIncrement)
     {
         if (!isIncrement)
@@ -528,7 +537,11 @@ public class AltarGUI : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Updates the progress bar values based on the attribute
+    /// </summary>
+    /// <param name="attribute"></param>
+    /// <param name="isIncrement"></param>
     private void updateProgressBar(string attribute, bool isIncrement)
     {
         foreach (Image image in progressBar)
