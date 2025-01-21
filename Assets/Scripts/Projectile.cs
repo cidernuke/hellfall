@@ -124,6 +124,7 @@ public class Projectile : MonoBehaviour
             if(isFireBullet)
             {
                 enemyHealth.ApplyFireDamage(damage, 2f, 1f);
+                enemyController.ApplyFireEffect(2f);
             }
 
             hit = true;

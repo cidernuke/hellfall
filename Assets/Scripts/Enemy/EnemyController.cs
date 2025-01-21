@@ -31,13 +31,16 @@ public class EnemyController : MonoBehaviour
     private PlayerMovement playerMovement;
     private HealthSystem healthSystem;
 
+    private ParticleSystem flameEffect;
+
     //Respawn variables
     private Vector3 initialPosition;
     private HealthSystem enemyHealthSystem;
     private bool isDead = false;
 
-    //Flag for Freeze
+    //Flag for special Attacks
     private bool isFrozen = false;
+    private bool isOnFire = false;
 
     private void Awake()
     {
@@ -48,6 +51,13 @@ public class EnemyController : MonoBehaviour
         healthSystem = GetComponent<HealthSystem>();
 
         enemyHealthSystem = GetComponent<HealthSystem>();
+
+        //for the fire effect
+        flameEffect = GetComponentInChildren<ParticleSystem>();
+        if (flameEffect == null)
+        {
+            Debug.LogError("Flame Particle System not found on enemy.");
+        }
 
         if (healthSystem == null)
         {
@@ -211,5 +221,40 @@ public class EnemyController : MonoBehaviour
         }
 
 
+    }
+
+    /// <summary>
+    /// Starts the Fire Effect Coroutine
+    /// </summary>
+    public void ApplyFireEffect(float duration)
+    {
+        if (!isOnFire)
+        {
+            StartCoroutine(HandleFireEffect(duration));
+        }
+    }
+
+    /// <summary>
+    /// Plays the fire effect
+    /// </summary>
+    private IEnumerator HandleFireEffect(float duration)
+    {
+        isOnFire = true;
+
+        // Enable the flame particle system
+        if (flameEffect != null)
+        {
+            flameEffect.Play();
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        // Disable the flame particle system
+        if (flameEffect != null)
+        {
+            flameEffect.Stop();
+        }
+
+        isOnFire = false;
     }
 }

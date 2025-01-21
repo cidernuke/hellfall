@@ -211,6 +211,7 @@ public class PlayerAttack : MonoBehaviour
                 //Note: TakeDamage still needs to be called, since fire damage is only secondary and applied over time
                 enemyHealth.TakeDamage(damage, null, enemyController);
                 enemyHealth.ApplyFireDamage(damage, 2f, 1f);
+                enemyController.ApplyFireEffect(2f);
             }
             else if (iceDamageClose)
             {
