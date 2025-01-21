@@ -1,38 +1,42 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EndBossMain : MonoBehaviour
 {
-    // [SerializeField] private Transform firePoint;
     private Transform player;
-    public int attackDamage = 1;
-    // public int enragedAttackDamage = 40;
+    private Collider2D playerCollider;
 
-    public Vector3 attackOffset;
-    public float attackRange = 1f;
-    public LayerMask attackMask;
+    // Moving Attack
+    [SerializeField] private int attackDamage;
+    [SerializeField] private Vector3 attackOffset;
+    public float attackRange; // radius for attack range
 
-    public float chargeAttackCooldown;
-    [HideInInspector] public float cooldownTimer = Mathf.Infinity;
-    private readonly float groundCoordinates = 29.7f; // Spawn coordinates for blood_bullets_up
-    [HideInInspector] public bool isFlipped = false;
-    public bool isInSecondPhase = false;
-    [SerializeField] private float chargeSpeed = 5f;
-    [SerializeField] private float chargeDuration = 2f;
-
-    public bool isCharging = false;
-    public bool isAreaAttack = false;
+    // Charge Attack
+    [SerializeField] private int areaAttackDamage; // Damage dealt by the attack
+    [SerializeField] private float chargeSpeed;
+    [SerializeField] private float chargeDuration;
     private float chargeTimer = 0f;
-    public int areaAttackDamage = 30; // Damage dealt by the attack
-    public Vector2 areaAttackboxSize = new(5f, 3f); // Width and height of the box
-    public Vector2 areaAttackboxOffset = new(2f, 0f); // Offset from the boss's position
+    public float chargeAttackCooldown;
+    [HideInInspector] public float chargeAttackcooldownTimer = Mathf.Infinity;
 
+    // Vanishing Area Attack
+    [SerializeField] private int chargeAttackDamage; // Damage dealt by the attack
+    [SerializeField] private Vector2 areaAttackboxSize; // Width and height of the box
+    [SerializeField] private Vector2 areaAttackboxOffset; // Offset from the boss's position
+    public float vanishAreaAttackCooldown;
+    [HideInInspector] public float vanishAttackcooldownTimer = Mathf.Infinity;
+
+    // Flags
+    [HideInInspector] public bool isFlipped = false;
+    [HideInInspector] public bool isInSecondPhase = false;
+    [HideInInspector] public bool isCharging = false;
+    [HideInInspector] public bool isAreaAttack = false;
+    
+    // References
+    [SerializeField] private LayerMask attackMask;
     private Rigidbody2D rb;
     private Animator animator;
-    public Collider2D bossCollider; // Reference to the boss's collider
-    public Collider2D playerCollider;
+    private Collider2D bossCollider; // Reference to the boss's collider
 
     private void Awake()
     {
@@ -45,7 +49,8 @@ public class EndBossMain : MonoBehaviour
 
     private void Update()
     {
-        cooldownTimer += Time.deltaTime;
+        chargeAttackcooldownTimer += Time.deltaTime;
+        vanishAttackcooldownTimer += Time.deltaTime;
 
         // if (gameObject.GetComponent<HealthSystem>().currentHealth == 10)
         // {
@@ -87,10 +92,12 @@ public class EndBossMain : MonoBehaviour
     public void Attack()
     {
         Vector3 pos = SetAttackPosition();
+        // print("pos in attack: "+pos);
         Collider2D colInfo = Physics2D.OverlapCircle(pos, attackRange, attackMask);
-        // print("attacking player, collider hit: " + colInfo + ", attack damage: " + attackDamage);
+        print("attacking player, collider hit: " + colInfo + ", attack damage: " + attackDamage);
         if (colInfo != null)
         {
+            print("attack hit");
             PlayerMovement playerMovement = colInfo.GetComponent<PlayerMovement>();
             colInfo.GetComponent<HealthSystem>().TakeDamage(attackDamage, playerMovement);
         }
@@ -103,7 +110,6 @@ public class EndBossMain : MonoBehaviour
         Vector2 direction = isFlipped ? new Vector2(-1, 0) : new Vector2(1, 0);
 
         // Move the boss
-        //! not very fast, slows down when nearing player. Also boss floats upwards
         rb.velocity = direction * chargeSpeed;
         // rb.AddForce(direction * chargeSpeed);
 
@@ -117,10 +123,9 @@ public class EndBossMain : MonoBehaviour
         {
             if (hit.CompareTag("Player"))
             {
-                print("hit player");
                 // Deal damage to the player
                 // PlayerMovement playerMovement = hit.GetComponent<PlayerMovement>();
-                hit.GetComponent<HealthSystem>().TakeDamage(attackDamage);
+                hit.GetComponent<HealthSystem>().TakeDamage(chargeAttackDamage);
                 StopCharge();
             }
             else
@@ -147,23 +152,10 @@ public class EndBossMain : MonoBehaviour
         animator.SetTrigger("returnToMoving"); // Return to idle or other states
     }
 
-    //* needs to be triggered in anim controller
-    // public void InitiateVanishingPhaseOne()
-    // {
-    //     animator.SetTrigger("initiateVanishing_01");
-    // }
-
-    // public void InitiateVanishingPhaseTwo()
-    // {
-    //     animator.SetTrigger("initiateVanishing_02");
-    // }
-
-    //! zeichne problem auf. Problem ist dass isAreaAttack entweder immer true ist oder zu spät auf false gesetzt wird
     public void InitiateVanishingPhaseThree()
     {
         if (isAreaAttack)
         {
-            print("initializing phase 3");
             animator.SetTrigger("initiateVanishing_03");
             animator.SetBool("isVanishing", isAreaAttack);
         }
@@ -173,14 +165,8 @@ public class EndBossMain : MonoBehaviour
     {
         if (isAreaAttack)
         {
-            // print("teleporting to player");
-            // animator.ResetTrigger("initiateVanishing_03");
-            // gameObject.SetActive(false);
             animator.SetBool("isVanishing", false);
-            // animator.SetTrigger("teleportedToPlayer");
-
             StartCoroutine(TeleportAfterDelay(1f));
-            // rb.transform.position = player.position;
         }
     }
 
@@ -188,13 +174,12 @@ public class EndBossMain : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        print("Teleporting to player...");
-        // gameObject.SetActive(true);
         gameObject.transform.position = new Vector2(player.position.x, -1);
         animator.SetTrigger("teleportedToPlayer");
         animator.SetBool("isAreaAttacking", true);
     }
 
+    //! Adjust dashframe and possible dashes in PlayerMovement for balancing
     public void AreaAttack()
     {
         if (isAreaAttack)
@@ -211,8 +196,8 @@ public class EndBossMain : MonoBehaviour
                 // if (target.TryGetComponent(out HealthSystem health))
                 if (target.CompareTag("Player"))
                 {
-                    target.GetComponent<HealthSystem>().TakeDamage(attackDamage, target.GetComponent<PlayerMovement>());
-                    Debug.Log($"Damaged {target.tag} for {attackDamage} HP.");
+                    target.GetComponent<HealthSystem>().TakeDamage(areaAttackDamage, target.GetComponent<PlayerMovement>());
+                    // Debug.Log($"Damaged {target.tag} for {areaAttackDamage} HP.");
                 }
             }
 
@@ -221,19 +206,6 @@ public class EndBossMain : MonoBehaviour
             isAreaAttack = false;
         }
     }
-
-    // public void EnragedAttack()
-    // {
-    //     Vector3 pos = transform.position;
-    //     pos += transform.right * attackOffset.x;
-    //     pos += transform.up * attackOffset.y;
-
-    //     Collider2D colInfo = Physics2D.OverlapCircle(pos, attackRange, attackMask);
-    //     if (colInfo != null)
-    //     {
-    //         colInfo.GetComponent<HealthSystem>().TakeDamage(enragedAttackDamage);
-    //     }
-    // }
 
     private Vector3 SetAttackPosition()
     {

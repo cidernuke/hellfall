@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EndBossAnimationController : StateMachineBehaviour
@@ -9,6 +7,7 @@ public class EndBossAnimationController : StateMachineBehaviour
     [SerializeField] private float attackRangeChargedAttack; // close combat
 
     Transform player;
+    PlayerMovement playerMovement;
     Rigidbody2D rb;
     EndBossMain boss;
 
@@ -16,9 +15,10 @@ public class EndBossAnimationController : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        playerMovement = player.GetComponent<PlayerMovement>();
         rb = animator.GetComponent<Rigidbody2D>();
         boss = animator.GetComponent<EndBossMain>();
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        // rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -29,11 +29,6 @@ public class EndBossAnimationController : StateMachineBehaviour
         Vector2 target = new Vector2(player.position.x, rb.position.y);
         Vector2 newPos = Vector2.MoveTowards(rb.position, target, speed * Time.fixedDeltaTime);
 
-        // Boss only moves when attack range is not reached. attackRangeCC is set in the editor.
-        // if (Vector2.Distance(player.position, rb.position) > attackRangeCC)
-        // {
-        //     // animator.SetBool("isRunning", true);
-        // }
         if (!boss.isCharging)
         {
             rb.MovePosition(newPos);
@@ -42,27 +37,30 @@ public class EndBossAnimationController : StateMachineBehaviour
         // Boss only attacks with melee if attack range is reached.
         if (Vector2.Distance(player.position, rb.position) <= attackRangeCC)
         {
-            // boss.PrinterForBossRun("should be attacking");
             animator.SetTrigger("movingAttack");
         }
 
-        if (boss.cooldownTimer >= boss.chargeAttackCooldown)
+
+        if (boss.chargeAttackcooldownTimer >= boss.chargeAttackCooldown)
         {
-            // boss.PrinterForBossRun("cooldown over, attackRangeChargedAttack: "+attackRangeChargedAttack);
             if (Vector2.Distance(player.position, rb.position) >= attackRangeChargedAttack)
             {
-                // Vector2 newPosInverse = Vector2.MoveTowards(rb.position, -target, 3f * Time.fixedDeltaTime);
-                // rb.MovePosition(newPosInverse);
-                // animator.SetTrigger("chargedAttack");
-                animator.SetTrigger("initiateVanishing_01");
-                // boss.PrinterForBossRun("setting trigger, setting isAreaAttack to true");
-                boss.isAreaAttack = true;
-                boss.cooldownTimer = 0;
+                animator.SetTrigger("chargedAttack");
+                boss.chargeAttackcooldownTimer = 0;
             }
         }
 
-        // animator.SetBool("isRunning", false);
-
+        if (boss.vanishAttackcooldownTimer >= boss.vanishAreaAttackCooldown)
+        {
+            if (Vector2.Distance(player.position, rb.position) <= 5f && playerMovement.IsDodgingALot)
+            {
+                boss.PrinterForBossRun("triggered charged attack");
+                animator.SetTrigger("initiateVanishing_01");
+                boss.isAreaAttack = true;
+                boss.vanishAttackcooldownTimer = 0;
+                playerMovement.IsDodgingALot = false;
+            }
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
