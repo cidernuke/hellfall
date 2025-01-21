@@ -36,6 +36,7 @@ public class UndeadExecutioner : MonoBehaviour
     private void Start()
     {
         StartCoroutine(HealPeriodically());
+        StartCoroutine(CheckForDeadMiniEnemies());
     }
 
     private void Awake()
@@ -261,6 +262,25 @@ public class UndeadExecutioner : MonoBehaviour
 
             // Use the heal skill
             UseSkill1();
+        }
+    }
+
+    private IEnumerator CheckForDeadMiniEnemies()
+    {
+        while (!isDead)
+        {
+            // Check periodically (e.g., every 2 seconds) for dead mini-enemies
+            yield return new WaitForSeconds(2f);
+
+            for (int i = spawnedMiniEnemies.Count - 1; i >= 0; i--)
+            {
+                if (spawnedMiniEnemies[i] == null)
+                {
+                    // If a mini-enemy is dead (destroyed), respawn a new one
+                    RespawnMiniEnemy(spawnedMiniEnemies[i]);
+                    spawnedMiniEnemies.RemoveAt(i);  // Remove the reference from the list
+                }
+            }
         }
     }
 
