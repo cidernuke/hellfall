@@ -103,7 +103,7 @@ public class CharacterStats
             intelligence.SetBaseValue(intelligence.GetBaseValue() - 1f);
 
             rangedDamage.SetBaseValue(rangedDamage.GetBaseValue() - 3f);
-            rangedCooldown.SetBaseValue(rangedCooldown.GetBaseValue() - 0.1f);
+            rangedCooldown.SetBaseValue(rangedCooldown.GetBaseValue() + 0.1f);
             rangedRange.SetBaseValue(rangedRange.GetBaseValue() - 0.1f);
         }
     }

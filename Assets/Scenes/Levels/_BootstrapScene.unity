@@ -628,126 +628,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: AltarGUI
       objectReference: {fileID: 0}
-    - target: {fileID: 1007344617795632798, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_HorizontalAlignment
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1028810530382153149, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: PlusButton1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1091635004029207795, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: StrengthValueText
-      objectReference: {fileID: 0}
-    - target: {fileID: 1428928786929778382, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Alpha
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1442285954966133636, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: cooldownValueText
-      objectReference: {fileID: 0}
-    - target: {fileID: 1711904310144885531, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: MinusButton3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2115611932639896860, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: IntelligenceValueText
-      objectReference: {fileID: 0}
-    - target: {fileID: 2156262069342677288, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: MinusButton2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2364894012932700873, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: SHValueText1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3447805346618725859, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_HorizontalAlignment
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3787502851461083729, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: SHValueText3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4153829034051017001, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: rangeDamageValueText
-      objectReference: {fileID: 0}
-    - target: {fileID: 4382224405643577477, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: playerController
-      value: 
-      objectReference: {fileID: 1627913586}
-    - target: {fileID: 4432041419611945664, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: damageValueText
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784826110176398580, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 94.4873
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784826110176398580, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.000026703
-      objectReference: {fileID: 0}
-    - target: {fileID: 4784826110176398580, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0.012421
-      objectReference: {fileID: 0}
-    - target: {fileID: 5388976108886914197, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_HorizontalAlignment
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5390963151823626163, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 71.4151
-      objectReference: {fileID: 0}
-    - target: {fileID: 5390963151823626163, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 29.102
-      objectReference: {fileID: 0}
-    - target: {fileID: 5390963151823626163, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 139.69135
-      objectReference: {fileID: 0}
-    - target: {fileID: 5390963151823626163, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 26.896
-      objectReference: {fileID: 0}
-    - target: {fileID: 5454407133874431106, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 72.2984
-      objectReference: {fileID: 0}
-    - target: {fileID: 5454407133874431106, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 140.12743
-      objectReference: {fileID: 0}
-    - target: {fileID: 5454407133874431106, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 27.345
-      objectReference: {fileID: 0}
-    - target: {fileID: 5635604641960019971, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: MinusButton1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5754893283122806666, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: VitalityValueText
-      objectReference: {fileID: 0}
-    - target: {fileID: 6122194126632728251, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: PlusButton3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6153200234573344527, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 149.71
-      objectReference: {fileID: 0}
-    - target: {fileID: 6153200234573344527, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -25.855
-      objectReference: {fileID: 0}
     - target: {fileID: 6568490763506401671, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -828,46 +708,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6886319001142833610, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6886319001142833610, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 27.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7011931018254216096, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: SHValueText2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7569205820711310900, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: PlusButton2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7659231201441629153, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 73.9841
-      objectReference: {fileID: 0}
-    - target: {fileID: 7659231201441629153, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 29.102
-      objectReference: {fileID: 0}
-    - target: {fileID: 7659231201441629153, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 136.99594
-      objectReference: {fileID: 0}
-    - target: {fileID: 7659231201441629153, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 56.604965
-      objectReference: {fileID: 0}
-    - target: {fileID: 8056577851520009624, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: rangedRangeValueText
-      objectReference: {fileID: 0}
-    - target: {fileID: 8726994458687464653, guid: 8571f5d6c23ee7d4aadd2c46491e5fb2, type: 3}
-      propertyPath: m_Name
-      value: maxHealthValueText
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -897,6 +737,10 @@ PrefabInstance:
     - target: {fileID: 1397085380373160115, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: maxLifetime
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+      propertyPath: closeDamage
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2149054594424086871, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: m_LocalPosition.x
