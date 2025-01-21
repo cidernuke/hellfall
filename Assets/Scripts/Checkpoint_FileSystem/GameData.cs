@@ -6,6 +6,8 @@ public class GameData
 {
     public PlayerData playerData;
     // public EnviromentData enviromentData;
-    public Dictionary<string, List<float>> bestLevelTimes;
+    
+    //public Dictionary<string, List<float>> bestLevelTimes;
+    public Dictionary<string, List<LeaderboardEntry>> bestLevelTimes;
     public Dictionary<string, float> currentLevelTimes; // <--- z.B. für Zwischenstände pro Level
 }

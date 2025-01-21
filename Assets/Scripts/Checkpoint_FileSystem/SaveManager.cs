@@ -13,7 +13,6 @@ public class SaveManager : MonoBehaviour
 
     // Path to the save file
     private string saveFilePath;
-
     public bool isLoadingFromSave = false;
 
     private void Awake()
