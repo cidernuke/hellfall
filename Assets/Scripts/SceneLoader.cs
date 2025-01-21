@@ -9,13 +9,62 @@ public class SceneLoader : MonoBehaviour
 {
     [SerializeField] private string sceneToLoad;
     [SerializeField] private GameObject loadingScreen; // Reference to loading screen object
+    public bool isScene;
+    private GameObject player;
+    [SerializeField] private Transform bossRoomEntrance;
+    public GameObject bossHealthBar;
+    // private var bossHealthBar;
+
+    private void Awake()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        // bossHealthBar = GameObject.FindGameObjectWithTag("BossHealthBar");
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (isScene)
         {
-            print("starting coroutine");
-            StartCoroutine(LoadScene());
+            if (other.CompareTag("Player"))
+            {
+                print("starting coroutine");
+                StartCoroutine(LoadScene());
+            }
+        }
+        else
+        {
+            if (other.CompareTag("Player"))
+            {
+                StartCoroutine(TeleportToBossRoom());
+            }
+        }
+    }
+
+    private IEnumerator TeleportToBossRoom()
+    {
+        
+        print(", bossHealthBar: "+bossHealthBar);
+        bossHealthBar.SetActive(true);
+        if (loadingScreen != null)
+        {
+            print("Loading screen activated");
+            loadingScreen.SetActive(true); // Activate the loading screen
+        }
+
+        yield return new WaitForSeconds(1); // Simulate loading time
+        
+        if (player != null && bossRoomEntrance != null)
+        {
+            print("Teleporting player");
+            player.transform.position = bossRoomEntrance.position; // Teleport the player
+        }
+
+        yield return new WaitForSeconds(0.5f); // Small delay before hiding the loading screen
+
+        if (loadingScreen != null)
+        {
+            print("Loading screen deactivated");
+            loadingScreen.SetActive(false); // Deactivate the loading screen
         }
     }
 
@@ -26,9 +75,9 @@ public class SceneLoader : MonoBehaviour
             print("loadingscreen activated");
             loadingScreen.SetActive(true); // Activate the loading screen
         }
-        
+
         yield return new WaitForSeconds(1f); // Simulate loading time (optional)
-            print("loading scene");
+        print("loading scene");
         SceneManager.LoadScene(sceneToLoad);
     }
 }

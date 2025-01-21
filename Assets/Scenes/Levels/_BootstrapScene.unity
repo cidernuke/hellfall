@@ -639,7 +639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cec7177fca08d64d86563bec816df55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: Scene_03
+  sceneToLoad: Scene_02
 --- !u!1001 &1322347938
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -892,11 +892,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9207121439723155590, guid: 5291325245c0d8547ba2ff3077683566, type: 3}
       propertyPath: setPlayerCoordinates.x
-      value: -1
+      value: 81
       objectReference: {fileID: 0}
     - target: {fileID: 9207121439723155590, guid: 5291325245c0d8547ba2ff3077683566, type: 3}
       propertyPath: setPlayerCoordinates.y
-      value: 0.43
+      value: 27.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

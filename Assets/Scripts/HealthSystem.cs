@@ -157,7 +157,7 @@ public class HealthSystem : MonoBehaviour
                 UpdateHealthUI();
                 //UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
             }
-            if (!isPlayer)
+            if (!isPlayer && gameObject.GetComponent<Boss>() == null && gameObject.GetComponent<EndBossMain>() == null)
             {
                 enemyHealthBar.updateHealthBar(currentHealth, startingHealth);
             }

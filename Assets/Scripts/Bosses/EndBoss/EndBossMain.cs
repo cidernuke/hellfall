@@ -38,6 +38,9 @@ public class EndBossMain : MonoBehaviour
     private Animator animator;
     private Collider2D bossCollider; // Reference to the boss's collider
 
+    public BossHealthBar healthBar;
+    public HealthSystem healthSystem;
+
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -45,6 +48,9 @@ public class EndBossMain : MonoBehaviour
         bossCollider = GetComponent<BoxCollider2D>();
         playerCollider = player.GetComponent<BoxCollider2D>();
         animator = GetComponent<Animator>();
+        healthSystem = gameObject.GetComponent<HealthSystem>();
+
+        healthBar.SetMaxHealth((int)healthSystem.startingHealth);
     }
 
     private void Update()
@@ -56,6 +62,12 @@ public class EndBossMain : MonoBehaviour
         // {
         //     isInSecondPhase = true;
         // }
+        if (healthSystem.currentHealth < healthSystem.startingHealth)
+        {
+            print("should be taking damage");
+            // healthSystem.TakeDamage(5);
+            healthBar.SetHealth((int)healthSystem.currentHealth);
+        }
         if (isCharging)
         {
             ChargeTowardsPlayer();

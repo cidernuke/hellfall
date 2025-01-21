@@ -18,6 +18,9 @@ TagManager:
   - bullet_forward#
   - SpawnPoint
   - CurrentWeapon
+  - BossHealthBar
+  - BossFolder
+  - TriggerBossFight
   layers:
   - Default
   - TransparentFX
@@ -32,7 +35,6 @@ TagManager:
   - CurrentWeapon
   - Projectile
   - Background
-  - 
   - 
   - 
   - 

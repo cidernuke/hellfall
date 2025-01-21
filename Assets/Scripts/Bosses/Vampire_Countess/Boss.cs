@@ -17,14 +17,26 @@ public class Boss : MonoBehaviour
 	[HideInInspector] public bool isFlipped = false;
 	public bool isInSecondPhase = false;
 
+	public BossHealthBar healthBar;
+	public GameObject healthBarUI;
+    public HealthSystem healthSystem;
+
 	private void Awake()
 	{
 		player = GameObject.FindGameObjectWithTag("Player").transform;
+		healthSystem = gameObject.GetComponent<HealthSystem>();
+
+        healthBar.SetMaxHealth((int)healthSystem.startingHealth);
 	}
 
 	private void Update()
 	{
 		cooldownTimer += Time.deltaTime;
+
+		if (healthSystem.currentHealth < healthSystem.startingHealth)
+        {
+            healthBar.SetHealth((int)healthSystem.currentHealth);
+        }
 
 		if (gameObject.GetComponent<HealthSystem>().currentHealth == 10)
 		{
@@ -118,18 +130,6 @@ public class Boss : MonoBehaviour
 		projectilesForward[projectileIndex].GetComponent<Projectile>().SetDirection(new Vector2(directionX, 0));
 	}
 
-	// private void AttackRangedReverse()
-	// {
-	// 	// find active projectile
-	// 	int projectileIndex = FindActiveProjectile();
-
-	// 	// reverse projectile movement
-	// 	int directionX = Math.Sign(transform.localScale.x);
-	// 	projectilesForward[projectileIndex].GetComponent<Projectile>().SetDirection(new Vector2(-directionX, 0));
-	// 	// projectilesForward[projectileIndex].transform.position = firePoint.position;
-
-	// }
-
 	/// <summary>
 	/// Executes the upward attack of the vampire countess boss.
 	/// Called by animation event in attack_02.
@@ -196,6 +196,7 @@ public class Boss : MonoBehaviour
 
 	public void OnDeath()
 	{
+		healthBarUI.SetActive(false);
 		gameObject.SetActive(false);
 	}
 
