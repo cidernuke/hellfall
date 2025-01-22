@@ -66,7 +66,7 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && cooldownTimer >= closeRangeAttackCooldown)
+        if (Input.GetMouseButtonDown(0) && cooldownTimer >= closeRangeAttackCooldown && !Input.GetKey(KeyCode.Q))
         {
             if (shortEquipped)
             {
@@ -74,7 +74,7 @@ public class PlayerAttack : MonoBehaviour
             }
         }
         //print(cooldownTimer >= rangedAttackCooldown); das war so ne semi gute idee, das log wird mehrmals pro sekunde damit voll geschrieben
-        if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown)
+        if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown && !Input.GetKey(KeyCode.Q))
         {
             if (longEquipped)
             {

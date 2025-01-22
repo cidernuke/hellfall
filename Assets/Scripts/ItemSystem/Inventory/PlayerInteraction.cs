@@ -125,28 +125,23 @@ public class PlayerInteraction : MonoBehaviour
             //pass player position and drop offset
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                //playerInventory.DropItemFromSlot(0, playerPosition, dropOffset); // Drop from slot 1
                 InventorySystem.Instance.DropItemFromSlot(0, playerPosition, dropOffset); // Drop from slot 1
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                //playerInventory.DropItemFromSlot(1, playerPosition, dropOffset); // Drop from slot 2
                 InventorySystem.Instance.DropItemFromSlot(1, playerPosition, dropOffset); // Drop from slot 2
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                //playerInventory.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
                 InventorySystem.Instance.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            else if (Input.GetMouseButtonDown(0)) // Check for left mouse button click
             {
-                //playerInventory.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
-                InventorySystem.Instance.DropItemFromSlot(3, playerPosition, dropOffset); // Drop from slot 3
+                InventorySystem.Instance.DropItemFromSlot(3, playerPosition, dropOffset); // Drop from slot 4
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha5))
+            else if (Input.GetMouseButtonDown(1)) // Check for right mouse button click
             {
-                //playerInventory.DropItemFromSlot(2, playerPosition, dropOffset); // Drop from slot 3
-                InventorySystem.Instance.DropItemFromSlot(4, playerPosition, dropOffset); // Drop from slot 3
+                InventorySystem.Instance.DropItemFromSlot(4, playerPosition, dropOffset); // Drop from slot 5
             }
         }
 
