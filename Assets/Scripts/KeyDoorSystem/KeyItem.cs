@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class KeyItem : MonoBehaviour
 {
+    [Header("UI Hint")]
+    [Tooltip("Assign a small UI object (e.g. Text) that says 'Press E to pick up'.")]
+    [SerializeField] private GameObject pickUpHintUI; 
+
     private bool playerInRange = false;
     private ItemRespawner respawner;
 
@@ -11,13 +15,15 @@ public class KeyItem : MonoBehaviour
         respawner = GetComponent<ItemRespawner>();
     }
 
-
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.CompareTag("Player"))
         {
             playerInRange = true;
             Debug.Log("Player in range of Key. Press [E] to pick up.");
+
+            if (pickUpHintUI != null)
+                pickUpHintUI.SetActive(true);
         }
     }
 
@@ -50,6 +56,9 @@ public class KeyItem : MonoBehaviour
         {
             playerInRange = false;
             Debug.Log("Player left range of Key.");
+
+            if (pickUpHintUI != null)
+                pickUpHintUI.SetActive(false);
         }
     }
 

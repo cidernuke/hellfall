@@ -8,12 +8,19 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class DoorController : MonoBehaviour
 {
+    [Header("Door Animation")]
     [SerializeField] private Animator doorAnimator;
-    private bool isDoorOpen = false;
-    private bool playerInRange = false;
 
+    [Header("Scene Loading")]
     [SerializeField] private string sceneToLoad = "Scene_02";
     [SerializeField] private float doorOpenDuration = 1.5f;
+
+    [Header("UI Hint")]
+    [SerializeField] private GameObject tryToOpenDoor_hintBubble; 
+    [SerializeField] private GameObject cantOpenDoot_hintBubble; 
+
+    private bool isDoorOpen = false;
+    private bool playerInRange = false;
 
 
     /// <summary>
@@ -42,6 +49,10 @@ public class DoorController : MonoBehaviour
         {
             playerInRange = true;
             Debug.Log("Player in door trigger zone. Press [E] to open.");
+
+            // Show the UI hint
+            if(tryToOpenDoor_hintBubble != null)
+                tryToOpenDoor_hintBubble.SetActive(true);
         }
     }
 
@@ -54,6 +65,13 @@ public class DoorController : MonoBehaviour
         {
             playerInRange = false;
             Debug.Log("Player left the door trigger zone.");
+
+            // Hide the UI hint
+            if(tryToOpenDoor_hintBubble != null)
+                tryToOpenDoor_hintBubble.SetActive(false);
+
+            if(cantOpenDoot_hintBubble != null)
+                cantOpenDoot_hintBubble.SetActive(false);
         }
     }
 
@@ -78,6 +96,8 @@ public class DoorController : MonoBehaviour
         }
         else
         {
+            if(cantOpenDoot_hintBubble != null)
+                cantOpenDoot_hintBubble.SetActive(true);
             Debug.Log("Door is locked. Player has not enough keys!");
         }
     }
