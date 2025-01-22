@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
         InitializeReferences();
         //SceneManager.sceneLoaded += OnSceneLoaded;
         RegisterSceneObjects();
+        TimerSystem.Instance.StartTimer("Scene_01");
     }
 
     /// <summary>

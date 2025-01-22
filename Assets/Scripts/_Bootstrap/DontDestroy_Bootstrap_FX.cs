@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class DontDestroy_Bootstrap : MonoBehaviour
+public class DontDestroy_Bootstrap_FX : MonoBehaviour
 {
-    private static bool objExist = false;
+    private static bool objectExist = false;
 
     void Awake()
     {
         //Check if the game object already exist
-        if (!objExist)
+        if (!objectExist)
         {
-            objExist = true;
+            objectExist = true;
             DontDestroyOnLoad(gameObject); 
         }
         else

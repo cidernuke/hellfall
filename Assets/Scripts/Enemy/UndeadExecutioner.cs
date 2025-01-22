@@ -45,6 +45,7 @@ public class UndeadExecutioner : MonoBehaviour
         healthSystem = GetComponent<HealthSystem>();
         enemyController = GetComponent<EnemyController>();
         anim = GetComponent<Animator>();
+        playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
     private void Update()
