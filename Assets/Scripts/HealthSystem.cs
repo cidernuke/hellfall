@@ -12,9 +12,9 @@ public class HealthSystem : MonoBehaviour
     /// <summary>
     /// The initial amount of health the object starts with.
     /// </summary>
-    
-    
-    
+
+
+
     [SerializeField] public float startingHealth = 100;
 
     [SerializeField] private EnemyHealthBar enemyHealthBar;
@@ -56,6 +56,13 @@ public class HealthSystem : MonoBehaviour
     public float respawnHealth;
     private float deathMessageDuration = 3f;
 
+    private Boss bossVampire;
+    private EndBossMain bossMain;
+    private SpriteRenderer spriteRenderer; // Reference to the boss's SpriteRenderer
+    private Color hitColor = Color.white;  // Color to show when hit
+    private float flashDuration = 0.1f;    // Duration of the hit effect
+    private Color originalColor;
+
     //Death Messages
     private string[] deathMessages =
     {
@@ -79,7 +86,13 @@ public class HealthSystem : MonoBehaviour
         respawnHealth = startingHealth; //To avoid null-pointers
         anim = GetComponent<Animator>();
         enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
+        bossVampire = gameObject.GetComponent<Boss>();
+        bossMain = gameObject.GetComponent<EndBossMain>();
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 
+        // Store the original color
+        // originalColor = spriteRenderer.material.color;
+        // spriteRenderer.material.color = Color.white;
     }
 
     /// <summary>
@@ -152,12 +165,16 @@ public class HealthSystem : MonoBehaviour
         {
             // Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
             anim.SetTrigger("hurt");
+            if (bossVampire != null && bossMain != null)
+            {
+                StartCoroutine(FlashHitEffect());
+            }
             if (isPlayer)
             {
                 UpdateHealthUI();
                 //UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
             }
-            if (!isPlayer && gameObject.GetComponent<Boss>() == null && gameObject.GetComponent<EndBossMain>() == null)
+            if (!isPlayer && bossVampire == null && bossMain == null)
             {
                 enemyHealthBar.updateHealthBar(currentHealth, startingHealth);
             }
@@ -171,6 +188,28 @@ public class HealthSystem : MonoBehaviour
             Die(playerMovement, enemyController);
 
         }
+    }
+
+    private IEnumerator FlashHitEffect()
+    {
+        if (bossMain != null)
+        {
+            spriteRenderer = bossMain.GetComponent<SpriteRenderer>();
+        }
+        else
+        {
+            spriteRenderer = bossVampire.GetComponent<SpriteRenderer>();
+        }
+        originalColor = spriteRenderer.material.color;
+
+        // Change the sprite color to the hit color
+        spriteRenderer.material.color = hitColor;
+
+        // Wait for the flash duration
+        yield return new WaitForSeconds(4);
+
+        // Revert the sprite color to the original color
+        spriteRenderer.material.color = originalColor;
     }
 
     /// <summary>

@@ -136,8 +136,8 @@ public class EndBossMain : MonoBehaviour
             if (hit.CompareTag("Player"))
             {
                 // Deal damage to the player
-                // PlayerMovement playerMovement = hit.GetComponent<PlayerMovement>();
-                hit.GetComponent<HealthSystem>().TakeDamage(chargeAttackDamage);
+                PlayerMovement playerMovement = hit.GetComponent<PlayerMovement>();
+                hit.GetComponent<HealthSystem>().TakeDamage(chargeAttackDamage, playerMovement);
                 StopCharge();
             }
             else

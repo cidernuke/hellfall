@@ -162,6 +162,10 @@ public class Boss : MonoBehaviour
 		}
 	}
 
+	/* 
+	When hit, dont play hit anim, but rather color the boss white for miliseconds --> boss still attacks
+	*/
+
 	/// <summary>
 	/// Executes the downward attack of the vampire countess boss.
 	/// Called by animation event in attack_02.5
