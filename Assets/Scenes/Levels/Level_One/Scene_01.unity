@@ -17254,6 +17254,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 9088130307965626201, guid: 6928203c5b93645199e51a125295c722, type: 3}
+      propertyPath: lootTable.Array.data[0].itemPrefab
+      value: 
+      objectReference: {fileID: 3105599385479915624, guid: ce1ee5ec5cfd1614f8ae566b6dedbc58, type: 3}
+    - target: {fileID: 9088130307965626201, guid: 6928203c5b93645199e51a125295c722, type: 3}
       propertyPath: lootTable.Array.data[1].dropChance
       value: 100
       objectReference: {fileID: 0}
