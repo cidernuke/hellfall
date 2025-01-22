@@ -8,6 +8,14 @@ public class EnemyHealthBar : MonoBehaviour
     [SerializeField] private Transform target;
     [SerializeField] private Vector3 offset;
 
+    private void Start()
+    {
+        if (camera == null)
+        {
+            camera = Camera.main;
+        }
+    }
+
 
     public void updateHealthBar(float currentHealth, float maxHealth)
     {
@@ -17,7 +25,7 @@ public class EnemyHealthBar : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {  
+    {
         transform.rotation = camera.transform.rotation;
         transform.position = target.position + offset;
     }

@@ -26,7 +26,6 @@ public class Explosion : MonoBehaviour
 
         if (playerCollider != null && !hasExploded) // If player enters trigger and explosion hasn't occurred
         {
-            Debug.Log("Player entered trigger radius. Triggering explosion.");
             TriggerExplosion();  // Trigger explosion
         }
     }
@@ -37,7 +36,6 @@ public class Explosion : MonoBehaviour
         if (hasExploded) return;  // If explosion has already occurred, exit
 
         hasExploded = true;  // Mark the explosion as triggered
-        Debug.Log("Explosion triggered!");
 
         if (animator != null)
         {
@@ -82,7 +80,17 @@ public class Explosion : MonoBehaviour
             // If the collider is the player, deal damage to the player
             if (collider.CompareTag("Player"))
             {
-                collider.GetComponent<HealthSystem>()?.TakeDamage(damageAmount);
+                HealthSystem healthSystem = collider.GetComponent<HealthSystem>();
+                PlayerMovement playerMovement = collider.GetComponent<PlayerMovement>();
+
+                if (healthSystem != null && playerMovement != null)
+                {
+                    healthSystem.TakeDamage(damageAmount, playerMovement);
+                }
+                else
+                {
+                    Debug.LogError("HealthSystem or PlayerMovement component not found on player!");
+                }
             }
             // If the collider is an enemy, deal damage to the enemy
             else if (collider.CompareTag("Enemy"))
