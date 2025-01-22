@@ -62,7 +62,7 @@ public class LeaderboardUI : MonoBehaviour
         isNewTimeAdded = false; // wir haben noch keinen Eintrag fürs Leaderboard angelegt
 
         // Zeit formatieren
-        currentTimeText.text = "Deine Zeit: " + FormatTime(finalTime);
+        currentTimeText.text = "Your time was: " + FormatTime(finalTime);
 
         // Liste anzeigen (ohne den neuen Eintrag?)
         UpdateBestTimesDisplay();
@@ -96,7 +96,8 @@ public class LeaderboardUI : MonoBehaviour
     {
         List<LeaderboardEntry> entries = TimerSystem.Instance.GetBestEntries(levelName);
 
-        string text = "Bestzeiten:\n";
+        //string text = "Bestzeiten:\n";
+        string text = "Record Times:\n";
         for (int i = 0; i < entries.Count; i++)
         {
             var entry = entries[i];

@@ -75391,9 +75391,79 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1334802484919981354, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_text
+      value: 'Best Times
+
+        1. Diego - 00:06
+
+        2.
+
+        3.
+
+        4.
+
+        5.'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1685945787068615727, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2770123352439696098, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -63
+      objectReference: {fileID: 0}
+    - target: {fileID: 3343685956769132746, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 115
+      objectReference: {fileID: 0}
+    - target: {fileID: 3902470166298735788, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -48
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075874723656947093, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 295
+      objectReference: {fileID: 0}
+    - target: {fileID: 6086032563819663017, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_text
+      value: 'Your time was: 00:00'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6086032563819663017, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_fontSize
+      value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 6086032563819663017, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_margin.x
+      value: -205.39484
+      objectReference: {fileID: 0}
+    - target: {fileID: 6086032563819663017, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_margin.z
+      value: -66.390076
+      objectReference: {fileID: 0}
+    - target: {fileID: 6086032563819663017, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6428931481535517122, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_Name
+      value: ConfirmBtn
+      objectReference: {fileID: 0}
     - target: {fileID: 6761062801494806166, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
       propertyPath: m_Name
       value: Leaderboard
+      objectReference: {fileID: 0}
+    - target: {fileID: 7198441169275447525, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 347
+      objectReference: {fileID: 0}
+    - target: {fileID: 7682234925320964739, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -249
+      objectReference: {fileID: 0}
+    - target: {fileID: 7725976487046197272, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 82
       objectReference: {fileID: 0}
     - target: {fileID: 9122517877877948541, guid: 7d8948ae4241fd941b80c0989fbcb9ac, type: 3}
       propertyPath: m_LocalPosition.x
