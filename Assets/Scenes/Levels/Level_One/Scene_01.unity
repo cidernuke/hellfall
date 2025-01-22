@@ -17199,7 +17199,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 797692599748389030, guid: 6928203c5b93645199e51a125295c722, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4648359069618010117, guid: 6928203c5b93645199e51a125295c722, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17243,11 +17243,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7710827050514571866, guid: 6928203c5b93645199e51a125295c722, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7710827050514571866, guid: 6928203c5b93645199e51a125295c722, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9088130307965626201, guid: 6928203c5b93645199e51a125295c722, type: 3}
       propertyPath: lootTable.Array.size
