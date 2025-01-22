@@ -159,11 +159,11 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private void AttackRanged()
     {
-        if (!playerMovement.isFalling)
-        {
-            playerMovement.blockInput = true;
-            playerMovement.body.constraints = RigidbodyConstraints2D.FreezePosition;
-        }
+        //if (!playerMovement.isFalling)
+        //{
+        //    playerMovement.blockInput = true;
+        //    playerMovement.body.constraints = RigidbodyConstraints2D.FreezePosition;
+        //}
 
         anim.SetTrigger("attack_ranged");
         cooldownTimer = 0;
