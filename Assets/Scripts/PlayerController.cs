@@ -36,7 +36,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float rangedRange = 2f;
 
 
-
+    /// <summary>
+    /// Initializes the PlayerController by ensuring all necessary components are assigned.
+    /// If any component is not assigned via the inspector, it attempts to find the component on the GameObject.
+    /// Initializes playerStats with the provided character stats.
+    /// </summary>
     void Awake()
     {
         // Ensure that HealthSystem is assigned either via inspector or automatically
@@ -70,6 +74,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the PlayerController every frame.
+    /// Synchronizes the health and attack system values with the player stats.
+    /// Updates the character stats based on the active weapons in the inventory.
+    /// </summary>
     void Update()
     {
         // Update HealthSystem values
@@ -126,6 +135,7 @@ public class PlayerController : MonoBehaviour
             // Checks if there is a closeRangeWeapon
             if (closeRangeWeapon != null)
             {
+                playerAttackSystem.shortEquipped = true;
                 // Communicates the Modifier values from the close range weapon to the player Stats, if they have changed
                 if (closeRangeWeapon.weaponStats.GetDamageModifier() != playerStats.closeDamage.GetModifier())
                 {
@@ -145,12 +155,19 @@ public class PlayerController : MonoBehaviour
                 }
 
             }
+            //set bool to false, so player can't do a short range attack without a weapon
+            if (closeRangeWeapon == null)
+            {
+                playerAttackSystem.shortEquipped = false;
+            }
+
             // slots[4] in Inventory = Long Range Weapon
             LongRangeWeapon longRangeWeapon = inventorySystem.slots[4].storedItem as LongRangeWeapon;
             ItemData itemDataRange = inventorySystem.slots[4].itemData;
             // Checks if there is a longRangeWeapon
             if (longRangeWeapon != null)
             {
+                playerAttackSystem.longEquipped = true;
                 // Communicates the Modifier values from the long range weapon to the player Stats, if they have changed
                 if (longRangeWeapon.weaponStats.GetDamageModifier() != playerStats.rangedDamage.GetModifier())
                 {
@@ -176,6 +193,11 @@ public class PlayerController : MonoBehaviour
                     playerAttackSystem.iceDamageRange = true;
                     playerAttackSystem.fireDamageRange = false;
                 }
+            }
+            //set bool to false, so player can't do a long range attack without a weapon
+            if (longRangeWeapon == null)
+            {
+                playerAttackSystem.longEquipped = false;
             }
         }
 

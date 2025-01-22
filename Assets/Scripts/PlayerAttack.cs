@@ -48,6 +48,9 @@ public class PlayerAttack : MonoBehaviour
     private int attackIndex = 0;
     private int totalAttacks = 2;
 
+    public bool shortEquipped = false;
+    public bool longEquipped = false;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -58,19 +61,25 @@ public class PlayerAttack : MonoBehaviour
 
     /// <summary>
     /// Checks if the player is able to attack and if the cooldown is over.
-    /// Calls the Attack() method if left mouse button is clicked.
-    /// Calls the AttackRanged() method if right mouse button is clicked.
+    /// Calls the Attack() method if left mouse button is clicked and a Short Range Weapon is equipped
+    /// Calls the AttackRanged() method if right mouse button is clicked and a Long Range Weapon is euqipped
     /// </summary>
     private void Update()
     {
         if (Input.GetMouseButtonDown(0) && cooldownTimer >= closeRangeAttackCooldown)
         {
-            Attack();
+            if (shortEquipped)
+            {
+                Attack();
+            }
         }
         //print(cooldownTimer >= rangedAttackCooldown); das war so ne semi gute idee, das log wird mehrmals pro sekunde damit voll geschrieben
         if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown)
         {
-            AttackRanged();
+            if (longEquipped)
+            {
+                AttackRanged();
+            }
         }
         cooldownTimer += Time.deltaTime;
     }
@@ -168,14 +177,14 @@ public class PlayerAttack : MonoBehaviour
         projectiles[projectileIndex].GetComponent<Projectile>().SetDirection(new Vector2(directionX, 0));
 
         // Set fire or ice flags
-        if(fireDamageRange)
+        if (fireDamageRange)
         {
 
             projectiles[projectileIndex].GetComponent<Projectile>().attackSys = this;
             projectiles[projectileIndex].GetComponent<Projectile>().isFireBullet = true;
             projectiles[projectileIndex].GetComponent<Projectile>().isIceBullet = false;
         }
-        if(iceDamageRange)
+        if (iceDamageRange)
         {
             projectiles[projectileIndex].GetComponent<Projectile>().attackSys = this;
             projectiles[projectileIndex].GetComponent<Projectile>().isIceBullet = true;
