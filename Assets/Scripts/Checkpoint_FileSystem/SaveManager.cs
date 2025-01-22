@@ -5,6 +5,7 @@ using UnityEngine;
 using ItemSystem.Abstract;
 using ItemSystem.Items;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class SaveManager : MonoBehaviour
 {
@@ -37,7 +38,7 @@ public class SaveManager : MonoBehaviour
     }
 
     // Method to save the game
-    public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
+    public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, PlayerController playerController)
     {
         print("Saving Game");
         // Create new PlayerData-Object
@@ -45,7 +46,8 @@ public class SaveManager : MonoBehaviour
             healthSystem,
             playerMovement.GetLastCheckpointID(),
             soulShardSystem,
-            inventorySystem
+            inventorySystem,
+            playerController
         );
 
         // Creates GameData and adds PlayerData
@@ -80,13 +82,13 @@ public class SaveManager : MonoBehaviour
     }
 
     // Methoad to load old game
-    public void LoadGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
+    public void LoadGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, PlayerController playerController)
     {
         GameData gameData = LoadGameData();
         if (gameData != null)
         {
             // Anwenden der geladenen Daten
-            ApplyLoadedData(gameData, playerMovement, healthSystem, soulShardSystem, inventorySystem);
+            ApplyLoadedData(gameData, playerMovement, healthSystem, soulShardSystem, inventorySystem, playerController);
             Debug.Log("Spiel geladen.");
         }
         else
@@ -95,7 +97,7 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    private void ApplyLoadedData(GameData gameData, PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
+    private void ApplyLoadedData(GameData gameData, PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, PlayerController playerController)
     {
         PlayerData data = gameData.playerData;
 
@@ -145,6 +147,27 @@ public class SaveManager : MonoBehaviour
                 break;
             }
         }
+
+        Dictionary<String, float> loadedPlayerStats = data.characterStats;
+        CharacterStats newPlayerStats = playerController.playerStats;
+
+        newPlayerStats.vitality.SetBaseValue(loadedPlayerStats["vitalityBase"]);
+        newPlayerStats.strength.SetBaseValue(loadedPlayerStats["strengthBase"]);
+        newPlayerStats.intelligence.SetBaseValue(loadedPlayerStats["intelligenceBase"]);
+
+        newPlayerStats.maxHealth.SetBaseValue(loadedPlayerStats["maxHealthBase"]);
+        newPlayerStats.maxHealth.SetModifier(loadedPlayerStats["maxHealthMod"]);
+        
+        newPlayerStats.closeDamage.SetBaseValue(loadedPlayerStats["closeDamageBase"]);
+        newPlayerStats.closeDamage.SetModifier(loadedPlayerStats["closeDamageMod"]);
+        
+        newPlayerStats.rangedDamage.SetBaseValue(loadedPlayerStats["rangedDamageBase"]);
+        newPlayerStats.rangedDamage.SetModifier(loadedPlayerStats["rangedDamageMod"]);
+        newPlayerStats.rangedCooldown.SetBaseValue(loadedPlayerStats["rangedCooldownBase"]);
+        newPlayerStats.rangedCooldown.SetModifier(loadedPlayerStats["rangedCooldownMod"]);
+        newPlayerStats.rangedRange.SetBaseValue(loadedPlayerStats["rangedRangeBase"]);
+        newPlayerStats.rangedRange.SetModifier(loadedPlayerStats["rangedRangeMod"]);
+
     }
 
     public PlayerData LoadPlayerData()

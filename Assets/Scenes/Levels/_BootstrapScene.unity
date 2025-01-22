@@ -1171,16 +1171,16 @@ MonoBehaviour:
   healthSystem: {fileID: 1627913580}
   playerAttackSystem: {fileID: 1627913579}
   inventorySystem: {fileID: 549623651}
-  playerStats: {fileID: 0}
+  playerMovementSystem: {fileID: 0}
   anim: {fileID: 0}
   boxCollider: {fileID: 0}
   vitality: 1
-  maxHealth: 100
+  maxHealth: 1000
   currentHealth: 100
   strength: 1
-  closeDamage: 5
+  closeDamage: 50
   intelligence: 1
-  rangedDamage: 5
+  rangedDamage: 1000
   rangedCooldown: 1.5
   rangedRange: 2
 --- !u!1 &2060588236

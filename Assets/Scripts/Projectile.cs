@@ -6,6 +6,8 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float damage;
     [SerializeField] private float maxLifetime;
+
+    public float playerDamage;
     private bool hit;
     private float directionX;
     private float directionY;

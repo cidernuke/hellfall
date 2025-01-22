@@ -29,22 +29,24 @@ public class EnemyController : MonoBehaviour
     private HealthSystem playerHealth;
     public EnemyPatrol enemyPatrol;
     private PlayerMovement playerMovement;
-    private HealthSystem healthSystem;
+    public HealthSystem healthSystem;
 
     //Respawn variables
     private Vector3 initialPosition;
-    private HealthSystem enemyHealthSystem;
+    // private HealthSystem enemyHealthSystem;
     private bool isDead = false;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
-        playerHealth = GetComponent<HealthSystem>();
-        playerMovement = GetComponent<PlayerMovement>();
+        // playerHealth = GetComponent<HealthSystem>();
+        playerHealth = GameObject.Find("Player").GetComponent<PlayerController>().healthSystem;
+        // playerMovement = GetComponent<PlayerMovement>();
+        playerMovement = GameObject.Find("Player").GetComponent<PlayerController>().playerMovementSystem;
         healthSystem = GetComponent<HealthSystem>();
 
-        enemyHealthSystem = GetComponent<HealthSystem>();
+        // enemyHealthSystem = GetComponent<HealthSystem>();
 
         if (healthSystem == null)
         {

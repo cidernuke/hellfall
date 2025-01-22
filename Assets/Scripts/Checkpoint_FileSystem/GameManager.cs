@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public HealthSystem healthSystem;
     public SoulShardSystem soulShardSystem;
     public InventorySystem inventorySystem;
+    public PlayerController playerController;
     private List<ItemRespawner> itemRespawners = new List<ItemRespawner>();
     private List<EnemyController> enemyRespawners = new List<EnemyController>();
 
@@ -113,6 +114,7 @@ public class GameManager : MonoBehaviour
             playerMovement = player.GetComponent<PlayerMovement>();
             healthSystem = player.GetComponent<HealthSystem>();
             soulShardSystem = player.GetComponent<SoulShardSystem>();
+            playerController = player.GetComponent<PlayerController>();
         }
         else
         {
@@ -120,6 +122,7 @@ public class GameManager : MonoBehaviour
             playerMovement = null;
             healthSystem = null;
             soulShardSystem = null;
+            playerController = null;
         }
 
         // InventorySystem (Singleton)
@@ -159,7 +162,7 @@ public class GameManager : MonoBehaviour
     {
         if (SaveManager.Instance)
         {
-            SaveManager.Instance.SaveGame(playerMovement, healthSystem, soulShardSystem, inventorySystem);
+            SaveManager.Instance.SaveGame(playerMovement, healthSystem, soulShardSystem, inventorySystem, playerController);
         }
         else
         {
@@ -171,7 +174,7 @@ public class GameManager : MonoBehaviour
     {
         if (SaveManager.Instance)
         {
-            SaveManager.Instance.LoadGame(playerMovement, healthSystem, soulShardSystem, inventorySystem);
+            SaveManager.Instance.LoadGame(playerMovement, healthSystem, soulShardSystem, inventorySystem, playerController);
         }
         else
         {
@@ -182,11 +185,11 @@ public class GameManager : MonoBehaviour
     public void StartNewGame()
     {
         //Check player references
-        if (playerMovement == null || healthSystem == null || soulShardSystem == null)
+        if (playerMovement == null || healthSystem == null || soulShardSystem == null || playerController == null)
         {
             Debug.LogWarning("StartNewGame: Player references are missing trying to reInitialize references.");
             InitializeReferences();
-            if (playerMovement == null || healthSystem == null || soulShardSystem == null)
+            if (playerMovement == null || healthSystem == null || soulShardSystem == null || playerController == null)
             {
                 Debug.LogWarning("StartNewGame: Player references are missing, cannot start new Game");
                 return;
@@ -206,6 +209,8 @@ public class GameManager : MonoBehaviour
         //Empty Inventory
         inventorySystem.ClearInventory();
         inventorySystem.SetupReferences();
+
+        playerController.SetUpReferences();
 
         //Rest Checkpoint-Status
         //Need more logic, not done yet

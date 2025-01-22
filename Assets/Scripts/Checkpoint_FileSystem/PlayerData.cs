@@ -20,8 +20,10 @@ public class PlayerData
 
     public string lastSceneName;
 
+    public Dictionary<String, float> characterStats = new Dictionary<string, float>();
+
     //public PlayerData(HealthSystem healthSystem, List<ItemSystem.Abstract.Item> playerItems, SoulShardSystem soulShardSystem, int lastCheckpointID)
-    public PlayerData(HealthSystem healthSystem, int lastCheckpointID, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
+    public PlayerData(HealthSystem healthSystem, int lastCheckpointID, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, PlayerController playerController)
     {
         // Save latest checkpointID
         this.lastCheckpointID = lastCheckpointID;
@@ -49,5 +51,31 @@ public class PlayerData
                 collectedItemNames.Add(null); // Platzhalter für leere Slots
             }
         }
+
+        CharacterStats stats = playerController.playerStats;
+
+        characterStats.Add("vitalityBase", stats.vitality.GetBaseValue());
+        characterStats.Add("strengthBase", stats.strength.GetBaseValue());
+        characterStats.Add("intelligenceBase", stats.intelligence.GetModifier());
+
+        characterStats.Add("maxHealthBase", stats.maxHealth.GetBaseValue());
+        characterStats.Add("maxHealthMod", stats.maxHealth.GetModifier());
+
+        characterStats.Add("closeDamageBase", stats.closeDamage.GetBaseValue());
+        characterStats.Add("closeDamageMod", stats.closeDamage.GetModifier());
+
+        characterStats.Add("rangedDamageBase", stats.rangedDamage.GetBaseValue());
+        characterStats.Add("rangedDamageMod", stats.rangedDamage.GetModifier());
+        characterStats.Add("rangedCooldownBase", stats.rangedCooldown.GetBaseValue());
+        characterStats.Add("rangedCooldownMod", stats.rangedCooldown.GetModifier());
+        characterStats.Add("rangedRangeBase", stats.rangedRange.GetBaseValue());
+        characterStats.Add("rangedRangeMod", stats.rangedRange.GetModifier());
+
+        
+
+
+
+
+
     }
 }

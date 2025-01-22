@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Codice.CM.Triggers;
-using ItemSystem.Abstract;
+
 using UnityEngine;
-using UnityEngine.Playables;
 
 public class PlayerController : MonoBehaviour 
 {
@@ -14,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public HealthSystem healthSystem;
     [SerializeField] public PlayerAttack playerAttackSystem;
     [SerializeField] public InventorySystem inventorySystem;
+    [SerializeField] public PlayerMovement playerMovementSystem;
     public CharacterStats playerStats;
 
     [Header("Player Components")]
@@ -39,35 +35,7 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        // Ensure that HealthSystem is assigned either via inspector or automatically
-        if (healthSystem == null)
-        {
-            healthSystem = GetComponent<HealthSystem>();  // Automatically find it
-        }
-
-        if(playerAttackSystem == null)
-        {
-            playerAttackSystem = GetComponent<PlayerAttack>();
-        }
-
-        if(inventorySystem == null)
-        {
-            inventorySystem = GetComponent<InventorySystem>();
-        }
-
-        if (playerStats == null)
-        {
-            playerStats = new CharacterStats(
-                vitality,
-                maxHealth,
-                strength,
-                closeDamage,
-                intelligence,
-                rangedDamage,
-                rangedCooldown,
-                rangedRange
-            );
-        }
+        SetUpReferences();
     }
 
     void Update()
@@ -156,5 +124,43 @@ public class PlayerController : MonoBehaviour
         // }
 
 
+    }
+
+    public void SetUpReferences()
+    {
+        // Ensure that HealthSystem is assigned either via inspector or automatically
+        if (healthSystem == null)
+        {
+            healthSystem = GetComponent<HealthSystem>();  // Automatically find it
+        }
+
+        if(playerAttackSystem == null)
+        {
+            playerAttackSystem = GetComponent<PlayerAttack>();
+        }
+
+        if(inventorySystem == null)
+        {
+            inventorySystem = GetComponent<InventorySystem>();
+        }
+
+        if(playerMovementSystem == null)
+        {
+            playerMovementSystem = GetComponent<PlayerMovement>();
+        }
+
+        if (playerStats == null)
+        {
+            playerStats = new CharacterStats(
+                vitality,
+                maxHealth,
+                strength,
+                closeDamage,
+                intelligence,
+                rangedDamage,
+                rangedCooldown,
+                rangedRange
+            );
+        }
     }
 }
