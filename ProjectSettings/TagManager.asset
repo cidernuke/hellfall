@@ -18,6 +18,7 @@ TagManager:
   - bullet_forward#
   - SpawnPoint
   - CurrentWeapon
+  - Audio
   layers:
   - Default
   - TransparentFX
@@ -32,7 +33,6 @@ TagManager:
   - CurrentWeapon
   - Projectile
   - Background
-  - 
   - 
   - 
   - 

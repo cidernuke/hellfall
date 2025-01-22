@@ -38,6 +38,7 @@ public class PlayerAttack : MonoBehaviour
     private PlayerMovement playerMovement;
     private EnemyController enemyController;
     private PlayerController playerController;
+    private AudioManager audioManager;
 
     //variables for attack
     private int attackIndex = 0;
@@ -50,7 +51,9 @@ public class PlayerAttack : MonoBehaviour
         enemyHealth = GetComponent<HealthSystem>();
         enemyController = GetComponent<EnemyController>();
         playerController = GetComponent<PlayerController>();
-        
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+
+
     }
 
     /// <summary>
@@ -121,9 +124,19 @@ public class PlayerAttack : MonoBehaviour
         {
             case 0:
                 anim.SetTrigger("attack_01");
+                //audioManager.PlaySFX(audioManager.closeAttack_01);
+                if (audioManager.closeAttack_01 != null)
+                {
+                    audioManager.PlaySFX(audioManager.closeAttack_01);
+                }
+                else
+                {
+                    Debug.LogError("AudioClip closeAttack_01 is not assigned in the AudioManager.");
+                }
                 break;
             case 1:
                 anim.SetTrigger("attack_02");
+                audioManager.PlaySFX(audioManager.closeAttack_02);
                 break;
         }
 
@@ -156,7 +169,7 @@ public class PlayerAttack : MonoBehaviour
         anim.SetTrigger("attack_ranged");
         cooldownTimer = 0;
         int projectileIndex = FindProjectile();
-        
+
         // important because projectiles are children of Player. Setting them to null makes them independant of the Players Transform
         projectiles[projectileIndex].transform.parent = null;
         projectiles[projectileIndex].transform.position = firePoint.position;
