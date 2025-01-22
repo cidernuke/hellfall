@@ -1236,6 +1236,7 @@ MonoBehaviour:
   healthSystem: {fileID: 1627913580}
   playerAttackSystem: {fileID: 1627913579}
   inventorySystem: {fileID: 549623651}
+  playerMovementSystem: {fileID: 0}
   anim: {fileID: 0}
   boxCollider: {fileID: 0}
   vitality: 0

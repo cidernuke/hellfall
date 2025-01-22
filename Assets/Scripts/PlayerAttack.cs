@@ -10,7 +10,6 @@ public class PlayerAttack : MonoBehaviour
     public float range;
     public float closeDamage;
     public float rangedDamage;
-    [SerializeField] private float damage;
 
     // for special attacks
     [SerializeField] private bool fireDamage = false;
@@ -53,8 +52,10 @@ public class PlayerAttack : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
-        enemyHealth = GetComponent<HealthSystem>();
+        //playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().playerMovementSystem;
         enemyController = GetComponent<EnemyController>();
+        enemyHealth = GetComponent<HealthSystem>();
+        //enemyHealth = enemyController.healthSystem;
         playerController = GetComponent<PlayerController>();
         
     }
@@ -70,7 +71,6 @@ public class PlayerAttack : MonoBehaviour
         {
             Attack();
         }
-        //print(cooldownTimer >= rangedAttackCooldown);
         if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown)
         {
             AttackRanged();
@@ -246,18 +246,18 @@ public class PlayerAttack : MonoBehaviour
             if (fireDamage)
             {
                 //Note: TakeDamage still needs to be called, since fire damage is only secondary and applied over time
-                enemyHealth.TakeDamage(damage, null, enemyController);
-                enemyHealth.ApplyFireDamage(damage, 2f, 1f);
+                enemyHealth.TakeDamage(closeDamage, null, enemyController);
+                enemyHealth.ApplyFireDamage(closeDamage, 2f, 1f);
             }
             else if (iceDamage)
             {
                 //Note: TakeDamage still needs to be called, since ice damage only freezes the opponent
-                enemyHealth.TakeDamage(damage, null, enemyController);
+                enemyHealth.TakeDamage(closeDamage, null, enemyController);
                 //FreezeEnemy();
             }
             else
             {
-                enemyHealth.TakeDamage(damage, null, enemyController);
+                enemyHealth.TakeDamage(closeDamage, null, enemyController);
             }
         }
     }
