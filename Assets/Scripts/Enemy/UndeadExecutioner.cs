@@ -229,11 +229,11 @@ public class UndeadExecutioner : MonoBehaviour
 
     private void HandleDeath()
     {
-        if (isDead) return; // Ensure death logic is only triggered once
-        isDead = true;
+        //if (isDead) return; // Ensure death logic is only triggered once
+        //isDead = true;
 
         // Play death animation
-        anim.SetTrigger("die");
+        //anim.SetTrigger("die");
 
         // Destroy all summoned mini-enemies
         foreach (var miniEnemy in spawnedMiniEnemies)
@@ -244,14 +244,27 @@ public class UndeadExecutioner : MonoBehaviour
             }
         }
 
-        StartCoroutine(DisableAfterDeath());
+        //StartCoroutine(DisableAfterDeath());
     }
 
-    private IEnumerator DisableAfterDeath()
+    /**private IEnumerator DisableAfterDeath()
     {
-        yield return new WaitForSeconds(2f); // Wait for the death animation
+        yield return new WaitForSeconds(2f); // Wait for death animation
+
+        if (enemyController != null)
+        {
+            Debug.Log("Spawning loot...");
+            enemyController.SpawnLoot();
+            yield return new WaitForSeconds(0.5f); // Ensure loot has time to spawn
+        }
+        else
+        {
+            Debug.LogError("EnemyController is NULL! Loot cannot spawn.");
+        }
+
         gameObject.SetActive(false);
-    }
+    }**/
+
 
     private IEnumerator HealPeriodically()
     {
