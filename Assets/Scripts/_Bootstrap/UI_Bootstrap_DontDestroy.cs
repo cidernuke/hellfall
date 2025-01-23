@@ -1,21 +1,19 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 
 public class UI_Bootstrap_DontDestroy : MonoBehaviour
 {
     private void Awake()
     {
-        //Verhindern, dass Bootstrap mehrfach existiert
+        // Prevent Bootstrap from existing multiple times
         var existingUI = FindObjectsOfType<UI_Bootstrap_DontDestroy>();
         if (existingUI.Length > 1)
         {
-            // Zerstören, falls schon ein Bootstrap da ist
+            // Destroy if a Bootstrap already exists
             Destroy(gameObject);
             return;
         }
 
-        //Markiert dieses ganze GameObject (und seine Kinder) als "dont destroy"
+        // Mark this GameObject (and its children) as "dont destroy"
         DontDestroyOnLoad(gameObject);
     }
 }

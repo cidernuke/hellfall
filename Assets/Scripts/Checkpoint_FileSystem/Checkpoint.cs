@@ -11,6 +11,9 @@ public class Checkpoint : MonoBehaviour
     private Animator animator;
     private float checkpointMessageDuration = 2f;
 
+    /// <summary>
+    /// Initializes the animator.
+    /// </summary>
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -19,7 +22,10 @@ public class Checkpoint : MonoBehaviour
             Debug.LogError("Animator-Component is missing on the Checkpoint.");
         }
     }
-
+    /// <summary>
+    /// Checks if the player has reached a checkpoint.
+    /// </summary>
+    /// <param name="collision"></param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // Check if the player has reached a checkpoint
@@ -29,13 +35,10 @@ public class Checkpoint : MonoBehaviour
             playerMovement = collision.GetComponent<PlayerMovement>();
             if (playerMovement != null)
             {
-                //player.UpdateRespawnPoint(transform.position);
-                //print(transform.position);
                 playerMovement.UpdateRespawnPoint(playerMovement.transform.position, checkpointID);
 
                 healthSystem = collision.GetComponent<HealthSystem>();
                 soulShardSystem = collision.GetComponent<SoulShardSystem>();
-                //inventorySystem = collision.GetComponent<InventorySystem>();
 
                 if (healthSystem != null && InventorySystem.Instance != null && soulShardSystem != null)
                 {
@@ -53,6 +56,9 @@ public class Checkpoint : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Activates the checkpoint.
+    /// </summary>
     private void ActivateCheckpoint()
     {
         isActive = true;

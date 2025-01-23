@@ -12,6 +12,9 @@ public class PlayerOneWayPlatform : MonoBehaviour
     [SerializeField] private float height = 1f;
     [SerializeField] private float time = 0.15f;
 
+    /// <summary>
+    /// Update is called once per frame. Handles player input for moving through or jumping on top of platforms.
+    /// </summary>
     void Update()
     {
         // Handle moving through the platform (pressing 'S')
@@ -44,6 +47,11 @@ public class PlayerOneWayPlatform : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when the player collides with another collider.
+    /// Adds the platform to the list of current platforms if it is a "OneWayPlatform".
+    /// </summary>
+    /// <param name="collision">The collision data associated with this collision event.</param>
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // Detect collision with a "OneWayPlatform"
@@ -56,6 +64,11 @@ public class PlayerOneWayPlatform : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when the player exits collision with another collider.
+    /// Removes the platform from the list of current platforms if it is a "OneWayPlatform".
+    /// </summary>
+    /// <param name="collision">The collision data associated with this collision event.</param>
     private void OnCollisionExit2D(Collision2D collision)
     {
         // Remove the platform from the list when exiting collision
@@ -65,6 +78,11 @@ public class PlayerOneWayPlatform : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Disables collision between the player and the specified platform for a short duration.
+    /// </summary>
+    /// <param name="platform">The platform GameObject to disable collision with.</param>
+    /// <returns>An IEnumerator for coroutine handling.</returns>
     private IEnumerator DisableCollision(GameObject platform)
     {
         // Disable collision for all platforms the player is interacting with
@@ -77,6 +95,11 @@ public class PlayerOneWayPlatform : MonoBehaviour
         Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
     }
 
+    /// <summary>
+    /// Moves the player to the top of the specified platform.
+    /// </summary>
+    /// <param name="platform">The platform GameObject to move the player to.</param>
+    /// <returns>An IEnumerator for coroutine handling.</returns>
     private IEnumerator MovePlayerToTopOfPlatform(GameObject platform)
     {
         playerAnimator = player.GetComponent<Animator>();
@@ -111,6 +134,14 @@ public class PlayerOneWayPlatform : MonoBehaviour
             yield return null;
         }
     }
+
+    /// <summary>
+    /// Smoothly moves an object from a start position to an end position over a specified duration.
+    /// </summary>
+    /// <param name="start">The starting position.</param>
+    /// <param name="end">The ending position.</param>
+    /// <param name="duration">The duration over which to move the object.</param>
+    /// <returns>An IEnumerator for coroutine handling.</returns>
     private IEnumerator MoveSomeone(Vector2 start, Vector2 end, float duration)
     {
         float elapsedTime = 0;

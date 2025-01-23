@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,19 +17,11 @@ public class SoulShardSystem : MonoBehaviour
         SetSoulShardCount(soulShardCount);
     }
 
-    //Now using UpdateUI() instead of Update
-    // void Update()
-    // {
-    //     if (soulShardItems.Count > 0)
-    //     {
-    //         counter.text = soulShardItems.Count.ToString();
-    //     }
-    // }
-
     /// <summary>
-    /// Method that increases the player's soul shard count by one.
+    /// Method that increases the player's soul shard count by the specified amount.
     /// </summary>
-    /// <param name="soulShardItem"></param>
+    /// <param name="soulShardItem">The soul shard item to add.</param>
+    /// <param name="amount">The amount of soul shards to add.</param>
     public void inreaseSoulShard(SoulShardItem soulShardItem, int amount)
     {
         for(int i = 0; i < amount; i++)
@@ -47,30 +38,36 @@ public class SoulShardSystem : MonoBehaviour
     /// Method that decreases the player's soul shard count by the specified amount.
     /// Returns false if the player does not have enough soul shards.
     /// </summary>
+    /// <param name="soulShardItem">The soul shard item to remove.</param>
+    /// <param name="amount">The amount of soul shards to remove.</param>
     public void decreaseSoulShard(SoulShardItem soulShardItem, int amount)
     {
-        //soulShardItems.Remove(soulShardItem);
-
         //More flexible like this, you can just say how many you want to remove
         if(amount > soulShardItems.Count)
         {
-            Debug.Log("You dont have enough Soul Shards");
-            
+            Debug.Log("You dont have enough Soul Shards"); 
         }
 
         for (int i = 0; i < amount && soulShardItems.Count > 0; i++)
         {
             soulShardItems.RemoveAt(soulShardItems.Count - 1);
         }
-        UpdateUI();
-                  
+        UpdateUI();              
     }
 
+    /// <summary>
+    /// Gets the current count of soul shards.
+    /// </summary>
+    /// <returns>The current count of soul shards.</returns>
     public int GetSoulShardCount()
     {
         return soulShardItems.Count;
     }
 
+    /// <summary>
+    /// Sets the soul shard count to the specified value.
+    /// </summary>
+    /// <param name="count">The new soul shard count.</param>
     public void SetSoulShardCount(int count)
     {
         // To modify the list and being able to reduce the SoulShards in case of death
@@ -87,6 +84,9 @@ public class SoulShardSystem : MonoBehaviour
         UpdateUI();
     }
 
+    /// <summary>
+    /// Updates the UI to reflect the current soul shard count.
+    /// </summary>
     private void UpdateUI()
     {
         if (counter != null)

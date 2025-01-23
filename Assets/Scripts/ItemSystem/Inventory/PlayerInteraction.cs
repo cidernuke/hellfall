@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 using System.Collections;
 
 public class PlayerInteraction : MonoBehaviour
@@ -31,7 +30,6 @@ public class PlayerInteraction : MonoBehaviour
     {
         playerHealth = GetComponent<HealthSystem>();
         playerInventory = InventorySystem.Instance;
-        //playerInventory.playerHealth = playerHealth;
         InventorySystem.Instance.playerHealth = playerHealth;
 
     }
@@ -60,24 +58,6 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-    // private void PickupOnKeyPress()
-    // {
-    //     // Check if the player presses E and an item is available to pick up
-    //     if (Input.GetKeyDown(KeyCode.E) && itemToPickUp != null)
-    //     {
-    //         Debug.Log($"Picking up item: {itemToPickUp.item.itemName}");
-    //         if (playerInventory.AddItemToFirstAvailableSlot(itemToPickUp.item)) // Attempt to add the item to the inventory
-    //         {
-    //             Destroy(itemToPickUp.gameObject); // Remove the item from the scene
-    //             itemToPickUp = null; // Clear the reference
-    //         }
-    //         else
-    //         {
-    //             Debug.Log("Failed to pick up item. Inventory is full!");
-    //         }
-    //     }
-    // }
-
     private void PickupOnKeyPress()
     {
         // Check if the player presses E and an item is available to pick up
@@ -93,7 +73,7 @@ public class PlayerInteraction : MonoBehaviour
                 }
                 else
                 {
-                    // Falls kein respawner vorhanden ist, zerstören wie bisher
+                    //If there is no respawner, destroy as before
                     Destroy(itemToPickUp.gameObject);
                 }
 
@@ -144,7 +124,6 @@ public class PlayerInteraction : MonoBehaviour
                 InventorySystem.Instance.DropItemFromSlot(4, playerPosition, dropOffset); // Drop from slot 5
             }
         }
-
     }
 
     /// <summary>
@@ -157,23 +136,19 @@ public class PlayerInteraction : MonoBehaviour
     /// </remarks>
     private void UseOnKeyPress()
     {
-
         // Prevent using items when tab is held (switching mode)
         if (Input.GetKey(KeyCode.Tab)) return;
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            //playerInventory.UseItemFromSlot(0);
             InventorySystem.Instance.UseItemFromSlot(0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            //playerInventory.UseItemFromSlot(1);
             InventorySystem.Instance.UseItemFromSlot(1);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            //playerInventory.UseItemFromSlot(2);
             InventorySystem.Instance.UseItemFromSlot(2);
         }
     }

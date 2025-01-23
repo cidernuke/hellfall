@@ -1,41 +1,28 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 
 public class BootstrapLoader : MonoBehaviour
 {
-    //Für direkten Zugriff auf die Manager
-    // private InventorySystem inventorySystem = InventorySystem.Instance;
-    // private GameManager gameManager = GameManager.Instance;
-    // private SaveManager saveManager = SaveManager.Instance;
-
     [Header("Scenes to Load")]
     public string sceneToLoad = "Menu";
 
     private void Awake()
     {
-        //Verhindern, dass Bootstrap mehrfach existiert
+        // Prevent Bootstrap from existing multiple times
         var existingBootstrap = FindObjectsOfType<BootstrapLoader>();
         if (existingBootstrap.Length > 1)
         {
-            // Zerstören, falls schon ein Bootstrap da ist
+            // Destroy if a Bootstrap already exists
             Destroy(gameObject);
             return;
         }
 
-        //Markiert dieses GameObject (und seine Kinder) als "dont destroy"
+        // Mark this GameObject (and its children) as "dont destroy"
         DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
-        // if (!playerSpawned && playerPrefab != null)
-        // {
-        //     GameObject player = Instantiate(playerPrefab);
-        //     DontDestroyOnLoad(player);     
-        //     playerSpawned = true;
-        // }
-
         // Load Scene
         if (!string.IsNullOrEmpty(sceneToLoad))
         {

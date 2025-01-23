@@ -1,6 +1,4 @@
-using System.Collections;
 using ItemSystem.Abstract;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,6 +10,10 @@ public class InventorySlot
 
     public ItemData itemData;
 
+    /// <summary>
+    /// Initializes the inventory slot with a visual element.
+    /// </summary>
+    /// <param name="slotVisualElement">The visual element representing the slot.</param>
     public void Initialize(VisualElement slotVisualElement)
     {
         hotkey = slotVisualElement;
@@ -22,6 +24,11 @@ public class InventorySlot
         UpdateSlotVisual();
     }
 
+    /// <summary>
+    /// Stores an item and its data in the inventory slot.
+    /// </summary>
+    /// <param name="item">The item to store.</param>
+    /// <param name="itemData">The data associated with the item.</param>
     public void StoreItem(Item item, ItemData itemData)
     {
         if (item == null || itemData == null)
@@ -34,16 +41,17 @@ public class InventorySlot
         {
             this.storedItem = item;
             this.itemData = itemData;
-            //Debug.Log($"Item stored: {storedItem.itemName}");
             UpdateSlotVisual();
         }
     }
 
+    /// <summary>
+    /// Uses the stored item.
+    /// </summary>
     public void useItem()
     {
         if (storedItem == null)
         {
-            //Debug.Log("No item to use");
             return;
         }
         storedItem.use();
@@ -53,6 +61,12 @@ public class InventorySlot
         itemData = null;
         UpdateSlotVisual();
     }
+
+    /// <summary>
+    /// Drops the stored item at a specified position with an offset.
+    /// </summary>
+    /// <param name="playerPosition">The position of the player.</param>
+    /// <param name="dropOffset">The offset from the player's position where the item will be dropped.</param>
     public void DropItem(Vector3 playerPosition, Vector3 dropOffset)
     {
         //get player position
@@ -65,7 +79,7 @@ public class InventorySlot
             {
                 case ItemType.ModifierItem:
                     Debug.Log("PowerUpItem was dropped");
-                    //resource Laden
+                    //Load resource
                     GameObject resource = Resources.Load<GameObject>("Prefabs/PowerUp");
                     // check if loading of resource worked
                     if (resource == null)
@@ -177,8 +191,6 @@ public class InventorySlot
                     break;
             }
 
-            //Debug.Log($"Dropping item: {storedItem.itemName}");
-
             //UpdateSlotVisual();
         }
         else
@@ -187,6 +199,9 @@ public class InventorySlot
         }
     }
 
+    /// <summary>
+    /// Updates the visual representation of the slot.
+    /// </summary>
     private void UpdateSlotVisual()
     {
         if (hotkey != null)
@@ -195,16 +210,17 @@ public class InventorySlot
             {
                 // set image of hotkey to the image of the item
                 hotkey.style.backgroundImage = new StyleBackground(storedItem.itemSprite);
-                //Debug.Log("InvSlot: Item displayed");
             }
             else
             {
                 hotkey.style.backgroundImage = null;
-                //Debug.Log("InvSlot: No item to display");
             }
         }
     }
 
+    /// <summary>
+    /// Clears the inventory slot, removing the stored item and its data.
+    /// </summary>
     public void ClearSlot()
     {
         storedItem = null;

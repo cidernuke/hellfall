@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using ItemSystem.Abstract;
 using UnityEngine;
 
 /// <summary>
 /// Class for health items in the game.
 /// </summary>
-
 public class ShortRangeWeapon : Item
 {
     public HealthSystem playerHealth; // reference to healthsystem
 
     public WeaponStats weaponStats; // reference to weapon stats
 
+    /// <summary>
+    /// Constructor for ShortRangeWeapon.
+    /// </summary>
+    /// <param name="itemName">Name of the item.</param>
+    /// <param name="itemSprite">Sprite of the item.</param>
     public ShortRangeWeapon(string itemName, Sprite itemSprite, bool isFire, bool isIce) 
     {
         this.itemName = itemName;
@@ -32,10 +34,13 @@ public class ShortRangeWeapon : Item
             this.weaponStats.SetCooldownModifier(0);
         }
     }
+
+    /// <summary>
+    /// Method to use the item.
+    /// </summary>
+    /// <returns>Returns true if the item was used successfully.</returns>
     public override bool use(){
-                      
-            Debug.Log("Item was used");
-            return true;
+        Debug.Log("Item was used");
+        return true;
     }       
-        
 }

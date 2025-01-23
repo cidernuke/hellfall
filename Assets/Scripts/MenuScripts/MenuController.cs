@@ -61,20 +61,27 @@ public class MenuController : MonoBehaviour
         resolutionDropdown.value = currentResolutionIndex; // Set the current resolution in the dropdown
     }
 
-    // Change the screen resolution based on the selected dropdown index
+    /// <summary>
+    /// Change the screen resolution based on the selected dropdown index.
+    /// </summary>
+    /// <param name="resolutionIndex">Index of the selected resolution.</param>
     public void SetResolution(int resolutionIndex)
     {
         Resolution resolution = resolutions[resolutionIndex]; // Get the selected resolution
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen); // Apply the resolution
     }
 
-    // Load game scene
+    /// <summary>
+    /// Load the main menu scene.
+    /// </summary>
     public void LoadGame()
     {
         SceneManager.LoadScene("Menu");
     }
 
-    // Start a new game, loading a specified level
+    /// <summary>
+    /// Start a new game, loading a specified level.
+    /// </summary>
     public void NewGameDialogYes()
     {
         //Deactivate MenuPause if activ
@@ -92,7 +99,9 @@ public class MenuController : MonoBehaviour
         SceneManager.LoadScene(_newGameLevel);
     }
 
-    // Load the saved game if a saved level exists
+    /// <summary>
+    /// Load the saved game if a saved level exists.
+    /// </summary>
     public void LoadGameDialogYes()
     {
         var data = SaveManager.Instance.LoadPlayerData();
@@ -120,32 +129,45 @@ public class MenuController : MonoBehaviour
         }
     }
 
-    // Exit the game
+    /// <summary>
+    /// Exit the game.
+    /// </summary>
     public void ExitButton()
     {
         Application.Quit(); // Quit the application
     }
 
-    // Adjust the volume and update the display
+    /// <summary>
+    /// Adjust the volume and update the display.
+    /// </summary>
+    /// <param name="volume">Volume level to set.</param>
     public void SetVolume(float volume)
     {
         AudioListener.volume = volume; // Set the volume
         volumeTextValue.text = volume.ToString("0.0"); // Display the volume value
     }
 
-    // Toggle fullscreen mode
+    /// <summary>
+    /// Toggle fullscreen mode.
+    /// </summary>
+    /// <param name="isFullScreen">True to enable fullscreen, false to disable.</param>
     public void SetFullScreen(bool isFullScreen)
     {
         _isFullScreen = isFullScreen; // Set fullscreen mode
     }
 
-    // Set the quality level of graphics
+    /// <summary>
+    /// Set the quality level of graphics.
+    /// </summary>
+    /// <param name="qualityIndex">Index of the quality level to set.</param>
     public void SetQuality(int qualityIndex)
     {
         _qualityLevel = qualityIndex; // Set the quality level
     }
 
-    // Apply graphics settings like brightness, quality, and fullscreen mode
+    /// <summary>
+    /// Apply graphics settings like brightness, quality, and fullscreen mode.
+    /// </summary>
     public void GraphicsApply()
     {
         PlayerPrefs.SetInt("masterQuality", _qualityLevel); // Save quality setting
@@ -157,14 +179,19 @@ public class MenuController : MonoBehaviour
         StartCoroutine(ConfirmationBox()); // Show confirmation box
     }
 
-    // Save and apply volume settings
+    /// <summary>
+    /// Save and apply volume settings.
+    /// </summary>
     public void VolumeApply()
     {
         PlayerPrefs.SetFloat("masterVolume", AudioListener.volume); // Save volume
         StartCoroutine(ConfirmationBox()); // Show confirmation box
     }
 
-    // Reset specific settings (Audio, Gameplay, Graphics) to default values
+    /// <summary>
+    /// Reset specific settings (Audio, Gameplay, Graphics) to default values.
+    /// </summary>
+    /// <param name="MenuType">Type of menu to reset (Audio, Graphics).</param>
     public void ResetButton(string MenuType)
     {
         if (MenuType == "Audio")
@@ -190,7 +217,10 @@ public class MenuController : MonoBehaviour
         }
     }
 
-    // Show confirmation prompt for 2 seconds
+    /// <summary>
+    /// Show confirmation prompt for 2 seconds.
+    /// </summary>
+    /// <returns>IEnumerator for coroutine.</returns>
     public IEnumerator ConfirmationBox()
     {
         confirmationPrompt.SetActive(true); // Show confirmation prompt

@@ -25,6 +25,15 @@ public class PlayerData
     //Key-Logic
     public int keyCounter;
 
+    /// <summary>
+    /// Constructor for the PlayerData-Class
+    /// </summary>
+    /// <param name="healthSystem"></param>
+    /// <param name="lastCheckpointID"></param>
+    /// <param name="soulShardSystem"></param>
+    /// <param name="inventorySystem"></param>
+    /// <param name="keySystem"></param>
+    /// <param name="playerController"></param>
     public PlayerData(HealthSystem healthSystem, int lastCheckpointID, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, KeySystem keySystem, PlayerController playerController)
     {
         // Save latest checkpointID
@@ -54,10 +63,11 @@ public class PlayerData
             }
             else
             {
-                collectedItemNames.Add(null); // Platzhalter für leere Slots
+                collectedItemNames.Add(null); // Placeholder for empty slots
             }
         }
 
+        //Save Character Stats
         CharacterStats stats = playerController.playerStats;
 
         characterStats.Add("vitalityBase", stats.vitality.GetBaseValue());

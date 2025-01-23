@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-
 
 public class WeaponStats 
 {
@@ -55,5 +53,4 @@ public class WeaponStats
     {
         rangeModifier = modifier;
     }
-
 }
