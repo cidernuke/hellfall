@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class CharacterStats 
 {
-
     // Overall Stats
     // -- Health
     public Stat vitality;
@@ -39,6 +38,10 @@ public class CharacterStats
         this.rangedRange = new Stat(rangedRange);
     }
 
+    /// <summary>
+    /// Increments the vitality stat by 1, if it is 9 or less.
+    /// Also increases maxHealth by 10.
+    /// </summary>
     public void IncrementVitality()
     {
         if(vitality.GetBaseValue() <= 9)
@@ -49,6 +52,11 @@ public class CharacterStats
         }
     }
 
+    /// <summary>
+    /// Decreases the vitality stat by 1, if it is between 1 and 10.
+    /// Also decreases maxHealth by 10.
+    /// Logs a message if vitality is 0.
+    /// </summary>
     public void DecreaseVitality()
     {
         if(vitality.GetBaseValue() == 0)
@@ -64,6 +72,10 @@ public class CharacterStats
         }
     }
 
+    /// <summary>
+    /// Increments the strength stat by 1, if it is 9 or less.
+    /// Also increases closeDamage by 5.
+    /// </summary>
     public void IncrementStrength()
     {
         if(strength.GetBaseValue() <= 9)
@@ -74,6 +86,10 @@ public class CharacterStats
         }
     }
 
+    /// <summary>
+    /// Decreases the strength stat by 1, if it is between 1 and 10.
+    /// Also decreases closeDamage by 5.
+    /// </summary>
     public void DecreaseStrength()
     {
         if(strength.GetBaseValue() >= 1 && strength.GetBaseValue() <= 10)
@@ -84,6 +100,11 @@ public class CharacterStats
         }
     }
 
+    /// <summary>
+    /// Increments the intelligence stat by 1, if it is 9 or less.
+    /// Also increases rangedDamage by 3, decreases rangedCooldown by 0.1,
+    /// and increases rangedRange by 0.1.
+    /// </summary>
     public void IncrementIntelligence()
     {
         if(intelligence.GetBaseValue() <= 9)
@@ -96,7 +117,12 @@ public class CharacterStats
         }
     }
 
-     public void DecreaseIntelligence()
+    /// <summary>
+    /// Decreases the intelligence stat by 1, if it is between 1 and 10.
+    /// Also decreases rangedDamage by 3, increases rangedCooldown by 0.1,
+    /// and decreases rangedRange by 0.1.
+    /// </summary>
+    public void DecreaseIntelligence()
     {
         if(intelligence.GetBaseValue() >= 1 && intelligence.GetBaseValue() <= 10)
         {
@@ -107,5 +133,4 @@ public class CharacterStats
             rangedRange.SetBaseValue(rangedRange.GetBaseValue() - 0.1f);
         }
     }
-
 }

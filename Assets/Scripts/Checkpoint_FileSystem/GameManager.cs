@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     // Singleton-Pattern
     public static GameManager Instance { get; private set; }
 
-    // Referenzen auf wichtige Komponenten
+    //References to important components
     public PlayerMovement playerMovement;
     public HealthSystem healthSystem;
     public SoulShardSystem soulShardSystem;
@@ -23,41 +23,43 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton-Implementierung
+        // Singleton-implementation
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Persistiert über Szenen hinweg
+            DontDestroyOnLoad(gameObject); //Persistence across scenes
         }
         else
         {
             Destroy(gameObject);
-            print("Mehrere Instanzen von GameManager erkannt.");
+            print("Found multiple instances of GameManager.");
         }
     }
 
     private void OnEnable()
     {
-        // Bei jedem Szenenwechsel OnSceneLoaded aufrufen
+        //On every scene change call OnSceneLoaded
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
-        // Abmelden, damit kein Memory Leak entsteht
+        //log out to prevent memory leak
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    /// <summary>
+    /// Called when the game starts.
+    /// </summary>
     private void Start()
     {
         InitializeReferences();
-        //SceneManager.sceneLoaded += OnSceneLoaded;
         RegisterSceneObjects();
         TimerSystem.Instance.StartTimer("Scene_01");
     }
 
     /// <summary>
-    /// Wird aufgerufen, sobald eine neue Szene geladen wurde.
+    /// Getting called when a new scene is loaded.
     /// </summary>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
@@ -94,18 +96,12 @@ public class GameManager : MonoBehaviour
 
         if (SaveManager.Instance.isLoadingFromSave)
         {
-            // LoadGame();
-
-            // // Danach nicht mehr laden
-            // SaveManager.Instance.isLoadingFromSave = false;
-
-            //SaveManager.Instance.isLoadingFromSave = false;
             StartCoroutine(LoadGameAfterUIIsReady());
         }
     }
 
     /// <summary>
-    /// Sucht dynamisch Player, InventorySystem und verknüpft sie.
+    /// Search dynamically for Player, InventorySystem and link them.
     /// </summary>
     private void InitializeReferences()
     {
@@ -143,18 +139,18 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Sucht alle relevanten Objekte (ItemRespawner, EnemyController) in der aktuellen Szene und registriert sie.
+    /// Search for all relevant objects (ItemRespawner, EnemyController) in the current scene and register them.
     /// </summary>
     private void RegisterSceneObjects()
     {
-        // Items in der Szene finden
+        //Find items in the scene
         ItemRespawner[] respawnersInScene = FindObjectsOfType<ItemRespawner>();
         foreach (var resp in respawnersInScene)
         {
             RegisterItem(resp);
         }
 
-        // Enemies in der Szene finden
+        //Find enemies in the scene
         EnemyController[] enemiesInScene = FindObjectsOfType<EnemyController>();
         foreach (var enemy in enemiesInScene)
         {
@@ -162,6 +158,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Save the current game state.
+    /// </summary>
     public void SaveGame()
     {
         if (SaveManager.Instance)
@@ -174,6 +173,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Load the last saved game state.
+    /// </summary>
     public void LoadGame()
     {
         if (SaveManager.Instance)
@@ -186,6 +188,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Start a new game.
+    /// </summary>
     public void StartNewGame()
     {
         //Check player references
@@ -225,6 +230,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("StartNewGame: Values reset to default.");
     }
 
+    /// <summary>
+    /// Respawn the player at the last checkpoint.
+    /// </summary>
     public void RespawnPlayer()
     {
         if (playerMovement == null || healthSystem == null)
@@ -253,10 +261,14 @@ public class GameManager : MonoBehaviour
         // Respawne enemies and items
         RespawnEnemiesAndItems();
 
-        print("RespawnPlayer wurde aufgerufen");
+        print("RespawnPlayer got called");
         print("Health: " + healthSystem.currentHealth + " soulShards: " + soulShardSystem.GetSoulShardCount());
     }
 
+    /// <summary>
+    /// Load the amount of collected SoulShards from the last checkpoint.
+    /// </summary>
+    /// <returns>SoulShardCount from the last checkpoint</returns>
     private int LoadSoulShardCountFromLastCheckpoint()
     {
         //Load the amount of collected SoulShards from the last checkpoint
@@ -264,6 +276,10 @@ public class GameManager : MonoBehaviour
         return data != null ? data.soulShardCount : 0;
     }
 
+    /// <summary>
+    /// Load the amount of collected keys from the last checkpoint.
+    /// </summary>
+    /// <returns>KeyCounter from the last checkpoint</returns>
     private int LoadKeyCountFromLastCheckpoint()
     {
         //Load the amount of collected keys from the last checkpoint
@@ -271,12 +287,14 @@ public class GameManager : MonoBehaviour
         return data != null ? data.keyCounter : 0;
     }
 
+    /// <summary>
+    /// Respawn all enemies and items in the scene.
+    /// </summary>
     private void RespawnEnemiesAndItems()
     {
         // Respawn enemies
         foreach (var enemy in enemyRespawners)
         {
-            //enemy.Respawn();
             if (enemy != null)
             {
                 HealthSystem hs = enemy.GetComponent<HealthSystem>();
@@ -297,18 +315,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Register an item to the GameManager.
+    /// </summary>
+    /// <param name="respawner"></param>
     public void RegisterItem(ItemRespawner respawner)
     {
         if (!itemRespawners.Contains(respawner))
             itemRespawners.Add(respawner);
     }
 
+    /// <summary>
+    /// Register an enemy to the GameManager.
+    /// </summary>
+    /// <param name="enemy"></param>
     public void RegisterEnemy(EnemyController enemy)
     {
         if (!enemyRespawners.Contains(enemy))
             enemyRespawners.Add(enemy);
     }
 
+    /// <summary>
+    /// Load the game after the UI is ready.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator LoadGameAfterUIIsReady()
     {
         //Wait until UIHandler.instance != null 

@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 /// <summary>
 /// Manages the health system for a game object, including taking damage and temporary invincibility.
@@ -12,9 +10,6 @@ public class HealthSystem : MonoBehaviour
     /// <summary>
     /// The initial amount of health the object starts with.
     /// </summary>
-    
-    
-    
     [SerializeField] public float startingHealth = 100;
 
     [SerializeField] private EnemyHealthBar enemyHealthBar;
@@ -26,7 +21,7 @@ public class HealthSystem : MonoBehaviour
     [SerializeField] private Animator anim;
     [SerializeField] private bool isPlayer = false;
 
-    //zum Awake wird current = starting gesetzt
+    // On Awake, set current health to starting health
 
     /// <summary>
     /// The duration for which the object is invincible after taking damage.
@@ -50,13 +45,12 @@ public class HealthSystem : MonoBehaviour
     // Flags for damage over time
     private bool isOnFire = false;
 
-
-    //Respawn variables
+    // Respawn variables
     public bool isDead;
     public float respawnHealth;
     private float deathMessageDuration = 3f;
 
-    //Death Messages
+    // Death Messages
     private string[] deathMessages =
     {
         "Your torment is far from over.",
@@ -76,10 +70,9 @@ public class HealthSystem : MonoBehaviour
     private void Awake()
     {
         currentHealth = startingHealth;
-        respawnHealth = startingHealth; //To avoid null-pointers
+        respawnHealth = startingHealth; // To avoid null-pointers
         anim = GetComponent<Animator>();
         enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
-
     }
 
     /// <summary>
@@ -119,7 +112,7 @@ public class HealthSystem : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Rufe die Logik auf, wenn eine neue Szene geladen wurde
+        // Call the logic when a new scene is loaded
         if (this != null)
         {
             this.UpdateHealthUI();
@@ -132,9 +125,11 @@ public class HealthSystem : MonoBehaviour
 
     /// <summary>
     /// Reduces the current health by the specified damage amount and handles invincibility and death.
-    /// Pass in the PlayerMovement or EnemyController script to disable movement on death. 
+    /// Pass in the PlayerMovement or EnemyController script to disable movement on death.
     /// </summary>
     /// <param name="damage">The amount of damage to take.</param>
+    /// <param name="playerMovement">The PlayerMovement script to disable on death.</param>
+    /// <param name="enemyController">The EnemyController script to disable on death.</param>
     public void TakeDamage(float damage, PlayerMovement playerMovement = null, EnemyController enemyController = null)
     {
         // not needed anymore, since player and enemies don't need a cooldown time
@@ -150,12 +145,10 @@ public class HealthSystem : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
         if (currentHealth > 0)
         {
-            // Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
             anim.SetTrigger("hurt");
             if (isPlayer)
             {
                 UpdateHealthUI();
-                //UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
             }
             if (!isPlayer)
             {
@@ -176,6 +169,7 @@ public class HealthSystem : MonoBehaviour
     /// <summary>
     /// Increases the current health by the specified health amount and updates the health UI.
     /// </summary>
+    /// <param name="healthAmount">The amount of health to add.</param>
     public void AddHealth(float healthAmount)
     {
         currentHealth = Mathf.Clamp(currentHealth + healthAmount, 0, startingHealth);
@@ -184,14 +178,14 @@ public class HealthSystem : MonoBehaviour
         UpdateHealthUI();
     }
 
-    #region Death funtionality
+    #region Death functionality
 
     /// <summary>
     /// Kills the player or enemy, disabling their movement and triggering the death animation.
     /// If Enemy is killed, loot is spawned.
     /// </summary>
-    /// <param name="playerMovement"></param>
-    /// <param name="enemyController"></param>
+    /// <param name="playerMovement">The PlayerMovement script to disable on death.</param>
+    /// <param name="enemyController">The EnemyController script to disable on death.</param>
     private void Die(PlayerMovement playerMovement = null, EnemyController enemyController = null)
     {
         if (!isDead)
@@ -199,9 +193,6 @@ public class HealthSystem : MonoBehaviour
             Debug.Log("Player/Enemy died");
 
             anim.SetTrigger("die");
-
-            //Show death message
-            // DeathUIManager.Instance.ShowDeathMessage("You are not worthy to go any further.", 3f);
 
             if (playerMovement != null)
             {
@@ -216,9 +207,7 @@ public class HealthSystem : MonoBehaviour
                 {
                     foreach (var enemy in enemyObject)
                     {
-                        //print("we da champs");
                         enemy.GetComponent<HealthSystem>().ResetEnemySliderToFullHealth();
-                        // enemy.ResetEnemySliderToFullHealth();
                     }
                 }
                 else
@@ -233,14 +222,13 @@ public class HealthSystem : MonoBehaviour
                 //StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
                 StartCoroutine(HandleEnemyDeath(anim, enemyController, 0.4f));
                 // enemyController.SpawnLoot();
-
             }
             isDead = true;
         }
     }
     #endregion
 
-    // Coroutine to Respawnen the player
+    // Coroutine to respawn the player
     private IEnumerator RespawnPlayer(PlayerMovement playerMovement)
     {
         //Wait for death animation
@@ -265,7 +253,7 @@ public class HealthSystem : MonoBehaviour
         isDead = false;
     }
 
-    // Coroutine to Respawnen the enemies
+    // Coroutine to handle enemy death
     private IEnumerator HandleEnemyDeath(Animator anim, EnemyController enemyController, float animDuration)
     {
         // Wait for death animation
@@ -278,6 +266,10 @@ public class HealthSystem : MonoBehaviour
         enemyController.OnDeath();
     }
 
+    /// <summary>
+    /// Respawns the enemy at the initial position.
+    /// </summary>
+    /// <param name="initialPosition">The initial position to respawn the enemy.</param>
     public void RespawnEnemy(Vector3 initialPosition)
     {
         // Reset values
@@ -314,15 +306,12 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
-
-
     /// <summary>
-    /// Applies fire damage over time. Is not primary damage
+    /// Applies fire damage over time. Is not primary damage.
     /// </summary>
     /// <param name="damagePerTick">Damage dealt per tick.</param>
     /// <param name="duration">Total duration of the effect.</param>
     /// <param name="tickInterval">Time between damage ticks.</param>
-
     public void ApplyFireDamage(float damagePerTick, float duration, float tickInterval)
     {
         if (!isOnFire)
@@ -332,8 +321,7 @@ public class HealthSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Handles the fire damage over time effect. Is only there for fire damage, doesn't deal
-    /// primary damage.
+    /// Handles the fire damage over time effect. Is only there for fire damage, doesn't deal primary damage.
     /// </summary>
     private IEnumerator FireDamageCoroutine(float damagePerTick, float duration, float tickInterval)
     {
@@ -352,6 +340,9 @@ public class HealthSystem : MonoBehaviour
         Debug.Log("Fire damage effect ended.");
     }
 
+    /// <summary>
+    /// Updates the health UI.
+    /// </summary>
     public void UpdateHealthUI()
     {
         if (isPlayer && UIHandler.instance != null)
@@ -360,6 +351,9 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resets the enemy health slider to full health.
+    /// </summary>
     public void ResetEnemySliderToFullHealth()
     {
         enemyHealthBar.slider.value = startingHealth;

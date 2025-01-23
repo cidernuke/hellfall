@@ -32,6 +32,9 @@ public class Boss : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Flips the boss sprite to face the player.
+	/// </summary>
 	public void LookAtPlayer(Transform player)
 	{
 		Vector3 flipped = transform.localScale;
@@ -68,6 +71,9 @@ public class Boss : MonoBehaviour
 		return 0;
 	}
 
+	/// <summary>
+	/// Finds the index of the active projectile in the array.
+	/// </summary>
 	private int FindActiveProjectile()
 	{
 		for (int i = 0; i < projectilesForward.Length; i++)
@@ -194,11 +200,17 @@ public class Boss : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Called by the HealthSystem when the boss dies.
+	/// </summary>
 	public void OnDeath()
 	{
 		gameObject.SetActive(false);
 	}
 
+	/// <summary>
+	/// Prints a message to the console.
+	/// </summary>
 	public void PrinterForBossRun(string message)
 	{
 		print(message);

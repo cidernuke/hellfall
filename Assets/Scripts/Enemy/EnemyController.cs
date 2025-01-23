@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +14,6 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float colliderDistance;
     [SerializeField] private BoxCollider2D boxCollider;
 
-
     [Header("Player Layer")]
     [SerializeField] private LayerMask playerLayer;
     private float cooldownTimer = Mathf.Infinity;
@@ -31,26 +28,21 @@ public class EnemyController : MonoBehaviour
     private PlayerMovement playerMovement;
     public HealthSystem healthSystem;
 
-    //Respawn variables
+    // Respawn variables
     private Vector3 initialPosition;
-    // private HealthSystem enemyHealthSystem;
     private bool isDead = false;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
-        // playerHealth = GetComponent<HealthSystem>();
         playerHealth = GameObject.Find("Player").GetComponent<PlayerController>().healthSystem;
-        // playerMovement = GetComponent<PlayerMovement>();
         playerMovement = GameObject.Find("Player").GetComponent<PlayerController>().playerMovementSystem;
         healthSystem = GetComponent<HealthSystem>();
 
-        // enemyHealthSystem = GetComponent<HealthSystem>();
-
         if (healthSystem == null)
         {
-            Debug.LogError("HealthSystem-Komponente nicht am Enemy gefunden.");
+            Debug.LogError("HealthSystem component not found on Enemy.");
         }
 
         initialPosition = transform.position;
@@ -60,25 +52,24 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("GameManager.Instance ist null, Enemy kann nicht registriert werden.");
+            Debug.LogError("GameManager.Instance is null, Enemy cannot be registered.");
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Increments the Cooldown-Timer for the time that past since the last frame
+        // Increments the cooldown timer for the time that passed since the last frame
         cooldownTimer += Time.deltaTime;
 
-        // Only Attacks if Player is in Sight
+        // Only attacks if player is in sight
         if (PlayerInSight())
         {
-            // Checks if Cooldown Timer has expired
+            // Checks if cooldown timer has expired
             if (cooldownTimer >= attackCooldown)
             {
                 cooldownTimer = 0;
                 anim.SetTrigger("meleeAttack");
-
             }
         }
 
@@ -86,16 +77,14 @@ public class EnemyController : MonoBehaviour
         {
             enemyPatrol.enabled = !PlayerInSight();
         }
-
     }
-    /*
-    * --PlayerInSight()-- 
-    * Performs a BoxCast to check if player is in reach. 
-    * @return true, if player is in reach, if not false.
-    **/
+
+    /// <summary>
+    ///Performs a BoxCast to check if player is in reach.
+    ///@return true if player is in reach, otherwise false.
+    /// </summary>
     private bool PlayerInSight()
     {
-
         RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
             new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y * height, boxCollider.bounds.size.z),
             0, Vector2.left, 0, playerLayer);
@@ -110,16 +99,15 @@ public class EnemyController : MonoBehaviour
                 return false;
             }
 
-            //abrufen des PlayerMovemnt objektes wenn der Spieler in Sicht ist
+            // Retrieve the PlayerMovement object when the player is in sight
             playerMovement = hit.transform.GetComponent<PlayerMovement>();
         }
         return hit.collider != null;
     }
 
-    /*
-    * --OnDrawGizmos()--
-    * Draws a Boxmodel to visualize the area of the BoxCast
-    **/
+    /// <summary>
+    ///Draws a box model to visualize the area of the BoxCast
+    /// </summary>
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -127,23 +115,21 @@ public class EnemyController : MonoBehaviour
             new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y * height, boxCollider.bounds.size.z));
     }
 
-    /*
-    * --DamagePlayer()--
-    * If Player is in Sight, the Player takes damage.
-    **/
+    /// <summary>
+    ///If player is in sight, the player takes damage.
+    ///</summary>
     private void DamagePlayer()
     {
         if (PlayerInSight())
         {
-
             playerHealth.TakeDamage(damage, playerMovement);
         }
     }
-    /// <summary>
-    /// Spawns loot items from the loot table.
-    /// If the random number is less than the drop chance, the item is spawned.
-    /// </summary>
 
+    /// <summary>
+    ///Spawns loot items from the loot table.
+    ///If the random number is less than the drop chance, the item is spawned.
+    ///</summary>
     public void SpawnLoot()
     {
         foreach (LootItem lootItem in lootTable)
@@ -156,11 +142,18 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///  Gets the initial position of the enemy.
+    ///  </summary>
+    /// <returns>The initial position of the enemy.</returns>
     public Vector3 GetInitialPosition()
     {
         return initialPosition;
     }
 
+    /// <summary>
+    ///Handles the enemy's death.
+    ///</summary>
     public void OnDeath()
     {
         isDead = true;

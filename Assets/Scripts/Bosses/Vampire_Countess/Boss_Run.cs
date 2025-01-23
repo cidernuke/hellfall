@@ -10,6 +10,9 @@ public class Boss_Run : StateMachineBehaviour
     Boss boss;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+    /// <summary>
+    /// This function initializes the player, rigidbody and boss
+    /// </summary>
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;

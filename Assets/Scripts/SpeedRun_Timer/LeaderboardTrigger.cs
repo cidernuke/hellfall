@@ -7,16 +7,20 @@ public class LeaderboardTrigger : MonoBehaviour
 
     private bool triggered = false;
 
+    /// <summary>
+    /// Called when another collider enters the trigger collider attached to this object (2D physics only).
+    /// </summary>
+    /// <param name="collision">The other Collider2D involved in this collision.</param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!triggered && collision.CompareTag("Player"))
         {
             triggered = true;
 
-            // Timer stoppen, Zeit abholen
+            // Stop timer, get time
             float finalTime = TimerSystem.Instance.StopTimer(levelName);
 
-            // Leaderboard anzeigen
+            // Show leaderboard
             if (leaderboardUI != null)
             {
                 leaderboardUI.ShowLeaderboard(finalTime);
@@ -25,9 +29,6 @@ public class LeaderboardTrigger : MonoBehaviour
             {
                 Debug.LogWarning("LeaderboardTrigger: leaderboardUI not assigned!");
             }
-
-            //TimerSystem.Instance.AddLeaderboardEntry(levelName, finalTime, enteredName);
-
         }
     }
 }

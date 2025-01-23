@@ -6,6 +6,9 @@ public class ItemRespawner : MonoBehaviour
     private Quaternion initialRotation;
     public bool isCollected = false;
 
+    /// <summary>
+    /// Registers the item in the GameManager.
+    /// </summary>
     private void Start()
     {
         initialPosition = transform.position;
@@ -16,16 +19,22 @@ public class ItemRespawner : MonoBehaviour
         }
         else
         {
-            Debug.LogError("GameManager.Instance ist null, Item kann nicht registriert werden.");
+            Debug.LogError("GameManager.Instance is null, item can't be registered.");
         }
     }
 
+    /// <summary>
+    /// Collects the item.
+    /// </summary>
     public void CollectItem()
     {
         isCollected = true;
         gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Respawns the item.
+    /// </summary>
     public void RespawnItem()
     {
         //if the item is a weapon it doesn't respawn
@@ -44,7 +53,7 @@ public class ItemRespawner : MonoBehaviour
         }
         else
         {
-            print("Item nicht collected, nichts zu respawnen: " + gameObject.name);
+            print("Item not collected, nothing to respawn: " + gameObject.name);
         }
     }
 }

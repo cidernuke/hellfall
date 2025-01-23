@@ -1,12 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// Holds the data for an item in the game.
 /// </summary>     
-
 [CreateAssetMenu(fileName = "New Item Data", menuName = "Inventory System/Items")]
 public class ItemData : ScriptableObject
 {
@@ -24,8 +20,6 @@ public class ItemData : ScriptableObject
 
     [Header("Weapon Item")]
     public WeaponStats weaponStats;
-
-
 }
 
 public enum ItemType
@@ -33,7 +27,7 @@ public enum ItemType
     ModifierItem,
     HealthItem,
     WeaponItem,
-    // Weitere Item-Typen können hier hinzugefügt werden
+    // More Item-types can be added here
     ShortRangeWeapon,
 
     LongRangeWeapon

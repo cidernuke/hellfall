@@ -1,4 +1,3 @@
-using PlasticGui.WorkspaceWindow;
 using UnityEngine;
 
 public class AltarHandler : MonoBehaviour

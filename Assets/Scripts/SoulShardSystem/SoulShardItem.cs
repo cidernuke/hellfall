@@ -5,7 +5,6 @@ using UnityEngine;
 /// </summary>
 public class SoulShardItem : MonoBehaviour
 {    
-    
     /// <summary>
     /// Method that is called when the player collides with the soul shard.
     /// The player's soul shard count is increased by one and the soul shard is destroyed.

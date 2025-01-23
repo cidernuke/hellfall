@@ -52,10 +52,8 @@ public class PlayerAttack : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
-        //playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().playerMovementSystem;
         enemyController = GetComponent<EnemyController>();
         enemyHealth = GetComponent<HealthSystem>();
-        //enemyHealth = enemyController.healthSystem;
         playerController = GetComponent<PlayerController>();
         
     }

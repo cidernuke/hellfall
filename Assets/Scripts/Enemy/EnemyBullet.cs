@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -7,12 +5,18 @@ public class Bullet : MonoBehaviour
     public float speed;
     [SerializeField] private int damageAmount = 5;
 
-    // Update is called once per frame
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
     void Update()
     {
         transform.Translate(Vector2.up * speed * Time.deltaTime);
     }
 
+    /// <summary>
+    /// Called when another collider enters the trigger collider attached to the object where this script is attached.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))

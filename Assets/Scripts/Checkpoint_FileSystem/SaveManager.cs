@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 public class SaveManager : MonoBehaviour
 {
-    // Singleton-Pattern
+    // Singleton pattern
     public static SaveManager Instance;
 
     // Path to the save file
@@ -18,12 +18,12 @@ public class SaveManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton-Implementierung
+        // Singleton implementation
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            print("SaveManager initialisiert");
+            print("SaveManager initialized");
         }
         else
         {
@@ -31,22 +31,33 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set the path to the save file
+    /// </summary>
     private void Start()
     {
         saveFilePath = Application.persistentDataPath + "/savegame.dat";
     }
 
-    // Method to save the game
+    /// <summary>
+    /// Save the game
+    /// </summary>
+    /// <param name="playerMovement"></param>
+    /// <param name="healthSystem"></param>
+    /// <param name="soulShardSystem"></param>
+    /// <param name="inventorySystem"></param>
+    /// <param name="keySystem"></param>
+    /// <param name="playerController"></param>
     public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, KeySystem keySystem, PlayerController playerController)
     {
         print("Saving Game");
 
-        // //Load existing GameData
+        // Load existing GameData
         GameData existingData = LoadGameData();
         if (existingData == null)
             existingData = new GameData(); // in case there is none
 
-        // Create new PlayerData-Object
+        // Create new PlayerData object
         PlayerData playerData = new PlayerData(
             healthSystem,
             playerMovement.GetLastCheckpointID(),
@@ -56,58 +67,49 @@ public class SaveManager : MonoBehaviour
             playerController
         );
 
-        //Merge existingData with PlayerData
+        // Merge existingData with PlayerData
         existingData.playerData = playerData;
 
-        // // 4) Bestzeiten + Zwischenzeiten vom TimerSystem (nur wenn du sie dort verwaltest)
-        // existingData.bestLevelTimes = TimerSystem.Instance.GetAllBestTimes();
+        // Best times are saved in the TimerSystem
         existingData.currentLevelTimes = TimerSystem.Instance.GetAllCurrentTimes();
 
-        // Creates GameData and adds PlayerData
-        // GameData gameData = new GameData
-        // {
-        //     playerData = playerData
-        // };
-
         // Serialize GameData to JSON
-        //string json = JsonUtility.ToJson(gameData);
         string json = JsonUtility.ToJson(existingData);
 
         // Write JSON into file
         File.WriteAllText(saveFilePath, json);
 
-        //Check if the file was written and the integrity
+        // Check if the file was written and the integrity
         if (File.Exists(saveFilePath))
         {
             string writtenContent = File.ReadAllText(saveFilePath);
             if (writtenContent == json)
             {
-                print("Das Spiel wurde erfolgreich gespeichert und überprüft.");
+                print("The game was saved successfully and verified.");
             }
             else
             {
-                print("Der Dateiinhalt stimmt nicht mit dem erwarteten Inhalt überein.");
+                print("The file content does not match the expected content.");
             }
         }
         else
         {
-            print("Das Spiel wurde nicht gespeichert.");
+            print("The game was not saved.");
         }
     }
 
     /// <summary>
-    /// Diese Methode wird vom TimerSystem oder anderen Klassen aufgerufen,
-    /// um TEIL-Bereiche von GameData zu ändern (z.B. nur Bestzeiten).
+    /// This method is called by the TimerSystem or other classes to change PARTS of GameData (e.g., only best times).
     /// </summary>
     public void SaveGameData(GameData partialData)
     {
-        // 1) Vorhandene Daten laden
+        // 1) Load existing data
         GameData existingData = LoadGameData();
         if (existingData == null)
             existingData = new GameData();
 
-        // 2) Nur die Felder überschreiben, die in partialData != null sind
-        // (So wird nichts gelöscht, was du nicht aktualisieren willst.)
+        // 2) Only overwrite fields that are not null in partialData
+        // (This way, nothing is deleted that you don't want to update.)
         if (partialData.playerData != null)
             existingData.playerData = partialData.playerData;
 
@@ -117,22 +119,30 @@ public class SaveManager : MonoBehaviour
         if (partialData.currentLevelTimes != null)
             existingData.currentLevelTimes = partialData.currentLevelTimes;
 
-        // Optional: Weitere Felder in GameData hier ergänzen, falls vorhanden.
+        // Optional: Add more fields in GameData here if available.
 
-        // 3) Jetzt alles wieder speichern
+        // 3) Save everything again
         string json = JsonUtility.ToJson(existingData);
         File.WriteAllText(saveFilePath, json);
 
-        Debug.Log("SaveGameData: Teil-Daten übernommen und gespeichert unter: " + saveFilePath);
+        Debug.Log("SaveGameData: Partial data adopted and saved under: " + saveFilePath);
     }
 
-    // Methoad to load old game
+    /// <summary>
+    /// Load the game
+    /// </summary>
+    /// <param name="playerMovement"></param>
+    /// <param name="healthSystem"></param>
+    /// <param name="soulShardSystem"></param>
+    /// <param name="inventorySystem"></param>
+    /// <param name="keySystem"></param>
+    /// <param name="playerController"></param>
     public void LoadGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, KeySystem keySystem, PlayerController playerController)
     {
         GameData gameData = LoadGameData();
         if (gameData != null)
         {
-            // Anwenden der geladenen Daten
+            // Apply loaded data
             ApplyLoadedData(gameData, playerMovement, healthSystem, soulShardSystem, inventorySystem, keySystem, playerController);
 
             if (gameData.bestLevelTimes != null)
@@ -143,31 +153,39 @@ public class SaveManager : MonoBehaviour
             {
                 TimerSystem.Instance.SetAllCurrentTimes(gameData.currentLevelTimes);
             }
-            Debug.Log("Spiel geladen.");
+            Debug.Log("Game loaded.");
         }
         else
         {
-            Debug.LogWarning("Keine Speicherdatei gefunden.");
+            Debug.LogWarning("No save file found.");
         }
     }
 
+    /// <summary>
+    /// Apply loaded data to the game
+    /// </summary>
+    /// <param name="gameData"></param>
+    /// <param name="playerMovement"></param>
+    /// <param name="healthSystem"></param>
+    /// <param name="soulShardSystem"></param>
+    /// <param name="inventorySystem"></param>
+    /// <param name="keySystem"></param>
+    /// <param name="playerController"></param>
     private void ApplyLoadedData(GameData gameData, PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, KeySystem keySystem, PlayerController playerController)
     {
         PlayerData data = gameData.playerData;
 
         // Reset Health
         healthSystem.currentHealth = data.currentHealth;
-
         healthSystem.respawnHealth = data.respawnHealth;
 
         // Set SoulShards
         soulShardSystem.SetSoulShardCount(data.soulShardCount);
 
-        //Set KeyCounter
+        // Set KeyCounter
         keySystem.SetKeyCount(data.keyCounter);
 
-
-        //Set Items
+        // Set Items
         for (int i = 0; i < inventorySystem.slots.Length; i++)
         {
             string itemName = data.collectedItemNames[i];
@@ -181,19 +199,19 @@ public class SaveManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("ItemData für " + itemName + " nicht gefunden.");
-                    //Game keeps running but with empty slot
+                    Debug.LogWarning("ItemData for " + itemName + " not found.");
+                    // Game keeps running but with empty slot
                     inventorySystem.slots[i].storedItem = null;
                 }
             }
             else
             {
-                // Leeren Slot sicherstellen
+                // Ensure empty slot
                 inventorySystem.slots[i].storedItem = null;
             }
         }
 
-        // Findes checkpoint with the saved ID und set the player position
+        // Find checkpoint with the saved ID and set the player position
         Checkpoint[] checkpoints = FindObjectsOfType<Checkpoint>();
         foreach (var checkpoint in checkpoints)
         {
@@ -224,11 +242,10 @@ public class SaveManager : MonoBehaviour
         newPlayerStats.rangedCooldown.SetModifier(loadedPlayerStats["rangedCooldownMod"]);
         newPlayerStats.rangedRange.SetBaseValue(loadedPlayerStats["rangedRangeBase"]);
         newPlayerStats.rangedRange.SetModifier(loadedPlayerStats["rangedRangeMod"]);
-
     }
 
     /// <summary>
-    /// Liefert lediglich die PlayerData zurück
+    /// Returns only the PlayerData
     /// </summary>
     public PlayerData LoadPlayerData()
     {
@@ -243,6 +260,9 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Load the game data
+    /// </summary>
     public GameData LoadGameData()
     {
         if (File.Exists(saveFilePath))
@@ -253,93 +273,34 @@ public class SaveManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Keine Speicherdatei gefunden.");
+            Debug.LogWarning("No save file found.");
             return null;
         }
     }
 
     /// <summary>
-    /// Laden der GameData als Objekt
+    /// Load the scene from the save file
     /// </summary>
     public void LoadSceneFromSave()
     {
         PlayerData data = LoadPlayerData();
         if (data == null)
         {
-            Debug.LogWarning("Keine Speicherdatei gefunden oder Daten null.");
+            Debug.LogWarning("No save file found or data is null.");
             return;
         }
 
-        // SzeneName aus PlayerData auslesen
+        // Read scene name from PlayerData
         string sceneName = data.lastSceneName;
         if (string.IsNullOrEmpty(sceneName))
         {
-            Debug.LogWarning("lastSceneName im Save ist leer. Lade keine Szene.");
+            Debug.LogWarning("lastSceneName in the save is empty. Not loading any scene.");
             return;
         }
 
         isLoadingFromSave = true;
 
-        // Lade die gespeicherte Szene
+        // Load the saved scene
         SceneManager.LoadScene(sceneName);
     }
 }
-
-
-
-
-// // Method to save the game
-// public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem)
-// {
-//     print("Saving Game");
-
-//     // //Load existing GameData
-//     // GameData existingData = LoadGameData();
-//     // if (existingData == null)
-//     //     existingData = new GameData(); // in case there is none
-
-//     // Create new PlayerData-Object
-//     PlayerData playerData = new PlayerData(
-//         healthSystem,
-//         playerMovement.GetLastCheckpointID(),
-//         soulShardSystem,
-//         inventorySystem
-//     );
-
-//     //Merge existingData with PlayerData
-//     // existingData.playerData = playerData;
-
-//     // // 4) Bestzeiten + Zwischenzeiten vom TimerSystem (nur wenn du sie dort verwaltest)
-//     // existingData.bestLevelTimes = TimerSystem.Instance.GetAllBestTimes();
-//     // existingData.currentLevelTimes = TimerSystem.Instance.GetAllCurrentTimes();
-
-//     // Creates GameData and adds PlayerData
-//     GameData gameData = new GameData
-//     {
-//         playerData = playerData
-//     };
-
-//     // Serialize GameData to JSON
-//     string json = JsonUtility.ToJson(gameData);
-
-//     // Write JSON into file
-//     File.WriteAllText(saveFilePath, json);
-
-//     //Check if the file was written and the integrity
-//     if (File.Exists(saveFilePath))
-//     {
-//         string writtenContent = File.ReadAllText(saveFilePath);
-//         if (writtenContent == json)
-//         {
-//             print("Das Spiel wurde erfolgreich gespeichert und überprüft.");
-//         }
-//         else
-//         {
-//             print("Der Dateiinhalt stimmt nicht mit dem erwarteten Inhalt überein.");
-//         }
-//     }
-//     else
-//     {
-//         print("Das Spiel wurde nicht gespeichert.");
-//     }
-// }

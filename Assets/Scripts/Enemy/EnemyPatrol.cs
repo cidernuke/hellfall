@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyPatrol : MonoBehaviour
@@ -56,6 +53,9 @@ public class EnemyPatrol : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Changes the direction of the enemy's movement.
+    /// </summary>
     private void DirectionChange()
     {
         anim.SetBool("moving", false);
@@ -71,23 +71,34 @@ public class EnemyPatrol : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Initializes the enemy's initial scale.
+    /// </summary>
     private void Awake()
     {
         initScale = enemy.localScale;
     }
     
+    /// <summary>
+    /// Disables the enemy's movement animation.
+    /// </summary>
     private void OnDisable()
     {
         anim.SetBool("moving", false);
     }
+
+    /// <summary>
+    /// Moves the enemy in the specified direction.
+    /// </summary>
+    /// <param name="_direction">The direction to move the enemy in.</param>
     private void MoveInDirection(int _direction)
     {
         idleTimer = 0;
         anim.SetBool("moving", true);
-        //Make enemy face direction
+        // Make enemy face direction
         enemy.localScale = new Vector3(Mathf.Abs(initScale.x) * _direction, initScale.y, initScale.z);
 
-        //Move in that direction
+        // Move in that direction
         enemy.position = new Vector3(enemy.position.x + Time.deltaTime * _direction * speed, enemy.position.y, enemy.position.z);
 
     }

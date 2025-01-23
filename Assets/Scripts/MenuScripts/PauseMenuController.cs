@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,7 +16,9 @@ public class PauseMenuController : MonoBehaviour
     [Header("MainMenu")]
     public string _mainMenu;
 
-    // Checks for input during every frame
+    /// <summary>
+    /// Checks for input during every frame and toggles the pause status when the Escape key is pressed.
+    /// </summary>
     private void Update()
     {        
         
@@ -39,7 +39,9 @@ public class PauseMenuController : MonoBehaviour
         }
     }
 
-    // Activates the pause menu
+    /// <summary>
+    /// Activates the pause menu, pauses the game, and handles UI and audio adjustments.
+    /// </summary>
     void ActivateMenu()
     {
         Time.timeScale = 0; // Pause the game by stopping time
@@ -73,7 +75,9 @@ public class PauseMenuController : MonoBehaviour
         }
     }
 
-    // Deactivates the pause menu
+    /// <summary>
+    /// Deactivates the pause menu, resumes the game, and handles UI and audio adjustments.
+    /// </summary>
     public void DeactivateMenu()
     {
         Time.timeScale = 1; // Resume the game by resuming time
@@ -96,23 +100,26 @@ public class PauseMenuController : MonoBehaviour
         }
     }
 
-    // On confirming, load the main menu scene
+    /// <summary>
+    /// Loads the main menu scene and deactivates the pause menu.
+    /// </summary>
     public void LoadMainMenuYes()
     {
         SceneManager.LoadScene(_mainMenu); // Replace with the actual name of the main menu scene
         DeactivateMenu();
     }
 
+    /// <summary>
+    /// Respawns the player and resets the health of all enemies.
+    /// </summary>
     public void RespawnYes()
     {
         GameManager.Instance.RespawnPlayer();
-        // DeactivateMenu();
         var enemyObject = GameObject.FindGameObjectsWithTag("Enemy");
         if (enemyObject != null)
         {
             foreach (var enemy in enemyObject)
             {
-                //print("we da champs");
                 enemy.GetComponent<HealthSystem>().ResetEnemySliderToFullHealth();
             }
             DeactivateMenu();

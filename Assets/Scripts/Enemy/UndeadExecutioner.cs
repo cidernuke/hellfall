@@ -83,6 +83,10 @@ public class UndeadExecutioner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks if the player is within the detection range.
+    /// </summary>
+    /// <returns>True if the player is in sight, otherwise false.</returns>
     private bool PlayerInSight()
     {
         Collider2D hit = Physics2D.OverlapCircle(transform.position, detectionRange, playerLayer);
@@ -97,6 +101,9 @@ public class UndeadExecutioner : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Makes the boss follow the player.
+    /// </summary>
     private void FollowPlayer()
     {
         if (playerTransform == null) return;
@@ -123,6 +130,9 @@ public class UndeadExecutioner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Stops the boss from following the player and starts summoning mini-enemies.
+    /// </summary>
     private void StopFollowingAndSummon()
     {
         // Stop the boss's movement
@@ -136,13 +146,16 @@ public class UndeadExecutioner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resumes following the player.
+    /// </summary>
     private void ResumeFollowingPlayer()
     {
         // Resume following the player
         isFollowingPlayer = true;
         moveSpeed = 2f; // You can set this to the desired speed
 
-        // Optional: Flip to face the player if needed
+        // Flip to face the player if needed
         if (playerTransform.position.x > transform.position.x && !facingRight)
         {
             Flip();
@@ -153,6 +166,9 @@ public class UndeadExecutioner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Flips the boss's sprite to face the opposite direction.
+    /// </summary>
     private void Flip()
     {
         facingRight = !facingRight;
@@ -161,6 +177,9 @@ public class UndeadExecutioner : MonoBehaviour
         transform.localScale = localScale;
     }
 
+    /// <summary>
+    /// Summons mini-enemies at predefined points.
+    /// </summary>
     private void SummonMiniEnemies()
     {
         anim.SetTrigger("Summon");
@@ -190,6 +209,10 @@ public class UndeadExecutioner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Respawns a mini-enemy at a random spawn point.
+    /// </summary>
+    /// <param name="deadMiniEnemy">The mini-enemy that died.</param>
     private void RespawnMiniEnemy(GameObject deadMiniEnemy)
     {
         // Remove the dead mini enemy from the list and destroy it
@@ -217,6 +240,9 @@ public class UndeadExecutioner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Uses the boss's healing skill.
+    /// </summary>
     public void UseSkill1()
     {
         if (isDead) return;
@@ -228,6 +254,9 @@ public class UndeadExecutioner : MonoBehaviour
         Debug.Log($"Boss healed by {healAmount}, current health: {healthSystem.currentHealth}");
     }
 
+    /// <summary>
+    /// Handles the boss's death.
+    /// </summary>
     private void HandleDeath()
     {
         //if (isDead) return; // Ensure death logic is only triggered once
@@ -267,6 +296,9 @@ public class UndeadExecutioner : MonoBehaviour
     }**/
 
 
+    /// <summary>
+    /// Periodically heals the boss.
+    /// </summary>
     private IEnumerator HealPeriodically()
     {
         while (!isDead)
@@ -279,6 +311,9 @@ public class UndeadExecutioner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Periodically checks for dead mini-enemies and respawns them.
+    /// </summary>
     private IEnumerator CheckForDeadMiniEnemies()
     {
         while (!isDead)
@@ -298,6 +333,9 @@ public class UndeadExecutioner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Draws gizmos in the editor to visualize the detection range.
+    /// </summary>
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

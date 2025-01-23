@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ItemSystem.Abstract;
@@ -8,34 +7,32 @@ using UnityEngine.SceneManagement; // Add this line to include the namespace whe
 
 public class InventorySystem : MonoBehaviour
 {
-    // Singleton-Instance
+    // Singleton instance
     public static InventorySystem Instance { get; private set; }
     public InventorySlot[] slots;
     //[SerializeField] protected UIDocument uiDocument;
     protected VisualElement root;
 
-
-    // Dynamische Felder
+    // Dynamic fields
     private UIDocument uiDocument;
     private GameObject player;
     private PlayerMovement playerMov;
-    public HealthSystem playerHealth;  // public, damit GameManager sie überschreiben kann
+    public HealthSystem playerHealth;  // public so that GameManager can override it
     private GameObject playerSpeech;
     private SpriteRenderer playerSpeechSpriteRenderer;
 
-    //Flaga
-
+    // Flag
     private bool isLoaded = false;
 
-    //New Singleton-implementation
+    // New Singleton implementation
     private void Awake()
     {
-        // Kurzzeit-Lösung: Destroy-Duplicate-Check
+        // Temporary solution: Destroy duplicate check
         if (Instance != null && Instance != this)
         {
             Debug.LogWarning($"Duplicate InventorySystem found on {gameObject.name}. Destroying it.");
             Destroy(gameObject);
-            return; // Wichtig: Hier abbrechen, damit der Rest von Awake nicht mehr ausgeführt wird.
+            return; // Important: Abort here so that the rest of Awake is not executed.
         }
 
         Instance = this;
@@ -44,40 +41,40 @@ public class InventorySystem : MonoBehaviour
 
     private void OnEnable()
     {
-        // Bei jedem Szenenwechsel "OnSceneLoaded" aufrufen
+        // Call "OnSceneLoaded" on every scene change
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
-        // Abmelden vom Event
+        // Unsubscribe from the event
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     void Start()
     {
         Debug.Log("Start");
-        // Sucht die Referenzen in der aktuellen Szene
+        // Search for references in the current scene
         SetupReferences();
     }
 
     /// <summary>
-    /// Wird jedes Mal aufgerufen, nachdem eine neue Szene geladen wurde.
+    /// Called every time a new scene is loaded.
     /// </summary>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log("Scene loaded: " + scene.name);
         isLoaded = true;
-        // Jedes Mal neu die Referenzen suchen
+        // Search for references again
         //SetupReferences();
     }
 
     /// <summary>
-    /// Sucht dynamisch den Player, HealthSystem, UI-Dokument etc. in der aktuellen Szene.
+    /// Dynamically searches for the player, HealthSystem, UI document, etc. in the current scene.
     /// </summary>
     public void SetupReferences()
     {
-        // 1) UI suchen
+        // 1) Search for UI
         uiDocument = FindObjectOfType<UIDocument>();
         if (uiDocument == null)
         {
@@ -85,7 +82,7 @@ public class InventorySystem : MonoBehaviour
             return;
         }
 
-        // root holen
+        // Get root
         root = uiDocument.rootVisualElement;
         if (root == null)
         {
@@ -93,9 +90,9 @@ public class InventorySystem : MonoBehaviour
             return;
         }
 
-        // 2) Slots anlegen/neu initialisieren
-        // Achtung: Falls du das nur EINMAL machen willst, solltest du erst checken,
-        // ob slots schon angelegt sind. Oder du löscht sie und legst sie neu an.
+        // 2) Create/initialize slots
+        // Warning: If you only want to do this ONCE, you should first check
+        // if slots are already created. Or you delete them and create them again.
 
         // slots = new InventorySlot[3];
         // for (int i = 0; i < slots.Length; i++)
@@ -109,25 +106,25 @@ public class InventorySystem : MonoBehaviour
         //     slots[i].Initialize(hotkey);
         // }
 
-        //Slots nicht neu zuweisen, sondern nur die UI-Elemente
+        // Do not reassign slots, only the UI elements
         if (slots == null || slots.Length == 0)
         {
             slots = new InventorySlot[5];
-            //For the 5 Itemslots "Hotkey1", "Hotkey2", "Hotkey3", Weapon1, Weapon2
+            // For the 5 item slots "Hotkey1", "Hotkey2", "Hotkey3", Weapon1, Weapon2
             for (int i = 0; i < 5; i++)
             {
                 slots[i] = new InventorySlot();
             }
         }
 
-        // Jetzt nur die UI-Elemente der Hotkeys neu suchen und binden
+        // Now only search and bind the UI elements of the hotkeys
         for (int i = 0; i < 3; i++)
         {
             var hotkey = root.Q<VisualElement>($"Hotkey{i + 1}Container");
             slots[i].Initialize(hotkey);
         }
 
-        // 3) Player suchen
+        // 3) Search for player
         var playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
@@ -147,10 +144,10 @@ public class InventorySystem : MonoBehaviour
             playerSpeechSpriteRenderer = playerSpeech.GetComponent<SpriteRenderer>();
         }
 
-        // 5) Initialize Weaponslots and add default weapons
+        // 5) Initialize weapon slots and add default weapons
 
-        //For Slots 4 and 5 which are weapon slots
-        //Get the Containers!
+        // For slots 4 and 5 which are weapon slots
+        // Get the containers!
         VisualElement shortRangeWeaponHotkey = root.Q<VisualElement>("Weapon1Container");
         if (shortRangeWeaponHotkey == null)
         {
@@ -162,38 +159,35 @@ public class InventorySystem : MonoBehaviour
             Debug.LogError("Could not find VisualElement with name Weapon2Container");
         }
 
-        //Initialisieren
+        // Initialize
         slots[3] = new InventorySlot();
         slots[3].Initialize(shortRangeWeaponHotkey);
 
         slots[4] = new InventorySlot();
         slots[4].Initialize(longRangeWeaponHotkey);
 
-        
-            //let player start with short (and to-do: long) range weapon 
-            try
-            {
-                ItemData basicSword = Resources.Load<ItemData>("ItemData/BasicSword");
-                //Debug.Log("Trying to create item instance: " + basicData.itemName + " " + basicData.itemType);
-                AddItemToFirstAvailableSlot(basicSword);
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError("Could not load ItemData/BasicSword");
-            }
+        // Let player start with short (and to-do: long) range weapon 
+        try
+        {
+            ItemData basicSword = Resources.Load<ItemData>("ItemData/BasicSword");
+            //Debug.Log("Trying to create item instance: " + basicData.itemName + " " + basicData.itemType);
+            AddItemToFirstAvailableSlot(basicSword);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Could not load ItemData/BasicSword");
+        }
 
-            try
-            {
-                ItemData basicLongRange = Resources.Load<ItemData>("ItemData/BasicLongRange");
-                //Debug.Log("Trying to create item instance: " + basicData.itemName + " " + basicData.itemType);
-                AddItemToFirstAvailableSlot(basicLongRange);
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError("Could not load ItemData/BasicLongRange");
-            }
-        
-
+        try
+        {
+            ItemData basicLongRange = Resources.Load<ItemData>("ItemData/BasicLongRange");
+            //Debug.Log("Trying to create item instance: " + basicData.itemName + " " + basicData.itemType);
+            AddItemToFirstAvailableSlot(basicLongRange);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Could not load ItemData/BasicLongRange");
+        }
     }
 
     void Update()
@@ -210,8 +204,6 @@ public class InventorySystem : MonoBehaviour
         {
             playerSpeechSpriteRenderer.flipX = false;
         }
-
-
     }
 
     /// <summary>
@@ -228,7 +220,7 @@ public class InventorySystem : MonoBehaviour
     /// </remarks>
     public bool AddItemToFirstAvailableSlot(ItemData itemData)
     {
-        //Check from Diego
+        // Check from Diego
         if (slots == null)
         {
             //Debug.LogError("Slots array is null.");
@@ -246,10 +238,10 @@ public class InventorySystem : MonoBehaviour
             return false;
         }
 
-        // Special Case for weapons
+        // Special case for weapons
         if (itemData.itemType == ItemType.ShortRangeWeapon)
         {
-            //check if the slot is empty, else return false so weapons don't get added to other slots
+            // Check if the slot is empty, else return false so weapons don't get added to other slots
             if (slots[3].storedItem == null)
             {
                 //Debug.Log("Weapon added to inventory");
@@ -265,10 +257,9 @@ public class InventorySystem : MonoBehaviour
 
         if (itemData.itemType == ItemType.LongRangeWeapon)
         {
-            //check if the slot is empty, else return false so weapons don't get added to other slots
+            // Check if the slot is empty, else return false so weapons don't get added to other slots
             if (slots[4].storedItem == null)
             {
-                //Debug.Log("Weapon added to inventory");
                 Item newItem = CreateItemInstance(itemData);
                 slots[4].StoreItem(newItem, itemData);
                 return true;
@@ -283,16 +274,15 @@ public class InventorySystem : MonoBehaviour
         {
             if (slots[i].storedItem == null)
             {
-                //Debug.Log($"Adding item {itemData.itemName} to the inventory.");
-                // calling method to set up instance
+                // Calling method to set up instance
                 Item newItem = CreateItemInstance(itemData);
-                // incase itemType isnt known, newItem is null
+                // In case itemType isn't known, newItem is null
                 if (newItem == null)
                 {
                     //Debug.LogError("Failed to create item instance.");
                     return false;
                 }
-                // pass the item-instance and itemData to the slot
+                // Pass the item instance and itemData to the slot
                 slots[i].StoreItem(newItem, itemData);
                 return true;
             }
@@ -300,7 +290,6 @@ public class InventorySystem : MonoBehaviour
         StartCoroutine(InvenotryFull());
         return false;
     }
-
 
     /// <summary>
     /// Drops the item from the specified slot at the given player position with an offset.
@@ -310,7 +299,7 @@ public class InventorySystem : MonoBehaviour
     /// <param name="dropOffset">The offset from the player's position where the item will be dropped.</param>
     public void DropItemFromSlot(int slotIndex, Vector3 playerPosition, Vector3 dropOffset)
     {
-        // drops item from the respective slot
+        // Drops item from the respective slot
         if (slotIndex >= 0 && slotIndex < slots.Length)
         {
             slots[slotIndex].DropItem(playerPosition, dropOffset);
@@ -346,19 +335,19 @@ public class InventorySystem : MonoBehaviour
             case ItemType.ModifierItem:
                 return new PowerUpItem(itemData.itemName, itemData.itemSprite);
 
-            //in this case, we need to pass the playerHealth to the HealthItem
-            //for the use method
+            // In this case, we need to pass the playerHealth to the HealthItem
+            // for the use method
             case ItemType.HealthItem:
                 var it = new HealthItem(itemData.itemName, itemData.itemSprite, itemData.healthAmount);
                 it.playerHealth = playerHealth;
                 return it;
             // Additional cases for other item types can be added here
 
-            //Short Range Weapon
+            // Short Range Weapon
             case ItemType.ShortRangeWeapon:
                 return new ShortRangeWeapon(itemData.itemName, itemData.itemSprite);
 
-            //Long Range Weapon
+            // Long Range Weapon
             case ItemType.LongRangeWeapon:
                 return new LongRangeWeapon(itemData.itemName, itemData.itemSprite);
             default:
@@ -366,7 +355,6 @@ public class InventorySystem : MonoBehaviour
                 return null;
         }
     }
-
 
     /// <summary>
     /// Uses the item from the specified slot number.
@@ -378,7 +366,7 @@ public class InventorySystem : MonoBehaviour
     /// </remarks>
     public void UseItemFromSlot(int SlotNumber)
     {
-        // call useItem from Items on the respective slot
+        // Call useItem from Items on the respective slot
         switch (SlotNumber)
         {
             case 0:
@@ -407,34 +395,32 @@ public class InventorySystem : MonoBehaviour
     /// </remarks>
     public void SwitchItems(int firstSlot, int secondSlot)
     {
-
         //Debug.Log($"First slot: {firstSlot}, second slot: {secondSlot}");
         //Debug.Log($"BEFORE SWAP: Item in first slot: {slots[firstSlot].itemData?.itemName}, Item in second slot: {slots[secondSlot].itemData?.itemName}");
         // Retrieve item data from the first slot
         var firstSlotItemData = slots[firstSlot].itemData;
         // Allow switching even if the first slot is empty
         Item firstSlotNewItem = firstSlotItemData != null ? CreateItemInstance(firstSlotItemData) : null;
-        //Debug.Log($"First slot item: {firstSlotNewItem}");
 
         // Retrieve item data from the second slot
         var secondSlotItemData = slots[secondSlot].itemData;
         // Allow switching even if the second slot is empty
         Item secondSlotNewItem = secondSlotItemData != null ? CreateItemInstance(secondSlotItemData) : null;
-        //Debug.Log($"Second slot item: {secondSlotNewItem}");
 
-        //clear InventorySlots
+        // Clear InventorySlots
         slots[firstSlot].ClearSlot();
         slots[secondSlot].ClearSlot();
-
 
         // Store the new item instances in the opposite slots
         slots[secondSlot].StoreItem(firstSlotNewItem, firstSlotItemData);
         slots[firstSlot].StoreItem(secondSlotNewItem, secondSlotItemData);
 
         //Debug.Log($"AFTER SWAP: Item in first slot: {slots[firstSlot].itemData?.itemName}, Item in second slot: {slots[secondSlot].itemData?.itemName}");
-
     }
 
+    /// <summary>
+    /// Coroutine to display an "Inventory Full" message for a set duration or until "Q" is pressed.
+    /// </summary>
     public IEnumerator InvenotryFull()
     {
         var time = 1.5f;
@@ -465,6 +451,9 @@ public class InventorySystem : MonoBehaviour
         playerSpeechSpriteRenderer.sprite = null;
     }
 
+    /// <summary>
+    /// Clears the inventory by removing all items from the slots.
+    /// </summary>
     public void ClearInventory()
     {
         for (int i = 0; i < 3; i++)
@@ -473,12 +462,18 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Hides the inventory UI.
+    /// </summary>
     public void HideInventoryUI()
     {
         if (root != null)
             root.style.display = DisplayStyle.None;
     }
 
+    /// <summary>
+    /// Shows the inventory UI.
+    /// </summary>
     public void ShowInventoryUI()
     {
         if (root != null)

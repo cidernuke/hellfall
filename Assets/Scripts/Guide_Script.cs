@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class guide_Script : MonoBehaviour
@@ -37,7 +36,10 @@ public class guide_Script : MonoBehaviour
     public bool isTitleAnimating; // true, if title is currently animating
 
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Start is called before the first frame update.
+    /// Initializes various game objects and components.
+    /// </summary>
     void Start()
     {
         
@@ -68,10 +70,12 @@ public class guide_Script : MonoBehaviour
 
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Update is called once per frame.
+    /// Handles the sequence of events based on the player's position and actions.
+    /// </summary>
     void Update()
     {
-        
         if (player != null)
         {
             // Get the players position
@@ -148,13 +152,17 @@ public class guide_Script : MonoBehaviour
                 StartCoroutine(ninthSequence());
                 sequence = 10;
             }
-
-
-
         }
         
     }
 
+    /// <summary>
+    /// Displays a speech bubble for a character.
+    /// </summary>
+    /// <param name="someonesSpriteRenderer">The SpriteRenderer of the character's speech bubble.</param>
+    /// <param name="spriteURL">The URL of the speech bubble sprite.</param>
+    /// <param name="skippable">Whether the speech bubble can be skipped.</param>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator someoneSpeaks(SpriteRenderer someonesSpriteRenderer, string spriteURL, bool skippable)
     {
         Sprite speechBubble = Resources.Load<Sprite>(spriteURL);
@@ -183,15 +191,26 @@ public class guide_Script : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Checks if the speech bubble has been skipped.
+    /// </summary>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator skipCheck()
     {
         while(!skipped)
         {
             yield return new WaitForSeconds(0.1f);
         }
-
     }
 
+    /// <summary>
+    /// Moves a game object from a start position to an end position over a duration.
+    /// </summary>
+    /// <param name="someone">The game object to move.</param>
+    /// <param name="start">The start position.</param>
+    /// <param name="end">The end position.</param>
+    /// <param name="duration">The duration of the movement.</param>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator moveSomeone(GameObject someone, Vector2 start, Vector2 end, float duration)
     {
         float elapsedTime = 0;
@@ -210,6 +229,9 @@ public class guide_Script : MonoBehaviour
         someone.transform.position = end;
     }
 
+    /// <summary>
+    /// Stops the player's movement and animations.
+    /// </summary>
     void StopPlayer() 
     {
         playerMovementScript.blockInput = true;
@@ -231,6 +253,10 @@ public class guide_Script : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Starts the player's movement and animations.
+    /// </summary>
+    /// <param name="jumpStop">Whether to stop the player's jump.</param>
     void StartPlayer(bool jumpStop)
     {
         playerMovementScript.enabled = true;
@@ -247,6 +273,10 @@ public class guide_Script : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles the title animation.
+    /// </summary>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator titleAnimation()
     {
 
@@ -262,6 +292,9 @@ public class guide_Script : MonoBehaviour
         isTitleAnimating = false;
     }
 
+    /// <summary>
+    /// Resets the guide's animation states.
+    /// </summary>
     void ResetAnimation()
     {
         guideAnimator.SetBool("isIdle", false);
@@ -269,6 +302,10 @@ public class guide_Script : MonoBehaviour
         guideAnimator.SetBool("hasDisappeared", true);
     }
 
+    /// <summary>
+    /// Handles the first sequence of events.
+    /// </summary>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator firstSequence() {
         skipped = false;
         StopPlayer();
@@ -365,7 +402,10 @@ public class guide_Script : MonoBehaviour
         StartPlayer(false);
     }
 
-    
+    /// <summary>
+    /// Handles the second sequence of events.
+    /// </summary>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator secondSequence()
     {
         playerSpeech.transform.position = new Vector2(24.5f, -1.75f);
@@ -383,6 +423,10 @@ public class guide_Script : MonoBehaviour
         StartPlayer(true);
     }
 
+    /// <summary>
+    /// Handles the third sequence of events.
+    /// </summary>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator thirdSequence()
     {
         yield return new WaitForSeconds(1f);
@@ -401,6 +445,10 @@ public class guide_Script : MonoBehaviour
         sequence = 4;
     }
 
+    /// <summary>
+    /// Handles the fourth sequence of events.
+    /// </summary>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator fourthSequence()
     {
         yield return new WaitForSeconds(1f);
@@ -424,6 +472,10 @@ public class guide_Script : MonoBehaviour
         sequence = 5;
     }
 
+    /// <summary>
+    /// Handles the fifth sequence of events.
+    /// </summary>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator fifthSequence()
     {
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(77f, 1.48f), 0.2f));
@@ -459,6 +511,10 @@ public class guide_Script : MonoBehaviour
         StartPlayer(false);
     }
     
+    /// <summary>
+    /// Handles the sixth sequence of events.
+    /// </summary>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator sixthSequence()
     {
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(98f, 12.502f), 0.3f));
@@ -483,6 +539,10 @@ public class guide_Script : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Handles the seventh sequence of events.
+    /// </summary>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator seventhSequence()
     {
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(119f, 7.5f), 0.4f));
@@ -509,6 +569,10 @@ public class guide_Script : MonoBehaviour
         StartPlayer(false);
     }
 
+    /// <summary>
+    /// Handles the eighth sequence of events.
+    /// </summary>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator eighthSequence()
     {
         StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(141f, -2.49f), 0.4f));
@@ -551,6 +615,10 @@ public class guide_Script : MonoBehaviour
         StartPlayer(false);
     }
 
+    /// <summary>
+    /// Handles the ninth sequence of events.
+    /// </summary>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator ninthSequence()
     {
         hintBubble.transform.position = new Vector3(159f, -4.6f, -1f);
@@ -561,5 +629,4 @@ public class guide_Script : MonoBehaviour
         StartCoroutine(someoneSpeaks(hintBubbleSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/hint_bubble_3", true));
         yield return skipCheck();
     }
-
 }

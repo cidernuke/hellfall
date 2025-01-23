@@ -9,12 +9,19 @@ public class KeyItem : MonoBehaviour
     private bool playerInRange = false;
     private ItemRespawner respawner;
 
+    /// <summary>
+    /// Called when the script instance is being loaded.
+    /// </summary>
     private void Awake()
     {
         // Get the ItemRespawner on the same object
         respawner = GetComponent<ItemRespawner>();
     }
 
+    /// <summary>
+    /// Called when another collider enters the trigger collider attached to this object.
+    /// </summary>
+    /// <param name="collider">The other collider involved in this collision.</param>
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.CompareTag("Player"))
@@ -50,6 +57,10 @@ public class KeyItem : MonoBehaviour
     //     }
     // }
 
+    /// <summary>
+    /// Called when another collider exits the trigger collider attached to this object.
+    /// </summary>
+    /// <param name="collider">The other collider involved in this collision.</param>
     private void OnTriggerExit2D(Collider2D collider)
     {
         if (collider.CompareTag("Player"))
@@ -62,6 +73,9 @@ public class KeyItem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called once per frame to update the object's state.
+    /// </summary>
     private void Update()
     {
         // Only react if player is in range
@@ -74,6 +88,9 @@ public class KeyItem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Handles the logic for picking up the key.
+    /// </summary>
     private void PickupKey()
     {
         var playerObj = GameObject.FindGameObjectWithTag("Player");

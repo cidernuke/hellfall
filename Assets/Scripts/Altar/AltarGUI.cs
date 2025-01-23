@@ -13,7 +13,7 @@ public class AltarGUI : MonoBehaviour
     private Image[] progressBar;
     private int defaultSoulShardCost = 5;
 
-    // Separate Kosten und Multiplikator-Zähler für jedes Attribut
+    // Separate costs and multiplier counters for each attribute
     private int vitalityCost = 5;
     private int strengthCost = 5;
     private int intelligenceCost = 5;
@@ -33,13 +33,9 @@ public class AltarGUI : MonoBehaviour
 
     //Max Values
 
-
-
-
-
-
     private void Start()
     {
+        // Initialize the GUI elements and player controller
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         textValueElements = GetComponentsInChildren<TextMeshProUGUI>();
         progressBar = GetComponentsInChildren<Image>();
@@ -47,6 +43,7 @@ public class AltarGUI : MonoBehaviour
         SetBaseValues();
         setBaseProgressBarValues();
 
+        
         foreach (Button button in buttons)
         {
             if (button.name == "PlusButton1" || button.name == "PlusButton2" || button.name == "PlusButton3")
@@ -103,7 +100,7 @@ public class AltarGUI : MonoBehaviour
         {
             if (multiplierCount < 10)
             {
-                costArray[multiplierCount] = shCost; // Speichern Sie den aktuellen Preis
+                costArray[multiplierCount] = shCost; //Save the current price
                 shCost += 15;
                 multiplierCount++;
             }
@@ -113,7 +110,7 @@ public class AltarGUI : MonoBehaviour
             if (multiplierCount > 0)
             {
                 multiplierCount--;
-                shCost = costArray[multiplierCount]; // Verwenden Sie den gespeicherten Preis
+                shCost = costArray[multiplierCount]; // Use the saved price
             }
         }
 

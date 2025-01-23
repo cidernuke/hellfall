@@ -1,8 +1,5 @@
-using UnityEngine;
-
 public class Stat 
 {
-
     /*
     Each Stat has three attributes:
      - baseValue: base Stat value, influenced by strength (closeRange) or intelligence (longRange)
@@ -25,7 +22,11 @@ public class Stat
     // calculated Value = baseValue * modifier (in percent)
     private float calcValue = 0f;
 
-
+    /// <summary>
+    /// Initializes a new instance of the Stat class.
+    /// </summary>
+    /// <param name="baseValue">Base value of the stat.</param>
+    /// <param name="modifier">Modifier value of the stat.</param>
     public Stat (float baseValue, float modifier = 0)
     {
         this.baseValue = baseValue;
@@ -34,40 +35,57 @@ public class Stat
         CalculateValue();
     }
 
-    // Returns baseValue
+    /// <summary>
+    /// Returns the base value of the stat.
+    /// </summary>
+    /// <returns>Base value of the stat.</returns>
     public float GetBaseValue() 
     {
         return baseValue;
     }
 
-    // Sets baseValue equal to provided value (value)
+    /// <summary>
+    /// Sets baseValue equal to provided value (value)
+    /// </summary>
+    /// <param name="value">New base value.</param>
     public void SetBaseValue (float value)
     {
         baseValue = value;
         CalculateValue();
     }
 
-    // Returns modifier
+    /// <summary>
+    /// Returns the modifier value of the stat.
+    /// </summary>
+    /// <returns>Modifier value of the stat.</returns>
     public float GetModifier ()
     {
         return modifier;
     }
 
-    // Sets modifierValue equal to provided value (modifierInPercent)
+    /// <summary>
+    /// Sets the modifier value of the stat to provided value (modifierInPercent).
+    /// </summary>
+    /// <param name="modifierInPercent">New modifier value in percent.</param>
     public void SetModifier (float modifierInPercent)
     {
         float modifier = modifierInPercent;
         CalculateValue();
     }
 
-    // Calculates calcValue and returns it
+    /// <summary>
+    /// Calculates and returns the calculated value of the stat.
+    /// </summary>
+    /// <returns>Calculated value of the stat.</returns>
     public float GetCalcValue()
     {
         CalculateValue();
         return calcValue;
     }
 
-    // Calculates calcValue and sets it
+    /// <summary>
+    /// Calculates calcValue and sets it
+    /// </summary>
     public void CalculateValue() 
     {
         float onePercentOfBaseValue = baseValue / 100f;         // Calculate onePercentOfBaseValue
@@ -80,6 +98,5 @@ public class Stat
         0.5 = 0.05 * 10
         5.5 = 5 + 0.5
         */
-    
     }
 }

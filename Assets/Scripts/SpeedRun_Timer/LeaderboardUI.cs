@@ -16,18 +16,18 @@ public class LeaderboardUI : MonoBehaviour
 
     [Header("Level Info")]
     [SerializeField] private string levelName = "Scene_01"; 
-    [SerializeField] private string nextLevelScene = "Scene_02"; // Für "Continue"
-    [SerializeField] private string mainMenuScene = "Menu";     // Für "MainMenu"
+    [SerializeField] private string nextLevelScene = "Scene_02"; // For "Continue"
+    [SerializeField] private string mainMenuScene = "Menu";     // For "MainMenu"
 
-    private float finalTime; // wird gespeichert, sobald Trigger ausgelöst wird
+    private float finalTime; // will be saved once the trigger is activated
     private bool isNewTimeAdded = false;
 
     void Start()
     {
-        // Falls das UI anfangs unsichtbar sein soll:
+        // If the UI should be invisible at the start:
         gameObject.SetActive(false);
 
-        //Dynamische zuweisung
+        // Dynamic assignment
         var uiBottom = GameObject.Find("UI Bottom right");
         if(uiBottom != null){
             uiBottomRight = uiBottom;
@@ -38,39 +38,39 @@ public class LeaderboardUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Wird vom LeaderboardTrigger (oder LevelEndTrigger) aufgerufen, 
-    /// sobald man das Level beendet hat. 
-    /// Wir kriegen hier die finalTime.
+    /// Called by the LeaderboardTrigger (or LevelEndTrigger) 
+    /// when the level is completed. 
+    /// We get the finalTime here.
     /// </summary>
     public void ShowLeaderboard(float finalTimeFromTrigger)
     {
-        // Spiel pausieren
+        // Pause the game
         Time.timeScale = 0f;
 
-        // Andere UI ausblenden
+        // Hide other UI
         InventorySystem.Instance.HideInventoryUI();
         if (uiBottomRight != null) uiBottomRight.SetActive(false);
 
-        // UI aktivieren
+        // Activate UI
         gameObject.SetActive(true);
 
-        //Cursor aktivieren
+        // Activate cursor
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
         finalTime = finalTimeFromTrigger;
-        isNewTimeAdded = false; // wir haben noch keinen Eintrag fürs Leaderboard angelegt
+        isNewTimeAdded = false; // haven't added an entry to the leaderboard yet
 
-        // Zeit formatieren
+        // Format time
         currentTimeText.text = "Your time was: " + FormatTime(finalTime);
 
-        // Liste anzeigen (ohne den neuen Eintrag?)
+        // Display list (without the new entry?)
         UpdateBestTimesDisplay();
     }
 
     /// <summary>
-    /// Wird aufgerufen, wenn der Spieler auf den "Bestätigen"-Button klickt, 
-    /// nachdem er den Namen eingegeben hat.
+    /// Called when the player clicks the "Confirm" button 
+    /// after entering their name.
     /// </summary>
     public void OnConfirmName()
     {
@@ -79,24 +79,23 @@ public class LeaderboardUI : MonoBehaviour
             string enteredName = nameInputField.text;
             if (string.IsNullOrEmpty(enteredName)) enteredName = "Unknown";
 
-            // Neuen Eintrag ins TimerSystem
+            // Add new entry to TimerSystem
             TimerSystem.Instance.AddLeaderboardEntry(levelName, finalTime, enteredName);
             isNewTimeAdded = true;
             
-            // Liste erneut anzeigen
+            // Display list again
             UpdateBestTimesDisplay();
         }
     }
     
     /// <summary>
-    /// Aktualisiert das Textfeld bestTimesText anhand der aktuellen Liste 
-    /// aus dem TimerSystem.
+    /// Updates the bestTimesText field based on the current list 
+    /// from the TimerSystem.
     /// </summary>
     private void UpdateBestTimesDisplay()
     {
         List<LeaderboardEntry> entries = TimerSystem.Instance.GetBestEntries(levelName);
 
-        //string text = "Bestzeiten:\n";
         string text = "Record Times:\n";
         for (int i = 0; i < entries.Count; i++)
         {
@@ -107,21 +106,22 @@ public class LeaderboardUI : MonoBehaviour
         bestTimesText.text = text;
     }
 
+    /// <summary>
+    /// Called when the player clicks the "Continue" button.
+    /// </summary>
     public void OnClickContinue()
     {
-        // Hier das Spiel fortsetzen
+        // Resume the game
         Time.timeScale = 1f;
 
         gameObject.SetActive(false);
 
-        // Option 1: direkt SceneManager
-        // SceneManager.LoadScene(nextLevelScene);
-
-        // Option 2: 
-        // Oder du rufst GameManager.Instance.LoadNextLevel() o.ä.
         SceneManager.LoadScene(nextLevelScene);
     }
 
+    /// <summary>
+    /// Called when the player clicks the "Main Menu" button.
+    /// </summary>
     public void OnClickMainMenu()
     {
         Time.timeScale = 1f;
@@ -129,6 +129,9 @@ public class LeaderboardUI : MonoBehaviour
         SceneManager.LoadScene(mainMenuScene);
     }
 
+    /// <summary>
+    /// Formats the given time in seconds to a string in the format "minutes:seconds".
+    /// </summary>
     private string FormatTime(float seconds)
     {
         int minutes = Mathf.FloorToInt(seconds / 60f);
