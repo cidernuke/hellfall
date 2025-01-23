@@ -5006,7 +5006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bbbdafceb1d62046b87c955a0d68953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 3
+  startingHealth: 20
   enemyHealthBar: {fileID: 0}
   currentHealth: 0
   anim: {fileID: 3058734885864157243}
@@ -5042,3 +5042,6 @@ MonoBehaviour:
     dropChance: 80
   anim: {fileID: 0}
   enemyPatrol: {fileID: 0}
+  healthSystem: {fileID: 0}
+  isFrozen: 0
+  isOnFire: 0

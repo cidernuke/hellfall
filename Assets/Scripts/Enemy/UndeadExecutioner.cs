@@ -71,7 +71,7 @@ public class UndeadExecutioner : MonoBehaviour
         }
 
         // If the player is too far away, stop following and start summoning mini-enemies
-        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+        float distanceToPlayer = Vector3.Distance(this.transform.position, playerTransform.position);
         if (distanceToPlayer > maxFollowDistance && isFollowingPlayer)
         {
             StopFollowingAndSummon();

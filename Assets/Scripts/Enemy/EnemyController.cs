@@ -30,6 +30,7 @@ public class EnemyController : MonoBehaviour
     public EnemyPatrol enemyPatrol;
     private PlayerMovement playerMovement;
     public HealthSystem healthSystem;
+    private UndeadExecutioner undeadExecutioner;
 
     private ParticleSystem flameEffect;
 
@@ -39,8 +40,8 @@ public class EnemyController : MonoBehaviour
     private bool isDead = false;
 
     //Flag for special Attacks
-    private bool isFrozen = false;
-    private bool isOnFire = false;
+    public bool isFrozen = false;
+    public bool isOnFire = false;
 
     private void Awake()
     {
@@ -51,6 +52,8 @@ public class EnemyController : MonoBehaviour
         // playerMovement = GetComponent<PlayerMovement>();
         playerMovement = GameObject.Find("Player").GetComponent<PlayerController>().playerMovementSystem;
         healthSystem = GetComponent<HealthSystem>();
+
+        var uE = GetComponent<UndeadExecutioner>();
 
         // enemyHealthSystem = GetComponent<HealthSystem>();
 
@@ -176,6 +179,16 @@ public class EnemyController : MonoBehaviour
 
     public void OnDeath()
     {
+        isFrozen = false;
+        //frozen effekte deaktivieren
+        if (this.enemyPatrol != null)
+        {
+            this.enemyPatrol.speed = 2.5f;
+        }
+        this.anim.speed = 1f;
+        this.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f);
+
+        isOnFire = false;
         isDead = true;
         gameObject.SetActive(false);
     }
@@ -185,6 +198,7 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     public void ApplyIceEffect()
     {
+        if(enemyPatrol == null) return; //No Ice Effect for UndeadExecutioner
         if (!enemyPatrol.enabled) return; // Prevent multiple freezes
 
         StartCoroutine(FreezeEnemy());
@@ -198,16 +212,25 @@ public class EnemyController : MonoBehaviour
         if (!isFrozen)
         {
             isFrozen = true;
-
-            //slow down speed for duration of freeze
-            this.enemyPatrol.speed = 0.3f;
-            //slow down animation for duration of freeze
-            this.anim.speed = 0.3f;
+            Debug.Log("Enemy is Frozen");
+            if (this.enemyPatrol != null)
+            {
+                //slow down speed for duration of freeze
+                this.enemyPatrol.speed = 0.3f;
+            }
+            if (this.anim != null)
+            {
+                //slow down animation for duration of freeze
+                this.anim.speed = 0.3f;
+            }
 
             //Save the initial color of the enemy
             var initial = this.GetComponent<SpriteRenderer>().material.color;
-            //Change the color of the enemy to blue
-            this.GetComponent<SpriteRenderer>().material.color = new Color(0.5f, 0.8f, 0.98f);
+            if (initial != null)
+            {
+                //Change the color of the enemy to blue
+                this.GetComponent<SpriteRenderer>().material.color = new Color(0.5f, 0.8f, 0.98f);
+            }
 
             //CooldownTimer set to 0, so the enemy can't attack for a second
             this.cooldownTimer = 0;
@@ -215,9 +238,19 @@ public class EnemyController : MonoBehaviour
             yield return new WaitForSeconds(1f);
 
             //reset changed fields
-            this.enemyPatrol.speed = 2.5f;
-            this.anim.speed = 1f;
-            this.GetComponent<SpriteRenderer>().material.color = initial;
+            if (this.enemyPatrol != null)
+            {
+                this.enemyPatrol.speed = 2.5f;
+            }
+            if (this.anim != null)
+            {
+                this.anim.speed = 1f;
+            }
+
+            if (initial != null)
+            {
+                this.GetComponent<SpriteRenderer>().material.color = initial;
+            }
 
             isFrozen = false;
         }

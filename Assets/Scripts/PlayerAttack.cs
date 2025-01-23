@@ -20,7 +20,6 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] public bool iceDamageClose = false;
     [SerializeField] public bool fireDamageRange = false;
     [SerializeField] public bool iceDamageRange = false;
-    [SerializeField] private bool isFrozen = false;
 
     //for smash attack
     [Header("Smash Attack")]
@@ -66,7 +65,7 @@ public class PlayerAttack : MonoBehaviour
         enemyHealth = GetComponent<HealthSystem>();
         //enemyHealth = enemyController.healthSystem;
         playerController = GetComponent<PlayerController>();
-        
+
     }
 
     /// <summary>
@@ -83,7 +82,7 @@ public class PlayerAttack : MonoBehaviour
                 Attack();
             }
         }
-        
+
         if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown && !Input.GetKey(KeyCode.Q))
         {
             if (longEquipped)
@@ -277,20 +276,21 @@ public class PlayerAttack : MonoBehaviour
             if (fireDamageClose)
             {
                 //Note: TakeDamage still needs to be called, since fire damage is only secondary and applied over time
+                enemyController.ApplyFireEffect(2f);
                 enemyHealth.TakeDamage(closeDamage, null, enemyController);
                 enemyHealth.ApplyFireDamage(closeDamage, 2f, 1f);
-                enemyController.ApplyFireEffect(2f);
+                return;
             }
-            else if (iceDamageClose)
+            if (iceDamageClose)
             {
                 //Note: TakeDamage still needs to be called, since ice damage only freezes the opponent
-                enemyHealth.TakeDamage(closeDamage, null, enemyController);
                 enemyController.ApplyIceEffect();
-            }
-            else
-            {
                 enemyHealth.TakeDamage(closeDamage, null, enemyController);
+                return;
             }
+
+            enemyHealth.TakeDamage(closeDamage, null, enemyController);
+
         }
     }
 }

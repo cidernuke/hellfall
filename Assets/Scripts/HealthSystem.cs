@@ -305,6 +305,8 @@ public class HealthSystem : MonoBehaviour
         if (enemyController != null)
         {
             enemyController.enabled = true;
+            enemyController.isOnFire = false;
+            enemyController.isFrozen = false;
         }
 
         EnemyPatrol enemyPatrol = GetComponentInParent<EnemyPatrol>();
