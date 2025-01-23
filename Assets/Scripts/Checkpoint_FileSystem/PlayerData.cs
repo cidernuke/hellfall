@@ -22,8 +22,10 @@ public class PlayerData
 
     public Dictionary<String, float> characterStats = new Dictionary<string, float>();
 
-    //public PlayerData(HealthSystem healthSystem, List<ItemSystem.Abstract.Item> playerItems, SoulShardSystem soulShardSystem, int lastCheckpointID)
-    public PlayerData(HealthSystem healthSystem, int lastCheckpointID, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, PlayerController playerController)
+    //Key-Logic
+    public int keyCounter;
+
+    public PlayerData(HealthSystem healthSystem, int lastCheckpointID, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, KeySystem keySystem, PlayerController playerController)
     {
         // Save latest checkpointID
         this.lastCheckpointID = lastCheckpointID;
@@ -39,6 +41,10 @@ public class PlayerData
         //Save the current amout of Soul Shards
         soulShardCount = soulShardSystem.GetSoulShardCount();
 
+        //Save keyCounter
+        keyCounter = keySystem.GetKeyCount();
+
+        //Save Items
         collectedItemNames = new List<string>();
         foreach (var slot in inventorySystem.slots)
         {

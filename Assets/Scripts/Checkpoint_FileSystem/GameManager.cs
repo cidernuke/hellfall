@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public PlayerMovement playerMovement;
     public HealthSystem healthSystem;
     public SoulShardSystem soulShardSystem;
+    public KeySystem keySystem;
     public InventorySystem inventorySystem;
     public PlayerController playerController;
     private List<ItemRespawner> itemRespawners = new List<ItemRespawner>();
@@ -115,6 +116,7 @@ public class GameManager : MonoBehaviour
             playerMovement = player.GetComponent<PlayerMovement>();
             healthSystem = player.GetComponent<HealthSystem>();
             soulShardSystem = player.GetComponent<SoulShardSystem>();
+            keySystem = player.GetComponent<KeySystem>();
             playerController = player.GetComponent<PlayerController>();
         }
         else
@@ -123,6 +125,7 @@ public class GameManager : MonoBehaviour
             playerMovement = null;
             healthSystem = null;
             soulShardSystem = null;
+            keySystem = null;
             playerController = null;
         }
 
@@ -163,7 +166,7 @@ public class GameManager : MonoBehaviour
     {
         if (SaveManager.Instance)
         {
-            SaveManager.Instance.SaveGame(playerMovement, healthSystem, soulShardSystem, inventorySystem, playerController);
+            SaveManager.Instance.SaveGame(playerMovement, healthSystem, soulShardSystem, inventorySystem, keySystem, playerController);
         }
         else
         {
@@ -175,7 +178,7 @@ public class GameManager : MonoBehaviour
     {
         if (SaveManager.Instance)
         {
-            SaveManager.Instance.LoadGame(playerMovement, healthSystem, soulShardSystem, inventorySystem, playerController);
+            SaveManager.Instance.LoadGame(playerMovement, healthSystem, soulShardSystem, inventorySystem, keySystem, playerController);
         }
         else
         {
@@ -186,11 +189,11 @@ public class GameManager : MonoBehaviour
     public void StartNewGame()
     {
         //Check player references
-        if (playerMovement == null || healthSystem == null || soulShardSystem == null || playerController == null)
+        if (playerMovement == null || healthSystem == null || soulShardSystem == null || keySystem == null || playerController == null)
         {
             Debug.LogWarning("StartNewGame: Player references are missing trying to reInitialize references.");
             InitializeReferences();
-            if (playerMovement == null || healthSystem == null || soulShardSystem == null || playerController == null)
+            if (playerMovement == null || healthSystem == null || soulShardSystem == null || keySystem == null || playerController == null)
             {
                 Debug.LogWarning("StartNewGame: Player references are missing, cannot start new Game");
                 return;
@@ -206,6 +209,9 @@ public class GameManager : MonoBehaviour
 
         //SoulShards to 0
         soulShardSystem.SetSoulShardCount(0);
+
+        //KeyCount to 0
+        keySystem.SetKeyCount(0);
 
         //Empty Inventory
         inventorySystem.ClearInventory();
@@ -237,6 +243,9 @@ public class GameManager : MonoBehaviour
 
         // Reset shoulShards to the value while reaching the last checkpoint
         soulShardSystem.SetSoulShardCount(LoadSoulShardCountFromLastCheckpoint());
+        
+        // Reset keyCounter to the value while reaching the last checkpoint
+        keySystem.SetKeyCount(LoadKeyCountFromLastCheckpoint());
 
         // Empty inventory
         inventorySystem.ClearInventory();
@@ -253,6 +262,13 @@ public class GameManager : MonoBehaviour
         //Load the amount of collected SoulShards from the last checkpoint
         PlayerData data = SaveManager.Instance.LoadPlayerData();
         return data != null ? data.soulShardCount : 0;
+    }
+
+    private int LoadKeyCountFromLastCheckpoint()
+    {
+        //Load the amount of collected keys from the last checkpoint
+        PlayerData data = SaveManager.Instance.LoadPlayerData();
+        return data != null ? data.keyCounter : 0;
     }
 
     private void RespawnEnemiesAndItems()

@@ -18,6 +18,7 @@ TagManager:
   - bullet_forward#
   - SpawnPoint
   - CurrentWeapon
+  - HintUI
   layers:
   - Default
   - TransparentFX

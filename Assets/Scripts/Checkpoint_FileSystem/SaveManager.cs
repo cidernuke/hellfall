@@ -37,7 +37,7 @@ public class SaveManager : MonoBehaviour
     }
 
     // Method to save the game
-    public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, PlayerController playerController)
+    public void SaveGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, KeySystem keySystem, PlayerController playerController)
     {
         print("Saving Game");
 
@@ -52,6 +52,7 @@ public class SaveManager : MonoBehaviour
             playerMovement.GetLastCheckpointID(),
             soulShardSystem,
             inventorySystem,
+            keySystem,
             playerController
         );
 
@@ -126,13 +127,13 @@ public class SaveManager : MonoBehaviour
     }
 
     // Methoad to load old game
-    public void LoadGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, PlayerController playerController)
+    public void LoadGame(PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, KeySystem keySystem, PlayerController playerController)
     {
         GameData gameData = LoadGameData();
         if (gameData != null)
         {
             // Anwenden der geladenen Daten
-            ApplyLoadedData(gameData, playerMovement, healthSystem, soulShardSystem, inventorySystem, playerController);
+            ApplyLoadedData(gameData, playerMovement, healthSystem, soulShardSystem, inventorySystem, keySystem, playerController);
 
             if (gameData.bestLevelTimes != null)
             {
@@ -150,7 +151,7 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    private void ApplyLoadedData(GameData gameData, PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, PlayerController playerController)
+    private void ApplyLoadedData(GameData gameData, PlayerMovement playerMovement, HealthSystem healthSystem, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, KeySystem keySystem, PlayerController playerController)
     {
         PlayerData data = gameData.playerData;
 
@@ -161,6 +162,9 @@ public class SaveManager : MonoBehaviour
 
         // Set SoulShards
         soulShardSystem.SetSoulShardCount(data.soulShardCount);
+
+        //Set KeyCounter
+        keySystem.SetKeyCount(data.keyCounter);
 
 
         //Set Items

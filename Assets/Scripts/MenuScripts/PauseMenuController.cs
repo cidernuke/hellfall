@@ -59,6 +59,18 @@ public class PauseMenuController : MonoBehaviour
                 audio.Pause();
             }
         }
+
+        // Hide all Hint-Bubbles (Edge-Case)
+        // (Set Tag on your UI hint-bubbles to "HintUI")
+        var allHints = GameObject.FindGameObjectsWithTag("HintUI");
+        foreach (var hint in allHints)
+        {
+            // if it's active, turn it off
+            if (hint.activeSelf)
+            {
+                hint.SetActive(false);
+            }
+        }
     }
 
     // Deactivates the pause menu
