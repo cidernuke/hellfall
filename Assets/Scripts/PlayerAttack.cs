@@ -289,7 +289,7 @@ public class PlayerAttack : MonoBehaviour
             }
             else
             {
-                enemyHealth.TakeDamage(damage, null, enemyController);
+                enemyHealth.TakeDamage(closeDamage, null, enemyController);
             }
         }
     }
