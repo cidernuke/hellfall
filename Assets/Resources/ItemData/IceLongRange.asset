@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cc0c4acd6bfa5c4786f79389bb96a16, type: 3}
+  m_Name: IceLongRange
+  m_EditorClassIdentifier: 
+  itemName: IceLongRange
+  itemSprite: {fileID: 21300000, guid: 31d43573bd1494325a6a26547683d90f, type: 3}
+  itemType: 4
+  healthAmount: 0
+  duration: 0
+  amount: 0
+  description: 
+  isFire: 0
+  isIce: 1

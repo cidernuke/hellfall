@@ -5,10 +5,26 @@ public class LongRangeWeapon : Item
 {
     public HealthSystem playerHealth; // reference to healthsystem
 
-    public LongRangeWeapon(string itemName, Sprite itemSprite) 
+    public WeaponStats weaponStats; // reference to weapon stats
+
+    public LongRangeWeapon(string itemName, Sprite itemSprite, bool isFire, bool isIce) 
     {
         this.itemName = itemName;
         this.itemSprite = itemSprite;
+        this.weaponStats = new WeaponStats(false);
+        //change modifiers based on the type of weapon
+        if(isFire)
+        {
+            //Example Values
+            this.weaponStats.SetDamageModifier(0);
+            this.weaponStats.SetCooldownModifier(5);
+        }
+        if(isIce)
+        {
+            //Example Values
+            this.weaponStats.SetDamageModifier(10);
+            this.weaponStats.SetCooldownModifier(0);
+        }
     }
     public override bool use(){
                       

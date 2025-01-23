@@ -23,7 +23,9 @@ public class ItemData : ScriptableObject
     public string description;
 
     [Header("Weapon Item")]
-    public WeaponStats weaponStats;
+    public bool isFire;
+    public bool isIce;
+    
 
 
 }

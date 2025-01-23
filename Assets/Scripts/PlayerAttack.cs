@@ -1,5 +1,9 @@
 using System;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -12,8 +16,10 @@ public class PlayerAttack : MonoBehaviour
     public float rangedDamage;
 
     // for special attacks
-    [SerializeField] private bool fireDamage = false;
-    [SerializeField] private bool iceDamage = false;
+    [SerializeField] public bool fireDamageClose = false;
+    [SerializeField] public bool iceDamageClose = false;
+    [SerializeField] public bool fireDamageRange = false;
+    [SerializeField] public bool iceDamageRange = false;
     [SerializeField] private bool isFrozen = false;
 
     //for smash attack
@@ -48,6 +54,9 @@ public class PlayerAttack : MonoBehaviour
     private int attackIndex = 0;
     private int totalAttacks = 2;
 
+    public bool shortEquipped = false;
+    public bool longEquipped = false;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -62,18 +71,25 @@ public class PlayerAttack : MonoBehaviour
 
     /// <summary>
     /// Checks if the player is able to attack and if the cooldown is over.
-    /// Calls the Attack() method if left mouse button is clicked.
-    /// Calls the AttackRanged() method if right mouse button is clicked.
+    /// Calls the Attack() method if left mouse button is clicked and a Short Range Weapon is equipped
+    /// Calls the AttackRanged() method if right mouse button is clicked and a Long Range Weapon is euqipped
     /// </summary>
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && cooldownTimer >= closeRangeAttackCooldown)
+        if (Input.GetMouseButtonDown(0) && cooldownTimer >= closeRangeAttackCooldown && !Input.GetKey(KeyCode.Q))
         {
-            Attack();
+            if (shortEquipped)
+            {
+                Attack();
+            }
         }
-        if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown)
+        
+        if (Input.GetMouseButtonDown(1) && cooldownTimer >= rangedAttackCooldown && !Input.GetKey(KeyCode.Q))
         {
-            AttackRanged();
+            if (longEquipped)
+            {
+                AttackRanged();
+            }
         }
 
         if (playerMovement.isDoubleJumping && Input.GetKey(KeyCode.LeftShift) && cooldownTimer >= smashCooldown)
@@ -169,11 +185,11 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private void AttackRanged()
     {
-        if (!playerMovement.isFalling)
-        {
-            playerMovement.blockInput = true;
-            playerMovement.body.constraints = RigidbodyConstraints2D.FreezePosition;
-        }
+        //if (!playerMovement.isFalling)
+        //{
+        //    playerMovement.blockInput = true;
+        //    playerMovement.body.constraints = RigidbodyConstraints2D.FreezePosition;
+        //}
 
         anim.SetTrigger("attack_ranged");
         cooldownTimer = 0;
@@ -185,6 +201,21 @@ public class PlayerAttack : MonoBehaviour
 
         int directionX = Math.Sign(transform.localScale.x);
         projectiles[projectileIndex].GetComponent<Projectile>().SetDirection(new Vector2(directionX, 0));
+
+        // Set fire or ice flags
+        if (fireDamageRange)
+        {
+
+            projectiles[projectileIndex].GetComponent<Projectile>().attackSys = this;
+            projectiles[projectileIndex].GetComponent<Projectile>().isFireBullet = true;
+            projectiles[projectileIndex].GetComponent<Projectile>().isIceBullet = false;
+        }
+        if (iceDamageRange)
+        {
+            projectiles[projectileIndex].GetComponent<Projectile>().attackSys = this;
+            projectiles[projectileIndex].GetComponent<Projectile>().isIceBullet = true;
+            projectiles[projectileIndex].GetComponent<Projectile>().isFireBullet = false;
+        }
     }
 
     /// <summary>
@@ -243,41 +274,23 @@ public class PlayerAttack : MonoBehaviour
     {
         if (EnemyInSight())
         {
-            if (fireDamage)
+            if (fireDamageClose)
             {
                 //Note: TakeDamage still needs to be called, since fire damage is only secondary and applied over time
                 enemyHealth.TakeDamage(closeDamage, null, enemyController);
                 enemyHealth.ApplyFireDamage(closeDamage, 2f, 1f);
+                enemyController.ApplyFireEffect(2f);
             }
-            else if (iceDamage)
+            else if (iceDamageClose)
             {
                 //Note: TakeDamage still needs to be called, since ice damage only freezes the opponent
                 enemyHealth.TakeDamage(closeDamage, null, enemyController);
-                //FreezeEnemy();
+                enemyController.ApplyIceEffect();
             }
             else
             {
-                enemyHealth.TakeDamage(closeDamage, null, enemyController);
+                enemyHealth.TakeDamage(damage, null, enemyController);
             }
         }
     }
-
-    /// <summary>
-    /// Freezes the Enemy, by disabling the EnemyPatrol Script for a certain amount of time.
-    /// </summary>
-    /* private IEnumerator FreezeEnemy()
-    {
-        if (!isFrozen)
-        {
-            //broken
-            //enemyController.enemyPatrol.enabled = false
-            //CooldownTimer set to 0, so the enemy can't attack for a second
-
-            enemyController.cooldownTimer = 0;
-            yield return new WaitForSeconds(1f);
-            //enemyController.GetComponent<EnemyPatrol>().enabled = true;
-        }
-        yield return null;
-
-    }*/
 }

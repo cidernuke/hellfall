@@ -356,11 +356,11 @@ public class InventorySystem : MonoBehaviour
 
             //Short Range Weapon
             case ItemType.ShortRangeWeapon:
-                return new ShortRangeWeapon(itemData.itemName, itemData.itemSprite);
+                return new ShortRangeWeapon(itemData.itemName, itemData.itemSprite, itemData.isFire, itemData.isIce);
 
             //Long Range Weapon
             case ItemType.LongRangeWeapon:
-                return new LongRangeWeapon(itemData.itemName, itemData.itemSprite);
+                return new LongRangeWeapon(itemData.itemName, itemData.itemSprite, itemData.isFire, itemData.isIce);
             default:
                 //Debug.LogError("Unknown ItemType: " + itemData.itemType);
                 return null;

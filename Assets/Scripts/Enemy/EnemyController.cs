@@ -19,22 +19,28 @@ public class EnemyController : MonoBehaviour
 
     [Header("Player Layer")]
     [SerializeField] private LayerMask playerLayer;
-    private float cooldownTimer = Mathf.Infinity;
+    public float cooldownTimer = Mathf.Infinity;
 
     [Header("Loot")]
     [SerializeField] public List<LootItem> lootTable = new List<LootItem>();
 
     // References
-    private Animator anim;
+    public Animator anim;
     private HealthSystem playerHealth;
     public EnemyPatrol enemyPatrol;
     private PlayerMovement playerMovement;
     public HealthSystem healthSystem;
 
+    private ParticleSystem flameEffect;
+
     //Respawn variables
     private Vector3 initialPosition;
     // private HealthSystem enemyHealthSystem;
     private bool isDead = false;
+
+    //Flag for special Attacks
+    private bool isFrozen = false;
+    private bool isOnFire = false;
 
     private void Awake()
     {
@@ -47,6 +53,13 @@ public class EnemyController : MonoBehaviour
         healthSystem = GetComponent<HealthSystem>();
 
         // enemyHealthSystem = GetComponent<HealthSystem>();
+
+        //for the fire effect
+        flameEffect = GetComponentInChildren<ParticleSystem>();
+        if (flameEffect == null)
+        {
+            Debug.LogError("Flame Particle System not found on enemy.");
+        }
 
         if (healthSystem == null)
         {
@@ -165,5 +178,85 @@ public class EnemyController : MonoBehaviour
     {
         isDead = true;
         gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Starts the FreezeEnemy Coroutine
+    /// </summary>
+    public void ApplyIceEffect()
+    {
+        if (!enemyPatrol.enabled) return; // Prevent multiple freezes
+
+        StartCoroutine(FreezeEnemy());
+    }
+
+    /// <summary>
+    /// Freezes the Enemy, by disabling the EnemyPatrol Script for a certain amount of time.
+    /// </summary>
+    private IEnumerator FreezeEnemy()
+    {
+        if (!isFrozen)
+        {
+            isFrozen = true;
+
+            //slow down speed for duration of freeze
+            this.enemyPatrol.speed = 0.3f;
+            //slow down animation for duration of freeze
+            this.anim.speed = 0.3f;
+
+            //Save the initial color of the enemy
+            var initial = this.GetComponent<SpriteRenderer>().material.color;
+            //Change the color of the enemy to blue
+            this.GetComponent<SpriteRenderer>().material.color = new Color(0.5f, 0.8f, 0.98f);
+
+            //CooldownTimer set to 0, so the enemy can't attack for a second
+            this.cooldownTimer = 0;
+            Debug.Log("Enemy is frozen");
+            yield return new WaitForSeconds(1f);
+
+            //reset changed fields
+            this.enemyPatrol.speed = 2.5f;
+            this.anim.speed = 1f;
+            this.GetComponent<SpriteRenderer>().material.color = initial;
+
+            isFrozen = false;
+        }
+
+
+    }
+
+    /// <summary>
+    /// Starts the Fire Effect Coroutine
+    /// </summary>
+    public void ApplyFireEffect(float duration)
+    {
+        if (!isOnFire)
+        {
+            StartCoroutine(HandleFireEffect(duration));
+        }
+    }
+
+    /// <summary>
+    /// Plays the fire effect
+    /// </summary>
+    private IEnumerator HandleFireEffect(float duration)
+    {
+        isOnFire = true;
+
+        // Enable the flame particle system
+        if (flameEffect != null)
+        {
+            flameEffect.Play();
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        // Disable the flame particle system
+        if (flameEffect != null)
+        {
+            flameEffect.Stop();
+        }
+
+        isOnFire = false;
     }
 }
