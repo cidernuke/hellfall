@@ -287,7 +287,7 @@ public class InventorySystem : MonoBehaviour
                 return true;
             }
         }
-        StartCoroutine(InvenotryFull());
+        StartCoroutine(InvenotryFull(1));
         return false;
     }
 
@@ -421,9 +421,21 @@ public class InventorySystem : MonoBehaviour
     /// <summary>
     /// Coroutine to display an "Inventory Full" message for a set duration or until "Q" is pressed.
     /// </summary>
-    public IEnumerator InvenotryFull()
+    public IEnumerator InvenotryFull(int messageCase)
     {
         var time = 1.5f;
+        switch(messageCase)
+        {
+            case 1:
+                Sprite speechBubble = Resources.Load<Sprite>("Sprites/Level_One/Speech_Bubbles/Inventory_full_bubble");
+            break;
+            case 2:
+                //to-do:
+            break;
+            default:
+                return;
+            break;
+        }
         // Load the sprite for the speech bubble
         Sprite speechBubble = Resources.Load<Sprite>("Sprites/Level_One/Speech_Bubbles/Inventory_full_bubble");
         // Set the sprite and position of the speech bubble
