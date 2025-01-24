@@ -64,8 +64,6 @@ public class EndBossMain : MonoBehaviour
         // }
         if (healthSystem.currentHealth < healthSystem.startingHealth)
         {
-            print("should be taking damage");
-            // healthSystem.TakeDamage(5);
             healthBar.SetHealth((int)healthSystem.currentHealth);
         }
         if (isCharging)
@@ -104,12 +102,9 @@ public class EndBossMain : MonoBehaviour
     public void Attack()
     {
         Vector3 pos = SetAttackPosition();
-        // print("pos in attack: "+pos);
         Collider2D colInfo = Physics2D.OverlapCircle(pos, attackRange, attackMask);
-        print("attacking player, collider hit: " + colInfo + ", attack damage: " + attackDamage);
         if (colInfo != null)
         {
-            print("attack hit");
             PlayerMovement playerMovement = colInfo.GetComponent<PlayerMovement>();
             colInfo.GetComponent<HealthSystem>().TakeDamage(attackDamage, playerMovement);
         }
@@ -118,12 +113,10 @@ public class EndBossMain : MonoBehaviour
     private void ChargeTowardsPlayer()
     {
         // Calculate direction towards the player
-        // Vector2 direction = (player.position - transform.position).normalized;
         Vector2 direction = isFlipped ? new Vector2(-1, 0) : new Vector2(1, 0);
 
         // Move the boss
         rb.velocity = direction * chargeSpeed;
-        // rb.AddForce(direction * chargeSpeed);
 
         // Decrease the charge timer
         chargeTimer -= Time.deltaTime;
@@ -143,7 +136,6 @@ public class EndBossMain : MonoBehaviour
             else
             {
                 // Stop if hitting a wall or other obstacle
-                print("hit nothing");
                 StopCharge();
             }
         }
@@ -151,7 +143,6 @@ public class EndBossMain : MonoBehaviour
         // End the charge after the timer runs out
         if (chargeTimer <= 0)
         {
-            print("timer ran out");
             StopCharge();
         }
     }
@@ -205,11 +196,9 @@ public class EndBossMain : MonoBehaviour
             // Deal damage to each target
             foreach (Collider2D target in hitTargets)
             {
-                // if (target.TryGetComponent(out HealthSystem health))
                 if (target.CompareTag("Player"))
                 {
                     target.GetComponent<HealthSystem>().TakeDamage(areaAttackDamage, target.GetComponent<PlayerMovement>());
-                    // Debug.Log($"Damaged {target.tag} for {areaAttackDamage} HP.");
                 }
             }
 
@@ -243,11 +232,6 @@ public class EndBossMain : MonoBehaviour
     public void PrinterForBossRun(string message)
     {
         print(message);
-    }
-
-    public void PrinterMessage()
-    {
-        print("isVanishing: " + animator.GetBool("isVanishing"));
     }
 }
 

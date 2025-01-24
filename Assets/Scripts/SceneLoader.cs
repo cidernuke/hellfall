@@ -14,12 +14,10 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] private Transform bossRoomEntrance;
     public GameObject bossHealthBar;
     [SerializeField] private Boss vampireCountess;
-    // private var bossHealthBar;
 
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        // bossHealthBar = GameObject.FindGameObjectWithTag("BossHealthBar");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -28,7 +26,6 @@ public class SceneLoader : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
-                print("starting coroutine");
                 StartCoroutine(LoadScene());
             }
         }
@@ -43,13 +40,10 @@ public class SceneLoader : MonoBehaviour
 
     private IEnumerator TeleportToBossRoom()
     {
-        
-        print(", bossHealthBar: "+bossHealthBar);
         vampireCountess.gameObject.SetActive(true);
         bossHealthBar.SetActive(true);
         if (loadingScreen != null)
         {
-            print("Loading screen activated");
             loadingScreen.SetActive(true); // Activate the loading screen
         }
 
@@ -57,7 +51,6 @@ public class SceneLoader : MonoBehaviour
         
         if (player != null && bossRoomEntrance != null)
         {
-            print("Teleporting player");
             player.transform.position = bossRoomEntrance.position; // Teleport the player
         }
 
@@ -65,7 +58,6 @@ public class SceneLoader : MonoBehaviour
 
         if (loadingScreen != null)
         {
-            print("Loading screen deactivated");
             loadingScreen.SetActive(false); // Deactivate the loading screen
         }
 
@@ -76,12 +68,10 @@ public class SceneLoader : MonoBehaviour
     {
         if (loadingScreen != null)
         {
-            print("loadingscreen activated");
             loadingScreen.SetActive(true); // Activate the loading screen
         }
 
         yield return new WaitForSeconds(1f); // Simulate loading time (optional)
-        print("loading scene");
         SceneManager.LoadScene(sceneToLoad);
     }
 }

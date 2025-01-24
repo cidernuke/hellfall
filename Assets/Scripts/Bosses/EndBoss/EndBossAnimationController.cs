@@ -18,7 +18,6 @@ public class EndBossAnimationController : StateMachineBehaviour
         playerMovement = player.GetComponent<PlayerMovement>();
         rb = animator.GetComponent<Rigidbody2D>();
         boss = animator.GetComponent<EndBossMain>();
-        // rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
