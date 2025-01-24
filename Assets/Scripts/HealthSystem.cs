@@ -50,6 +50,21 @@ public class HealthSystem : MonoBehaviour
     public float respawnHealth;
     private float deathMessageDuration = 3f;
 
+    // Variables and References for bosses
+    private Boss bossVampire;
+    private EndBossMain bossMain;
+    private SpriteRenderer spriteRenderer; // Reference to the boss's SpriteRenderer
+    private Color hitColor = Color.white;  // Color to show when hit
+    private float flashDuration = 0.1f;    // Duration of the hit effect
+    private Color originalColor;
+
+    // private Boss bossVampire;
+    // private EndBossMain bossMain;
+    // private SpriteRenderer spriteRenderer; // Reference to the boss's SpriteRenderer
+    // private Color hitColor = Color.white;  // Color to show when hit
+    // private float flashDuration = 0.1f;    // Duration of the hit effect
+    // private Color originalColor;
+
     // Death Messages
     private string[] deathMessages =
     {
@@ -73,6 +88,13 @@ public class HealthSystem : MonoBehaviour
         respawnHealth = startingHealth; // To avoid null-pointers
         anim = GetComponent<Animator>();
         enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
+        bossVampire = gameObject.GetComponent<Boss>();
+        bossMain = gameObject.GetComponent<EndBossMain>();
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+
+        // Store the original color
+        // originalColor = spriteRenderer.material.color;
+        // spriteRenderer.material.color = Color.white;
     }
 
     /// <summary>
@@ -146,11 +168,15 @@ public class HealthSystem : MonoBehaviour
         if (currentHealth > 0)
         {
             anim.SetTrigger("hurt");
+            // if (bossVampire != null && bossMain != null)
+            // {
+            //     StartCoroutine(FlashHitEffect());
+            // }
             if (isPlayer)
             {
                 UpdateHealthUI();
             }
-            if (!isPlayer)
+            if (!isPlayer && bossVampire == null && bossMain == null)
             {
                 enemyHealthBar.updateHealthBar(currentHealth, startingHealth);
             }
@@ -165,6 +191,28 @@ public class HealthSystem : MonoBehaviour
 
         }
     }
+
+    // private IEnumerator FlashHitEffect()
+    // {
+    //     if (bossMain != null)
+    //     {
+    //         spriteRenderer = bossMain.GetComponent<SpriteRenderer>();
+    //     }
+    //     else
+    //     {
+    //         spriteRenderer = bossVampire.GetComponent<SpriteRenderer>();
+    //     }
+    //     originalColor = spriteRenderer.material.color;
+
+    //     // Change the sprite color to the hit color
+    //     spriteRenderer.material.color = hitColor;
+
+    //     // Wait for the flash duration
+    //     yield return new WaitForSeconds(4);
+
+    //     // Revert the sprite color to the original color
+    //     spriteRenderer.material.color = originalColor;
+    // }
 
     /// <summary>
     /// Increases the current health by the specified health amount and updates the health UI.

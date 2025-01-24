@@ -9,26 +9,69 @@ public class SceneLoader : MonoBehaviour
 {
     [SerializeField] private string sceneToLoad;
     [SerializeField] private GameObject loadingScreen; // Reference to loading screen object
+    public bool isScene;
+    private GameObject player;
+    [SerializeField] private Transform bossRoomEntrance;
+    public GameObject bossHealthBar;
+    [SerializeField] private Boss vampireCountess;
+
+    private void Awake()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (isScene)
         {
-            print("starting coroutine");
-            StartCoroutine(LoadScene());
+            if (other.CompareTag("Player"))
+            {
+                StartCoroutine(LoadScene());
+            }
         }
+        else
+        {
+            if (other.CompareTag("Player"))
+            {
+                StartCoroutine(TeleportToBossRoom());
+            }
+        }
+    }
+
+    private IEnumerator TeleportToBossRoom()
+    {
+        vampireCountess.gameObject.SetActive(true);
+        bossHealthBar.SetActive(true);
+        if (loadingScreen != null)
+        {
+            loadingScreen.SetActive(true); // Activate the loading screen
+        }
+
+        yield return new WaitForSeconds(1); // Simulate loading time
+        
+        if (player != null && bossRoomEntrance != null)
+        {
+            player.transform.position = bossRoomEntrance.position; // Teleport the player
+        }
+
+        yield return new WaitForSeconds(0.5f); // Small delay before hiding the loading screen
+
+        if (loadingScreen != null)
+        {
+            loadingScreen.SetActive(false); // Deactivate the loading screen
+        }
+
+        gameObject.SetActive(false);
     }
 
     private IEnumerator LoadScene()
     {
         if (loadingScreen != null)
         {
-            print("loadingscreen activated");
             loadingScreen.SetActive(true); // Activate the loading screen
         }
-        
+
         yield return new WaitForSeconds(1f); // Simulate loading time (optional)
-            print("loading scene");
         SceneManager.LoadScene(sceneToLoad);
     }
 }

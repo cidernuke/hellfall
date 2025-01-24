@@ -89,6 +89,10 @@ public class PlayerMovement : MonoBehaviour
     private bool isDashing = false;
     private bool canDash = true;
     private float dashDirection;
+    private float movementTimer;
+    public int dashCounter;
+    private const float dashTimeFrame = 6f; // Time window to check for multiple dashes
+    public bool IsDodgingALot = false;
     #endregion
 
     #region Crouch Variables
@@ -149,6 +153,18 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>        
     public void Update()
     {
+        // Relevant for the final boss
+        if (dashCounter > 0)
+        {
+            movementTimer += Time.deltaTime;
+            // Reset both timer and counter if time window expires
+            if (movementTimer > dashTimeFrame)
+            {
+                movementTimer = 0f;
+                dashCounter = 0;
+            }
+        }
+
         if (!blockInput)
         {
             horizontal = playerInput.GetHorizontalInput();
@@ -174,7 +190,7 @@ public class PlayerMovement : MonoBehaviour
         }
         jumpedThisFrame = false;
         HandleJumpInput();
-        HandleDashInput(); 
+        HandleDashInput();
         WallSlide();
         // WallSlide(); --> moved into WallJump for performance.
         WallJump();
@@ -209,7 +225,7 @@ public class PlayerMovement : MonoBehaviour
                 animator.SetBool("run", isWalking);
 
 
-                HandleCrouchInput(); 
+                HandleCrouchInput();
                 bool isCrouchWalking = isWalking && isCrouching;
 
                 animator.SetBool("crouch", !isCrouchWalking && isCrouching);
@@ -697,6 +713,16 @@ public class PlayerMovement : MonoBehaviour
     {
         isDashing = true;
         canDash = false;
+
+        dashCounter++;
+        // Check if the player has dashed too many times within the time window
+        if (movementTimer <= dashTimeFrame && dashCounter >= 2)
+        {
+            IsDodgingALot = true;
+            // Reset counter and timer (optional based on your desired logic)
+            movementTimer = 0f;
+            dashCounter = 0;
+        }
 
         animator.SetBool("is_dashing", true);
         // Disable gravity during the dash for consistent movement

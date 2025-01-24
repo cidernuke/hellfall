@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
         }
         else if (spawnPoint != null)
         {
+            print("spawning at spawn point");
             playerMovement.transform.position = spawnPoint.transform.position;
         }
 

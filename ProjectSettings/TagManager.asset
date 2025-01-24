@@ -18,6 +18,9 @@ TagManager:
   - bullet_forward#
   - SpawnPoint
   - CurrentWeapon
+  - BossHealthBar
+  - BossFolder
+  - TriggerBossFight
   - HintUI
   layers:
   - Default
@@ -33,7 +36,6 @@ TagManager:
   - CurrentWeapon
   - Projectile
   - Background
-  - 
   - 
   - 
   - 
