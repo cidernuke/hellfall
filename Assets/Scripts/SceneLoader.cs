@@ -13,6 +13,7 @@ public class SceneLoader : MonoBehaviour
     private GameObject player;
     [SerializeField] private Transform bossRoomEntrance;
     public GameObject bossHealthBar;
+    [SerializeField] private Boss vampireCountess;
     // private var bossHealthBar;
 
     private void Awake()
@@ -44,6 +45,7 @@ public class SceneLoader : MonoBehaviour
     {
         
         print(", bossHealthBar: "+bossHealthBar);
+        vampireCountess.gameObject.SetActive(true);
         bossHealthBar.SetActive(true);
         if (loadingScreen != null)
         {
@@ -66,6 +68,8 @@ public class SceneLoader : MonoBehaviour
             print("Loading screen deactivated");
             loadingScreen.SetActive(false); // Deactivate the loading screen
         }
+
+        gameObject.SetActive(false);
     }
 
     private IEnumerator LoadScene()
