@@ -783,9 +783,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 27862426199377037, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+      propertyPath: maxLifetime
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: smashRange
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+      propertyPath: closeDamage
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: smashDamage
@@ -794,14 +802,6 @@ PrefabInstance:
     - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: smashCooldown
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 27862426199377037, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: maxLifetime
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: closeDamage
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2149054594424086871, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -938,7 +938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cec7177fca08d64d86563bec816df55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: Scene_01
+  sceneToLoad: Level_Zero_Fixed
 --- !u!1001 &1322347938
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1325,6 +1325,7 @@ Transform:
   - {fileID: 1170440538}
   - {fileID: 1050605822}
   - {fileID: 480340096}
+  - {fileID: 190716057}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2060588238
@@ -1347,7 +1348,6 @@ SceneRoots:
   - {fileID: 2060588237}
   - {fileID: 1314418967}
   - {fileID: 1207594475}
-  - {fileID: 2060588237}
   - {fileID: 747122262}
   - {fileID: 1761919016}
   - {fileID: 965947440}
