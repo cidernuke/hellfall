@@ -19,6 +19,9 @@ public class HealthSystem : MonoBehaviour
 
     [SerializeField] private EnemyHealthBar enemyHealthBar;
 
+    
+    private AudioManager audioManager;
+
     /// <summary>
     /// The current amount of health the object has.
     /// </summary>
@@ -79,6 +82,7 @@ public class HealthSystem : MonoBehaviour
         respawnHealth = startingHealth; //To avoid null-pointers
         anim = GetComponent<Animator>();
         enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
 
     }
 
@@ -207,6 +211,8 @@ public class HealthSystem : MonoBehaviour
             {
                 playerMovement.enabled = false;
                 isDead = true;
+                audioManager.PlaySFX(audioManager.player_death);
+                
 
                 StartCoroutine(RespawnPlayer(playerMovement));
 

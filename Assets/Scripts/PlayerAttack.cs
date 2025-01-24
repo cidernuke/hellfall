@@ -123,16 +123,8 @@ public class PlayerAttack : MonoBehaviour
         switch (attackIndex)
         {
             case 0:
-                anim.SetTrigger("attack_01");
-                //audioManager.PlaySFX(audioManager.closeAttack_01);
-                if (audioManager.closeAttack_01 != null)
-                {
-                    audioManager.PlaySFX(audioManager.closeAttack_01);
-                }
-                else
-                {
-                    Debug.LogError("AudioClip closeAttack_01 is not assigned in the AudioManager.");
-                }
+                anim.SetTrigger("attack_01");  
+                audioManager.PlaySFX(audioManager.closeAttack_01);     
                 break;
             case 1:
                 anim.SetTrigger("attack_02");
@@ -167,6 +159,7 @@ public class PlayerAttack : MonoBehaviour
         }
 
         anim.SetTrigger("attack_ranged");
+        audioManager.PlaySFX(audioManager.rangedAttack);
         cooldownTimer = 0;
         int projectileIndex = FindProjectile();
 
@@ -200,7 +193,7 @@ public class PlayerAttack : MonoBehaviour
     private void DamageEnemy()
     {
         if (EnemyInSight())
-        {
+        {            
             if (fireDamage)
             {
                 //Note: TakeDamage still needs to be called, since fire damage is only secondary and applied over time

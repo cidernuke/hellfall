@@ -10,12 +10,18 @@ public class AudioManager : MonoBehaviour
 
     [Header("-----Audio Clips-----")]
     public AudioClip background;
-    public AudioClip death;
+    public AudioClip player_death;
+    public AudioClip enemy_death;
     public AudioClip rangedAttack;
     public AudioClip closeAttack_01;
     public AudioClip closeAttack_02;
-    public AudioClip jump;
+    public AudioClip jump_01;
+    public AudioClip jump_02;
     public AudioClip walk;
+    public AudioClip landing;
+    public AudioClip dash;
+    public AudioClip player_hit;
+    public AudioClip enemy_hit;
     
 
     public void PlaySFX(AudioClip clip)
