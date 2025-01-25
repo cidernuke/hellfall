@@ -56,7 +56,7 @@ public class KeyItem : MonoBehaviour
     //         }
     //     }
     // }
-
+    
     /// <summary>
     /// Called when another collider exits the trigger collider attached to this object.
     /// </summary>

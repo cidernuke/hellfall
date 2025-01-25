@@ -39,6 +39,10 @@ public class MenuController : MonoBehaviour
     // Initialize resolution dropdown and set the current resolution
     private void Start()
     {
+        // Ensure cursor is visible and unlocked when the menu is opened
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions(); // Clear existing options
 
@@ -77,6 +81,10 @@ public class MenuController : MonoBehaviour
     public void LoadGame()
     {
         SceneManager.LoadScene("Menu");
+
+        Cursor.visible = true; // Ensure cursor is visible
+        Cursor.lockState = CursorLockMode.None; // Unlock the cursor
+        
     }
 
     /// <summary>
@@ -135,6 +143,8 @@ public class MenuController : MonoBehaviour
     public void ExitButton()
     {
         Application.Quit(); // Quit the application
+        Cursor.visible = false; // Hide the cursor
+        Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
     }
 
     /// <summary>

@@ -21,6 +21,11 @@ public class PauseMenuController : MonoBehaviour
     /// </summary>
     private void Update()
     {        
+        // Prevent pause menu from opening if the main menu is active
+        if (SceneManager.GetActiveScene().name == "Menu")
+        {
+            return;
+        }
         
         // Toggle pause status when the Escape key is pressed
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -105,8 +110,10 @@ public class PauseMenuController : MonoBehaviour
     /// </summary>
     public void LoadMainMenuYes()
     {
-        SceneManager.LoadScene(_mainMenu); // Replace with the actual name of the main menu scene
         DeactivateMenu();
+        SceneManager.LoadScene(_mainMenu);
+        Cursor.visible = true; // Ensure cursor is visible
+        Cursor.lockState = CursorLockMode.None; // Unlock the cursor
     }
 
     /// <summary>
