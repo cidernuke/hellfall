@@ -424,21 +424,9 @@ public class InventorySystem : MonoBehaviour
     public IEnumerator InvenotryFull(int messageCase)
     {
         var time = 1.5f;
-        Sprite speechBubble = null; 
-        switch(messageCase)
-        {
-            case 1:
-                speechBubble = Resources.Load<Sprite>("Sprites/Level_One/Speech_Bubbles/Inventory_full_bubble");
-            break;
-            case 2:
-                //to-do:
-            break;
-            default:
-                //nix
-            break;
-        }
+
         // Load the sprite for the speech bubble
-        //Sprite speechBubble = Resources.Load<Sprite>("Sprites/Level_One/Speech_Bubbles/Inventory_full_bubble");
+        Sprite speechBubble = Resources.Load<Sprite>("Sprites/Level_One/Speech_Bubbles/Inventory_full_bubble");
         // Set the sprite and position of the speech bubble
         playerSpeechSpriteRenderer.sprite = speechBubble;
 
