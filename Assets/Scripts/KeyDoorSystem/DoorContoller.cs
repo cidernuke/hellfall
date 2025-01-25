@@ -16,12 +16,14 @@ public class DoorController : MonoBehaviour
     [SerializeField] private float doorOpenDuration = 1.5f;
 
     [Header("UI Hint")]
-    [SerializeField] private GameObject tryToOpenDoor_hintBubble; 
-    [SerializeField] private GameObject cantOpenDoot_hintBubble; 
+    [SerializeField] private GameObject tryToOpenDoor_hintBubble;
+    [SerializeField] private GameObject cantOpenDoot_hintBubble;
 
     private bool isDoorOpen = false;
     private bool playerInRange = false;
-
+    public Vector3 setPlayerCoordinates;
+    [SerializeField] private GameObject loadingScreen; // Reference to loading screen object
+    private GameManager gameManager;
 
     /// <summary>
     /// Checks each frame if the player is in range and if the door is still closed. 
@@ -51,7 +53,7 @@ public class DoorController : MonoBehaviour
             Debug.Log("Player in door trigger zone. Press [E] to open.");
 
             // Show the UI hint
-            if(tryToOpenDoor_hintBubble != null)
+            if (tryToOpenDoor_hintBubble != null)
                 tryToOpenDoor_hintBubble.SetActive(true);
         }
     }
@@ -67,10 +69,10 @@ public class DoorController : MonoBehaviour
             Debug.Log("Player left the door trigger zone.");
 
             // Hide the UI hint
-            if(tryToOpenDoor_hintBubble != null)
+            if (tryToOpenDoor_hintBubble != null)
                 tryToOpenDoor_hintBubble.SetActive(false);
 
-            if(cantOpenDoot_hintBubble != null)
+            if (cantOpenDoot_hintBubble != null)
                 cantOpenDoot_hintBubble.SetActive(false);
         }
     }
@@ -96,7 +98,7 @@ public class DoorController : MonoBehaviour
         }
         else
         {
-            if(cantOpenDoot_hintBubble != null)
+            if (cantOpenDoot_hintBubble != null)
                 cantOpenDoot_hintBubble.SetActive(true);
             Debug.Log("Door is locked. Player has not enough keys!");
         }
@@ -135,10 +137,14 @@ public class DoorController : MonoBehaviour
     {
         yield return new WaitForSeconds(doorOpenDuration);
 
-        if (!string.IsNullOrEmpty(sceneToLoad))
+        if (!string.IsNullOrEmpty(sceneToLoad) && setPlayerCoordinates != new Vector3(0, 0, 0))
         {
+            gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+            gameManager.SetIsMainBossTrue();
             Debug.Log("Loading scene: " + sceneToLoad);
             SceneManager.LoadScene(sceneToLoad);
+            // var playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+            // playerMovement.transform.position = setPlayerCoordinates;
         }
         else
         {

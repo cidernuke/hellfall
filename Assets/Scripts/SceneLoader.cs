@@ -14,6 +14,7 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] private Transform bossRoomEntrance;
     public GameObject bossHealthBar;
     [SerializeField] private Boss vampireCountess;
+    [SerializeField] private UndeadExecutioner undeadExecutioner;
 
     private void Awake()
     {
@@ -40,7 +41,14 @@ public class SceneLoader : MonoBehaviour
 
     private IEnumerator TeleportToBossRoom()
     {
-        vampireCountess.gameObject.SetActive(true);
+        if (vampireCountess != null)
+        {
+            vampireCountess.gameObject.SetActive(true);
+        }
+        else if (undeadExecutioner != null)
+        {
+            undeadExecutioner.gameObject.SetActive(true);
+        }
         bossHealthBar.SetActive(true);
         if (loadingScreen != null)
         {
@@ -48,7 +56,7 @@ public class SceneLoader : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1); // Simulate loading time
-        
+
         if (player != null && bossRoomEntrance != null)
         {
             player.transform.position = bossRoomEntrance.position; // Teleport the player

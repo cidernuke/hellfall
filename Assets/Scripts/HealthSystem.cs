@@ -53,6 +53,7 @@ public class HealthSystem : MonoBehaviour
     // Variables and References for bosses
     private Boss bossVampire;
     private EndBossMain bossMain;
+    private UndeadExecutioner undeadExecutionerBoss;
     private SpriteRenderer spriteRenderer; // Reference to the boss's SpriteRenderer
     private Color hitColor = Color.white;  // Color to show when hit
     private float flashDuration = 0.1f;    // Duration of the hit effect
@@ -90,6 +91,7 @@ public class HealthSystem : MonoBehaviour
         enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
         bossVampire = gameObject.GetComponent<Boss>();
         bossMain = gameObject.GetComponent<EndBossMain>();
+        undeadExecutionerBoss = gameObject.GetComponent<UndeadExecutioner>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 
         // Store the original color
@@ -168,15 +170,11 @@ public class HealthSystem : MonoBehaviour
         if (currentHealth > 0)
         {
             anim.SetTrigger("hurt");
-            // if (bossVampire != null && bossMain != null)
-            // {
-            //     StartCoroutine(FlashHitEffect());
-            // }
             if (isPlayer)
             {
                 UpdateHealthUI();
             }
-            if (!isPlayer && bossVampire == null && bossMain == null)
+            if (!isPlayer && bossVampire == null && bossMain == null && undeadExecutionerBoss == null)
             {
                 enemyHealthBar.updateHealthBar(currentHealth, startingHealth);
             }
@@ -191,28 +189,6 @@ public class HealthSystem : MonoBehaviour
 
         }
     }
-
-    // private IEnumerator FlashHitEffect()
-    // {
-    //     if (bossMain != null)
-    //     {
-    //         spriteRenderer = bossMain.GetComponent<SpriteRenderer>();
-    //     }
-    //     else
-    //     {
-    //         spriteRenderer = bossVampire.GetComponent<SpriteRenderer>();
-    //     }
-    //     originalColor = spriteRenderer.material.color;
-
-    //     // Change the sprite color to the hit color
-    //     spriteRenderer.material.color = hitColor;
-
-    //     // Wait for the flash duration
-    //     yield return new WaitForSeconds(4);
-
-    //     // Revert the sprite color to the original color
-    //     spriteRenderer.material.color = originalColor;
-    // }
 
     /// <summary>
     /// Increases the current health by the specified health amount and updates the health UI.

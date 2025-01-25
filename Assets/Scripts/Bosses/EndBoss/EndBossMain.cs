@@ -229,6 +229,20 @@ public class EndBossMain : MonoBehaviour
         Gizmos.DrawWireCube(boxPosition, areaAttackboxSize);
     }
 
+    public void DisableCollider()
+    {
+        bossCollider.enabled = false;
+    }
+
+    /// <summary>
+	/// Called by the HealthSystem when the boss dies.
+	/// </summary>
+	public void OnDeath()
+	{
+		healthBar.gameObject.SetActive(false);
+		gameObject.SetActive(false);
+	}
+
     public void PrinterForBossRun(string message)
     {
         print(message);

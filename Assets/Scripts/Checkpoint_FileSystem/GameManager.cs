@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     private List<EnemyController> enemyRespawners = new List<EnemyController>();
 
     public Vector3 setPlayerCoordinates;
+    private readonly Vector3 playerSpawnPointEndBoss = new(0, 0.5f, 0);
+    public bool isMainBoss = false;
 
     private void Awake()
     {
@@ -74,12 +76,17 @@ public class GameManager : MonoBehaviour
 
         //Sets the spawn location after switching scene
         GameObject spawnPoint = GameObject.FindWithTag("SpawnPoint");
-        if (setPlayerCoordinates != new Vector3(0, 0, 0))
+        if (setPlayerCoordinates != new Vector3(0, 0, 0) && !isMainBoss)
         {
             playerMovement.transform.position = setPlayerCoordinates;
         }
         else if (spawnPoint != null)
         {
+            // if (isMainBoss)
+            // {
+            //     EndBossMain mainBoss = new(); 
+            //     mainBoss.gameObject.SetActive(true);
+            // }
             print("spawning at spawn point");
             playerMovement.transform.position = spawnPoint.transform.position;
         }
@@ -99,6 +106,11 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(LoadGameAfterUIIsReady());
         }
+    }
+
+    public void SetIsMainBossTrue()
+    {
+        isMainBoss = true;
     }
 
     /// <summary>
