@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ItemSystem.Abstract;
-using ItemSystem.Items;
 using UnityEngine.SceneManagement; // Add this line to include the namespace where PowerUpItem is defined
 
 public class InventorySystem : MonoBehaviour
@@ -332,7 +331,7 @@ public class InventorySystem : MonoBehaviour
         }
         switch (itemData.itemType)
         {
-            case ItemType.ModifierItem:
+            case ItemType.PowerUpItem:
                 return new PowerUpItem(itemData.itemName, itemData.itemSprite);
 
             // In this case, we need to pass the playerHealth to the HealthItem
