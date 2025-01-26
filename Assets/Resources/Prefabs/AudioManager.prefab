@@ -320,6 +320,7 @@ MonoBehaviour:
   dash: {fileID: 8300000, guid: dd87a70a9696b154b80fe19f6ab478fd, type: 3}
   checkpoint: {fileID: 8300000, guid: b64551e0989dc6043b4476bdb4140b16, type: 3}
   open_door: {fileID: 8300000, guid: 6d6fbd5c33f13ba4e95d62231939b4bc, type: 3}
+  healthitem: {fileID: 8300000, guid: 23684ebb30cdfcd4aa02b6429a3fc23e, type: 3}
 --- !u!114 &4425688037874184884
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,19 +10,22 @@ using UnityEngine;
 public class HealthItem : Item
 {
     private float healthAmount; // how much does an item heal
-    public HealthSystem playerHealth; // reference to 
+    public HealthSystem playerHealth; // reference to
+    private AudioManager audioManager; 
     
     public HealthItem(string itemName, Sprite itemSprite, float healthAmount) 
     {
         this.itemName = itemName;
         this.itemSprite = itemSprite;
         this.healthAmount = healthAmount;
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
     public override bool use()        {
             
             if (playerHealth.currentHealth < playerHealth.startingHealth)
             {
-                playerHealth.AddHealth(healthAmount);                            
+                playerHealth.AddHealth(healthAmount);
+                audioManager.PlaySFX(audioManager.healthitem);                            
                 return true;             
             }            
             return false;
