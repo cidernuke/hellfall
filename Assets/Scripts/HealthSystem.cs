@@ -287,7 +287,10 @@ public class HealthSystem : MonoBehaviour
         enemyController.SpawnLoot();
 
         //deactivate the enemy instead of destroying him
-        enemyController.OnDeath();
+        if (!enemyController.isBoss)
+        {
+            enemyController.OnDeath();
+        }
     }
 
     /// <summary>

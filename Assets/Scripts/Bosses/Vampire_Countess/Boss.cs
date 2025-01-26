@@ -18,7 +18,7 @@ public class Boss : MonoBehaviour
 	public bool isInSecondPhase = false;
 
 	public BossHealthBar healthBar;
-	public GameObject healthBarUI;
+	// public GameObject healthBarUI;
     public HealthSystem healthSystem;
 
 	private void Awake()
@@ -209,7 +209,8 @@ public class Boss : MonoBehaviour
 	/// </summary>
 	public void OnDeath()
 	{
-		healthBarUI.SetActive(false);
+		healthBar.gameObject.SetActive(false);
+		print("healthbar should deactivate");
 		gameObject.SetActive(false);
 	}
 

@@ -21,6 +21,7 @@ public class EnemyController : MonoBehaviour
 
     [Header("Loot")]
     [SerializeField] public List<LootItem> lootTable = new List<LootItem>();
+    [SerializeField] private Vector3 lootPositionOffset;
 
     // References
     public Animator anim;
@@ -39,6 +40,9 @@ public class EnemyController : MonoBehaviour
     //Flag for special Attacks
     public bool isFrozen = false;
     public bool isOnFire = false;
+
+    // Variables
+    public bool isBoss = false;
 
     private void Awake()
     {
@@ -82,17 +86,20 @@ public class EnemyController : MonoBehaviour
         cooldownTimer += Time.deltaTime;
 
         // Only attacks if player is in sight
-        if (PlayerInSight())
+        if (!isBoss)
         {
-            // Checks if cooldown timer has expired
-            if (cooldownTimer >= attackCooldown)
+            if (PlayerInSight())
             {
-                cooldownTimer = 0;
-                anim.SetTrigger("meleeAttack");
+                // Checks if cooldown timer has expired
+                if (cooldownTimer >= attackCooldown)
+                {
+                    cooldownTimer = 0;
+                    anim.SetTrigger("meleeAttack");
+                }
             }
         }
 
-        if (enemyPatrol != null)
+        if (enemyPatrol != null && !isBoss)
         {
             enemyPatrol.enabled = !PlayerInSight();
         }
@@ -129,6 +136,10 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     private void OnDrawGizmos()
     {
+        if (isBoss)
+        {
+            return;
+        }
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
             new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y * height, boxCollider.bounds.size.z));
@@ -155,7 +166,7 @@ public class EnemyController : MonoBehaviour
         {
             if (UnityEngine.Random.Range(0f, 100f) <= lootItem.dropChance)
             {
-                Vector3 lootPosition = transform.position - new Vector3(0, 1, 0);
+                Vector3 lootPosition = transform.position - lootPositionOffset;
                 Instantiate(lootItem.itemPrefab, lootPosition, Quaternion.identity);
             }
         }
@@ -194,7 +205,7 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     public void ApplyIceEffect()
     {
-        if(enemyPatrol == null) return; //No Ice Effect for UndeadExecutioner
+        if (enemyPatrol == null) return; //No Ice Effect for UndeadExecutioner
         if (!enemyPatrol.enabled) return; // Prevent multiple freezes
 
         StartCoroutine(FreezeEnemy());

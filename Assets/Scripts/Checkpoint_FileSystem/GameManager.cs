@@ -308,7 +308,7 @@ public class GameManager : MonoBehaviour
         // Respawn enemies
         foreach (var enemy in enemyRespawners)
         {
-            if (enemy != null)
+            if (enemy != null && !enemy.isBoss)
             {
                 HealthSystem hs = enemy.GetComponent<HealthSystem>();
                 if (hs != null)
@@ -324,7 +324,11 @@ public class GameManager : MonoBehaviour
         // Respawn Items
         foreach (var respawner in itemRespawners)
         {
-            respawner.RespawnItem();
+            // So that the keys dont respawn on death and can be duplicated
+            if (respawner.gameObject.name != "KeyItem(Clone)")
+            {
+                respawner.RespawnItem();
+            }
         }
     }
 

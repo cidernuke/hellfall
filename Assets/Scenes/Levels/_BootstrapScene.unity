@@ -854,6 +854,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2193375495534342346, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+      propertyPath: startingHealth
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 2207868281329742412, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: maxLifetime
       value: 1.5
@@ -1210,11 +1214,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9207121439723155590, guid: 5291325245c0d8547ba2ff3077683566, type: 3}
       propertyPath: setPlayerCoordinates.x
-      value: 46.22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9207121439723155590, guid: 5291325245c0d8547ba2ff3077683566, type: 3}
       propertyPath: setPlayerCoordinates.y
-      value: -26
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
