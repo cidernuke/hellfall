@@ -14,5 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Staerke Buff
   itemSprite: {fileID: 3450577421433650506, guid: c7d1d3d805b430c48b35e2241065a0cb, type: 3}
+  itemType: 5
   healthAmount: 0
-  itemType: 0
+  duration: 0
+  amount: 0
+  description: 
+  isFire: 0
+  isIce: 0

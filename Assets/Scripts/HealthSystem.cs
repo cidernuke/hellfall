@@ -398,6 +398,7 @@ public class HealthSystem : MonoBehaviour
         if (isPlayer && UIHandler.instance != null)
         {
             UIHandler.instance.SetHealthValue(currentHealth / startingHealth);
+            UIHandler.instance.SetHealthText($"{currentHealth}/{startingHealth}");
         }
     }
 
