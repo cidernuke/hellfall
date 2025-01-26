@@ -244,6 +244,9 @@ public class HealthSystem : MonoBehaviour
 
             if (playerMovement != null)
             {
+                playerMovement.isDead = true;
+                playerMovement.stopPlayerMoving();
+                
                 playerMovement.enabled = false;
                 isDead = true;
 

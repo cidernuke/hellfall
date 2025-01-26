@@ -153,6 +153,13 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>        
     public void Update()
     {
+        // if(isDead)
+        // {
+        //     blockInput = true;
+        //     body.velocity = new Vector2(0, body.velocity.y);
+        //     return;
+        // }
+
         // Relevant for the final boss
         if (dashCounter > 0)
         {
@@ -212,6 +219,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundDecay;
     private void FixedUpdate()
     {
+        // if(isDead)
+        // {
+        //     blockInput = true;
+        //     body.velocity = new Vector2(0, body.velocity.y);
+        //     return;
+        // }
+
         if (!blockInput)
         {
             if (!isWallJumping)
@@ -682,6 +696,8 @@ public class PlayerMovement : MonoBehaviour
         // Reset death-flag
         isDead = false;
 
+        blockInput = false;
+
         // Reset velocity
         body.velocity = Vector2.zero;
 
@@ -690,6 +706,12 @@ public class PlayerMovement : MonoBehaviour
         //animator.ResetTrigger("die");
         //Set Idle animation again, if not player is invisible unitl the animation is changed
         //animator.Play("Idle");
+    }
+
+    public void stopPlayerMoving()
+    {
+        blockInput = true;
+        body.velocity = new Vector2(0, body.velocity.y);
     }
 
     #endregion
