@@ -10,8 +10,8 @@ using UnityEngine;
 public class HealthItem : Item
 {
     private float healthAmount; // how much does an item heal
-    public HealthSystem playerHealth; // reference to healthsystem
-
+    public HealthSystem playerHealth; // reference to 
+    
     public HealthItem(string itemName, Sprite itemSprite, float healthAmount) 
     {
         this.itemName = itemName;
@@ -22,10 +22,9 @@ public class HealthItem : Item
             
             if (playerHealth.currentHealth < playerHealth.startingHealth)
             {
-                playerHealth.AddHealth(healthAmount);                
+                playerHealth.AddHealth(healthAmount);                            
                 return true;             
             }            
-            Debug.Log("Item was used");
             return false;
         }
 }

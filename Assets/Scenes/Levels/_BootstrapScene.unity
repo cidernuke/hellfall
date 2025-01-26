@@ -122,23 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &56696201 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8393715674122549264, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-  m_PrefabInstance: {fileID: 1824115809207490320}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &56696204
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 56696201}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71e3b7b033daf8643bad8de5a3b9d561, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &90478559
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1303,6 +1286,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
+      propertyPath: healthitem
+      value: 
+      objectReference: {fileID: 8300000, guid: 23684ebb30cdfcd4aa02b6429a3fc23e, type: 3}
     - target: {fileID: 8393715674122549264, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
       propertyPath: m_Name
       value: AudioManager
@@ -1310,10 +1297,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8393715674122549264, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 56696204}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

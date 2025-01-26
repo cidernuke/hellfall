@@ -266,6 +266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1189816476284437215}
   - component: {fileID: 1658325379613624237}
+  - component: {fileID: 4425688037874184884}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Audio
@@ -317,3 +318,17 @@ MonoBehaviour:
   walk: {fileID: 8300000, guid: 849c680fb64e5354e9920df5179dd567, type: 3}
   landing: {fileID: 8300000, guid: 673b75cfa1ce52b4680213f32f3e6d1a, type: 3}
   dash: {fileID: 8300000, guid: dd87a70a9696b154b80fe19f6ab478fd, type: 3}
+  checkpoint: {fileID: 8300000, guid: b64551e0989dc6043b4476bdb4140b16, type: 3}
+  open_door: {fileID: 8300000, guid: 6d6fbd5c33f13ba4e95d62231939b4bc, type: 3}
+--- !u!114 &4425688037874184884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8393715674122549264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71e3b7b033daf8643bad8de5a3b9d561, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

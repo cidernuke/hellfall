@@ -33,6 +33,10 @@ public class AudioManager : MonoBehaviour
 
     public AudioClip checkpoint;
     public AudioClip open_door;
+
+    [Header("-Items")]
+
+    public AudioClip healthitem;
     
     
 
