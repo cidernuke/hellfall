@@ -95,12 +95,13 @@ public class Explosion : MonoBehaviour
 
 
 
-            /** If the collider is an enemy, deal damage to the enemy
-            commented so no enemy damage
-            else if (collider.CompareTag("Enemy"))
-            {
-                collider.GetComponent<HealthSystem>()?.TakeDamage(damageAmount);
-            }**/
+            // If the collider is an enemy, deal damage to the enemy
+            // commented so no enemy damage
+            //! bug for 2-key-drop is here
+            // else if (collider.CompareTag("Enemy"))
+            // {
+            //     collider.GetComponent<HealthSystem>()?.TakeDamage(damageAmount);
+            // }
         }
     }
 

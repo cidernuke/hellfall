@@ -210,9 +210,27 @@ public class Boss : MonoBehaviour
 	public void OnDeath()
 	{
 		healthBar.gameObject.SetActive(false);
-		print("healthbar should deactivate");
+		SpawnObject(new Vector3(83.1f, 29.48f, 1.1f));
 		gameObject.SetActive(false);
 	}
+
+	public void SpawnObject(Vector3 position)
+    {
+        // Create a new GameObject
+        GameObject newObject = new GameObject("MyDynamicObject");
+
+        // Set its position and rotation
+        newObject.transform.position = position;
+
+        // Add the desired component
+        newObject.AddComponent<Checkpoint>();
+		BoxCollider2D collider = newObject.AddComponent<BoxCollider2D>();
+		collider.offset = new Vector2((float)1.15, (float)0.2);
+		collider.size = new Vector2(3, (float)0.1);
+		collider.isTrigger = true;
+        // Optionally, modify the component
+        // myComponent.DoSomething();
+    }
 
 	/// <summary>
 	/// Prints a message to the console.

@@ -162,8 +162,10 @@ public class EnemyController : MonoBehaviour
     ///</summary>
     public void SpawnLoot()
     {
+        print("lootTable count: "+lootTable.Count);
         foreach (LootItem lootItem in lootTable)
         {
+        print("lootitem: "+lootItem);
             if (UnityEngine.Random.Range(0f, 100f) <= lootItem.dropChance)
             {
                 Vector3 lootPosition = transform.position - lootPositionOffset;
