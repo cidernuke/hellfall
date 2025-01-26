@@ -38,11 +38,35 @@ public class AudioManager : MonoBehaviour
 
     public AudioClip healthitem;
     
+    [Header("-Settings")]
+
+    // Pitch is exaggerated in this example, normally you'd use 0.9f to 1.1f or similar.
+    // Play with minPitch and maxPitch values in the Editor until you achieve the desired effect.
+    [SerializeField] private float minPitch;
+    [SerializeField] private float maxPitch;
+    
+    //Max Volume is 1
+    [SerializeField] private float minVolume;
+    [SerializeField] private float maxVolume;
+
+    //Stereo Pan 0 is the middle, + is right side and - is left side
+    [SerializeField] private float leftMaxPan;
+    [SerializeField] private float rightMaxPan;
+
     
 
     public void PlaySFX(AudioClip clip)
     {
         SFXSource.PlayOneShot(clip);
+
+        float newPitch = Random.Range(minPitch, maxPitch);
+        float newVolume = Random.Range(minVolume, maxVolume);
+        float newPan = Random.Range(leftMaxPan, rightMaxPan);
+        
+        SFXSource.pitch = newPitch;
+        SFXSource.volume = newVolume;
+        SFXSource.panStereo = newPan;
+
     }
     
 }
