@@ -225,40 +225,7 @@ public class GameManager : MonoBehaviour
 
         playerController.SetUpReferences();
 
-        //Rest Checkpoint-Status
-        //Need more logic, not done yet
-
-        //SaveGame();
-
-        // (1) Base_Spawn-Objekt suchen
-        // GameObject baseSpawnObj = GameObject.Find("Base_Spawn");
-        // if (baseSpawnObj != null)
-        // {
-        //     Checkpoint baseSpawn = baseSpawnObj.GetComponent<Checkpoint>();
-        //     if (baseSpawn != null)
-        //     {
-        //         // (2) PlayerMovement das neue Respawn-Target mitteilen
-        //         playerMovement.UpdateRespawnPoint(baseSpawn.transform.position, baseSpawn.checkpointID);
-        //         Debug.Log("Base_Spawn als aktiven Checkpoint gesetzt.");
-        //     }
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("Base_Spawn nicht gefunden - überprüfe Name oder Tag.");
-        // }
-
-        // // (3) Jetzt den neuen Spielstand speichern
-        // //     (damit wir ein Save haben, in dem Base_Spawn = letzter Checkpoint ist)
-        // SaveManager.Instance.SaveGame(
-        //     playerMovement,
-        //     healthSystem,
-        //     soulShardSystem,
-        //     inventorySystem,
-        //     keySystem,
-        //     playerController
-        // );
-
-        //Delete old save file
+        //Delete old save file to prevent loading the old game state
         if (SaveManager.Instance.saveFilePath != null)
         {
             string path = SaveManager.Instance.saveFilePath;
