@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 public class UIHandler : MonoBehaviour
 {
     private VisualElement m_Healthbar;
+    private TextField m_HealthText;
     public static UIHandler instance { get; private set; }
 
 
@@ -24,11 +25,17 @@ public class UIHandler : MonoBehaviour
             return;
         }
         m_Healthbar = uiDocument.rootVisualElement.Q<VisualElement>("HealthBar");
+        m_HealthText = uiDocument.rootVisualElement.Q<TextField>("HealthText");
         SetHealthValue(1.0f);
     }
 
     public void SetHealthValue(float percentage)
     {
         m_Healthbar.style.width = Length.Percent(100 * percentage);
+    }
+
+    public void SetHealthText(string text)
+    {
+        m_HealthText.SetValueWithoutNotify(text);
     }
 }

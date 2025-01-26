@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 using ItemSystem.Abstract;
-using ItemSystem.Items;
 using UnityEngine.SceneManagement; // Add this line to include the namespace where PowerUpItem is defined
 
 public class InventorySystem : MonoBehaviour
@@ -287,7 +286,7 @@ public class InventorySystem : MonoBehaviour
                 return true;
             }
         }
-        StartCoroutine(InvenotryFull());
+        StartCoroutine(InvenotryFull(1));
         return false;
     }
 
@@ -332,7 +331,7 @@ public class InventorySystem : MonoBehaviour
         }
         switch (itemData.itemType)
         {
-            case ItemType.ModifierItem:
+            case ItemType.PowerUpItem:
                 return new PowerUpItem(itemData.itemName, itemData.itemSprite);
 
             // In this case, we need to pass the playerHealth to the HealthItem
@@ -421,9 +420,10 @@ public class InventorySystem : MonoBehaviour
     /// <summary>
     /// Coroutine to display an "Inventory Full" message for a set duration or until "Q" is pressed.
     /// </summary>
-    public IEnumerator InvenotryFull()
+    public IEnumerator InvenotryFull(int messageCase)
     {
         var time = 1.5f;
+
         // Load the sprite for the speech bubble
         Sprite speechBubble = Resources.Load<Sprite>("Sprites/Level_One/Speech_Bubbles/Inventory_full_bubble");
         // Set the sprite and position of the speech bubble

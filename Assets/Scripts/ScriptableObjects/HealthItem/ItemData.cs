@@ -32,5 +32,7 @@ public enum ItemType
     // More Item-types can be added here
     ShortRangeWeapon,
 
-    LongRangeWeapon
+    LongRangeWeapon,
+
+    PowerUpItem
 }
