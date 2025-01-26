@@ -164,4 +164,22 @@ public class EnemyController : MonoBehaviour
         isDead = true;
         gameObject.SetActive(false);
     }
+
+    /// <summary>
+    /// Changes the enemy's sprite color to white when damaged and resets it after a short duration.
+    /// </summary>
+    public IEnumerator DamageEffect()
+    {
+        // Save the initial color of the enemy
+        Color initialColor = this.GetComponent<SpriteRenderer>().material.color;
+
+        // Change the color of the enemy to red (or another contrasting color)
+        this.GetComponent<SpriteRenderer>().material.color = Color.red;
+
+        // Wait for a short duration (e.g., 0.1 seconds)
+        yield return new WaitForSeconds(0.1f);
+
+        // Reset the color to the initial color
+        this.GetComponent<SpriteRenderer>().material.color = initialColor;
+    }
 }

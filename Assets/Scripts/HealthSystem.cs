@@ -12,9 +12,9 @@ public class HealthSystem : MonoBehaviour
     /// <summary>
     /// The initial amount of health the object starts with.
     /// </summary>
-    
-    
-    
+
+
+
     [SerializeField] public float startingHealth = 100;
 
     [SerializeField] private EnemyHealthBar enemyHealthBar;
@@ -150,6 +150,11 @@ public class HealthSystem : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
         if (currentHealth > 0)
         {
+            // Trigger the damage effect
+            if (enemyController != null)
+            {
+                enemyController.StartCoroutine(enemyController.DamageEffect());
+            }
             // Debug.Log("Current Health: " + currentHealth + "/ Starting Health: " + startingHealth);
             anim.SetTrigger("hurt");
             if (isPlayer)
