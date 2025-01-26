@@ -296,7 +296,8 @@ public class HealthSystem : MonoBehaviour
         GameManager.Instance.RespawnPlayer();
 
         //Reactivate the PlayerMovement
-        playerMovement.enabled = true;
+        //Now in GameManager.Instance.RespawnPlayer() -> playerMovement.Respawn();
+        //playerMovement.enabled = true;
 
         isDead = false;
     }

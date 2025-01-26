@@ -121,6 +121,7 @@ public class PauseMenuController : MonoBehaviour
     /// </summary>
     public void RespawnYes()
     {
+        DeactivateMenu();
         GameManager.Instance.RespawnPlayer();
         var enemyObject = GameObject.FindGameObjectsWithTag("Enemy");
         if (enemyObject != null)
@@ -129,12 +130,11 @@ public class PauseMenuController : MonoBehaviour
             {
                 enemy.GetComponent<HealthSystem>().ResetEnemySliderToFullHealth();
             }
-            DeactivateMenu();
+            //DeactivateMenu();
         }
         else
         {
             Debug.Log("HealthSystem not found on enemyObject");
         }
-
     }
 }

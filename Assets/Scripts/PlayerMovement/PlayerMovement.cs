@@ -685,11 +685,11 @@ public class PlayerMovement : MonoBehaviour
         // Reset velocity
         body.velocity = Vector2.zero;
 
-        //TODO: Add respawn animation here
+        // This was the Error, the player was freezed after respawn
         //Reset die trigger
-        animator.ResetTrigger("die");
+        //animator.ResetTrigger("die");
         //Set Idle animation again, if not player is invisible unitl the animation is changed
-        animator.Play("Idle");
+        //animator.Play("Idle");
     }
 
     #endregion
