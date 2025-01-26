@@ -43,7 +43,7 @@ public class AltarGUI : MonoBehaviour
         SetBaseValues();
         setBaseProgressBarValues();
 
-        
+
         foreach (Button button in buttons)
         {
             if (button.name == "PlusButton1" || button.name == "PlusButton2" || button.name == "PlusButton3")
@@ -55,9 +55,6 @@ public class AltarGUI : MonoBehaviour
                 button.onClick.AddListener(() => OnMinusButtonClick(button));
             }
         }
-
-
-
     }
 
     /// <summary>
@@ -123,6 +120,16 @@ public class AltarGUI : MonoBehaviour
         }
     }
 
+    private bool HasEnoughSoulShards(int cost)
+    {
+        int currentShards = GameManager.Instance.soulShardSystem.GetSoulShardCount();
+        if (currentShards < cost)
+        {
+            Debug.LogError("Not enough soul shards.");
+            return false;
+        }
+        return true;
+    }
 
     /// <summary>
     /// Event handler for the plus buttons in the Altar GUI
@@ -131,7 +138,6 @@ public class AltarGUI : MonoBehaviour
     /// <param name="button"></param>
     private void OnPlusButtonClick(Button button)
     {
-
         foreach (TextMeshProUGUI textElement in textValueElements)
         {
             if (button.name == "PlusButton1")
@@ -144,10 +150,11 @@ public class AltarGUI : MonoBehaviour
 
                 if (textElement.name == "VitalityValueText")
                 {
+                    //Check for enough soul shards
+                    //if (!HasEnoughSoulShards(vitalityCost)) return;
                     GameManager.Instance.soulShardSystem.decreaseSoulShard(null, vitalityCost);
                     incrementValueText(textElement);
                     updateSoulShardCost("SHValueText1", ref vitalityCost, ref vitalityMultiplierCount, true, vitalityCosts);
-
                 }
             }
             if (button.name == "PlusButton2")
@@ -159,6 +166,8 @@ public class AltarGUI : MonoBehaviour
                 }
                 if (textElement.name == "StrengthValueText")
                 {
+                    //Check for enough soul shards
+                    //if (!HasEnoughSoulShards(strengthCost)) return;
                     GameManager.Instance.soulShardSystem.decreaseSoulShard(null, strengthCost);
                     incrementValueText(textElement);
                     updateSoulShardCost("SHValueText2", ref strengthCost, ref strengthMultiplierCount, true, strengthCosts);
@@ -173,15 +182,14 @@ public class AltarGUI : MonoBehaviour
                 }
                 if (textElement.name == "IntelligenceValueText")
                 {
+                    //Check for enough soul shards
+                    //if (!HasEnoughSoulShards(intelligenceCost)) return;
                     GameManager.Instance.soulShardSystem.decreaseSoulShard(null, intelligenceCost);
                     incrementValueText(textElement);
                     updateSoulShardCost("SHValueText3", ref intelligenceCost, ref intelligenceMultiplierCount, true, intelligenceCosts);
                 }
             }
-
         }
-
-
     }
 
     /// <summary>
@@ -322,11 +330,11 @@ public class AltarGUI : MonoBehaviour
         {
             if (textElement.name == "maxHealthValueText")
             {
-                textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();                
+                textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();
             }
             if (textElement.name == "healthPBValueText")
             {
-                textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();                
+                textElement.text = playerController.playerStats.maxHealth.GetBaseValue().ToString();
             }
         }
     }
@@ -341,12 +349,12 @@ public class AltarGUI : MonoBehaviour
             if (textElement.name == "damageValueText")
             {
                 textElement.text = playerController.playerStats.closeDamage.GetBaseValue().ToString();
-                
+
             }
             if (textElement.name == "damagePBValueText")
             {
-                textElement.text = (playerController.playerStats.closeDamage.GetBaseValue() * 1.1f).ToString() ;
-                
+                textElement.text = (playerController.playerStats.closeDamage.GetBaseValue() * 1.1f).ToString();
+
             }
 
         }
@@ -382,7 +390,7 @@ public class AltarGUI : MonoBehaviour
             }
             if (textElement.name == "r_cooldownPBValueText")
             {
-                
+
                 textElement.text = Math.Round(playerController.playerStats.rangedCooldown.GetBaseValue() * 0.95f, 2).ToString();
 
             }
@@ -405,7 +413,7 @@ public class AltarGUI : MonoBehaviour
         foreach (TextMeshProUGUI textElement in textValueElements)
         {
             /// Health values                
-            if (textElement.name == "VitalityValueText" )
+            if (textElement.name == "VitalityValueText")
             {
                 textElement.text = playerController.playerStats.vitality.GetBaseValue().ToString();
             }
@@ -576,7 +584,7 @@ public class AltarGUI : MonoBehaviour
                     }
                     if (image.name == "rangePBValue")
                     {
-                       fillImage(image, isIncrement);
+                        fillImage(image, isIncrement);
                     }
                     break;
 
