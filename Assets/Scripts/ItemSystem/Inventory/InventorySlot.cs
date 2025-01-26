@@ -77,7 +77,7 @@ public class InventorySlot
             // switch based on the name of the item
             switch (itemData.itemType)
             {
-                case ItemType.ModifierItem:
+                case ItemType.PowerUpItem:
                     Debug.Log("PowerUpItem was dropped");
                     //Load resource
                     GameObject resource = Resources.Load<GameObject>("Prefabs/PowerUp");

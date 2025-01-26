@@ -195,7 +195,6 @@ public class EnemyController : MonoBehaviour
     public void ApplyIceEffect()
     {
         if(enemyPatrol == null) return; //No Ice Effect for UndeadExecutioner
-        if (!enemyPatrol.enabled) return; // Prevent multiple freezes
 
         StartCoroutine(FreezeEnemy());
     }

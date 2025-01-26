@@ -1,5 +1,4 @@
 using ItemSystem.Abstract;
-using ItemSystem.Items;
 using UnityEngine;
 
 /// <summary>
@@ -30,7 +29,7 @@ public class ItemFactory : MonoBehaviour
     {
         switch (itemData.itemType)
         {
-            case ItemType.ModifierItem:
+            case ItemType.PowerUpItem:
                 powerUpItem = new PowerUpItem(itemData.itemName, itemData.itemSprite);
                 break;
 
