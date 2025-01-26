@@ -856,7 +856,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2193375495534342346, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: startingHealth
-      value: 500
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 2207868281329742412, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: maxLifetime
@@ -957,7 +957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cec7177fca08d64d86563bec816df55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: Scene_02
+  sceneToLoad: Scene_01
 --- !u!1001 &1322347938
 PrefabInstance:
   m_ObjectHideFlags: 0
