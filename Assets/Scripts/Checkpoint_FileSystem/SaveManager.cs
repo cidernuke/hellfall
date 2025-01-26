@@ -1,9 +1,7 @@
 using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using ItemSystem.Abstract;
-using ItemSystem.Items;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
@@ -13,7 +11,7 @@ public class SaveManager : MonoBehaviour
     public static SaveManager Instance;
 
     // Path to the save file
-    private string saveFilePath;
+    public string saveFilePath;
     public bool isLoadingFromSave = false;
 
     private void Awake()

@@ -97,7 +97,7 @@ public class UndeadExecutioner : MonoBehaviour
             return true;
         }
 
-        playerTransform = null;
+        //playerTransform = null;
         return false;
     }
 

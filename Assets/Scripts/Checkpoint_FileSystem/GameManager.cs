@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -199,7 +199,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning("StartNewGame: Player references are missing trying to reInitialize references.");
             InitializeReferences();
-            if (playerMovement == null || healthSystem == null || soulShardSystem == null || keySystem == null || playerController == null)
+            if (playerMovement == null || healthSystem == null || soulShardSystem == null || keySystem == null || playerController == null)
             {
                 Debug.LogWarning("StartNewGame: Player references are missing, cannot start new Game");
                 return;
@@ -228,6 +228,51 @@ public class GameManager : MonoBehaviour
         //Rest Checkpoint-Status
         //Need more logic, not done yet
 
+        //SaveGame();
+
+        // (1) Base_Spawn-Objekt suchen
+        // GameObject baseSpawnObj = GameObject.Find("Base_Spawn");
+        // if (baseSpawnObj != null)
+        // {
+        //     Checkpoint baseSpawn = baseSpawnObj.GetComponent<Checkpoint>();
+        //     if (baseSpawn != null)
+        //     {
+        //         // (2) PlayerMovement das neue Respawn-Target mitteilen
+        //         playerMovement.UpdateRespawnPoint(baseSpawn.transform.position, baseSpawn.checkpointID);
+        //         Debug.Log("Base_Spawn als aktiven Checkpoint gesetzt.");
+        //     }
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("Base_Spawn nicht gefunden - überprüfe Name oder Tag.");
+        // }
+
+        // // (3) Jetzt den neuen Spielstand speichern
+        // //     (damit wir ein Save haben, in dem Base_Spawn = letzter Checkpoint ist)
+        // SaveManager.Instance.SaveGame(
+        //     playerMovement,
+        //     healthSystem,
+        //     soulShardSystem,
+        //     inventorySystem,
+        //     keySystem,
+        //     playerController
+        // );
+
+        //Delete old save file
+        if (SaveManager.Instance.saveFilePath != null)
+        {
+            string path = SaveManager.Instance.saveFilePath;
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+                print("Old save file deleted.");
+            }
+        }
+        else
+        {
+            print("No save file found.");
+        }
+
         Debug.Log("StartNewGame: Values reset to default.");
     }
 
@@ -252,7 +297,7 @@ public class GameManager : MonoBehaviour
 
         // Reset shoulShards to the value while reaching the last checkpoint
         soulShardSystem.SetSoulShardCount(LoadSoulShardCountFromLastCheckpoint());
-        
+
         // Reset keyCounter to the value while reaching the last checkpoint
         keySystem.SetKeyCount(LoadKeyCountFromLastCheckpoint());
 
