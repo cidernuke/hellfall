@@ -158,8 +158,8 @@ public class PlayerAttack : MonoBehaviour
             playerMovement.body.constraints = RigidbodyConstraints2D.FreezePosition;
         }
 
-        anim.SetTrigger("attack_ranged");
         audioManager.PlaySFX(audioManager.rangedAttack);
+        anim.SetTrigger("attack_ranged");
         cooldownTimer = 0;
         int projectileIndex = FindProjectile();
 

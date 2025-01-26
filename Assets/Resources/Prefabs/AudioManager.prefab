@@ -305,9 +305,15 @@ MonoBehaviour:
   audioSource: {fileID: 2212377149832679415}
   SFXSource: {fileID: 7393028537596054008}
   background: {fileID: 0}
-  death: {fileID: 0}
-  rangedAttack: {fileID: 8300000, guid: 1317bafbe6906974fa7acb902d03ab29, type: 3}
-  closeAttack_01: {fileID: 8300000, guid: c9964ef62eff568469a71ebdac3b2c5b, type: 3}
-  closeAttack_02: {fileID: 8300000, guid: bbc00cfca5dff4f4587dd8be4d094ef7, type: 3}
-  jump: {fileID: 8300000, guid: 1ec7a335a83f08f4485006361e549998, type: 3}
+  player_hit: {fileID: 0}
+  player_death: {fileID: 8300000, guid: 79b41e0ee966d51439496466ecae39a1, type: 3}
+  enemy_hit: {fileID: 8300000, guid: 311482b872f05f84499afff64d0a1501, type: 3}
+  enemy_death: {fileID: 8300000, guid: 1c3161fdeb2feca4e9b35e51f5c5295d, type: 3}
+  rangedAttack: {fileID: 8300000, guid: 06a7ce5c08ae75e45bfeb1e362a5eb22, type: 3}
+  closeAttack_01: {fileID: 8300000, guid: 75eeec9b544810141a3eec04257a33bd, type: 3}
+  closeAttack_02: {fileID: 8300000, guid: a095171887368934593701bd7311c872, type: 3}
+  jump_01: {fileID: 8300000, guid: bbc00cfca5dff4f4587dd8be4d094ef7, type: 3}
+  jump_02: {fileID: 8300000, guid: 71349dfa0e4669d4faa597208d003b94, type: 3}
   walk: {fileID: 8300000, guid: 849c680fb64e5354e9920df5179dd567, type: 3}
+  landing: {fileID: 8300000, guid: 673b75cfa1ce52b4680213f32f3e6d1a, type: 3}
+  dash: {fileID: 8300000, guid: dd87a70a9696b154b80fe19f6ab478fd, type: 3}

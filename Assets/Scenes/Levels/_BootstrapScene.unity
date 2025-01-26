@@ -122,6 +122,23 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &56696201 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8393715674122549264, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
+  m_PrefabInstance: {fileID: 1824115809207490320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &56696204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56696201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71e3b7b033daf8643bad8de5a3b9d561, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &90478559
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -302,6 +319,10 @@ PrefabInstance:
     - target: {fileID: 8906896832516004659, guid: 36975662f68604e95b22f08096da681a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 9083658168900251581, guid: 36975662f68604e95b22f08096da681a, type: 3}
+      propertyPath: isPaused
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1260,15 +1281,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1189816476284437215, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1189816476284437215, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1189816476284437215, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1189816476284437215, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1289,7 +1310,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8393715674122549264, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 56696204}
   m_SourcePrefab: {fileID: 100100000, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -164,6 +164,7 @@ public class HealthSystem : MonoBehaviour
             if (!isPlayer)
             {
                 enemyHealthBar.updateHealthBar(currentHealth, startingHealth);
+                audioManager.PlaySFX(audioManager.enemy_hit);
             }
         }
         else
@@ -234,11 +235,12 @@ public class HealthSystem : MonoBehaviour
             }
             else if (enemyController != null)
             {
+                audioManager.PlaySFX(audioManager.enemy_death);
                 print("death of enemy");
                 enemyController.enabled = false;
                 //StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
                 StartCoroutine(HandleEnemyDeath(anim, enemyController, 0.4f));
-                // enemyController.SpawnLoot();
+                
 
             }
             isDead = true;

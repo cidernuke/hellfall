@@ -1202,50 +1202,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: dash
-      value: 
-      objectReference: {fileID: 8300000, guid: dd87a70a9696b154b80fe19f6ab478fd, type: 3}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: jump
-      value: 
-      objectReference: {fileID: 8300000, guid: 71349dfa0e4669d4faa597208d003b94, type: 3}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: death
-      value: 
-      objectReference: {fileID: 8300000, guid: 79b41e0ee966d51439496466ecae39a1, type: 3}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: jump_01
-      value: 
-      objectReference: {fileID: 8300000, guid: bbc00cfca5dff4f4587dd8be4d094ef7, type: 3}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: jump_02
-      value: 
-      objectReference: {fileID: 8300000, guid: 71349dfa0e4669d4faa597208d003b94, type: 3}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: landing
-      value: 
-      objectReference: {fileID: 8300000, guid: 673b75cfa1ce52b4680213f32f3e6d1a, type: 3}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: enemy_hit
-      value: 
-      objectReference: {fileID: 8300000, guid: 992f001435184bd4a9914b3fc07acf1b, type: 3}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: player_death
-      value: 
-      objectReference: {fileID: 8300000, guid: 79b41e0ee966d51439496466ecae39a1, type: 3}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: rangedAttack
-      value: 
-      objectReference: {fileID: 8300000, guid: 06a7ce5c08ae75e45bfeb1e362a5eb22, type: 3}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: closeAttack_01
-      value: 
-      objectReference: {fileID: 8300000, guid: 75eeec9b544810141a3eec04257a33bd, type: 3}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: closeAttack_02
-      value: 
-      objectReference: {fileID: 8300000, guid: a095171887368934593701bd7311c872, type: 3}
     - target: {fileID: 8393715674122549264, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
       propertyPath: m_Name
       value: AudioManager
@@ -2166,6 +2122,10 @@ PrefabInstance:
     - target: {fileID: 5794579647418493868, guid: fac2980baa124954b851147a365e2142, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656428639951187165, guid: fac2980baa124954b851147a365e2142, type: 3}
+      propertyPath: startingHealth
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7488354036633323685, guid: fac2980baa124954b851147a365e2142, type: 3}
       propertyPath: camera

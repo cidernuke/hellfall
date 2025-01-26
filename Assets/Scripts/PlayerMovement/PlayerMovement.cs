@@ -213,7 +213,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (!isDashing)
                 {
-                    body.velocity = new Vector2(playerInput.GetHorizontalInput() * groundSpeed, body.velocity.y);
+                    body.velocity = new Vector2(playerInput.GetHorizontalInput() * groundSpeed, body.velocity.y);                    
                 
                 }
                 else return;
@@ -474,6 +474,7 @@ public class PlayerMovement : MonoBehaviour
                 // Disable jumping on the same wall again until we touch a new wall
                 canWallJump = false;
                 wallJumpingCounter = 0f;
+                audioManager.PlaySFX(audioManager.jump_01);
 
                 // Flips player during walljump
                 if (transform.localScale.x != wallJumpDirection)
@@ -760,6 +761,11 @@ public class PlayerMovement : MonoBehaviour
             playerFXAnimator.SetBool("hasDoubleJumped", false);
         }
 
+    }
+
+    public void PlayWalkingSound()
+    {
+        audioManager.PlaySFX(audioManager.walk);
     }
 
     #region getter for tests
