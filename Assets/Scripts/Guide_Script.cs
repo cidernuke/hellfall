@@ -85,6 +85,7 @@ public class guide_Script : MonoBehaviour
             // Start title animation
             if(sequence == 0)
             {
+                StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(player.transform.position.x, -2.32f), 0.05f));
                 StartCoroutine(titleAnimation());
                 StopPlayer();
                 sequence = 1;
@@ -137,7 +138,7 @@ public class guide_Script : MonoBehaviour
                 sequence = 8;
             }
 
-            if(playerPosition.x >= 142.5 && playerPosition.x <= 144 && sequence == 8) 
+            if(playerPosition.x >= 141.5 && playerPosition.x <= 143 && sequence == 8) 
             {
                 StartCoroutine(eighthSequence());
                 sequence = 9;
@@ -374,7 +375,7 @@ public class guide_Script : MonoBehaviour
         StopPlayer();
         playerMovementScript.enabled = false;
 
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.5f), 0.05f));
+        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.34f), 0.05f));
 
         // S: you can jump with | space |...
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_20", true));
@@ -385,9 +386,12 @@ public class guide_Script : MonoBehaviour
 
     IEnumerator thirdSequence()
     {
-        yield return new WaitForSeconds(1f);
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.5f), 0.05f));
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(2f);
+        if(player.transform.position.x < -2) {
+            StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.34f), 0.05f));
+        } else {
+            yield return new WaitForSeconds(0.2f);
+        }
 
         StopPlayer();
         playerMovementScript.enabled = false;
@@ -403,13 +407,12 @@ public class guide_Script : MonoBehaviour
 
     IEnumerator fourthSequence()
     {
-        yield return new WaitForSeconds(1f);
-        StopPlayer();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(2f);
 
+        StopPlayer();
         playerMovementScript.enabled = false;
 
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.5f), 0.2f));
+        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(23f, -2.34f), 0.2f));
 
         // S: Follow me for your next lesson.
         StartCoroutine(someoneSpeaks(guideSpeechSpriteRenderer, "Sprites/Level_One/Speech_Bubbles/guide_speech_22", true));
@@ -426,7 +429,7 @@ public class guide_Script : MonoBehaviour
 
     IEnumerator fifthSequence()
     {
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(77f, 1.48f), 0.2f));
+        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(77f, 1.65f), 0.2f));
         yield return new WaitForSeconds(0.2f);
         StopPlayer();
         yield return new WaitForSeconds(1.1f);
@@ -461,7 +464,7 @@ public class guide_Script : MonoBehaviour
     
     IEnumerator sixthSequence()
     {
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(98f, 12.502f), 0.3f));
+        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(98f, 12.67f), 0.3f));
         yield return new WaitForSeconds(0.3f);
         StopPlayer();
 
@@ -485,7 +488,7 @@ public class guide_Script : MonoBehaviour
 
     IEnumerator seventhSequence()
     {
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(119f, 7.5f), 0.4f));
+        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(119f, 7.65f), 0.4f));
         guideSpeech.transform.position = new Vector3(122.5f, 8f, -1f);
         yield return new WaitForSeconds(0.4f);
 
@@ -507,18 +510,18 @@ public class guide_Script : MonoBehaviour
         guide.transform.position = new Vector2(146f, -1.75f);
 
         StartPlayer(false);
+        playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     IEnumerator eighthSequence()
     {
-        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(141f, -2.49f), 0.4f));
-        playerRigidBody.constraints = RigidbodyConstraints2D.FreezePosition;
-        Debug.Log("Guide Speech: " + guideSpeech.transform.position);
-        guideSpeech.transform.position = new Vector2(144.5f, -1.5f);
-        Debug.Log("Guide Speech: " + guideSpeech.transform.position);
-
+        hintBubble.transform.position = new Vector3(145f, -4.6f, -1f);
 
         StopPlayer();
+        StartCoroutine(moveSomeone(player, player.transform.position, new Vector2(141f, -2.3f), 0.4f));
+        guideSpeech.transform.position = new Vector2(144.5f, -1.5f);
+
+
         yield return new WaitForSeconds(1f);
 
         // S: Didn't think you'd manage all that.
@@ -549,6 +552,8 @@ public class guide_Script : MonoBehaviour
         guide.transform.position = new Vector2(3f, 7.32f);
 
         StartPlayer(false);
+        playerRigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+
     }
 
     IEnumerator ninthSequence()

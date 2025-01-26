@@ -41,10 +41,10 @@ public class ParallaxScrolling : MonoBehaviour
 
     private void Update()
     {
-        background_1.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y, -20);
-        background_2.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y, -15);
-        background_3.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y, -10);
-        background_4.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y, -5);
+        background_1.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y+5, 5);
+        background_2.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y+5, 4);
+        background_3.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y+5, 3);
+        background_4.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y+5, 2);
 
 
         // Vector3 cameraOffset = mainCamera.transform.position - cameraStartPos;

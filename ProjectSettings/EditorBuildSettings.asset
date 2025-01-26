@@ -38,4 +38,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/_BootstrapScene.unity
     guid: b6b15a5b69937ea4c937e2610d18ee3d
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level_Zero_Fixed.unity
+    guid: 30181dbc2fd1a486c94b4bd249136347
+  - enabled: 1
+    path: Assets/Scenes/Levels/Level_Two.unity
+    guid: e666379566ba54b4fb38902edaa8a49d
   m_configObjects: {}
