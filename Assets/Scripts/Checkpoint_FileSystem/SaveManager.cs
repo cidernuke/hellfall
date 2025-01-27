@@ -3,7 +3,6 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using ItemSystem.Abstract;
-using ItemSystem.Items;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
