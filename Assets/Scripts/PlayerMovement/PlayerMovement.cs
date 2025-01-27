@@ -674,7 +674,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void Respawn()
     {
-        animator.SetTrigger("respawn");
         // Set the position of the Player to the respawn-point
         transform.position = respawnPosition;
 
