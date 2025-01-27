@@ -200,7 +200,7 @@ public class HealthSystem : MonoBehaviour
         {
             if (isPlayer)
             {
-                UIHandler.instance.SetHealthValue(0f);
+                UpdateHealthUI();
             }
             Die(playerMovement, enemyController);
 
@@ -318,6 +318,8 @@ public class HealthSystem : MonoBehaviour
         playerMovement.enabled = true;
 
         isDead = false;
+
+        UpdateHealthUI();
     }
 
     // Coroutine to handle enemy death
