@@ -184,11 +184,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4553674711009610526, guid: 36975662f68604e95b22f08096da681a, type: 3}
   m_PrefabInstance: {fileID: 528956317}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &323271592 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5585758838363563765, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-  m_PrefabInstance: {fileID: 1207594475}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &480340096 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7203404565512192778, guid: 1ed2cf6556f05fe48826fe12d9aec708, type: 3}
@@ -723,26 +718,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 27862426199377037, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: maxLifetime
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: smashRange
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: closeDamage
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: smashDamage
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: smashCooldown
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 529821900032205658, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+      propertyPath: inventorySystem
+      value: 
+      objectReference: {fileID: 549623651}
     - target: {fileID: 2149054594424086871, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -783,22 +762,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2207868281329742412, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: maxLifetime
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2670466633884875034, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: maxLifetime
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4368885040078127639, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: maxLifetime
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5077749126528247758, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: keyCounterText
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 5585758838363563765, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: m_Name
       value: Player
@@ -807,33 +770,10 @@ PrefabInstance:
       propertyPath: counter
       value: 
       objectReference: {fileID: 612249766}
-    - target: {fileID: 6027865557405022282, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: soulShardCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6243606006489939958, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: maxLifetime
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6342456675221489673, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: maxLifetime
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6343161396507669889, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: maxLifetime
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8917340976624881129, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: maxLifetime
-      value: 1.5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5585758838363563765, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      insertIndex: 8
-      addedObject: {fileID: 1627913586}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
 --- !u!1 &1314418966
 GameObject:
@@ -882,7 +822,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cec7177fca08d64d86563bec816df55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: Scene_01
+  sceneToLoad: Scene_02
 --- !u!1001 &1322347938
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1151,55 +1091,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2149054594424086871, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
   m_PrefabInstance: {fileID: 1207594475}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1627913579 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1795978731709622821, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-  m_PrefabInstance: {fileID: 1207594475}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 323271592}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1122240b373e6694e909995038f8120c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1627913580 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2193375495534342346, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-  m_PrefabInstance: {fileID: 1207594475}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 323271592}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bbbdafceb1d62046b87c955a0d68953, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1627913586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 323271592}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d29ecf0bd06fa4eada7872bfc84bb0db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthSystem: {fileID: 1627913580}
-  playerAttackSystem: {fileID: 1627913579}
-  inventorySystem: {fileID: 549623651}
-  playerMovementSystem: {fileID: 0}
-  anim: {fileID: 0}
-  boxCollider: {fileID: 0}
-  vitality: 0
-  maxHealth: 100
-  currentHealth: 100
-  strength: 0
-  closeDamage: 5
-  intelligence: 0
-  rangedDamage: 5
-  rangedCooldown: 1.5
-  rangedRange: 2
 --- !u!1 &1761919014
 GameObject:
   m_ObjectHideFlags: 0

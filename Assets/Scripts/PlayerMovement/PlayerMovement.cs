@@ -674,8 +674,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void Respawn()
     {
+        animator.SetTrigger("respawn");
         // Set the position of the Player to the respawn-point
         transform.position = respawnPosition;
+
 
         // // Berechne den Offset zwischen dem Spieler-Pivot und dem Ground-Check
         // float pivotToGroundCheckOffset = transform.position.y - groundCheck.position.y;

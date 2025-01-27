@@ -13,7 +13,7 @@ public class DamageZone : MonoBehaviour
         playerMovement = collider.GetComponent<PlayerMovement>();
         if(playerHealthSys != null)
         {
-            playerHealthSys.TakeDamageFromDamageZone(10);
+            playerHealthSys.TakeDamageFromDamageZone(10, playerMovement);
         }
     }
 }

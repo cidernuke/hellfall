@@ -101,11 +101,11 @@ public class HealthSystem : MonoBehaviour
     /// Takes damage from damage zones with a global cooldown.
     /// </summary>
     /// <param name="damage">The amount of damage to take.</param>
-    public void TakeDamageFromDamageZone(float damage)
+    public void TakeDamageFromDamageZone(float damage, PlayerMovement playerMovement)
     {
         if (isDamageZoneCooldown) return;
 
-        TakeDamage(damage);
+        TakeDamage(damage, playerMovement);
         StartCoroutine(DamageZoneCooldown());
     }
 
@@ -297,6 +297,9 @@ public class HealthSystem : MonoBehaviour
 
         //Call the respawn method from the GameManagers
         GameManager.Instance.RespawnPlayer();
+
+        //Reset the death animation
+        anim.SetTrigger("respawn");
 
         //Reactivate the PlayerMovement
         //Now in GameManager.Instance.RespawnPlayer() -> playerMovement.Respawn();

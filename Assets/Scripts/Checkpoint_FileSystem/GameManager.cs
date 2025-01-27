@@ -255,6 +255,7 @@ public class GameManager : MonoBehaviour
         }
         // Reset the position of the player to the last checkpoint
         playerMovement.Respawn();
+        
 
         // Reset health to max value
         healthSystem.currentHealth = healthSystem.startingHealth;
