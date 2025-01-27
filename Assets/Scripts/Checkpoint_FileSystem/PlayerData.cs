@@ -86,12 +86,5 @@ public class PlayerData
         characterStats.Add("rangedCooldownMod", stats.rangedCooldown.GetModifier());
         characterStats.Add("rangedRangeBase", stats.rangedRange.GetBaseValue());
         characterStats.Add("rangedRangeMod", stats.rangedRange.GetModifier());
-
-        
-
-
-
-
-
     }
 }
