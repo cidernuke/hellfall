@@ -325,7 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bbbdafceb1d62046b87c955a0d68953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 3
+  startingHealth: 100
   enemyHealthBar: {fileID: 6101700728895270426}
   currentHealth: 0
   anim: {fileID: 0}
@@ -394,10 +394,15 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 0
+  cooldownTimer: Infinity
   lootTable:
   - itemPrefab: {fileID: 3105599385479915624, guid: ce1ee5ec5cfd1614f8ae566b6dedbc58, type: 3}
     dropChance: 100
+  anim: {fileID: 0}
   enemyPatrol: {fileID: 0}
+  healthSystem: {fileID: 0}
+  isFrozen: 0
+  isOnFire: 0
 --- !u!114 &197163886150042724
 MonoBehaviour:
   m_ObjectHideFlags: 0

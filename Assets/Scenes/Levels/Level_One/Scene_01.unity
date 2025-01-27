@@ -69707,79 +69707,6 @@ PlatformEffector2D:
   m_UseSideFriction: 0
   m_UseSideBounce: 0
   m_SideArc: 1
---- !u!1001 &1051056384
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1343589604}
-    m_Modifications:
-    - target: {fileID: 197163886150042724, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: camera
-      value: 
-      objectReference: {fileID: 2030275752}
-    - target: {fileID: 3928242419607300781, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -20.428
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928242419607300781, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -4.52
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928242419607300781, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.04930348
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928242419607300781, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928242419607300781, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928242419607300781, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928242419607300781, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928242419607300781, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928242419607300781, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928242419607300781, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4354580855760487399, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: startingHealth
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4839883577633566742, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_Name
-      value: Evil Wizard
-      objectReference: {fileID: 0}
-    - target: {fileID: 5800652271296049402, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5800652271296049402, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
 --- !u!4 &1051778060 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5794579647418493868, guid: fac2980baa124954b851147a365e2142, type: 3}
@@ -73165,11 +73092,6 @@ PlatformEffector2D:
   m_UseSideFriction: 0
   m_UseSideBounce: 0
   m_SideArc: 1
---- !u!4 &1785803276 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3928242419607300781, guid: 3d33384121e4147a4acc3b3e634f24de, type: 3}
-  m_PrefabInstance: {fileID: 1051056384}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1791694094
 GameObject:
   m_ObjectHideFlags: 0
@@ -75174,5 +75096,3 @@ SceneRoots:
   - {fileID: 1311798061}
   - {fileID: 2042858012}
   - {fileID: 8659195517856225738}
-  - {fileID: 668477265}
-  - {fileID: 1298150746}
