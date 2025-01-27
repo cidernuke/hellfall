@@ -17663,7 +17663,7 @@ Tilemap:
       serializedVersion: 2
       m_TileIndex: 3
       m_TileSpriteIndex: 3
-      m_TileMatrixIndex: 0
+      m_TileMatrixIndex: 1
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
@@ -17718,7 +17718,7 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: 21300000, guid: edac48a28c5cd4707ba4047dfe4f451d, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 16
+  - m_RefCount: 15
     m_Data:
       e00: 1
       e01: 0
@@ -17736,24 +17736,24 @@ Tilemap:
       e31: 0
       e32: 0
       e33: 1
-  - m_RefCount: 0
+  - m_RefCount: 1
     m_Data:
-      e00: 4.7636155e-25
+      e00: 1
       e01: 0
-      e02: -1.395866e+10
-      e03: -1.395866e+10
-      e10: 1.072e-42
-      e11: 0
-      e12: 1.066e-42
-      e13: 1.066e-42
-      e20: -4.711298e-17
-      e21: -9.883981e+28
-      e22: 0.0000000047438427
-      e23: 2.264678e-39
-      e30: 4.5904e-41
-      e31: 1.066e-42
-      e32: 1.068e-42
-      e33: 1.07e-42
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: -0.21543598
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
   - m_RefCount: 1
     m_Data:
       e00: 1
@@ -77134,7 +77134,7 @@ Transform:
   m_GameObject: {fileID: 1721123646}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 24.514, y: 11.605, z: 0}
+  m_LocalPosition: {x: 24.514, y: 11.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
