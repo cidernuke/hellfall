@@ -69,6 +69,8 @@ public class PlayerMovement : MonoBehaviour
     private float wallJumpingCounter;
     [SerializeField] private float wallJumpDuration = 0.09f;  // Duration during which horizontal input is ignored after a wall jump
     public bool isFalling = false;
+    private bool isGrounded;
+    private bool wasGrounded;
 
     // Double Jump
     public bool isDoubleJumping;
@@ -118,8 +120,12 @@ public class PlayerMovement : MonoBehaviour
     public GameObject wallDust;
     public ParticleSystem wallDustParticleSystem;
     public GameObject floorDust;
-    public ParticleSystem floorDustParticleSystem;
+    public ParticleSystem floorDustParticleSystem;    
 
+    #endregion
+
+    #region Audio references
+    private AudioManager audioManager;
     #endregion
 
     #region Unity Methods
@@ -142,6 +148,7 @@ public class PlayerMovement : MonoBehaviour
         InitializeLayers();
         InitializeCrouchVariables();
         InitializeDashVariables();
+        
 
         // Initialise the respawnPosition to the Start Position of the Player
         respawnPosition = transform.position;
@@ -167,7 +174,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (!blockInput)
         {
-            horizontal = playerInput.GetHorizontalInput();
+            horizontal = playerInput.GetHorizontalInput();            
         }
 
         ResetAnimation();
@@ -179,8 +186,17 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (IsGrounded())
-        {
+        {            
             isDoubleJumping = false;
+        }
+
+        // Logic to check if player was grounded last frame
+        wasGrounded = isGrounded;
+        isGrounded = IsGrounded();
+        
+        if (isGrounded && !wasGrounded)
+        {
+            audioManager.PlaySFX(audioManager.landing);
         }
 
         //Detect last time jump pressed -> jump buffering
@@ -218,7 +234,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (!isDashing)
                 {
-                    body.velocity = new Vector2(playerInput.GetHorizontalInput() * groundSpeed, body.velocity.y);
+                    body.velocity = new Vector2(playerInput.GetHorizontalInput() * groundSpeed, body.velocity.y);                    
+                
                 }
                 else return;
                 bool isWalking = playerInput.GetHorizontalInput() != 0;
@@ -284,6 +301,7 @@ public class PlayerMovement : MonoBehaviour
         transform = GetComponent<Transform>();
         // Get reference to the Animator component
         animator = GetComponent<Animator>();
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
 
         // Get Player Effects Object
         playerFX = GameObject.Find("Player_Effects");
@@ -400,6 +418,7 @@ public class PlayerMovement : MonoBehaviour
         // Store the last time the player touched the ground for coyote time
         if (grounded)
         {
+            
             isFalling = false;
             animator.SetBool("is_falling", isFalling);
             wallDustParticleSystem.Stop();
@@ -483,6 +502,7 @@ public class PlayerMovement : MonoBehaviour
                 // Disable jumping on the same wall again until we touch a new wall
                 canWallJump = false;
                 wallJumpingCounter = 0f;
+                audioManager.PlaySFX(audioManager.jump_01);
 
                 // Flips player during walljump
                 if (transform.localScale.x != wallJumpDirection)
@@ -539,6 +559,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 //print(">>> Attempting first jump");
                 animator.SetTrigger("jump"); // Play jump animation on first jump
+                audioManager.PlaySFX(audioManager.jump_01);
+                
 
                 // Handles logic to jump off of a ladder
                 if (ladderMovement != null && ladderMovement.isClimbing)
@@ -573,6 +595,7 @@ public class PlayerMovement : MonoBehaviour
                     //Double-Jump Particle Animation
                     playerFX.transform.position = new Vector2(transform.position.x + 0.1f, transform.position.y - 0.35f);
                     playerFXAnimator.SetBool("hasDoubleJumped", true);
+                    audioManager.PlaySFX(audioManager.jump_02);
 
                     body.velocity = new Vector2(body.velocity.x, jumpPower / 1.3f);
                     isDoubleJumping = true; // Set double jump flag to prevent further jumps
@@ -595,6 +618,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 StartDash(horizontalInput);
                 animator.SetTrigger("dash");
+                audioManager.PlaySFX(audioManager.dash);
             }
         }
     }
@@ -775,6 +799,11 @@ public class PlayerMovement : MonoBehaviour
             playerFXAnimator.SetBool("hasDoubleJumped", false);
         }
 
+    }
+
+    public void PlayWalkingSound()
+    {
+        audioManager.PlaySFX_walk();
     }
 
     #region getter for tests

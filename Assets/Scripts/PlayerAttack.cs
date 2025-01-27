@@ -44,6 +44,7 @@ public class PlayerAttack : MonoBehaviour
     private PlayerMovement playerMovement;
     private EnemyController enemyController;
     private PlayerController playerController;
+    private AudioManager audioManager;
 
     //variables for attack
     private int attackIndex = 0;
@@ -59,6 +60,8 @@ public class PlayerAttack : MonoBehaviour
         enemyController = GetComponent<EnemyController>();
         enemyHealth = GetComponent<HealthSystem>();
         playerController = GetComponent<PlayerController>();
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+
 
     }
 
@@ -151,10 +154,12 @@ public class PlayerAttack : MonoBehaviour
         switch (attackIndex)
         {
             case 0:
-                anim.SetTrigger("attack_01");
+                anim.SetTrigger("attack_01");  
+                audioManager.PlaySFX(audioManager.closeAttack_01);     
                 break;
             case 1:
                 anim.SetTrigger("attack_02");
+                audioManager.PlaySFX(audioManager.closeAttack_02);
                 break;
         }
 
@@ -184,6 +189,7 @@ public class PlayerAttack : MonoBehaviour
         //    playerMovement.body.constraints = RigidbodyConstraints2D.FreezePosition;
         //}
 
+        audioManager.PlaySFX(audioManager.rangedAttack);
         anim.SetTrigger("attack_ranged");
         cooldownTimer = 0;
         int projectileIndex = FindProjectile();

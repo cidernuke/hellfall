@@ -7,8 +7,9 @@ using UnityEngine;
 public class HealthItem : Item
 {
     private float healthAmount; // how much does an item heal
-    public HealthSystem playerHealth; // reference to healthsystem
-
+    public HealthSystem playerHealth; // reference to
+    private AudioManager audioManager; 
+    
     /// <summary>
     /// Constructor for the HealthItem class.
     /// </summary>
@@ -20,6 +21,7 @@ public class HealthItem : Item
         this.itemName = itemName;
         this.itemSprite = itemSprite;
         this.healthAmount = healthAmount;
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
 
     /// <summary>
@@ -30,10 +32,10 @@ public class HealthItem : Item
             
             if (playerHealth.currentHealth < playerHealth.startingHealth)
             {
-                playerHealth.AddHealth(healthAmount);                
+                playerHealth.AddHealth(healthAmount);
+                audioManager.PlaySFX(audioManager.healthitem);                            
                 return true;             
             }            
-            Debug.Log("Item was used");
             return false;
         }
 }

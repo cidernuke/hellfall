@@ -17,6 +17,9 @@ public class HealthSystem : MonoBehaviour
 
     [SerializeField] private EnemyHealthBar enemyHealthBar;
 
+    
+    private AudioManager audioManager;
+
     /// <summary>
     /// The current amount of health the object has.
     /// </summary>
@@ -91,6 +94,7 @@ public class HealthSystem : MonoBehaviour
         respawnHealth = startingHealth; // To avoid null-pointers
         anim = GetComponent<Animator>();
         enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         bossVampire = gameObject.GetComponent<Boss>();
         bossMain = gameObject.GetComponent<EndBossMain>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
@@ -183,11 +187,13 @@ public class HealthSystem : MonoBehaviour
             // }
             if (isPlayer)
             {
+            audioManager.PlaySFX(audioManager.player_hit);
                 UpdateHealthUI();
             }
             if (!isPlayer && bossVampire == null && bossMain == null)
             {
                 enemyHealthBar.updateHealthBar(currentHealth, startingHealth);
+                audioManager.PlaySFX(audioManager.enemy_hit);
             }
         }
         else
@@ -255,6 +261,8 @@ public class HealthSystem : MonoBehaviour
             {
                 playerMovement.enabled = false;
                 isDead = true;
+                audioManager.PlaySFX(audioManager.player_death);
+                
 
                 StartCoroutine(RespawnPlayer(playerMovement));
 
@@ -274,11 +282,13 @@ public class HealthSystem : MonoBehaviour
             }
             else if (enemyController != null)
             {
+                audioManager.PlaySFX(audioManager.enemy_death);
                 print("death of enemy");
                 enemyController.enabled = false;
                 //StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
                 StartCoroutine(HandleEnemyDeath(anim, enemyController, 0.4f));
-                // enemyController.SpawnLoot();
+                
+
             }
             isDead = true;
         }

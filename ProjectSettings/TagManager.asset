@@ -18,6 +18,7 @@ TagManager:
   - bullet_forward#
   - SpawnPoint
   - CurrentWeapon
+  - Audio
   - BossHealthBar
   - BossFolder
   - TriggerBossFight

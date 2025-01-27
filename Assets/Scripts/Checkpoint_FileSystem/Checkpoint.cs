@@ -8,7 +8,7 @@ public class Checkpoint : MonoBehaviour
     private PlayerMovement playerMovement;
     private HealthSystem healthSystem;
     private SoulShardSystem soulShardSystem;
-    private Animator animator;
+    private Animator animator;    
     private float checkpointMessageDuration = 2f;
 
     /// <summary>
@@ -16,7 +16,7 @@ public class Checkpoint : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();        
         if (animator == null)
         {
             Debug.LogError("Animator-Component is missing on the Checkpoint.");
@@ -36,6 +36,7 @@ public class Checkpoint : MonoBehaviour
             if (playerMovement != null)
             {
                 playerMovement.UpdateRespawnPoint(playerMovement.transform.position, checkpointID);
+                
 
                 healthSystem = collision.GetComponent<HealthSystem>();
                 soulShardSystem = collision.GetComponent<SoulShardSystem>();
