@@ -1286,38 +1286,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: maxPitch
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: minPitch
-      value: 0.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: healthitem
-      value: 
-      objectReference: {fileID: 8300000, guid: 23684ebb30cdfcd4aa02b6429a3fc23e, type: 3}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: leftMaxPan
-      value: -0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1658325379613624237, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: rightMaxPan
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 7393028537596054008, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: Pan2D
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7393028537596054008, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: m_Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7393028537596054008, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
-      propertyPath: reverbZoneMixCustomCurve.m_Curve.Array.data[0].value
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8393715674122549264, guid: 633a094f6aa080b4b9b67e84dc842694, type: 3}
       propertyPath: m_Name
       value: AudioManager

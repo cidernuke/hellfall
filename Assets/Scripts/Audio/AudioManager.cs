@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
     [Header("-----Audio Sources-----")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioSource SFXSource;
+    [SerializeField] private AudioSource SFXSource_walking;
 
     [Header("-----Audio Clips-----")]
 
@@ -59,14 +60,19 @@ public class AudioManager : MonoBehaviour
     {
         SFXSource.PlayOneShot(clip);
 
+    }
+
+    public void PlaySFX_walk()
+    {
+        SFXSource_walking.PlayOneShot(walk);
+
         float newPitch = Random.Range(minPitch, maxPitch);
         float newVolume = Random.Range(minVolume, maxVolume);
         float newPan = Random.Range(leftMaxPan, rightMaxPan);
         
-        SFXSource.pitch = newPitch;
-        SFXSource.volume = newVolume;
-        SFXSource.panStereo = newPan;
-
+        SFXSource_walking.pitch = newPitch;
+        SFXSource_walking.volume = newVolume;
+        SFXSource_walking.panStereo = newPan;
     }
     
 }

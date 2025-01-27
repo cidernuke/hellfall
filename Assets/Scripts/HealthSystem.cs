@@ -158,6 +158,7 @@ public class HealthSystem : MonoBehaviour
             anim.SetTrigger("hurt");
             if (isPlayer)
             {
+            audioManager.PlaySFX(audioManager.player_hit);
                 UpdateHealthUI();
                 //UIHandler.instance.SetHealthValue(currentHealth / (float)startingHealth);
             }

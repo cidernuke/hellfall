@@ -765,7 +765,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void PlayWalkingSound()
     {
-        audioManager.PlaySFX(audioManager.walk);
+        audioManager.PlaySFX_walk();
     }
 
     #region getter for tests
