@@ -30,8 +30,7 @@ public class SoulShardSystem : MonoBehaviour
             Debug.Log("Soul Shard collected: " + soulShardItems.Count);
             UpdateUI();
             
-        }
-        
+        } 
     }
 
     /// <summary>
@@ -46,6 +45,7 @@ public class SoulShardSystem : MonoBehaviour
         if(amount > soulShardItems.Count)
         {
             Debug.Log("You dont have enough Soul Shards"); 
+            return;
         }
 
         for (int i = 0; i < amount && soulShardItems.Count > 0; i++)

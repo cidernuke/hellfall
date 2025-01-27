@@ -160,6 +160,13 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>        
     public void Update()
     {
+        // if(isDead)
+        // {
+        //     blockInput = true;
+        //     body.velocity = new Vector2(0, body.velocity.y);
+        //     return;
+        // }
+
         // Relevant for the final boss
         if (dashCounter > 0)
         {
@@ -228,6 +235,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundDecay;
     private void FixedUpdate()
     {
+        // if(isDead)
+        // {
+        //     blockInput = true;
+        //     body.velocity = new Vector2(0, body.velocity.y);
+        //     return;
+        // }
+
         if (!blockInput)
         {
             if (!isWallJumping)
@@ -687,6 +701,7 @@ public class PlayerMovement : MonoBehaviour
         // Set the position of the Player to the respawn-point
         transform.position = respawnPosition;
 
+
         // // Berechne den Offset zwischen dem Spieler-Pivot und dem Ground-Check
         // float pivotToGroundCheckOffset = transform.position.y - groundCheck.position.y;
 
@@ -706,14 +721,22 @@ public class PlayerMovement : MonoBehaviour
         // Reset death-flag
         isDead = false;
 
+        blockInput = false;
+
         // Reset velocity
         body.velocity = Vector2.zero;
 
-        //TODO: Add respawn animation here
+        // This was the Error, the player was freezed after respawn
         //Reset die trigger
-        animator.ResetTrigger("die");
+        //animator.ResetTrigger("die");
         //Set Idle animation again, if not player is invisible unitl the animation is changed
-        animator.Play("Idle");
+        //animator.Play("Idle");
+    }
+
+    public void stopPlayerMoving()
+    {
+        blockInput = true;
+        body.velocity = new Vector2(0, body.velocity.y);
     }
 
     #endregion

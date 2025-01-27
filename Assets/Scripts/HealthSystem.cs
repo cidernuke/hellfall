@@ -108,11 +108,11 @@ public class HealthSystem : MonoBehaviour
     /// Takes damage from damage zones with a global cooldown.
     /// </summary>
     /// <param name="damage">The amount of damage to take.</param>
-    public void TakeDamageFromDamageZone(float damage)
+    public void TakeDamageFromDamageZone(float damage, PlayerMovement playerMovement)
     {
         if (isDamageZoneCooldown) return;
 
-        TakeDamage(damage);
+        TakeDamage(damage, playerMovement);
         StartCoroutine(DamageZoneCooldown());
     }
 
@@ -259,6 +259,9 @@ public class HealthSystem : MonoBehaviour
 
             if (playerMovement != null)
             {
+                playerMovement.isDead = true;
+                playerMovement.stopPlayerMoving();
+                
                 playerMovement.enabled = false;
                 isDead = true;
                 audioManager.PlaySFX(audioManager.player_death);
@@ -314,8 +317,12 @@ public class HealthSystem : MonoBehaviour
         //Call the respawn method from the GameManagers
         GameManager.Instance.RespawnPlayer();
 
+        //Reset the death animation
+        anim.SetTrigger("respawn");
+
         //Reactivate the PlayerMovement
-        playerMovement.enabled = true;
+        //Now in GameManager.Instance.RespawnPlayer() -> playerMovement.Respawn();
+        //playerMovement.enabled = true;
 
         isDead = false;
 
@@ -375,6 +382,7 @@ public class HealthSystem : MonoBehaviour
         {
             enemyPatrol.enabled = true;
         }
+        ResetEnemySliderToFullHealth();
     }
 
     /// <summary>
