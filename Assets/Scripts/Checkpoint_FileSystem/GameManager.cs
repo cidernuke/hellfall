@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO;
+using ItemSystem.Abstract;
 
 public class GameManager : MonoBehaviour
 {
@@ -255,7 +256,6 @@ public class GameManager : MonoBehaviour
         }
         // Reset the position of the player to the last checkpoint
         playerMovement.Respawn();
-        
 
         // Reset health to max value
         healthSystem.currentHealth = healthSystem.startingHealth;
@@ -263,14 +263,16 @@ public class GameManager : MonoBehaviour
         // Reset healthbar animation
         UIHandler.instance.SetHealthValue(healthSystem.currentHealth / healthSystem.startingHealth);
 
+        PlayerData data = SaveManager.Instance.LoadPlayerData();
+
         // Reset shoulShards to the value while reaching the last checkpoint
-        soulShardSystem.SetSoulShardCount(LoadSoulShardCountFromLastCheckpoint());
+        soulShardSystem.SetSoulShardCount(LoadSoulShardCountFromLastCheckpoint(data));
 
         // Reset keyCounter to the value while reaching the last checkpoint
-        keySystem.SetKeyCount(LoadKeyCountFromLastCheckpoint());
+        keySystem.SetKeyCount(LoadKeyCountFromLastCheckpoint(data));
 
-        // Empty inventory
-        inventorySystem.ClearInventory();
+        //inventorySystem.ClearInventory();
+        LoadInventoryFromLastCheckpoint(data);
 
         // Respawne enemies and items
         RespawnEnemiesAndItems();
@@ -283,10 +285,9 @@ public class GameManager : MonoBehaviour
     /// Load the amount of collected SoulShards from the last checkpoint.
     /// </summary>
     /// <returns>SoulShardCount from the last checkpoint</returns>
-    private int LoadSoulShardCountFromLastCheckpoint()
+    private int LoadSoulShardCountFromLastCheckpoint(PlayerData data)
     {
         //Load the amount of collected SoulShards from the last checkpoint
-        PlayerData data = SaveManager.Instance.LoadPlayerData();
         return data != null ? data.soulShardCount : 0;
     }
 
@@ -294,11 +295,47 @@ public class GameManager : MonoBehaviour
     /// Load the amount of collected keys from the last checkpoint.
     /// </summary>
     /// <returns>KeyCounter from the last checkpoint</returns>
-    private int LoadKeyCountFromLastCheckpoint()
+    private int LoadKeyCountFromLastCheckpoint(PlayerData data)
     {
         //Load the amount of collected keys from the last checkpoint
-        PlayerData data = SaveManager.Instance.LoadPlayerData();
         return data != null ? data.keyCounter : 0;
+    }
+
+    /// <summary>
+    /// Load the inventory from the last checkpoint.
+    /// <paramref name="data"/> The PlayerData from the last checkpoint.
+    /// </summary>
+    private void LoadInventoryFromLastCheckpoint(PlayerData data)
+    {
+        if (data == null)
+        {
+            Debug.LogWarning("No checkpoint data found. Inventory will not be restored.");
+            inventorySystem.ClearInventory();
+            return;
+        }
+
+        //Empty inventory before filling it with checkpoint data
+        inventorySystem.ClearInventory();
+
+        for (int i = 0; i < inventorySystem.slots.Length; i++)
+        {
+            string itemName = data.collectedItemNames[i];
+
+            if (!string.IsNullOrEmpty(itemName))
+            {
+                ItemData itemData = Resources.Load<ItemData>("ItemData/" + itemName);
+                if (itemData != null)
+                {
+                    Item newItem = inventorySystem.CreateItemInstance(itemData);
+                    inventorySystem.slots[i].StoreItem(newItem, itemData);
+                }
+                else
+                {
+                    Debug.LogWarning($"ItemData for {itemName} not found.");
+                }
+            }
+        }
+        Debug.Log("Inventory restored to last checkpoint state.");
     }
 
     /// <summary>
