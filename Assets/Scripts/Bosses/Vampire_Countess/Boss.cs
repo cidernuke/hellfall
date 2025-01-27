@@ -210,7 +210,7 @@ public class Boss : MonoBehaviour
 	public void OnDeath()
 	{
 		healthBar.gameObject.SetActive(false);
-		SpawnObject(new Vector3(83.1f, 29.48f, 1.1f));
+		SpawnObject(new Vector3(83.1f, 26.5f, 1.1f));
 		gameObject.SetActive(false);
 	}
 

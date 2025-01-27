@@ -343,7 +343,7 @@ public class UndeadExecutioner : MonoBehaviour
 	{
         healthBar.gameObject.SetActive(false);
 		gameObject.SetActive(false);
-		SpawnObject(new Vector3(43.77f, -28.12f, -4.331337f));
+		SpawnObject(new Vector3(43.77f, -35f, -4.331337f));
 	}
 
     public void SpawnObject(Vector3 position)
