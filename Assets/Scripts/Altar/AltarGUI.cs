@@ -151,7 +151,7 @@ public class AltarGUI : MonoBehaviour
                 if (textElement.name == "VitalityValueText")
                 {
                     //Check for enough soul shards
-                    //if (!HasEnoughSoulShards(vitalityCost)) return;
+                    if (!HasEnoughSoulShards(vitalityCost)) return;
                     GameManager.Instance.soulShardSystem.decreaseSoulShard(null, vitalityCost);
                     incrementValueText(textElement);
                     updateSoulShardCost("SHValueText1", ref vitalityCost, ref vitalityMultiplierCount, true, vitalityCosts);
@@ -167,7 +167,7 @@ public class AltarGUI : MonoBehaviour
                 if (textElement.name == "StrengthValueText")
                 {
                     //Check for enough soul shards
-                    //if (!HasEnoughSoulShards(strengthCost)) return;
+                    if (!HasEnoughSoulShards(strengthCost)) return;
                     GameManager.Instance.soulShardSystem.decreaseSoulShard(null, strengthCost);
                     incrementValueText(textElement);
                     updateSoulShardCost("SHValueText2", ref strengthCost, ref strengthMultiplierCount, true, strengthCosts);
@@ -183,7 +183,7 @@ public class AltarGUI : MonoBehaviour
                 if (textElement.name == "IntelligenceValueText")
                 {
                     //Check for enough soul shards
-                    //if (!HasEnoughSoulShards(intelligenceCost)) return;
+                    if (!HasEnoughSoulShards(intelligenceCost)) return;
                     GameManager.Instance.soulShardSystem.decreaseSoulShard(null, intelligenceCost);
                     incrementValueText(textElement);
                     updateSoulShardCost("SHValueText3", ref intelligenceCost, ref intelligenceMultiplierCount, true, intelligenceCosts);
