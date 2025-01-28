@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour
             if (healthSystem.currentHealth != currentHealth)
             {
                 currentHealth = healthSystem.currentHealth;
+                healthSystem.UpdateHealthUI();
             }
         }
 

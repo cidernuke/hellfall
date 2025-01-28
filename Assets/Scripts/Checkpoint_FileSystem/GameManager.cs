@@ -221,8 +221,6 @@ public class GameManager : MonoBehaviour
 
         //Reset Health
         healthSystem.currentHealth = healthSystem.startingHealth;
-        //update healthbar and text
-        healthSystem.UpdateHealthUI();
 
         //SoulShards to 0
         soulShardSystem.SetSoulShardCount(0);
@@ -234,7 +232,12 @@ public class GameManager : MonoBehaviour
         inventorySystem.ClearInventory();
         inventorySystem.SetupReferences();
 
+        //fix bug that new game starts with old stats
+        playerController.playerStats = null;
         playerController.SetUpReferences();
+
+        //update healthbar and text
+        healthSystem.UpdateHealthUI();
 
         //Delete old save file to prevent loading the old game state
         if (SaveManager.Instance.saveFilePath != null)
