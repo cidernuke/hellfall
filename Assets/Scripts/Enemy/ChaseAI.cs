@@ -34,7 +34,6 @@ public class ChaseAi : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // If the AI is exploding or the player is not assigned, do nothing
         if (isExploding || player == null) return;
 
         // Calculate the distance between the AI and the player
@@ -51,8 +50,6 @@ public class ChaseAi : MonoBehaviour
         if (distance < chaseDistance)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime);
-            // Rotate to face the player
-            transform.rotation = Quaternion.Euler(Vector3.forward * angle);
         }
 
         // If the AI is within explosion distance, trigger explosion

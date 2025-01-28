@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 13.778562, y: -2.3966043}
+  m_AnchoredPosition: {x: 0.05, y: 0.174}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &8205308096167564422
@@ -193,7 +193,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!95 &8525510535890942328
 Animator:
   serializedVersion: 5
@@ -336,10 +336,17 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 0
+  cooldownTimer: Infinity
   lootTable:
   - itemPrefab: {fileID: 0}
     dropChance: 0
+  lootPositionOffset: {x: 0, y: 0, z: 0}
+  anim: {fileID: 0}
   enemyPatrol: {fileID: 0}
+  healthSystem: {fileID: 0}
+  isFrozen: 0
+  isOnFire: 0
+  isBoss: 0
 --- !u!114 &4884025574838868089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,7 +399,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -507.2, y: 101.4}
+  m_AnchoredPosition: {x: -1.4, y: 7.3}
   m_SizeDelta: {x: 160, y: 31.072}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8614893853591271287
