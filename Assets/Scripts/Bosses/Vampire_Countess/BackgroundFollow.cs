@@ -21,7 +21,6 @@ public class BackgroundFollow : MonoBehaviour
     {
         if (PlayerInBossRoom())
         {
-            print("player is in boss room!");
             // Calculate the new x position based on the player's x position and offset
             float targetX = Mathf.Clamp(player.position.x + offset, minX, maxX);
 

@@ -325,7 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bbbdafceb1d62046b87c955a0d68953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 100
+  startingHealth: 30
   enemyHealthBar: {fileID: 6101700728895270426}
   currentHealth: 0
   anim: {fileID: 0}
@@ -351,6 +351,8 @@ MonoBehaviour:
   followRange: 15
   shootingRange: 6
   moveSpeed: 2
+  minX: -10
+  maxX: 10
   startShotCooldown: 3
 --- !u!95 &965161727904256203
 Animator:
@@ -398,11 +400,13 @@ MonoBehaviour:
   lootTable:
   - itemPrefab: {fileID: 3105599385479915624, guid: ce1ee5ec5cfd1614f8ae566b6dedbc58, type: 3}
     dropChance: 100
+  lootPositionOffset: {x: 0, y: 0, z: 0}
   anim: {fileID: 0}
   enemyPatrol: {fileID: 0}
   healthSystem: {fileID: 0}
   isFrozen: 0
   isOnFire: 0
+  isBoss: 0
 --- !u!114 &197163886150042724
 MonoBehaviour:
   m_ObjectHideFlags: 0

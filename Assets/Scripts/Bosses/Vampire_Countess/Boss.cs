@@ -16,6 +16,7 @@ public class Boss : MonoBehaviour
 	private readonly float groundCoordinates = 29.7f; // Spawn coordinates for blood_bullets_up
 	[HideInInspector] public bool isFlipped = false;
 	public bool isInSecondPhase = false;
+	[HideInInspector] public bool didBossKillPlayer = false;
 
 	public BossHealthBar healthBar;
 	// public GameObject healthBarUI;
@@ -41,6 +42,11 @@ public class Boss : MonoBehaviour
 		if (gameObject.GetComponent<HealthSystem>().currentHealth == 10)
 		{
 			isInSecondPhase = true;
+		}
+
+		if (didBossKillPlayer)
+		{
+			DeactivateBoss();
 		}
 	}
 
@@ -209,11 +215,19 @@ public class Boss : MonoBehaviour
 	/// </summary>
 	public void OnDeath()
 	{
+		GameObject.Find("TriggerForBossFightVampire").SetActive(false);
 		healthBar.gameObject.SetActive(false);
 		SpawnObject(new Vector3(83.1f, 26.5f, 1.1f));
 		gameObject.SetActive(false);
 	}
 
+	private void DeactivateBoss()
+	{
+		healthBar.gameObject.SetActive(false);
+		gameObject.SetActive(false);
+	}
+
+	// Spawns a checkpoint below the platform after the boss is defeated
 	public void SpawnObject(Vector3 position)
     {
         // Create a new GameObject
@@ -231,6 +245,11 @@ public class Boss : MonoBehaviour
         // Optionally, modify the component
         // myComponent.DoSomething();
     }
+
+	private void KilledPlayer()
+	{
+
+	}
 
 	/// <summary>
 	/// Prints a message to the console.

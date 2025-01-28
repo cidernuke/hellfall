@@ -31,6 +31,7 @@ public class EndBossMain : MonoBehaviour
     [HideInInspector] public bool isInSecondPhase = false;
     [HideInInspector] public bool isCharging = false;
     [HideInInspector] public bool isAreaAttack = false;
+    [HideInInspector] public bool didBossKillPlayer = false;
     
     // References
     [SerializeField] private LayerMask attackMask;
@@ -72,6 +73,11 @@ public class EndBossMain : MonoBehaviour
         {
             ChargeTowardsPlayer();
         }
+
+        if (didBossKillPlayer)
+		{
+			DeactivateBoss();
+		}
     }
 
     public void StartCharge()
@@ -108,7 +114,7 @@ public class EndBossMain : MonoBehaviour
         if (colInfo != null)
         {
             PlayerMovement playerMovement = colInfo.GetComponent<PlayerMovement>();
-            colInfo.GetComponent<HealthSystem>().TakeDamage(attackDamage, playerMovement);
+            colInfo.GetComponent<HealthSystem>().TakeDamage(attackDamage, playerMovement, null, gameObject);
         }
     }
 
@@ -132,7 +138,7 @@ public class EndBossMain : MonoBehaviour
             {
                 // Deal damage to the player
                 PlayerMovement playerMovement = hit.GetComponent<PlayerMovement>();
-                hit.GetComponent<HealthSystem>().TakeDamage(chargeAttackDamage, playerMovement);
+                hit.GetComponent<HealthSystem>().TakeDamage(chargeAttackDamage, playerMovement, null, gameObject);
                 StopCharge();
             }
             else
@@ -200,7 +206,7 @@ public class EndBossMain : MonoBehaviour
             {
                 if (target.CompareTag("Player"))
                 {
-                    target.GetComponent<HealthSystem>().TakeDamage(areaAttackDamage, target.GetComponent<PlayerMovement>());
+                    target.GetComponent<HealthSystem>().TakeDamage(areaAttackDamage, target.GetComponent<PlayerMovement>(), null, gameObject);
                 }
             }
 
@@ -245,6 +251,12 @@ public class EndBossMain : MonoBehaviour
 		gameObject.SetActive(false);
 
         bossRoomHole.OpenHole();
+	}
+
+    private void DeactivateBoss()
+	{
+		healthBar.gameObject.SetActive(false);
+		gameObject.SetActive(false);
 	}
 
     public void PrinterForBossRun(string message)

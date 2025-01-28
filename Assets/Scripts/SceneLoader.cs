@@ -43,10 +43,16 @@ public class SceneLoader : MonoBehaviour
     {
         if (vampireCountess != null)
         {
+            vampireCountess.didBossKillPlayer = false;
             vampireCountess.gameObject.SetActive(true);
         }
         else if (undeadExecutioner != null)
         {
+            // if (GameObject.Find("UndeadExecutioner_Minions").TryGetComponent<Explosion>(out var minion))
+            // {
+            //     minion.didMinionKillPlayer = false;
+            // }
+            undeadExecutioner.didBossKillPlayer = false;
             undeadExecutioner.gameObject.SetActive(true);
         }
         bossHealthBar.SetActive(true);
@@ -69,7 +75,8 @@ public class SceneLoader : MonoBehaviour
             loadingScreen.SetActive(false); // Deactivate the loading screen
         }
 
-        gameObject.SetActive(false);
+        //! move to respective boss scripts
+        // gameObject.SetActive(false); 
     }
 
     private IEnumerator LoadScene()

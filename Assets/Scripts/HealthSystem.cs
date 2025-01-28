@@ -60,17 +60,7 @@ public class HealthSystem : MonoBehaviour
     private Boss bossVampire;
     private EndBossMain bossMain;
     private UndeadExecutioner undeadExecutionerBoss;
-    private SpriteRenderer spriteRenderer; // Reference to the boss's SpriteRenderer
-    private Color hitColor = Color.white;  // Color to show when hit
-    private float flashDuration = 0.1f;    // Duration of the hit effect
-    private Color originalColor;
-
-    // private Boss bossVampire;
-    // private EndBossMain bossMain;
-    // private SpriteRenderer spriteRenderer; // Reference to the boss's SpriteRenderer
-    // private Color hitColor = Color.white;  // Color to show when hit
-    // private float flashDuration = 0.1f;    // Duration of the hit effect
-    // private Color originalColor;
+    private GameObject lastAttacker;
 
     // Death Messages
     private string[] deathMessages =
@@ -99,7 +89,6 @@ public class HealthSystem : MonoBehaviour
         bossVampire = gameObject.GetComponent<Boss>();
         bossMain = gameObject.GetComponent<EndBossMain>();
         undeadExecutionerBoss = gameObject.GetComponent<UndeadExecutioner>();
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 
         // Store the original color
         // originalColor = spriteRenderer.material.color;
@@ -161,7 +150,7 @@ public class HealthSystem : MonoBehaviour
     /// <param name="damage">The amount of damage to take.</param>
     /// <param name="playerMovement">The PlayerMovement script to disable on death.</param>
     /// <param name="enemyController">The EnemyController script to disable on death.</param>
-    public void TakeDamage(float damage, PlayerMovement playerMovement = null, EnemyController enemyController = null)
+    public void TakeDamage(float damage, PlayerMovement playerMovement = null, EnemyController enemyController = null, GameObject attacker = null)
     {
         // not needed anymore, since player and enemies don't need a cooldown time
         //if (damage > 0)
@@ -199,6 +188,8 @@ public class HealthSystem : MonoBehaviour
             if (isPlayer)
             {
                 UpdateHealthUI();
+                print($"setting last attacker to {attacker.name}");
+                lastAttacker = attacker;
             }
             Die(playerMovement, enemyController);
 
@@ -235,6 +226,27 @@ public class HealthSystem : MonoBehaviour
 
             if (playerMovement != null)
             {
+                // Example check for the boss
+                bossVampire = lastAttacker.GetComponent<Boss>();
+                undeadExecutionerBoss = lastAttacker.GetComponent<UndeadExecutioner>();
+                // var undeadExecutionerMinion = lastAttacker.GetComponent<Explosion>();
+                var finalBoss = lastAttacker.GetComponent<EndBossMain>();
+                if (bossVampire != null)
+                {
+                    bossVampire.didBossKillPlayer = true;
+                }
+                else if (undeadExecutionerBoss != null)
+                {
+                    undeadExecutionerBoss.didBossKillPlayer = true;
+                } 
+                else if (finalBoss != null)
+                {
+                    finalBoss.didBossKillPlayer = true;
+                }
+                // else if (undeadExecutionerMinion != null)
+                // {
+                //     undeadExecutionerMinion.didMinionKillPlayer = true;
+                // }
                 playerMovement.isDead = true;
                 playerMovement.stopPlayerMoving();
                 

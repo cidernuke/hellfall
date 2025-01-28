@@ -152,7 +152,8 @@ public class EnemyController : MonoBehaviour
     {
         if (PlayerInSight())
         {
-            playerHealth.TakeDamage(damage, playerMovement);
+            // var undeadExecutioner = gameObject.GetComponent<UndeadExecutioner>();
+            playerHealth.TakeDamage(damage, playerMovement, null, gameObject); //? unsure if this passes the correct GO
         }
     }
 

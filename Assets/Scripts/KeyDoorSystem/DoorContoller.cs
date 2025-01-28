@@ -143,8 +143,6 @@ public class DoorController : MonoBehaviour
             gameManager.SetIsMainBossTrue();
             Debug.Log("Loading scene: " + sceneToLoad);
             SceneManager.LoadScene(sceneToLoad);
-            // var playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
-            // playerMovement.transform.position = setPlayerCoordinates;
         }
         else
         {

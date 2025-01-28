@@ -11,6 +11,8 @@ public class Explosion : MonoBehaviour
     private Animator animator;  // Animator for handling explosion and death animations
     private bool hasExploded = false;  // Flag to check if the explosion has already occurred
     private bool damageDealt = false;  // Flag to ensure damage is dealt only once during the explosion
+    // public bool didMinionKillPlayer = false;
+    // public bool isMinion = false;
 
     // Start is called before the first frame update
     private void Start()
@@ -28,6 +30,17 @@ public class Explosion : MonoBehaviour
         {
             TriggerExplosion();  // Trigger explosion
         }
+
+        /*
+        * Some minions dont despawn after killing the player
+        * When minion kills player, boss healthbar not deactivated
+        * 
+        */
+        // if (didMinionKillPlayer)
+        // {
+        //     GameObject.Find("Undead Executioner").GetComponent<UndeadExecutioner>().DestroyMinions();
+        //     GameObject.Find("Undead Executioner").SetActive(false);
+        // }
     }
 
     // This method is called to initiate the explosion
@@ -85,7 +98,17 @@ public class Explosion : MonoBehaviour
 
                 if (healthSystem != null && playerMovement != null)
                 {
-                    healthSystem.TakeDamage(damageAmount, playerMovement);
+                    // print($"name of explosion enemy: {gameObject.name}");
+                    // print($"is minion: {isMinion}");
+                    // if (gameObject.name.Contains("Explosion Enemy"))
+                    // {
+                    //     // didMinionKillPlayer = true;
+                    //     healthSystem.TakeDamage(damageAmount, playerMovement, null, gameObject);
+                    // }
+                    // else
+                    // {
+                        healthSystem.TakeDamage(damageAmount, playerMovement);
+                    // }
                 }
                 else
                 {

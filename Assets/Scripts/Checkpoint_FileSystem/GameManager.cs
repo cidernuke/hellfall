@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     private List<EnemyController> enemyRespawners = new List<EnemyController>();
 
     public Vector3 setPlayerCoordinates;
-    private readonly Vector3 playerSpawnPointEndBoss = new(0, 0.5f, 0);
+    private Vector3 playerSpawnPointEndBoss = new(0, 0.5f, 0);
     public bool isMainBoss = false;
 
     private void Awake()
