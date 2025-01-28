@@ -233,6 +233,7 @@ public class GameManager : MonoBehaviour
         inventorySystem.SetupReferences();
 
         //fix bug that new game starts with old stats
+        //if you null the stats, the playercontroller sets up new stats that are the base values
         playerController.playerStats = null;
         playerController.SetUpReferences();
 
