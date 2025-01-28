@@ -517,6 +517,7 @@ public class PlayerMovement : MonoBehaviour
                 canWallJump = false;
                 wallJumpingCounter = 0f;
                 audioManager.PlaySFX(audioManager.jump_01);
+                animator.SetTrigger("jump"); // Play jump animation
 
                 // Flips player during walljump
                 if (transform.localScale.x != wallJumpDirection)

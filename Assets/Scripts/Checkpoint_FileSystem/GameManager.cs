@@ -221,10 +221,8 @@ public class GameManager : MonoBehaviour
 
         //Reset Health
         healthSystem.currentHealth = healthSystem.startingHealth;
-        if (UIHandler.instance != null)
-        {
-            UIHandler.instance.SetHealthValue(1.0f);
-        }
+        //update healthbar and text
+        healthSystem.UpdateHealthUI();
 
         //SoulShards to 0
         soulShardSystem.SetSoulShardCount(0);
@@ -272,8 +270,8 @@ public class GameManager : MonoBehaviour
         // Reset health to max value
         healthSystem.currentHealth = healthSystem.startingHealth;
 
-        // Reset healthbar animation
-        UIHandler.instance.SetHealthValue(healthSystem.currentHealth / healthSystem.startingHealth);
+        // Reset healthbar and healthtext
+        healthSystem.UpdateHealthUI();
 
         PlayerData data = SaveManager.Instance.LoadPlayerData();
 
