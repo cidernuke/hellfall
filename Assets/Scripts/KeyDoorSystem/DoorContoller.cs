@@ -24,6 +24,12 @@ public class DoorController : MonoBehaviour
     public Vector3 setPlayerCoordinates;
     [SerializeField] private GameObject loadingScreen; // Reference to loading screen object
     private GameManager gameManager;
+    private AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     /// <summary>
     /// Checks each frame if the player is in range and if the door is still closed. 
@@ -116,6 +122,7 @@ public class DoorController : MonoBehaviour
         // Play the animation
         if (doorAnimator != null)
         {
+            audioManager.PlaySFX(audioManager.open_door);
             doorAnimator.SetTrigger("open");
         }
 
