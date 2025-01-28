@@ -221,25 +221,26 @@ public class SaveManager : MonoBehaviour
             }
         }
 
-        Dictionary<String, float> loadedPlayerStats = data.characterStats;
+        //apply the loaded PlayerData data to the controllers playerstats
+        CharacterStats loadedPlayerStats = data.characterStats;
         CharacterStats newPlayerStats = playerController.playerStats;
 
-        newPlayerStats.vitality.SetBaseValue(loadedPlayerStats["vitalityBase"]);
-        newPlayerStats.strength.SetBaseValue(loadedPlayerStats["strengthBase"]);
-        newPlayerStats.intelligence.SetBaseValue(loadedPlayerStats["intelligenceBase"]);
+        newPlayerStats.vitality.SetBaseValue(loadedPlayerStats.vitalityBase);
+        newPlayerStats.strength.SetBaseValue(loadedPlayerStats.strengthBase);
+        newPlayerStats.intelligence.SetBaseValue(loadedPlayerStats.intelligenceBase);
 
-        newPlayerStats.maxHealth.SetBaseValue(loadedPlayerStats["maxHealthBase"]);
-        newPlayerStats.maxHealth.SetModifier(loadedPlayerStats["maxHealthMod"]);
+        newPlayerStats.maxHealth.SetBaseValue(loadedPlayerStats.maxHealthBase);
+        newPlayerStats.maxHealth.SetModifier(loadedPlayerStats.maxHealthModifier);
         
-        newPlayerStats.closeDamage.SetBaseValue(loadedPlayerStats["closeDamageBase"]);
-        newPlayerStats.closeDamage.SetModifier(loadedPlayerStats["closeDamageMod"]);
+        newPlayerStats.closeDamage.SetBaseValue(loadedPlayerStats.closeDamageBase);
+        newPlayerStats.closeDamage.SetModifier(loadedPlayerStats.closeDamageModifier);
         
-        newPlayerStats.rangedDamage.SetBaseValue(loadedPlayerStats["rangedDamageBase"]);
-        newPlayerStats.rangedDamage.SetModifier(loadedPlayerStats["rangedDamageMod"]);
-        newPlayerStats.rangedCooldown.SetBaseValue(loadedPlayerStats["rangedCooldownBase"]);
-        newPlayerStats.rangedCooldown.SetModifier(loadedPlayerStats["rangedCooldownMod"]);
-        newPlayerStats.rangedRange.SetBaseValue(loadedPlayerStats["rangedRangeBase"]);
-        newPlayerStats.rangedRange.SetModifier(loadedPlayerStats["rangedRangeMod"]);
+        newPlayerStats.rangedDamage.SetBaseValue(loadedPlayerStats.rangedDamageBase);
+        newPlayerStats.rangedDamage.SetModifier(loadedPlayerStats.rangedDamageModifier);
+        newPlayerStats.rangedCooldown.SetBaseValue(loadedPlayerStats.rangedCooldownBase);
+        newPlayerStats.rangedCooldown.SetModifier(loadedPlayerStats.rangedCooldownModifier);
+        newPlayerStats.rangedRange.SetBaseValue(loadedPlayerStats.rangedRangeBase);
+        newPlayerStats.rangedRange.SetModifier(loadedPlayerStats.rangedRangeModifier);
     }
 
     /// <summary>

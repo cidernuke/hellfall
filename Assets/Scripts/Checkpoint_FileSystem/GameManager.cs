@@ -284,8 +284,8 @@ public class GameManager : MonoBehaviour
         //inventorySystem.ClearInventory();
         LoadInventoryFromLastCheckpoint(data);
 
-        //Not working atm because JsonUtility does not support Dictionaries...
-        //LoadCharacterStatsFromLastCheckpoint(data);
+        //since the player controller aplies the stats itself, this should work
+        LoadCharacterStatsFromLastCheckpoint(data);
 
         // Respawne enemies and items
         RespawnEnemiesAndItems();
@@ -366,22 +366,22 @@ public class GameManager : MonoBehaviour
             var loadedStats = data.characterStats;
             var playerStats = playerController.playerStats;
 
-            playerStats.vitality.SetBaseValue(loadedStats["vitalityBase"]);
-            playerStats.strength.SetBaseValue(loadedStats["strengthBase"]);
-            playerStats.intelligence.SetBaseValue(loadedStats["intelligenceBase"]);
+            playerStats.vitality.SetBaseValue(loadedStats.vitalityBase);
+            playerStats.strength.SetBaseValue(loadedStats.strengthBase);
+            playerStats.intelligence.SetBaseValue(loadedStats.intelligenceBase);
 
-            playerStats.maxHealth.SetBaseValue(loadedStats["maxHealthBase"]);
-            playerStats.maxHealth.SetModifier(loadedStats["maxHealthMod"]);
+            playerStats.maxHealth.SetBaseValue(loadedStats.maxHealthBase);
+            playerStats.maxHealth.SetModifier(loadedStats.maxHealthModifier);
 
-            playerStats.closeDamage.SetBaseValue(loadedStats["closeDamageBase"]);
-            playerStats.closeDamage.SetModifier(loadedStats["closeDamageMod"]);
+            playerStats.closeDamage.SetBaseValue(loadedStats.closeDamageBase);
+            playerStats.closeDamage.SetModifier(loadedStats.closeDamageModifier);
 
-            playerStats.rangedDamage.SetBaseValue(loadedStats["rangedDamageBase"]);
-            playerStats.rangedDamage.SetModifier(loadedStats["rangedDamageMod"]);
-            playerStats.rangedCooldown.SetBaseValue(loadedStats["rangedCooldownBase"]);
-            playerStats.rangedCooldown.SetModifier(loadedStats["rangedCooldownMod"]);
-            playerStats.rangedRange.SetBaseValue(loadedStats["rangedRangeBase"]);
-            playerStats.rangedRange.SetModifier(loadedStats["rangedRangeMod"]);
+            playerStats.rangedDamage.SetBaseValue(loadedStats.rangedDamageBase);
+            playerStats.rangedDamage.SetModifier(loadedStats.rangedDamageModifier);
+            playerStats.rangedCooldown.SetBaseValue(loadedStats.rangedCooldownBase);
+            playerStats.rangedCooldown.SetModifier(loadedStats.rangedCooldownModifier);
+            playerStats.rangedRange.SetBaseValue(loadedStats.rangedRangeBase);
+            playerStats.rangedRange.SetModifier(loadedStats.rangedRangeModifier);
 
             print("Loaded playercontroller.CharacterStats: "+ playerController.playerStats);
             print("Loaded CharacterStats: "+ playerStats);
