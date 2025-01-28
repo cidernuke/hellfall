@@ -37,6 +37,7 @@ public class EndBossMain : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     private Collider2D bossCollider; // Reference to the boss's collider
+    private BossRoomHole bossRoomHole;
 
     public BossHealthBar healthBar;
     public HealthSystem healthSystem;
@@ -49,6 +50,7 @@ public class EndBossMain : MonoBehaviour
         playerCollider = player.GetComponent<BoxCollider2D>();
         animator = GetComponent<Animator>();
         healthSystem = gameObject.GetComponent<HealthSystem>();
+        bossRoomHole = GetComponent<BossRoomHole>();
 
         healthBar.SetMaxHealth((int)healthSystem.startingHealth);
     }
@@ -241,6 +243,8 @@ public class EndBossMain : MonoBehaviour
 	{
 		healthBar.gameObject.SetActive(false);
 		gameObject.SetActive(false);
+
+        bossRoomHole.OpenHole();
 	}
 
     public void PrinterForBossRun(string message)

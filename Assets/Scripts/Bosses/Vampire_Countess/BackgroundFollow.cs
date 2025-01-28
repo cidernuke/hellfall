@@ -14,12 +14,14 @@ public class BackgroundFollow : MonoBehaviour
         // Store the initial position of the background
         initialPosition = transform.position;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        print("found the player!");
     }
 
     private void Update()
     {
         if (PlayerInBossRoom())
         {
+            print("player is in boss room!");
             // Calculate the new x position based on the player's x position and offset
             float targetX = Mathf.Clamp(player.position.x + offset, minX, maxX);
 
