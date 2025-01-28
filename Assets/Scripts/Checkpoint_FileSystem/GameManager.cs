@@ -358,12 +358,12 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void LoadCharacterStatsFromLastCheckpoint(PlayerData data)
     {
-        if (data != null && data.characterStats != null)
+        if (data != null)
         {
             print("Current CharacterStats"+ playerController.playerStats);
-            print("Loaded CharacterStats: "+ data.characterStats);
+            print("Loaded CharacterStats: "+ data);
 
-            var loadedStats = data.characterStats;
+            var loadedStats = data;
             var playerStats = playerController.playerStats;
 
             playerStats.vitality.SetBaseValue(loadedStats.vitalityBase);
