@@ -28,6 +28,7 @@ public class UndeadExecutioner : MonoBehaviour
 
     private bool facingRight = true;
     private bool isDead = false;
+	public BossHealthBar healthBar;
 
     [Header("Boss Behavior")]
     [SerializeField] private float maxFollowDistance = 15f;  // The distance at which the boss will stop following and start summoning
@@ -46,11 +47,16 @@ public class UndeadExecutioner : MonoBehaviour
         enemyController = GetComponent<EnemyController>();
         anim = GetComponent<Animator>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+
+        healthBar.SetMaxHealth((int)healthSystem.startingHealth);
     }
 
     private void Update()
     {
-        if (isDead) return;
+        if (healthSystem.currentHealth < healthSystem.startingHealth)
+        {
+            healthBar.SetHealth((int)healthSystem.currentHealth);
+        }
 
         // Check if health reaches zero
         if (healthSystem.currentHealth <= 0)
@@ -71,7 +77,7 @@ public class UndeadExecutioner : MonoBehaviour
         }
 
         // If the player is too far away, stop following and start summoning mini-enemies
-        float distanceToPlayer = Vector3.Distance(this.transform.position, playerTransform.position);
+        float distanceToPlayer = Vector3.Distance(gameObject.transform.position, playerTransform.position);
         if (distanceToPlayer > maxFollowDistance && isFollowingPlayer)
         {
             StopFollowingAndSummon();
@@ -97,7 +103,7 @@ public class UndeadExecutioner : MonoBehaviour
             return true;
         }
 
-        //playerTransform = null;
+        // playerTransform = null;
         return false;
     }
 
@@ -331,6 +337,31 @@ public class UndeadExecutioner : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void OnDeath()
+	{
+        healthBar.gameObject.SetActive(false);
+		gameObject.SetActive(false);
+		SpawnObject(new Vector3(43.77f, -35f, -4.331337f));
+	}
+
+    public void SpawnObject(Vector3 position)
+    {
+        // Create a new GameObject
+        GameObject newObject = new GameObject("MyDynamicObject");
+
+        // Set its position and rotation
+        newObject.transform.position = position;
+
+        // Add the desired component
+        newObject.AddComponent<Checkpoint>();
+		BoxCollider2D collider = newObject.AddComponent<BoxCollider2D>();
+		collider.offset = new Vector2(2, (float)0.4);
+		collider.size = new Vector2(5, (float)0.1);
+		collider.isTrigger = true;
+        // Optionally, modify the component
+        // myComponent.DoSomething();
     }
 
     /// <summary>

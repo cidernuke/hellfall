@@ -92,11 +92,16 @@ public class Explosion : MonoBehaviour
                     Debug.LogError("HealthSystem or PlayerMovement component not found on player!");
                 }
             }
+
+
+
             // If the collider is an enemy, deal damage to the enemy
-            else if (collider.CompareTag("Enemy"))
-            {
-                collider.GetComponent<HealthSystem>()?.TakeDamage(damageAmount);
-            }
+            // commented so no enemy damage
+            //! bug for 2-key-drop is here
+            // else if (collider.CompareTag("Enemy"))
+            // {
+            //     collider.GetComponent<HealthSystem>()?.TakeDamage(damageAmount);
+            // }
         }
     }
 

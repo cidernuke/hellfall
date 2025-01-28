@@ -28,10 +28,16 @@ public class EndBossAnimationController : StateMachineBehaviour
         Vector2 target = new Vector2(player.position.x, rb.position.y);
         Vector2 newPos = Vector2.MoveTowards(rb.position, target, speed * Time.fixedDeltaTime);
 
-        if (!boss.isCharging)
+        // Boss only moves when attack range is not reached. attackRangeCC is set in the editor.
+        if (Vector2.Distance(player.position, rb.position) > attackRangeCC && !boss.isCharging)
         {
+            // animator.SetBool("isRunning", true);
             rb.MovePosition(newPos);
         }
+        // if (!boss.isCharging)
+        // {
+        //     rb.MovePosition(newPos);
+        // }
 
         // Boss only attacks with melee if attack range is reached.
         if (Vector2.Distance(player.position, rb.position) <= attackRangeCC)

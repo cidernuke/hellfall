@@ -23,6 +23,7 @@ TagManager:
   - BossFolder
   - TriggerBossFight
   - HintUI
+  - GameManager
   layers:
   - Default
   - TransparentFX
