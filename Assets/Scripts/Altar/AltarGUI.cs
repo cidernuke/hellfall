@@ -125,7 +125,7 @@ public class AltarGUI : MonoBehaviour
         int currentShards = GameManager.Instance.soulShardSystem.GetSoulShardCount();
         if (currentShards < cost)
         {
-            Debug.LogError("Not enough soul shards.");
+            Debug.LogError("Not enough soul shards. Cost is " + cost + ". You have " + currentShards + ".");
             return false;
         }
         return true;
@@ -591,5 +591,12 @@ public class AltarGUI : MonoBehaviour
             }
         }
     }
+
+    public void updateAltarGUI()
+    {
+        SetBaseValues();
+        setBaseProgressBarValues();
+    }
+
 
 }

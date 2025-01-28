@@ -36,6 +36,14 @@ public class AltarHandler : MonoBehaviour
             playerInAltar = false;
         }
     }
+
+    public void handleUpdateAltarGUI()
+    {
+        if(altarGUI != null)
+        {
+            altarGUI.updateAltarGUI();
+        }
+    }
 }
 
 

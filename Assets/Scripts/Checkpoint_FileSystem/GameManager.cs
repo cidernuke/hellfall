@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public PlayerController playerController;
     private List<ItemRespawner> itemRespawners = new List<ItemRespawner>();
     private List<EnemyController> enemyRespawners = new List<EnemyController>();
+    private AltarHandler altarHandler;
 
     public Vector3 setPlayerCoordinates;
     private readonly Vector3 playerSpawnPointEndBoss = new(0, 0.5f, 0);
@@ -150,6 +151,15 @@ public class GameManager : MonoBehaviour
             if (healthSystem != null)
                 inventorySystem.playerHealth = healthSystem;
         }
+        var altar = GameObject.Find("Altar");
+        if (altar != null)
+        {
+            AltarHandler aH = altar.GetComponent<AltarHandler>();
+            if (aH != null)
+            {
+                altarHandler = aH;
+            }
+        }
     }
 
     /// <summary>
@@ -237,6 +247,9 @@ public class GameManager : MonoBehaviour
         playerController.playerStats = null;
         playerController.SetUpReferences();
 
+        //update altar gui
+        altarHandler.handleUpdateAltarGUI();
+
         //update healthbar and text
         healthSystem.UpdateHealthUI();
 
@@ -290,6 +303,7 @@ public class GameManager : MonoBehaviour
 
         //since the player controller aplies the stats itself, this should work
         LoadCharacterStatsFromLastCheckpoint(data);
+        altarHandler.handleUpdateAltarGUI();
 
         // Respawne enemies and items
         RespawnEnemiesAndItems();
@@ -364,8 +378,8 @@ public class GameManager : MonoBehaviour
     {
         if (data != null)
         {
-            print("Current CharacterStats"+ playerController.playerStats);
-            print("Loaded CharacterStats: "+ data);
+            print("Current CharacterStats" + playerController.playerStats);
+            print("Loaded CharacterStats: " + data);
 
             var loadedStats = data;
             var playerStats = playerController.playerStats;
@@ -387,8 +401,8 @@ public class GameManager : MonoBehaviour
             playerStats.rangedRange.SetBaseValue(loadedStats.rangedRangeBase);
             playerStats.rangedRange.SetModifier(loadedStats.rangedRangeModifier);
 
-            print("Loaded playercontroller.CharacterStats: "+ playerController.playerStats);
-            print("Loaded CharacterStats: "+ playerStats);
+            print("Loaded playercontroller.CharacterStats: " + playerController.playerStats);
+            print("Loaded CharacterStats: " + playerStats);
         }
         else
         {
