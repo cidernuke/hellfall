@@ -11,6 +11,8 @@ public class RangedEnemy2 : MonoBehaviour
     public float followRange = 15f; // Range within which the enemy will follow the player
     public float shootingRange = 10f; // Range within which the enemy will start shooting
     public float moveSpeed = 2f; // Speed at which the enemy moves towards the player
+    [SerializeField] private float minX = -10f; // Minimum x-coordinate the enemy can move to
+    [SerializeField] private float maxX = 10f;  // Maximum x-coordinate the enemy can move to
 
     // Shooting settings for the enemy
     [Header("Shooting Settings")]
@@ -108,6 +110,10 @@ public class RangedEnemy2 : MonoBehaviour
         Vector2 direction = new Vector2(player.position.x - transform.position.x, 0).normalized;
         // Move the enemy towards the player
         transform.position += (Vector3)direction * moveSpeed * Time.deltaTime;
+
+        // Clamp the enemy's position within the minX and maxX range
+        float clampedX = Mathf.Clamp(transform.position.x, minX, maxX);
+        transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
     }
 
     // Stop the enemy from moving
