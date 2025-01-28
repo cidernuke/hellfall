@@ -105,7 +105,7 @@ public class RangedEnemy2 : MonoBehaviour
     private void MoveTowardsPlayer()
     {
         // Calculate direction towards the player and normalize it
-        Vector2 direction = (player.position - transform.position).normalized;
+        Vector2 direction = new Vector2(player.position.x - transform.position.x, 0).normalized;
         // Move the enemy towards the player
         transform.position += (Vector3)direction * moveSpeed * Time.deltaTime;
     }
