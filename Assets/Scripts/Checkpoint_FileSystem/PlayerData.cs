@@ -72,7 +72,8 @@ public class PlayerData
 
         characterStats.Add("vitalityBase", stats.vitality.GetBaseValue());
         characterStats.Add("strengthBase", stats.strength.GetBaseValue());
-        characterStats.Add("intelligenceBase", stats.intelligence.GetModifier());
+        //characterStats.Add("intelligenceBase", stats.intelligence.GetModifier()); --> Typo?
+        characterStats.Add("intelligenceBase", stats.intelligence.GetBaseValue());
 
         characterStats.Add("maxHealthBase", stats.maxHealth.GetBaseValue());
         characterStats.Add("maxHealthMod", stats.maxHealth.GetModifier());

@@ -286,6 +286,9 @@ public class GameManager : MonoBehaviour
         //inventorySystem.ClearInventory();
         LoadInventoryFromLastCheckpoint(data);
 
+        //Not working atm because JsonUtility does not support Dictionaries...
+        //LoadCharacterStatsFromLastCheckpoint(data);
+
         // Respawne enemies and items
         RespawnEnemiesAndItems();
 
@@ -348,6 +351,47 @@ public class GameManager : MonoBehaviour
             }
         }
         Debug.Log("Inventory restored to last checkpoint state.");
+    }
+
+    /// <summary>
+    /// Not working atm because JsonUtility does not support Dictionaries...
+    /// Load the character stats from the last checkpoint.
+    /// <paramref name="data"/> The PlayerData from the last checkpoint.
+    /// </summary>
+    private void LoadCharacterStatsFromLastCheckpoint(PlayerData data)
+    {
+        if (data != null && data.characterStats != null)
+        {
+            print("Current CharacterStats"+ playerController.playerStats);
+            print("Loaded CharacterStats: "+ data.characterStats);
+
+            var loadedStats = data.characterStats;
+            var playerStats = playerController.playerStats;
+
+            playerStats.vitality.SetBaseValue(loadedStats["vitalityBase"]);
+            playerStats.strength.SetBaseValue(loadedStats["strengthBase"]);
+            playerStats.intelligence.SetBaseValue(loadedStats["intelligenceBase"]);
+
+            playerStats.maxHealth.SetBaseValue(loadedStats["maxHealthBase"]);
+            playerStats.maxHealth.SetModifier(loadedStats["maxHealthMod"]);
+
+            playerStats.closeDamage.SetBaseValue(loadedStats["closeDamageBase"]);
+            playerStats.closeDamage.SetModifier(loadedStats["closeDamageMod"]);
+
+            playerStats.rangedDamage.SetBaseValue(loadedStats["rangedDamageBase"]);
+            playerStats.rangedDamage.SetModifier(loadedStats["rangedDamageMod"]);
+            playerStats.rangedCooldown.SetBaseValue(loadedStats["rangedCooldownBase"]);
+            playerStats.rangedCooldown.SetModifier(loadedStats["rangedCooldownMod"]);
+            playerStats.rangedRange.SetBaseValue(loadedStats["rangedRangeBase"]);
+            playerStats.rangedRange.SetModifier(loadedStats["rangedRangeMod"]);
+
+            print("Loaded playercontroller.CharacterStats: "+ playerController.playerStats);
+            print("Loaded CharacterStats: "+ playerStats);
+        }
+        else
+        {
+            print("No CharacterStats found in the last checkpoint.");
+        }
     }
 
     /// <summary>
