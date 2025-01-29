@@ -131,6 +131,11 @@ public class PlayerController : MonoBehaviour
                     playerAttackSystem.iceDamageClose = true;
                     playerAttackSystem.fireDamageClose = false;
                 }
+                if(itemDataClose.isIce == false && itemDataClose.isFire == false)
+                {
+                    playerAttackSystem.iceDamageClose = false;
+                    playerAttackSystem.fireDamageClose = false;
+                }
 
             }
             //set bool to false, so player can't do a short range attack without a weapon
@@ -169,6 +174,11 @@ public class PlayerController : MonoBehaviour
                 if (itemDataRange.isIce == true)
                 {
                     playerAttackSystem.iceDamageRange = true;
+                    playerAttackSystem.fireDamageRange = false;
+                }
+                if(itemDataRange.isIce == false && itemDataRange.isFire == false)
+                {
+                    playerAttackSystem.iceDamageRange = false;
                     playerAttackSystem.fireDamageRange = false;
                 }
             }
