@@ -726,6 +726,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkpointMessageText: {fileID: 893755352}
   deathMessageText: {fileID: 502843071}
+--- !u!114 &848593641 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9207579189335168160, guid: c8dd822283d79954fa0c24446a0f59b2, type: 3}
+  m_PrefabInstance: {fileID: 590310214}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &893755350
 GameObject:
   m_ObjectHideFlags: 0
@@ -1216,6 +1227,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5077749126528247758, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
+      propertyPath: keyCounterText
+      value: 
+      objectReference: {fileID: 848593641}
     - target: {fileID: 5585758838363563765, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1280,7 +1295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cec7177fca08d64d86563bec816df55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: Scene_01
+  sceneToLoad: Scene_02
 --- !u!1001 &1322347938
 PrefabInstance:
   m_ObjectHideFlags: 0
