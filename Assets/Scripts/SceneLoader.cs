@@ -19,7 +19,7 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    private IEnumerator LoadScene()
+    public IEnumerator LoadScene()
     {
         if (loadingScreen != null)
         {
@@ -31,4 +31,5 @@ public class SceneLoader : MonoBehaviour
             print("loading scene");
         SceneManager.LoadScene(sceneToLoad);
     }
+
 }
