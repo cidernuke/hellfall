@@ -9,9 +9,10 @@ public class TimerSystem : MonoBehaviour
     private Dictionary<string, float> currentTimeDict = new Dictionary<string, float>();
 
     // Leaderboard entries per level: time + player name
-    private Dictionary<string, List<LeaderboardEntry>> bestTimesDict = 
-        new Dictionary<string, List<LeaderboardEntry>>();
+    private Dictionary<string, List<LeaderboardEntry>> bestTimesDict = new Dictionary<string, List<LeaderboardEntry>>();
 
+    [Header("Put level for example values here")]
+    [SerializeField] string level = "Scene_02";
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -138,6 +139,22 @@ public class TimerSystem : MonoBehaviour
         {
             bestTimesDict = new Dictionary<string, List<LeaderboardEntry>>();
         }
+
+        if (!bestTimesDict.ContainsKey(level) || bestTimesDict[level].Count == 0)
+        {
+            bestTimesDict[level] = GetDefaultEntries();
+        }
+    }
+
+    private List<LeaderboardEntry> GetDefaultEntries()
+    {
+        List<LeaderboardEntry> defaultEntries = new List<LeaderboardEntry>();
+        defaultEntries.Add(new LeaderboardEntry(12.34f, "Markus"));
+        defaultEntries.Add(new LeaderboardEntry(14.10f, "Otis"));
+        defaultEntries.Add(new LeaderboardEntry(15.89f, "Marinus"));
+        defaultEntries.Add(new LeaderboardEntry(20.05f, "Lukas"));
+        defaultEntries.Add(new LeaderboardEntry(25.50f, "Christoph"));
+        return defaultEntries;
     }
 
     private void SaveBestTimes()

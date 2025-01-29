@@ -1194,7 +1194,7 @@ PrefabInstance:
       objectReference: {fileID: 612249766}
     - target: {fileID: 6027865557405022282, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: soulShardCount
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1248,7 +1248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cec7177fca08d64d86563bec816df55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: Scene_02
+  sceneToLoad: Scene_01
 --- !u!1001 &1322347938
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1550,6 +1550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c44f7ddd06881041a6924af04e5d21c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  level: Scene_01
 --- !u!4 &1761919016
 Transform:
   m_ObjectHideFlags: 0
