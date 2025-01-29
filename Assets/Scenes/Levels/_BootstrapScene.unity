@@ -1216,10 +1216,6 @@ PrefabInstance:
       propertyPath: counter
       value: 
       objectReference: {fileID: 612249766}
-    - target: {fileID: 6027865557405022282, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
-      propertyPath: soulShardCount
-      value: 1000
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -494,7 +494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   counter: {fileID: 0}
-  soulShardCount: 1000
+  soulShardCount: 2000
 --- !u!114 &7685874390314061115
 MonoBehaviour:
   m_ObjectHideFlags: 0
