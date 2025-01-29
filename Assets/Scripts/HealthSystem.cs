@@ -17,7 +17,7 @@ public class HealthSystem : MonoBehaviour
 
     [SerializeField] private EnemyHealthBar enemyHealthBar;
 
-    
+
     private AudioManager audioManager;
 
     /// <summary>
@@ -174,7 +174,7 @@ public class HealthSystem : MonoBehaviour
             anim.SetTrigger("hurt");
             if (isPlayer)
             {
-            audioManager.PlaySFX(audioManager.player_hit);
+                audioManager.PlaySFX(audioManager.player_hit);
                 UpdateHealthUI();
             }
             if (!isPlayer && bossVampire == null && bossMain == null && undeadExecutionerBoss == null)
@@ -188,8 +188,11 @@ public class HealthSystem : MonoBehaviour
             if (isPlayer)
             {
                 UpdateHealthUI();
-                print($"setting last attacker to {attacker.name}");
-                lastAttacker = attacker;
+                if (attacker != null)
+                {
+                    print($"setting last attacker to {attacker.name}");
+                    lastAttacker = attacker;
+                }
             }
             Die(playerMovement, enemyController);
 
@@ -226,34 +229,37 @@ public class HealthSystem : MonoBehaviour
 
             if (playerMovement != null)
             {
-                // Example check for the boss
-                bossVampire = lastAttacker.GetComponent<Boss>();
-                undeadExecutionerBoss = lastAttacker.GetComponent<UndeadExecutioner>();
-                // var undeadExecutionerMinion = lastAttacker.GetComponent<Explosion>();
-                var finalBoss = lastAttacker.GetComponent<EndBossMain>();
-                if (bossVampire != null)
+                // Responsible to mark a boss as the last enemy to kill the player, so that the boss is respawned and its health reset
+                if (lastAttacker != null)
                 {
-                    bossVampire.didBossKillPlayer = true;
+                    bossVampire = lastAttacker.GetComponent<Boss>();
+                    undeadExecutionerBoss = lastAttacker.GetComponent<UndeadExecutioner>();
+                    // var undeadExecutionerMinion = lastAttacker.GetComponent<Explosion>();
+                    var finalBoss = lastAttacker.GetComponent<EndBossMain>();
+                    if (bossVampire != null)
+                    {
+                        bossVampire.didBossKillPlayer = true;
+                    }
+                    else if (undeadExecutionerBoss != null)
+                    {
+                        undeadExecutionerBoss.didBossKillPlayer = true;
+                    }
+                    else if (finalBoss != null)
+                    {
+                        finalBoss.didBossKillPlayer = true;
+                    }
+                    // else if (undeadExecutionerMinion != null)
+                    // {
+                    //     undeadExecutionerMinion.didMinionKillPlayer = true;
+                    // }
                 }
-                else if (undeadExecutionerBoss != null)
-                {
-                    undeadExecutionerBoss.didBossKillPlayer = true;
-                } 
-                else if (finalBoss != null)
-                {
-                    finalBoss.didBossKillPlayer = true;
-                }
-                // else if (undeadExecutionerMinion != null)
-                // {
-                //     undeadExecutionerMinion.didMinionKillPlayer = true;
-                // }
                 playerMovement.isDead = true;
                 playerMovement.stopPlayerMoving();
-                
+
                 playerMovement.enabled = false;
                 isDead = true;
                 audioManager.PlaySFX(audioManager.player_death);
-                
+
 
                 StartCoroutine(RespawnPlayer(playerMovement));
 
@@ -278,8 +284,6 @@ public class HealthSystem : MonoBehaviour
                 enemyController.enabled = false;
                 //StartCoroutine(AutoDestroy.DestroyAfterAnimation(anim, enemyController.gameObject, 0.4f));
                 StartCoroutine(HandleEnemyDeath(anim, enemyController, 0.4f));
-                
-
             }
             isDead = true;
         }

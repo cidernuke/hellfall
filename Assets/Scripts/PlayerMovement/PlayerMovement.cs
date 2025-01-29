@@ -267,7 +267,7 @@ public class PlayerMovement : MonoBehaviour
                     body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
                 }
 
-                if (body.velocity.y < 0 && !isFalling && !IsGrounded())
+                if (body.velocity.y < 0 && !isFalling && !IsGrounded() && !ladderMovement.isClimbing)
                 {
                     isFalling = true; // Set falling state
                     animator.SetBool("is_falling", isFalling);
@@ -646,7 +646,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (playerInput.GetCrouchInput())
             {
-                if (!isCrouching)
+                if (!isCrouching && !ladderMovement.isClimbing)
                 {
                     // Enter crouching state
                     spriteRenderer.sprite = crouching;

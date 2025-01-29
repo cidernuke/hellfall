@@ -13,6 +13,7 @@ public class SceneLoader : MonoBehaviour
     private GameObject player;
     [SerializeField] private Transform bossRoomEntrance;
     public GameObject bossHealthBar;
+    [SerializeField] private BossHealthBar bossHealthBarScript;
     [SerializeField] private Boss vampireCountess;
     [SerializeField] private UndeadExecutioner undeadExecutioner;
 
@@ -45,6 +46,11 @@ public class SceneLoader : MonoBehaviour
         {
             vampireCountess.didBossKillPlayer = false;
             vampireCountess.gameObject.SetActive(true);
+            if ((int)vampireCountess.GetComponent<HealthSystem>().startingHealth > (int)vampireCountess.GetComponent<HealthSystem>().currentHealth)
+            {
+                bossHealthBarScript.SetMaxHealth((int)vampireCountess.GetComponent<HealthSystem>().startingHealth);
+                vampireCountess.GetComponent<HealthSystem>().currentHealth = vampireCountess.GetComponent<HealthSystem>().startingHealth;
+            }
         }
         else if (undeadExecutioner != null)
         {
@@ -54,7 +60,13 @@ public class SceneLoader : MonoBehaviour
             // }
             undeadExecutioner.didBossKillPlayer = false;
             undeadExecutioner.gameObject.SetActive(true);
+            if ((int)undeadExecutioner.GetComponent<HealthSystem>().startingHealth > (int)undeadExecutioner.GetComponent<HealthSystem>().currentHealth)
+            {
+                bossHealthBarScript.SetMaxHealth((int)undeadExecutioner.GetComponent<HealthSystem>().startingHealth);
+                undeadExecutioner.GetComponent<HealthSystem>().currentHealth = undeadExecutioner.GetComponent<HealthSystem>().startingHealth;
+            }
         }
+
         bossHealthBar.SetActive(true);
         if (loadingScreen != null)
         {
