@@ -325,7 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bbbdafceb1d62046b87c955a0d68953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 30
+  startingHealth: 20
   enemyHealthBar: {fileID: 6101700728895270426}
   currentHealth: 0
   anim: {fileID: 0}
@@ -348,8 +348,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   bullet: {fileID: 6189948764542817469, guid: 34b2ad993a4374928a29d84e67bdc7fe, type: 3}
-  followRange: 15
-  shootingRange: 6
+  followRange: 10
+  shootingRange: 4
   moveSpeed: 2
   minX: -10
   maxX: 10

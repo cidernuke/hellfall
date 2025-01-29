@@ -311,7 +311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerRadius: 0.5
   explosionRadius: 3
-  damageAmount: 20
+  damageAmount: 10
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
