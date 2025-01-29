@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float intelligence = 0f;
     [SerializeField] public float rangedDamage = 5f;
     [SerializeField] public float rangedCooldown = 0.25f;
-    [SerializeField] public float rangedRange = 2f;
+    [SerializeField] public float rangedRange = 0.7f;
 
 
     /// <summary>
@@ -78,22 +78,28 @@ public class PlayerController : MonoBehaviour
                 playerAttackSystem.closeDamage = playerStats.closeDamage.GetCalcValue();
             }
 
-            // if rangedDamage value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
-            if (playerAttackSystem.rangedDamage != playerStats.rangedDamage.GetCalcValue())
-            {
-                playerAttackSystem.rangedDamage = playerStats.rangedDamage.GetCalcValue();
-            }
-
             // if rangedAttackCooldown value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
             if (playerAttackSystem.rangedAttackCooldown != playerStats.rangedCooldown.GetCalcValue())
             {
                 playerAttackSystem.rangedAttackCooldown = playerStats.rangedCooldown.GetCalcValue();
             }
 
-            // if rangedAttackRange value in PlayerAttack isn't the same as in playerStats, then value in PlayerAttack is changed
-            if (playerAttackSystem.range != playerStats.rangedRange.GetCalcValue())
+
+            int projectileIndex = playerAttackSystem.FindProjectile();
+
+            for (int i = 0; i < projectileIndex; i++)
             {
-                playerAttackSystem.range = playerStats.rangedRange.GetCalcValue();
+                Projectile projectile = playerAttackSystem.projectiles[i].GetComponent<Projectile>();
+
+                if ( projectile.playerDamage != playerStats.rangedDamage.GetCalcValue() ) 
+                {
+                    projectile.playerDamage = playerStats.rangedDamage.GetCalcValue();
+                }
+
+                if ( projectile.playerRange != playerStats.rangedRange.GetCalcValue() ) 
+                {
+                    projectile.playerRange = playerStats.rangedRange.GetCalcValue();
+                }
             }
         }
 
@@ -170,6 +176,7 @@ public class PlayerController : MonoBehaviour
             {
                 playerAttackSystem.longEquipped = false;
             }
+
         }
 
 

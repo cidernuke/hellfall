@@ -40,7 +40,7 @@ public class PlayerAttack : MonoBehaviour
 
     [Header("Ranged Attack")]
     [SerializeField] private Transform firePoint;
-    [SerializeField] private GameObject[] projectiles;
+    [SerializeField] public GameObject[] projectiles;
 
 
     // references
@@ -48,7 +48,6 @@ public class PlayerAttack : MonoBehaviour
     private HealthSystem enemyHealth;
     private PlayerMovement playerMovement;
     private EnemyController enemyController;
-    private PlayerController playerController;
     private AudioManager audioManager;
 
     //variables for attack
@@ -64,7 +63,6 @@ public class PlayerAttack : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         enemyController = GetComponent<EnemyController>();
         enemyHealth = GetComponent<HealthSystem>();
-        playerController = GetComponent<PlayerController>();
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         if (smashEffect == null) smashEffect = GameObject.Find("Smash");
         if (smashParticleSystem == null) smashParticleSystem = smashEffect.GetComponent<ParticleSystem>();
@@ -212,7 +210,6 @@ public class PlayerAttack : MonoBehaviour
         // Set fire or ice flags
         if (fireDamageRange)
         {
-
             projectiles[projectileIndex].GetComponent<Projectile>().attackSys = this;
             projectiles[projectileIndex].GetComponent<Projectile>().isFireBullet = true;
             projectiles[projectileIndex].GetComponent<Projectile>().isIceBullet = false;
@@ -229,7 +226,7 @@ public class PlayerAttack : MonoBehaviour
     /// Finds an inactive projectile in the array and returns its index.
     /// </summary>
     /// <returns></returns>
-    private int FindProjectile()
+    public int FindProjectile()
     {
         for (int i = 0; i < projectiles.Length; i++)
         {

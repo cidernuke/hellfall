@@ -8,9 +8,11 @@ public class Projectile : MonoBehaviour
     // variables
     [SerializeField] private float speed;
     [SerializeField] private float damage;
-    [SerializeField] private float maxLifetime;
+    [SerializeField] private float maxLifetime = 2;
 
-    public float playerDamage;
+    public float playerDamage = 5f;
+    public float playerCooldown = 0.25f;
+    public float playerRange = 0.7f;
     private bool hit;
     private float directionX;
     private float directionY;
@@ -19,6 +21,7 @@ public class Projectile : MonoBehaviour
     // Relevant for Vampire Countess Boss
     private float waitTime;
     private bool isWaiting;
+    public bool isVampireBitch = false;
 
     // references
     private BoxCollider2D boxCollider;
@@ -77,10 +80,26 @@ public class Projectile : MonoBehaviour
     private void SetLifeTime()
     {
         lifeTime += Time.deltaTime;
-        if (lifeTime >= maxLifetime)
+
+        // if (lifeTime >= maxLifetime)
+        // {
+        //      gameObject.SetActive(false);
+        // }
+
+        if(isVampireBitch)
         {
-            gameObject.SetActive(false);
+            if (lifeTime >= maxLifetime)
+            {
+                gameObject.SetActive(false);
+            }
+        } else
+        {
+            if (lifeTime >= playerRange)
+            {
+                gameObject.SetActive(false);
+            }
         }
+        
     }
 
     /// <summary>
@@ -102,6 +121,7 @@ public class Projectile : MonoBehaviour
         {
             //Get Components and check if they exist
             EnemyController enemyController = collision.GetComponent<EnemyController>();
+
             if (enemyController == null)
             {
                 Debug.Log("EnemyController is null");
@@ -115,7 +135,7 @@ public class Projectile : MonoBehaviour
             }
 
             //Apply Damage
-            enemyHealth.TakeDamage(damage, null, enemyController);
+            enemyHealth.TakeDamage(playerDamage, null, enemyController);
 
             //für den fall dass es ice bullets sind
             if (isIceBullet)
@@ -125,7 +145,7 @@ public class Projectile : MonoBehaviour
             //für den fall dass es ice bullets sind
             if (isFireBullet)
             {
-                enemyHealth.ApplyFireDamage(damage, 2f, 1f);
+                enemyHealth.ApplyFireDamage(playerDamage, 2f, 1f);
                 enemyController.ApplyFireEffect(2f);
             }
 

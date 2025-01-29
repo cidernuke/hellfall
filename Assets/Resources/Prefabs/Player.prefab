@@ -433,6 +433,8 @@ MonoBehaviour:
   smashRange: 4
   smashCooldown: 0
   isSmashing: 0
+  smashEffect: {fileID: 0}
+  smashParticleSystem: {fileID: 0}
   colliderDistance: 0.25
   boxCollider: {fileID: 8124953113361661337}
   enemyLayer:
@@ -478,7 +480,7 @@ MonoBehaviour:
   intelligence: 0
   rangedDamage: 5
   rangedCooldown: 1.5
-  rangedRange: 2
+  rangedRange: 0.7
 --- !u!114 &6027865557405022282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -492,7 +494,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   counter: {fileID: 0}
-  soulShardCount: 0
+  soulShardCount: 1000
 --- !u!114 &7685874390314061115
 MonoBehaviour:
   m_ObjectHideFlags: 0

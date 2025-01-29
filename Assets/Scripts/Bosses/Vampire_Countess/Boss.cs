@@ -131,6 +131,8 @@ public class Boss : MonoBehaviour
 	{
 		int projectileIndex = FindProjectile();
 		projectilesForward[projectileIndex].transform.position = firePoint.position;
+		projectilesForward[projectileIndex].GetComponent<Projectile>().isVampireBitch = true;
+
 
 		int directionX = Math.Sign(transform.localScale.x);
 		projectilesForward[projectileIndex].GetComponent<Projectile>().SetDirection(new Vector2(directionX, 0));

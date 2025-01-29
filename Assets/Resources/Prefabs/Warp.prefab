@@ -102,6 +102,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 8
   damage: 1
+  maxLifetime: 2
+  playerDamage: 5
+  playerCooldown: 0.25
+  playerRange: 0.7
+  isVampireBitch: 0
+  attackSys: {fileID: 0}
+  isFireBullet: 0
+  isIceBullet: 0
+  isFrozen: 0
 --- !u!61 &1234679327708100712
 BoxCollider2D:
   m_ObjectHideFlags: 0
