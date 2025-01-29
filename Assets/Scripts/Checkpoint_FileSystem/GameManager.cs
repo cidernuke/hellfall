@@ -284,12 +284,6 @@ public class GameManager : MonoBehaviour
         // Reset the position of the player to the last checkpoint
         playerMovement.Respawn();
 
-        // Reset health to max value
-        healthSystem.currentHealth = healthSystem.startingHealth;
-
-        // Reset healthbar and healthtext
-        healthSystem.UpdateHealthUI();
-
         PlayerData data = SaveManager.Instance.LoadPlayerData();
 
         // Reset shoulShards to the value while reaching the last checkpoint
@@ -303,10 +297,19 @@ public class GameManager : MonoBehaviour
 
         //since the player controller aplies the stats itself, this should work
         LoadCharacterStatsFromLastCheckpoint(data);
-        altarHandler.handleUpdateAltarGUI();
+
+        LoadAltarCostsFromLastCheckpoint(data);
+
+        //altarHandler.handleUpdateAltarGUI();
 
         // Respawne enemies and items
         RespawnEnemiesAndItems();
+
+        // Reset health to max value
+        healthSystem.currentHealth = playerController.maxHealth;
+
+        // Reset healthbar and healthtext
+        healthSystem.UpdateHealthUI();
 
         print("RespawnPlayer got called");
         print("Health: " + healthSystem.currentHealth + " soulShards: " + soulShardSystem.GetSoulShardCount());
@@ -478,4 +481,22 @@ public class GameManager : MonoBehaviour
         var pmc = GameObject.Find("PauseMenuController");
         pmc.GetComponent<PauseMenuController>().DeactivateMenu();
     }
+
+    private void LoadAltarCostsFromLastCheckpoint(PlayerData data)
+    {
+        if (data == null) return;
+
+        // AltarGUI finden
+        AltarGUI altarGUI = FindObjectOfType<AltarGUI>();
+        if (altarGUI == null) return;
+
+        // Nun die Felder zurückschreiben:
+        altarGUI.SetAltarCostsFromData(
+            data.vitalityCost, data.strengthCost, data.intelligenceCost,
+            data.vitalityMultiplierCount, data.strengthMultiplierCount, data.intelligenceMultiplierCount,
+            data.vitalityCosts, data.strengthCosts, data.intelligenceCosts
+        );
+        Debug.Log("Altar Costs reloaded from PlayerData.");
+    }
+
 }

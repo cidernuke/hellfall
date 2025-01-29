@@ -55,6 +55,9 @@ public class SaveManager : MonoBehaviour
         if (existingData == null)
             existingData = new GameData(); // in case there is none
 
+        // 1) Get AltarGUI
+        AltarGUI altarGUI = FindObjectOfType<AltarGUI>();
+
         // Create new PlayerData object
         PlayerData playerData = new PlayerData(
             healthSystem,
@@ -62,7 +65,8 @@ public class SaveManager : MonoBehaviour
             soulShardSystem,
             inventorySystem,
             keySystem,
-            playerController
+            playerController,
+            altarGUI
         );
 
         // Merge existingData with PlayerData
@@ -230,10 +234,10 @@ public class SaveManager : MonoBehaviour
 
         newPlayerStats.maxHealth.SetBaseValue(data.maxHealthBase);
         newPlayerStats.maxHealth.SetModifier(data.maxHealthModifier);
-        
+
         newPlayerStats.closeDamage.SetBaseValue(data.closeDamageBase);
         newPlayerStats.closeDamage.SetModifier(data.closeDamageModifier);
-        
+
         newPlayerStats.rangedDamage.SetBaseValue(data.rangedDamageBase);
         newPlayerStats.rangedDamage.SetModifier(data.rangedDamageModifier);
         newPlayerStats.rangedCooldown.SetBaseValue(data.rangedCooldownBase);

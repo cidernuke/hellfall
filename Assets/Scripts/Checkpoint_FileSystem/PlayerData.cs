@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [Serializable]
@@ -35,6 +36,20 @@ public class PlayerData
     public float rangedRangeBase;
     public float rangedRangeModifier;
 
+    //Altar Costs
+     public int vitalityCost;
+    public int strengthCost;
+    public int intelligenceCost;
+
+    public int vitalityMultiplierCount;
+    public int strengthMultiplierCount;
+    public int intelligenceMultiplierCount;
+
+    //Array for the current saved costs
+    public int[] vitalityCosts;
+    public int[] strengthCosts;
+    public int[] intelligenceCosts;
+
     //Key-Logic
     public int keyCounter;
 
@@ -47,7 +62,7 @@ public class PlayerData
     /// <param name="inventorySystem"></param>
     /// <param name="keySystem"></param>
     /// <param name="playerController"></param>
-    public PlayerData(HealthSystem healthSystem, int lastCheckpointID, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, KeySystem keySystem, PlayerController playerController)
+    public PlayerData(HealthSystem healthSystem, int lastCheckpointID, SoulShardSystem soulShardSystem, InventorySystem inventorySystem, KeySystem keySystem, PlayerController playerController, AltarGUI altarGUI)
     {
         // Save latest checkpointID
         this.lastCheckpointID = lastCheckpointID;
@@ -100,5 +115,27 @@ public class PlayerData
         rangedCooldownModifier = stats.rangedCooldown.GetModifier();
         rangedRangeBase = stats.rangedRange.GetBaseValue();
         rangedRangeModifier = stats.rangedRange.GetModifier();
+
+
+        //Altar Costs
+        if (altarGUI != null)
+        {
+            this.vitalityCost = altarGUI.vitalityCost;
+            this.strengthCost = altarGUI.strengthCost;
+            this.intelligenceCost = altarGUI.intelligenceCost;
+
+            this.vitalityMultiplierCount = altarGUI.vitalityMultiplierCount;
+            this.strengthMultiplierCount = altarGUI.strengthMultiplierCount;
+            this.intelligenceMultiplierCount = altarGUI.intelligenceMultiplierCount;
+
+            // Arrays kopieren
+            this.vitalityCosts = (int[])altarGUI.vitalityCosts.Clone();
+            this.strengthCosts = (int[])altarGUI.strengthCosts.Clone();
+            this.intelligenceCosts = (int[])altarGUI.intelligenceCosts.Clone();
+        }
+        else
+        {
+            Debug.LogWarning("AltarGUI not found, no altar cost data saved!");
+        }
     }
 }
