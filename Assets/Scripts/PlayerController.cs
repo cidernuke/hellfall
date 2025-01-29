@@ -217,43 +217,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void handlePowerUp()
-    {
-        StartCoroutine(upgradeStrength());
-    }
-
-
-    /// <summary>
-    /// Temporarily upgrades the player's strength and close damage, changes the player's color to light green,
-    /// and then reverts the changes after a delay. Gets called by the Powerup Item.
-    /// </summary>
-    /// <returns>IEnumerator for coroutine handling.</returns>
-    public IEnumerator upgradeStrength()
-    {
-        playerStats.strength.SetBaseValue(playerStats.strength.GetBaseValue() + 5f);
-
-        playerStats.closeDamage.SetBaseValue(playerStats.closeDamage.GetBaseValue() + 10f);
-
-        var initial = this.GetComponent<SpriteRenderer>().material.color;
-
-        if (initial != null)
-        {
-            //Change the color of the player to light green
-            this.GetComponent<SpriteRenderer>().material.color = new Color(0.5f, 0.98f, 0.8f);
-        }
-
-        yield return new WaitForSeconds(8f);
-
-        playerStats.strength.SetBaseValue(playerStats.strength.GetBaseValue() - 5f);
-
-        playerStats.closeDamage.SetBaseValue(playerStats.closeDamage.GetBaseValue() - 10f);
-
-        if (initial != null)
-        {
-            //Change the color of the player to inital
-            this.GetComponent<SpriteRenderer>().material.color = initial;
-        }
-    }
 
     public void handlePowerUp()
     {
