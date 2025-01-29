@@ -1,4 +1,5 @@
 
+using Unity.VisualScripting.YamlDotNet.Serialization.ObjectGraphVisitors;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour 
@@ -133,6 +134,7 @@ public class PlayerController : MonoBehaviour
         if (healthSystem == null)
         {
             healthSystem = GetComponent<HealthSystem>();  // Automatically find it
+            Debug.Log("Health System: " + healthSystem);
         }
 
         if(playerAttackSystem == null)
@@ -162,6 +164,8 @@ public class PlayerController : MonoBehaviour
                 rangedCooldown,
                 rangedRange
             );
+            Debug.Log("Player Stats: " + playerStats);
+
         }
     }
 }
