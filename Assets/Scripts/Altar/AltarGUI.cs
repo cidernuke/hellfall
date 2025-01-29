@@ -14,17 +14,17 @@ public class AltarGUI : MonoBehaviour
     private int defaultSoulShardCost = 5;
 
     // Separate costs and multiplier counters for each attribute
-    private int vitalityCost = 5;
-    private int strengthCost = 5;
-    private int intelligenceCost = 5;
-    private int vitalityMultiplierCount = 0;
-    private int strengthMultiplierCount = 0;
-    private int intelligenceMultiplierCount = 0;
+    public int vitalityCost = 5;
+    public int strengthCost = 5;
+    public int intelligenceCost = 5;
+    public int vitalityMultiplierCount = 0;
+    public int strengthMultiplierCount = 0;
+    public int intelligenceMultiplierCount = 0;
 
     // Arrays zum Speichern der ursprünglichen Preise
-    private int[] vitalityCosts = new int[11];
-    private int[] strengthCosts = new int[11];
-    private int[] intelligenceCosts = new int[11];
+    public int[] vitalityCosts = new int[11];
+    public int[] strengthCosts = new int[11];
+    public int[] intelligenceCosts = new int[11];
 
     // Modfier values
     private float damageModifier = 10f;
@@ -125,7 +125,7 @@ public class AltarGUI : MonoBehaviour
         int currentShards = GameManager.Instance.soulShardSystem.GetSoulShardCount();
         if (currentShards < cost)
         {
-            Debug.LogError("Not enough soul shards.");
+            Debug.LogError("Not enough soul shards. Cost is " + cost + ". You have " + currentShards + ".");
             return false;
         }
         return true;
@@ -524,7 +524,6 @@ public class AltarGUI : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// Fills the image of the progress bar by 0.1f
     /// </summary>
@@ -592,4 +591,120 @@ public class AltarGUI : MonoBehaviour
         }
     }
 
+    public void updateAltarGUI()
+    {
+        SetBaseValues();
+        setBaseProgressBarValues();
+    }
+
+    /// <summary>
+    /// Sets the costs for the attributes and the multiplier counts
+    /// <param name="vitCost"></param>
+    /// <param name="strCost"></param>
+    /// <param name="intCost"></param>
+    /// <param name="vitMult"></param>
+    /// <param name="strMult"></param>
+    /// <param name="intMult"></param>
+    /// <param name="vitArray"></param>
+    /// <param name="strArray"></param>
+    /// <param name="intArray"></param>
+    /// </summary>
+    public void SetAltarCostsFromData(int vitCost, int strCost, int intCost, int vitMult, int strMult, int intMult, int[] vitArray, int[] strArray, int[] intArray)
+    {
+        this.vitalityCost = vitCost;
+        this.strengthCost = strCost;
+        this.intelligenceCost = intCost;
+
+        this.vitalityMultiplierCount = vitMult;
+        this.strengthMultiplierCount = strMult;
+        this.intelligenceMultiplierCount = intMult;
+
+        this.vitalityCosts = vitArray;
+        this.strengthCosts = strArray;
+        this.intelligenceCosts = intArray;
+
+        // Nun noch die GUI aktualisieren
+        updateAltarGUI();
+        UpdateCostTexts();
+        RefreshProgressBars();
+    }
+
+    /// <summary>
+    /// Refreshes the progress bars in the Altar GUI
+    /// </summary>
+    public void RefreshProgressBars()
+    {
+        // Vitality
+        float vit = playerController.playerStats.vitality.GetBaseValue();
+        SetProgressBarAbsolute("Health", vit / 10f);
+
+        // Strength
+        float str = playerController.playerStats.strength.GetBaseValue();
+        SetProgressBarAbsolute("Strength", str / 10f);
+
+        // Intelligence
+        float intel = playerController.playerStats.intelligence.GetBaseValue();
+        SetProgressBarAbsolute("Intelligence", intel / 10f);
+    }
+
+    /// <summary>
+    /// Updates the cost texts in the Altar GUI
+    /// </summary>
+    public void UpdateCostTexts()
+    {
+        foreach (var textElement in textValueElements)
+        {
+            if (textElement.name == "SHValueText1")
+                textElement.text = vitalityCost.ToString();
+            if (textElement.name == "SHValueText2")
+                textElement.text = strengthCost.ToString();
+            if (textElement.name == "SHValueText3")
+                textElement.text = intelligenceCost.ToString();
+        }
+    }
+
+    /// <summary>
+    /// Sets the progress bar to a specific value
+    /// </summary>
+    /// <param name="attribute"></param>
+    /// <param name="fraction"></param>
+    private void SetProgressBarAbsolute(string attribute, float fraction)
+    {
+        foreach (Image image in progressBar)
+        {
+            switch (attribute)
+            {
+                case "Health":
+                    if (image.name == "healthPBValue")
+                    {
+                        image.fillAmount = fraction;
+                    }
+                    break;
+
+                case "Strength":
+                    if (image.name == "damagePBValue")
+                    {
+                        image.fillAmount = fraction;
+                    }
+                    break;
+
+                case "Intelligence":
+                    if (image.name == "rangeDamagePBValue")
+                    {
+                        image.fillAmount = fraction;
+                    }
+
+                    if (image.name == "cooldownPBValue")
+                    {
+                        image.fillAmount = 1 - fraction;
+                    }
+
+                    if (image.name == "rangePBValue")
+                    {
+                        image.fillAmount = fraction;
+                    }
+                    break;
+            }
+        }
+    }
 }

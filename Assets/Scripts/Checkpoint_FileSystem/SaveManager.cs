@@ -55,6 +55,9 @@ public class SaveManager : MonoBehaviour
         if (existingData == null)
             existingData = new GameData(); // in case there is none
 
+        // 1) Get AltarGUI
+        AltarGUI altarGUI = FindObjectOfType<AltarGUI>();
+
         // Create new PlayerData object
         PlayerData playerData = new PlayerData(
             healthSystem,
@@ -62,7 +65,8 @@ public class SaveManager : MonoBehaviour
             soulShardSystem,
             inventorySystem,
             keySystem,
-            playerController
+            playerController,
+            altarGUI
         );
 
         // Merge existingData with PlayerData
@@ -221,25 +225,25 @@ public class SaveManager : MonoBehaviour
             }
         }
 
-        Dictionary<String, float> loadedPlayerStats = data.characterStats;
+        //apply the loaded PlayerData data to the controllers playerstats
         CharacterStats newPlayerStats = playerController.playerStats;
 
-        newPlayerStats.vitality.SetBaseValue(loadedPlayerStats["vitalityBase"]);
-        newPlayerStats.strength.SetBaseValue(loadedPlayerStats["strengthBase"]);
-        newPlayerStats.intelligence.SetBaseValue(loadedPlayerStats["intelligenceBase"]);
+        newPlayerStats.vitality.SetBaseValue(data.vitalityBase);
+        newPlayerStats.strength.SetBaseValue(data.strengthBase);
+        newPlayerStats.intelligence.SetBaseValue(data.intelligenceBase);
 
-        newPlayerStats.maxHealth.SetBaseValue(loadedPlayerStats["maxHealthBase"]);
-        newPlayerStats.maxHealth.SetModifier(loadedPlayerStats["maxHealthMod"]);
-        
-        newPlayerStats.closeDamage.SetBaseValue(loadedPlayerStats["closeDamageBase"]);
-        newPlayerStats.closeDamage.SetModifier(loadedPlayerStats["closeDamageMod"]);
-        
-        newPlayerStats.rangedDamage.SetBaseValue(loadedPlayerStats["rangedDamageBase"]);
-        newPlayerStats.rangedDamage.SetModifier(loadedPlayerStats["rangedDamageMod"]);
-        newPlayerStats.rangedCooldown.SetBaseValue(loadedPlayerStats["rangedCooldownBase"]);
-        newPlayerStats.rangedCooldown.SetModifier(loadedPlayerStats["rangedCooldownMod"]);
-        newPlayerStats.rangedRange.SetBaseValue(loadedPlayerStats["rangedRangeBase"]);
-        newPlayerStats.rangedRange.SetModifier(loadedPlayerStats["rangedRangeMod"]);
+        newPlayerStats.maxHealth.SetBaseValue(data.maxHealthBase);
+        newPlayerStats.maxHealth.SetModifier(data.maxHealthModifier);
+
+        newPlayerStats.closeDamage.SetBaseValue(data.closeDamageBase);
+        newPlayerStats.closeDamage.SetModifier(data.closeDamageModifier);
+
+        newPlayerStats.rangedDamage.SetBaseValue(data.rangedDamageBase);
+        newPlayerStats.rangedDamage.SetModifier(data.rangedDamageModifier);
+        newPlayerStats.rangedCooldown.SetBaseValue(data.rangedCooldownBase);
+        newPlayerStats.rangedCooldown.SetModifier(data.rangedCooldownModifier);
+        newPlayerStats.rangedRange.SetBaseValue(data.rangedRangeBase);
+        newPlayerStats.rangedRange.SetModifier(data.rangedRangeModifier);
     }
 
     /// <summary>

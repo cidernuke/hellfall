@@ -16,7 +16,7 @@ public class LeaderboardUI : MonoBehaviour
 
     [Header("Level Info")]
     [SerializeField] private string levelName = "Scene_01"; 
-    [SerializeField] private string nextLevelScene = "Scene_02"; // For "Continue"
+    //[SerializeField] private string nextLevelScene = "Scene_02"; // For "Continue"
     [SerializeField] private string mainMenuScene = "Menu";     // For "MainMenu"
 
     private float finalTime; // will be saved once the trigger is activated
@@ -116,7 +116,10 @@ public class LeaderboardUI : MonoBehaviour
 
         gameObject.SetActive(false);
 
-        SceneManager.LoadScene(nextLevelScene);
+        uiBottomRight.SetActive(true);
+
+        // Load next level
+        //SceneManager.LoadScene(nextLevelScene);
     }
 
     /// <summary>

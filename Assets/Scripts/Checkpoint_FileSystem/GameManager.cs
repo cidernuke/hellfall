@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public PlayerController playerController;
     private List<ItemRespawner> itemRespawners = new List<ItemRespawner>();
     private List<EnemyController> enemyRespawners = new List<EnemyController>();
+    private AltarHandler altarHandler;
 
     public Vector3 setPlayerCoordinates;
     private readonly Vector3 playerSpawnPointEndBoss = new(0, 0.5f, 0);
@@ -150,6 +151,15 @@ public class GameManager : MonoBehaviour
             if (healthSystem != null)
                 inventorySystem.playerHealth = healthSystem;
         }
+        var altar = GameObject.Find("Altar");
+        if (altar != null)
+        {
+            AltarHandler aH = altar.GetComponent<AltarHandler>();
+            if (aH != null)
+            {
+                altarHandler = aH;
+            }
+        }
     }
 
     /// <summary>
@@ -221,8 +231,6 @@ public class GameManager : MonoBehaviour
 
         //Reset Health
         healthSystem.currentHealth = healthSystem.startingHealth;
-        //update healthbar and text
-        healthSystem.UpdateHealthUI();
 
         //SoulShards to 0
         soulShardSystem.SetSoulShardCount(0);
@@ -234,7 +242,17 @@ public class GameManager : MonoBehaviour
         inventorySystem.ClearInventory();
         inventorySystem.SetupReferences();
 
+        //fix bug that new game starts with old stats
+        //if you null the stats, the playercontroller sets up new stats that are the base values
+        playerController.playerStats = null;
         playerController.SetUpReferences();
+
+        //update altar gui
+        if(altarHandler != null)
+            altarHandler.handleUpdateAltarGUI();
+
+        //update healthbar and text
+        healthSystem.UpdateHealthUI();
 
         //Delete old save file to prevent loading the old game state
         if (SaveManager.Instance.saveFilePath != null)
@@ -267,12 +285,6 @@ public class GameManager : MonoBehaviour
         // Reset the position of the player to the last checkpoint
         playerMovement.Respawn();
 
-        // Reset health to max value
-        healthSystem.currentHealth = healthSystem.startingHealth;
-
-        // Reset healthbar and healthtext
-        healthSystem.UpdateHealthUI();
-
         PlayerData data = SaveManager.Instance.LoadPlayerData();
 
         // Reset shoulShards to the value while reaching the last checkpoint
@@ -284,11 +296,21 @@ public class GameManager : MonoBehaviour
         //inventorySystem.ClearInventory();
         LoadInventoryFromLastCheckpoint(data);
 
-        //Not working atm because JsonUtility does not support Dictionaries...
-        //LoadCharacterStatsFromLastCheckpoint(data);
+        //since the player controller aplies the stats itself, this should work
+        LoadCharacterStatsFromLastCheckpoint(data);
+
+        LoadAltarCostsFromLastCheckpoint(data);
+
+        //altarHandler.handleUpdateAltarGUI();
 
         // Respawne enemies and items
         RespawnEnemiesAndItems();
+
+        // Reset health to max value
+        healthSystem.currentHealth = playerController.maxHealth;
+
+        // Reset healthbar and healthtext
+        healthSystem.UpdateHealthUI();
 
         print("RespawnPlayer got called");
         print("Health: " + healthSystem.currentHealth + " soulShards: " + soulShardSystem.GetSoulShardCount());
@@ -358,33 +380,33 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void LoadCharacterStatsFromLastCheckpoint(PlayerData data)
     {
-        if (data != null && data.characterStats != null)
+        if (data != null)
         {
-            print("Current CharacterStats"+ playerController.playerStats);
-            print("Loaded CharacterStats: "+ data.characterStats);
+            print("Current CharacterStats" + playerController.playerStats);
+            print("Loaded CharacterStats: " + data);
 
-            var loadedStats = data.characterStats;
+            var loadedStats = data;
             var playerStats = playerController.playerStats;
 
-            playerStats.vitality.SetBaseValue(loadedStats["vitalityBase"]);
-            playerStats.strength.SetBaseValue(loadedStats["strengthBase"]);
-            playerStats.intelligence.SetBaseValue(loadedStats["intelligenceBase"]);
+            playerStats.vitality.SetBaseValue(loadedStats.vitalityBase);
+            playerStats.strength.SetBaseValue(loadedStats.strengthBase);
+            playerStats.intelligence.SetBaseValue(loadedStats.intelligenceBase);
 
-            playerStats.maxHealth.SetBaseValue(loadedStats["maxHealthBase"]);
-            playerStats.maxHealth.SetModifier(loadedStats["maxHealthMod"]);
+            playerStats.maxHealth.SetBaseValue(loadedStats.maxHealthBase);
+            playerStats.maxHealth.SetModifier(loadedStats.maxHealthModifier);
 
-            playerStats.closeDamage.SetBaseValue(loadedStats["closeDamageBase"]);
-            playerStats.closeDamage.SetModifier(loadedStats["closeDamageMod"]);
+            playerStats.closeDamage.SetBaseValue(loadedStats.closeDamageBase);
+            playerStats.closeDamage.SetModifier(loadedStats.closeDamageModifier);
 
-            playerStats.rangedDamage.SetBaseValue(loadedStats["rangedDamageBase"]);
-            playerStats.rangedDamage.SetModifier(loadedStats["rangedDamageMod"]);
-            playerStats.rangedCooldown.SetBaseValue(loadedStats["rangedCooldownBase"]);
-            playerStats.rangedCooldown.SetModifier(loadedStats["rangedCooldownMod"]);
-            playerStats.rangedRange.SetBaseValue(loadedStats["rangedRangeBase"]);
-            playerStats.rangedRange.SetModifier(loadedStats["rangedRangeMod"]);
+            playerStats.rangedDamage.SetBaseValue(loadedStats.rangedDamageBase);
+            playerStats.rangedDamage.SetModifier(loadedStats.rangedDamageModifier);
+            playerStats.rangedCooldown.SetBaseValue(loadedStats.rangedCooldownBase);
+            playerStats.rangedCooldown.SetModifier(loadedStats.rangedCooldownModifier);
+            playerStats.rangedRange.SetBaseValue(loadedStats.rangedRangeBase);
+            playerStats.rangedRange.SetModifier(loadedStats.rangedRangeModifier);
 
-            print("Loaded playercontroller.CharacterStats: "+ playerController.playerStats);
-            print("Loaded CharacterStats: "+ playerStats);
+            print("Loaded playercontroller.CharacterStats: " + playerController.playerStats);
+            print("Loaded CharacterStats: " + playerStats);
         }
         else
         {
@@ -460,4 +482,22 @@ public class GameManager : MonoBehaviour
         var pmc = GameObject.Find("PauseMenuController");
         pmc.GetComponent<PauseMenuController>().DeactivateMenu();
     }
+
+    private void LoadAltarCostsFromLastCheckpoint(PlayerData data)
+    {
+        if (data == null) return;
+
+        // AltarGUI finden
+        AltarGUI altarGUI = FindObjectOfType<AltarGUI>();
+        if (altarGUI == null) return;
+
+        // Nun die Felder zurückschreiben:
+        altarGUI.SetAltarCostsFromData(
+            data.vitalityCost, data.strengthCost, data.intelligenceCost,
+            data.vitalityMultiplierCount, data.strengthMultiplierCount, data.intelligenceMultiplierCount,
+            data.vitalityCosts, data.strengthCosts, data.intelligenceCosts
+        );
+        Debug.Log("Altar Costs reloaded from PlayerData.");
+    }
+
 }
