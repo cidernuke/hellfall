@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ParallaxScrolling : MonoBehaviour
@@ -14,11 +15,25 @@ public class ParallaxScrolling : MonoBehaviour
 
     private Vector3 cameraStartPos;  // The camera's starting position
 
-    private GameObject background;
+    private GameObject background_1;
+    private GameObject background_2;
+    private GameObject background_3;
+    private GameObject background_4;
+
 
     private void Start()
     {
-        background = GameObject.Find("Space_Background");
+        try 
+        {
+            background_1 = GameObject.Find("background1");
+            background_2 = GameObject.Find("background2");
+            background_3 = GameObject.Find("background3");
+            background_4 = GameObject.Find("background4b");
+        } catch (Exception e) 
+        {
+
+        }
+
         // If no camera is assigned, use the main camera
         if (mainCamera == null)
         {
@@ -31,7 +46,16 @@ public class ParallaxScrolling : MonoBehaviour
 
     private void Update()
     {
-        background.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y, 3);
+        try
+        {
+        background_1.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y+5, 5);
+        background_2.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y+5, 4);
+        background_3.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y+5, 3);
+        background_4.transform.position = new Vector3(mainCamera.transform.position.x, mainCamera.transform.position.y+5, 2);
+        } catch (Exception e)
+        {
+            
+        }   
 
         // Vector3 cameraOffset = mainCamera.transform.position - cameraStartPos;
 

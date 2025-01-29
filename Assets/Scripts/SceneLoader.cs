@@ -72,7 +72,7 @@ public class SceneLoader : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private IEnumerator LoadScene()
+    public IEnumerator LoadScene()
     {
         if (loadingScreen != null)
         {
@@ -82,4 +82,5 @@ public class SceneLoader : MonoBehaviour
         yield return new WaitForSeconds(1f); // Simulate loading time (optional)
         SceneManager.LoadScene(sceneToLoad);
     }
+
 }
