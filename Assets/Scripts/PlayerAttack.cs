@@ -25,6 +25,11 @@ public class PlayerAttack : MonoBehaviour
     private float smashCooldownTimer = Mathf.Infinity; // Timer for smash attack cooldown
     public bool isSmashing = false; // Track if smash attack is active
 
+    [Header("Smash FX")]
+    public GameObject smashEffect; // particle system and smash dust
+    public ParticleSystem smashParticleSystem;
+
+
     [Header("Collider Parameters")]
     [SerializeField] private float colliderDistance;
     [SerializeField] private BoxCollider2D boxCollider;
@@ -61,6 +66,8 @@ public class PlayerAttack : MonoBehaviour
         enemyHealth = GetComponent<HealthSystem>();
         playerController = GetComponent<PlayerController>();
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        if (smashEffect == null) smashEffect = GameObject.Find("Smash");
+        if (smashParticleSystem == null) smashParticleSystem = smashEffect.GetComponent<ParticleSystem>();
 
 
     }
@@ -91,6 +98,7 @@ public class PlayerAttack : MonoBehaviour
         if (playerMovement.isDoubleJumping && Input.GetKey(KeyCode.LeftShift) && cooldownTimer >= smashCooldown)
         {
             SmashAttack();
+            anim.SetTrigger("smashAttack");
         }
 
 
@@ -154,8 +162,8 @@ public class PlayerAttack : MonoBehaviour
         switch (attackIndex)
         {
             case 0:
-                anim.SetTrigger("attack_01");  
-                audioManager.PlaySFX(audioManager.closeAttack_01);     
+                anim.SetTrigger("attack_01");
+                audioManager.PlaySFX(audioManager.closeAttack_01);
                 break;
             case 1:
                 anim.SetTrigger("attack_02");
@@ -240,7 +248,7 @@ public class PlayerAttack : MonoBehaviour
         if (cooldownTimer < smashCooldown || playerMovement.IsGrounded()) return;
 
         Debug.Log("Smash attack triggered!");
-        anim.SetTrigger("smashAttack");
+
         smashCooldownTimer = 0;
 
         isSmashing = true;  // Set smash state (damage will be applied on landing)
@@ -262,6 +270,13 @@ public class PlayerAttack : MonoBehaviour
             {
                 enemyHealth.TakeDamage(smashDamage, null, enemy.GetComponent<EnemyController>());
             }
+        }
+
+        if (smashParticleSystem != null)
+        {
+            Debug.Log("Playing Smash Effect on Impact!");
+            smashEffect.transform.position = new Vector2(transform.position.x, transform.position.y - 1.3f);
+            smashParticleSystem.Play();
         }
     }
 

@@ -120,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject wallDust;
     public ParticleSystem wallDustParticleSystem;
     public GameObject floorDust;
-    public ParticleSystem floorDustParticleSystem;    
+    public ParticleSystem floorDustParticleSystem;
 
     #endregion
 
@@ -148,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
         InitializeLayers();
         InitializeCrouchVariables();
         InitializeDashVariables();
-        
+
 
         // Initialise the respawnPosition to the Start Position of the Player
         respawnPosition = transform.position;
@@ -181,7 +181,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (!blockInput)
         {
-            horizontal = playerInput.GetHorizontalInput();            
+            horizontal = playerInput.GetHorizontalInput();
         }
 
         ResetAnimation();
@@ -193,14 +193,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (IsGrounded())
-        {            
+        {
             isDoubleJumping = false;
         }
 
         // Logic to check if player was grounded last frame
         wasGrounded = isGrounded;
         isGrounded = IsGrounded();
-        
+
         if (isGrounded && !wasGrounded)
         {
             audioManager.PlaySFX(audioManager.landing);
@@ -248,8 +248,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (!isDashing)
                 {
-                    body.velocity = new Vector2(playerInput.GetHorizontalInput() * groundSpeed, body.velocity.y);                    
-                
+                    body.velocity = new Vector2(playerInput.GetHorizontalInput() * groundSpeed, body.velocity.y);
+
                 }
                 else return;
                 bool isWalking = playerInput.GetHorizontalInput() != 0;
@@ -267,7 +267,7 @@ public class PlayerMovement : MonoBehaviour
                     body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
                 }
 
-                if (body.velocity.y < 0 && !isFalling && !IsGrounded())
+                if (body.velocity.y < 0 && !isFalling && !IsGrounded() && !playerAttack.isSmashing)
                 {
                     isFalling = true; // Set falling state
                     animator.SetBool("is_falling", isFalling);
@@ -432,7 +432,7 @@ public class PlayerMovement : MonoBehaviour
         // Store the last time the player touched the ground for coyote time
         if (grounded)
         {
-            
+
             isFalling = false;
             animator.SetBool("is_falling", isFalling);
             wallDustParticleSystem.Stop();
@@ -575,7 +575,7 @@ public class PlayerMovement : MonoBehaviour
                 //print(">>> Attempting first jump");
                 animator.SetTrigger("jump"); // Play jump animation on first jump
                 audioManager.PlaySFX(audioManager.jump_01);
-                
+
 
                 // Handles logic to jump off of a ladder
                 if (ladderMovement != null && ladderMovement.isClimbing)
