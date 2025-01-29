@@ -98,6 +98,7 @@ public class PlayerAttack : MonoBehaviour
         if (playerMovement.isDoubleJumping && Input.GetKey(KeyCode.LeftShift) && cooldownTimer >= smashCooldown)
         {
             SmashAttack();
+            anim.SetTrigger("smashAttack");
         }
 
 
@@ -247,7 +248,7 @@ public class PlayerAttack : MonoBehaviour
         if (cooldownTimer < smashCooldown || playerMovement.IsGrounded()) return;
 
         Debug.Log("Smash attack triggered!");
-        anim.SetTrigger("smashAttack");
+
         smashCooldownTimer = 0;
 
         isSmashing = true;  // Set smash state (damage will be applied on landing)

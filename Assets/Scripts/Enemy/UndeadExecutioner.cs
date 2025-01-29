@@ -28,7 +28,7 @@ public class UndeadExecutioner : MonoBehaviour
 
     private bool facingRight = true;
     private bool isDead = false;
-	public BossHealthBar healthBar;
+    public BossHealthBar healthBar;
 
     [Header("Boss Behavior")]
     [SerializeField] private float maxFollowDistance = 15f;  // The distance at which the boss will stop following and start summoning
@@ -205,6 +205,7 @@ public class UndeadExecutioner : MonoBehaviour
             if (miniEnemyController)
             {
                 miniEnemyController.enabled = true;
+                miniEnemyController.isBoss = true;
             }
 
             var miniHealthSystem = miniEnemy.GetComponent<HealthSystem>();
@@ -236,6 +237,7 @@ public class UndeadExecutioner : MonoBehaviour
             if (miniEnemyController)
             {
                 miniEnemyController.enabled = true;
+                miniEnemyController.isBoss = true;
             }
 
             var miniHealthSystem = miniEnemy.GetComponent<HealthSystem>();
@@ -279,7 +281,6 @@ public class UndeadExecutioner : MonoBehaviour
                 Destroy(miniEnemy);
             }
         }
-
         //StartCoroutine(DisableAfterDeath());
     }
 
@@ -340,11 +341,11 @@ public class UndeadExecutioner : MonoBehaviour
     }
 
     public void OnDeath()
-	{
+    {
         healthBar.gameObject.SetActive(false);
-		gameObject.SetActive(false);
-		SpawnObject(new Vector3(43.77f, -35f, -4.331337f));
-	}
+        gameObject.SetActive(false);
+        SpawnObject(new Vector3(43.77f, -35f, -4.331337f));
+    }
 
     public void SpawnObject(Vector3 position)
     {
@@ -356,10 +357,10 @@ public class UndeadExecutioner : MonoBehaviour
 
         // Add the desired component
         newObject.AddComponent<Checkpoint>();
-		BoxCollider2D collider = newObject.AddComponent<BoxCollider2D>();
-		collider.offset = new Vector2(2, (float)0.4);
-		collider.size = new Vector2(5, (float)0.1);
-		collider.isTrigger = true;
+        BoxCollider2D collider = newObject.AddComponent<BoxCollider2D>();
+        collider.offset = new Vector2(2, (float)0.4);
+        collider.size = new Vector2(5, (float)0.1);
+        collider.isTrigger = true;
         // Optionally, modify the component
         // myComponent.DoSomething();
     }

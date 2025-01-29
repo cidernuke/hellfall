@@ -267,7 +267,7 @@ public class PlayerMovement : MonoBehaviour
                     body.velocity = new Vector2(horizontal * crouchSpeed, body.velocity.y);
                 }
 
-                if (body.velocity.y < 0 && !isFalling && !IsGrounded())
+                if (body.velocity.y < 0 && !isFalling && !IsGrounded() && !playerAttack.isSmashing)
                 {
                     isFalling = true; // Set falling state
                     animator.SetBool("is_falling", isFalling);
