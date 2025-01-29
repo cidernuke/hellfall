@@ -248,7 +248,8 @@ public class GameManager : MonoBehaviour
         playerController.SetUpReferences();
 
         //update altar gui
-        altarHandler.handleUpdateAltarGUI();
+        if(altarHandler != null)
+            altarHandler.handleUpdateAltarGUI();
 
         //update healthbar and text
         healthSystem.UpdateHealthUI();
