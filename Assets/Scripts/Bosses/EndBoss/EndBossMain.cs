@@ -39,6 +39,7 @@ public class EndBossMain : MonoBehaviour
     private Animator animator;
     private Collider2D bossCollider; // Reference to the boss's collider
     private BossRoomHole bossRoomHole;
+    private AudioManager audioManager;
 
     public BossHealthBar healthBar;
     public HealthSystem healthSystem;
@@ -52,7 +53,7 @@ public class EndBossMain : MonoBehaviour
         animator = GetComponent<Animator>();
         healthSystem = gameObject.GetComponent<HealthSystem>();
         bossRoomHole = GetComponent<BossRoomHole>();
-
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         healthBar.SetMaxHealth((int)healthSystem.startingHealth);
     }
 
@@ -262,6 +263,11 @@ public class EndBossMain : MonoBehaviour
     public void PrinterForBossRun(string message)
     {
         print(message);
+    }
+
+    private void HitSound()
+    {
+        audioManager.PlaySFX(audioManager.endBoss_hit);
     }
 }
 

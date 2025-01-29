@@ -240,6 +240,7 @@ MonoBehaviour:
   healthSystem: {fileID: 4620583008830625310}
   healthBar: {fileID: 0}
   maxFollowDistance: 4
+  didBossKillPlayer: 0
 --- !u!1 &1728753116367311880
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,6 +19,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip player_death;
     public AudioClip enemy_hit;
     public AudioClip enemy_death;
+    public AudioClip enemy_attack;
+    public AudioClip endBoss_hit;
     public AudioClip rangedAttack;
     public AudioClip closeAttack_01;
     public AudioClip closeAttack_02;

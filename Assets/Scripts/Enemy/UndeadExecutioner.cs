@@ -25,7 +25,7 @@ public class UndeadExecutioner : MonoBehaviour
     [SerializeField] private HealthSystem healthSystem;
     private EnemyController enemyController;
     private Transform playerTransform;
-
+    private AudioManager audioManager;
     private bool facingRight = true;
     private bool isDead = false;
 	public BossHealthBar healthBar;
@@ -49,7 +49,7 @@ public class UndeadExecutioner : MonoBehaviour
         enemyController = GetComponent<EnemyController>();
         anim = GetComponent<Animator>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         healthBar.SetMaxHealth((int)healthSystem.startingHealth);
     }
 
@@ -406,5 +406,10 @@ public class UndeadExecutioner : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
+    }
+
+    private void AttackSound()
+    {
+        audioManager.PlaySFX(audioManager.enemy_attack);
     }
 }
