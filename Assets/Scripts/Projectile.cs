@@ -161,7 +161,14 @@ public class Projectile : MonoBehaviour
             {
                 return;
             }
-            collision.GetComponent<HealthSystem>().TakeDamage(damage, playerMovement, null);
+            if (gameObject.name.Contains("blood_bullet_"))
+            {
+                collision.GetComponent<HealthSystem>().TakeDamage(damage, playerMovement, null, GameObject.Find("MiniBoss"));
+            }
+            else
+            {
+                collision.GetComponent<HealthSystem>().TakeDamage(damage, playerMovement, null);
+            }
             if (!transform.CompareTag("blood_bullet_up") && !transform.CompareTag("blood_bullet_down"))
             {
                 hit = true;

@@ -15,8 +15,9 @@ MonoBehaviour:
   itemName: Health Potion (small)
   itemSprite: {fileID: 3110332419431051783, guid: 42841dbacd4b88447a3d4ba22f85abdd, type: 3}
   itemType: 1
-  healthAmount: 15
+  healthAmount: 50
   duration: 0
   amount: 0
   description: 
-  damage: 0
+  isFire: 0
+  isIce: 0

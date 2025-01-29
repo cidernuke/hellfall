@@ -14,6 +14,7 @@ public class BackgroundFollow : MonoBehaviour
         // Store the initial position of the background
         initialPosition = transform.position;
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        print("found the player!");
     }
 
     private void Update()

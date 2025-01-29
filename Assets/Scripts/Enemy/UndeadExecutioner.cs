@@ -25,7 +25,7 @@ public class UndeadExecutioner : MonoBehaviour
     [SerializeField] private HealthSystem healthSystem;
     private EnemyController enemyController;
     private Transform playerTransform;
-
+    private AudioManager audioManager;
     private bool facingRight = true;
     private bool isDead = false;
     public BossHealthBar healthBar;
@@ -33,6 +33,8 @@ public class UndeadExecutioner : MonoBehaviour
     [Header("Boss Behavior")]
     [SerializeField] private float maxFollowDistance = 15f;  // The distance at which the boss will stop following and start summoning
     private bool isFollowingPlayer = true;  // Tracks if the boss is currently following the player
+	[HideInInspector] public bool didBossKillPlayer = false;
+
 
     private void Start()
     {
@@ -47,7 +49,7 @@ public class UndeadExecutioner : MonoBehaviour
         enemyController = GetComponent<EnemyController>();
         anim = GetComponent<Animator>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         healthBar.SetMaxHealth((int)healthSystem.startingHealth);
     }
 
@@ -82,11 +84,21 @@ public class UndeadExecutioner : MonoBehaviour
         {
             StopFollowingAndSummon();
         }
-        // If the player is back in range, start following again
         else if (distanceToPlayer <= maxFollowDistance && !isFollowingPlayer)
         {
             ResumeFollowingPlayer();
         }
+        if (distanceToPlayer <= 2)
+        {
+            anim.SetTrigger("meleeAttack");
+        }
+        // If the player is back in range, start following again
+        // else if (distanceToPlayer <= maxFollowDistance && !isFollowingPlayer)
+
+        if (didBossKillPlayer)
+		{
+			DeactivateBoss();
+		}
     }
 
     /// <summary>
@@ -198,6 +210,7 @@ public class UndeadExecutioner : MonoBehaviour
 
             // Instantiate mini enemy at the summon point
             GameObject miniEnemy = Instantiate(miniEnemyPrefab, point.position, Quaternion.identity);
+            // miniEnemy.GetComponent<Explosion>().isMinion = true;
             spawnedMiniEnemies.Add(miniEnemy);
 
             // Ensure spawned enemies use existing EnemyController and HealthSystem
@@ -232,6 +245,7 @@ public class UndeadExecutioner : MonoBehaviour
             if (spawnedMiniEnemies.Count >= maxMiniEnemies) break;
 
             GameObject miniEnemy = Instantiate(miniEnemyPrefab, point.position, Quaternion.identity);
+            // miniEnemy.GetComponent<Explosion>().isMinion = true;
             spawnedMiniEnemies.Add(miniEnemy);
             var miniEnemyController = miniEnemy.GetComponent<EnemyController>();
             if (miniEnemyController)
@@ -278,11 +292,25 @@ public class UndeadExecutioner : MonoBehaviour
         {
             if (miniEnemy != null)
             {
+                // miniEnemy.GetComponent<Explosion>().isMinion = false;
                 Destroy(miniEnemy);
             }
         }
         //StartCoroutine(DisableAfterDeath());
     }
+
+    // public void DestroyMinions()
+    // {
+    //     // Destroy all summoned mini-enemies
+    //     foreach (var miniEnemy in spawnedMiniEnemies)
+    //     {
+    //         if (miniEnemy != null)
+    //         {
+    //             miniEnemy.GetComponent<Explosion>().isMinion = false;
+    //             Destroy(miniEnemy);
+    //         }
+    //     }
+    // }
 
     /**private IEnumerator DisableAfterDeath()
     {
@@ -341,7 +369,8 @@ public class UndeadExecutioner : MonoBehaviour
     }
 
     public void OnDeath()
-    {
+	{
+        GameObject.Find("TriggerForBossFightExecutioner").SetActive(false);
         healthBar.gameObject.SetActive(false);
         gameObject.SetActive(false);
         SpawnObject(new Vector3(43.77f, -35f, -4.331337f));
@@ -365,6 +394,12 @@ public class UndeadExecutioner : MonoBehaviour
         // myComponent.DoSomething();
     }
 
+    private void DeactivateBoss()
+	{
+		healthBar.gameObject.SetActive(false);
+		gameObject.SetActive(false);
+	}
+
     /// <summary>
     /// Draws gizmos in the editor to visualize the detection range.
     /// </summary>
@@ -372,5 +407,10 @@ public class UndeadExecutioner : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
+    }
+
+    private void AttackSound()
+    {
+        audioManager.PlaySFX(audioManager.enemy_attack);
     }
 }

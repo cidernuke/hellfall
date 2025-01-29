@@ -13,6 +13,7 @@ public class SceneLoader : MonoBehaviour
     private GameObject player;
     [SerializeField] private Transform bossRoomEntrance;
     public GameObject bossHealthBar;
+    [SerializeField] private BossHealthBar bossHealthBarScript;
     [SerializeField] private Boss vampireCountess;
     [SerializeField] private UndeadExecutioner undeadExecutioner;
 
@@ -43,12 +44,29 @@ public class SceneLoader : MonoBehaviour
     {
         if (vampireCountess != null)
         {
+            vampireCountess.didBossKillPlayer = false;
             vampireCountess.gameObject.SetActive(true);
+            if ((int)vampireCountess.GetComponent<HealthSystem>().startingHealth > (int)vampireCountess.GetComponent<HealthSystem>().currentHealth)
+            {
+                bossHealthBarScript.SetMaxHealth((int)vampireCountess.GetComponent<HealthSystem>().startingHealth);
+                vampireCountess.GetComponent<HealthSystem>().currentHealth = vampireCountess.GetComponent<HealthSystem>().startingHealth;
+            }
         }
         else if (undeadExecutioner != null)
         {
+            // if (GameObject.Find("UndeadExecutioner_Minions").TryGetComponent<Explosion>(out var minion))
+            // {
+            //     minion.didMinionKillPlayer = false;
+            // }
+            undeadExecutioner.didBossKillPlayer = false;
             undeadExecutioner.gameObject.SetActive(true);
+            if ((int)undeadExecutioner.GetComponent<HealthSystem>().startingHealth > (int)undeadExecutioner.GetComponent<HealthSystem>().currentHealth)
+            {
+                bossHealthBarScript.SetMaxHealth((int)undeadExecutioner.GetComponent<HealthSystem>().startingHealth);
+                undeadExecutioner.GetComponent<HealthSystem>().currentHealth = undeadExecutioner.GetComponent<HealthSystem>().startingHealth;
+            }
         }
+
         bossHealthBar.SetActive(true);
         if (loadingScreen != null)
         {
@@ -69,7 +87,8 @@ public class SceneLoader : MonoBehaviour
             loadingScreen.SetActive(false); // Deactivate the loading screen
         }
 
-        gameObject.SetActive(false);
+        //! move to respective boss scripts
+        // gameObject.SetActive(false); 
     }
 
     public IEnumerator LoadScene()
