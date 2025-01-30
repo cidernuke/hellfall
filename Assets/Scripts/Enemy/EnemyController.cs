@@ -40,6 +40,7 @@ public class EnemyController : MonoBehaviour
     //Flag for special Attacks
     public bool isFrozen = false;
     public bool isOnFire = false;
+    public bool isInvisible = false;
 
     // Variables
     public bool isBoss = false;
@@ -273,7 +274,7 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     public void ApplyFireEffect(float duration)
     {
-        if (!isOnFire)
+        if (!isOnFire && !isInvisible)
         {
             StartCoroutine(HandleFireEffect(duration));
         }
@@ -290,6 +291,11 @@ public class EnemyController : MonoBehaviour
         if (flameEffect != null)
         {
             flameEffect.Play();
+        }
+
+        if(isInvisible == true)
+        {
+            flameEffect.Stop();
         }
 
         yield return new WaitForSeconds(duration);

@@ -33,7 +33,7 @@ public class EndBossMain : MonoBehaviour
     [HideInInspector] public bool isAreaAttack = false;
     [HideInInspector] public bool didBossKillPlayer = false;
     [HideInInspector] public bool isInvisible = false;
-    
+
     // References
     [SerializeField] private LayerMask attackMask;
     private Rigidbody2D rb;
@@ -44,6 +44,7 @@ public class EndBossMain : MonoBehaviour
 
     public BossHealthBar healthBar;
     public HealthSystem healthSystem;
+    public EnemyController enemyController;
     // [SerializeField] private GameObject leaderboardUI; 
 
     private void Awake()
@@ -57,6 +58,7 @@ public class EndBossMain : MonoBehaviour
         bossRoomHole = GetComponent<BossRoomHole>();
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         healthBar.SetMaxHealth((int)healthSystem.startingHealth);
+        enemyController = GetComponent<EnemyController>();
         // leaderboardUI = GameObject.FindWithTag("TriggerBossFight");
     }
 
@@ -79,9 +81,9 @@ public class EndBossMain : MonoBehaviour
         }
 
         if (didBossKillPlayer)
-		{
-			DeactivateBoss();
-		}
+        {
+            DeactivateBoss();
+        }
     }
 
     public void StartCharge()
@@ -172,6 +174,10 @@ public class EndBossMain : MonoBehaviour
         if (isAreaAttack)
         {
             isInvisible = true;
+            if (enemyController != null)
+            {
+                enemyController.isInvisible = true;
+            }
             animator.SetTrigger("initiateVanishing_03");
             animator.SetBool("isVanishing", isAreaAttack);
         }
@@ -189,6 +195,10 @@ public class EndBossMain : MonoBehaviour
     private IEnumerator TeleportAfterDelay(float delay)
     {
         isInvisible = false;
+        if (enemyController != null)
+        {
+            enemyController.isInvisible = false;
+        }
         yield return new WaitForSeconds(delay);
 
         gameObject.transform.position = new Vector2(player.position.x, -1);
@@ -252,18 +262,18 @@ public class EndBossMain : MonoBehaviour
 	/// Called by the HealthSystem when the boss dies.
 	/// </summary>
 	public void OnDeath()
-	{
-		healthBar.gameObject.SetActive(false);
-		gameObject.SetActive(false);
+    {
+        healthBar.gameObject.SetActive(false);
+        gameObject.SetActive(false);
         // leaderboardUI.SetActive(true);
         bossRoomHole.OpenHole();
-	}
+    }
 
     private void DeactivateBoss()
-	{
-		healthBar.gameObject.SetActive(false);
-		gameObject.SetActive(false);
-	}
+    {
+        healthBar.gameObject.SetActive(false);
+        gameObject.SetActive(false);
+    }
 
     public void PrinterForBossRun(string message)
     {
