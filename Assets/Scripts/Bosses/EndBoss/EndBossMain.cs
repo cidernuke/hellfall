@@ -32,6 +32,7 @@ public class EndBossMain : MonoBehaviour
     [HideInInspector] public bool isCharging = false;
     [HideInInspector] public bool isAreaAttack = false;
     [HideInInspector] public bool didBossKillPlayer = false;
+    [HideInInspector] public bool isInvisible = false;
     
     // References
     [SerializeField] private LayerMask attackMask;
@@ -43,6 +44,7 @@ public class EndBossMain : MonoBehaviour
 
     public BossHealthBar healthBar;
     public HealthSystem healthSystem;
+    // [SerializeField] private GameObject leaderboardUI; 
 
     private void Awake()
     {
@@ -55,6 +57,7 @@ public class EndBossMain : MonoBehaviour
         bossRoomHole = GetComponent<BossRoomHole>();
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
         healthBar.SetMaxHealth((int)healthSystem.startingHealth);
+        // leaderboardUI = GameObject.FindWithTag("TriggerBossFight");
     }
 
     private void Update()
@@ -168,6 +171,7 @@ public class EndBossMain : MonoBehaviour
     {
         if (isAreaAttack)
         {
+            isInvisible = true;
             animator.SetTrigger("initiateVanishing_03");
             animator.SetBool("isVanishing", isAreaAttack);
         }
@@ -184,6 +188,7 @@ public class EndBossMain : MonoBehaviour
 
     private IEnumerator TeleportAfterDelay(float delay)
     {
+        isInvisible = false;
         yield return new WaitForSeconds(delay);
 
         gameObject.transform.position = new Vector2(player.position.x, -1);
@@ -250,7 +255,7 @@ public class EndBossMain : MonoBehaviour
 	{
 		healthBar.gameObject.SetActive(false);
 		gameObject.SetActive(false);
-
+        // leaderboardUI.SetActive(true);
         bossRoomHole.OpenHole();
 	}
 

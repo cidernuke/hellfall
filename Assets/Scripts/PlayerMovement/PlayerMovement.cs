@@ -764,7 +764,7 @@ public class PlayerMovement : MonoBehaviour
 
         dashCounter++;
         // Check if the player has dashed too many times within the time window
-        if (movementTimer <= dashTimeFrame && dashCounter >= 2)
+        if (movementTimer <= dashTimeFrame && dashCounter >= 3)
         {
             IsDodgingALot = true;
             // Reset counter and timer (optional based on your desired logic)
