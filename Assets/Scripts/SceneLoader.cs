@@ -46,6 +46,12 @@ public class SceneLoader : MonoBehaviour
         {
             vampireCountess.didBossKillPlayer = false;
             vampireCountess.gameObject.SetActive(true);
+
+            //resets the flame effect on the vampire countess
+            var flameEffect = vampireCountess.GetComponentInChildren<ParticleSystem>();
+            var vamp_controller = vampireCountess.GetComponent<EnemyController>();
+            vamp_controller.flameEffect = flameEffect;
+
             if ((int)vampireCountess.GetComponent<HealthSystem>().startingHealth > (int)vampireCountess.GetComponent<HealthSystem>().currentHealth)
             {
                 bossHealthBarScript.SetMaxHealth((int)vampireCountess.GetComponent<HealthSystem>().startingHealth);
