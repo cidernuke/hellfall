@@ -31,7 +31,7 @@ public class EnemyController : MonoBehaviour
     public HealthSystem healthSystem;
     private UndeadExecutioner undeadExecutioner;
 
-    private ParticleSystem flameEffect;
+    public ParticleSystem flameEffect;
 
     // Respawn variables
     private Vector3 initialPosition;
@@ -308,6 +308,10 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     public IEnumerator DamageEffect()
     {
+        if(isFrozen == true)
+        {
+            yield break; //when enemy is frozen don't change colors
+        }
         // Save the initial color of the enemy
         Color initialColor = this.GetComponent<SpriteRenderer>().material.color;
 

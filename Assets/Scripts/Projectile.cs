@@ -134,14 +134,16 @@ public class Projectile : MonoBehaviour
                 return;
             }
 
-            //Apply Damage
-            enemyHealth.TakeDamage(playerDamage, null, enemyController);
 
             //für den fall dass es ice bullets sind
             if (isIceBullet)
             {
                 enemyController.ApplyIceEffect();
             }
+            
+            //Apply Damage
+            enemyHealth.TakeDamage(playerDamage, null, enemyController);
+            
             //für den fall dass es ice bullets sind
             if (isFireBullet)
             {
