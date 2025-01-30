@@ -409,8 +409,19 @@ public class UndeadExecutioner : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, detectionRange);
     }
 
+    /// <summary>
+    /// Gets called in the animation as event
+    /// </summary>
     private void AttackSound()
     {
         audioManager.PlaySFX(audioManager.enemy_attack);
+    }
+    
+    /// <summary>
+    /// Gets called in the animation as event
+    /// </summary>
+    private void DeathSound()
+    {
+        audioManager.PlaySFX(audioManager.executioner_death);
     }
 }
