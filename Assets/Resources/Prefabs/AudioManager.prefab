@@ -443,6 +443,8 @@ MonoBehaviour:
   enemy_attack: {fileID: 8300000, guid: 1f8aa742ec72ee54a94a69ce1542539e, type: 3}
   executioner_death: {fileID: 8300000, guid: bcb3d411b2fcad246b44f13f8e9c57a1, type: 3}
   endBoss_hit: {fileID: 8300000, guid: 9c7be6aa1c87fe14ea12d736a269b8c2, type: 3}
+  endBoss_attack: {fileID: 8300000, guid: 28578e36e1c1a7b4ba6c5d0b9d1ebf79, type: 3}
+  endBoss_appear: {fileID: 8300000, guid: afe2d64f77f83f5449e1a05bc335b766, type: 3}
   rangedAttack: {fileID: 8300000, guid: 06a7ce5c08ae75e45bfeb1e362a5eb22, type: 3}
   closeAttack_01: {fileID: 8300000, guid: 75eeec9b544810141a3eec04257a33bd, type: 3}
   closeAttack_02: {fileID: 8300000, guid: a095171887368934593701bd7311c872, type: 3}

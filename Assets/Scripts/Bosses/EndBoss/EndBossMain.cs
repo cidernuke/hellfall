@@ -265,9 +265,26 @@ public class EndBossMain : MonoBehaviour
         print(message);
     }
 
+    /// <summary>
+    /// Gets called as animation event in animator
+    /// </summary>
     private void HitSound()
     {
         audioManager.PlaySFX(audioManager.endBoss_hit);
+    }
+    /// <summary>
+    /// Gets called as animation event in animator
+    /// </summary>
+    private void AttackSound()
+    {
+        audioManager.PlaySFX(audioManager.endBoss_attack);
+    }
+    /// <summary>
+    /// Gets called as animation event in animator
+    /// </summary>
+    private void AppearSound()
+    {
+        audioManager.PlaySFX(audioManager.endBoss_appear);
     }
 }
 
