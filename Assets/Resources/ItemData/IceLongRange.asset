@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IceLongRange
   m_EditorClassIdentifier: 
   itemName: IceLongRange
-  itemSprite: {fileID: 21300000, guid: 31d43573bd1494325a6a26547683d90f, type: 3}
+  itemSprite: {fileID: -2124323734, guid: 9d4ee48dc0b4f4868b3fba8af15b1226, type: 3}
   itemType: 4
   healthAmount: 0
   duration: 0
