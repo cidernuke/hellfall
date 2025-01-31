@@ -205,12 +205,16 @@ MonoBehaviour:
   lootTable:
   - itemPrefab: {fileID: 6541560707912191982, guid: ec290509addb4c8469be3a244d90de3b, type: 3}
     dropChance: 100
+  - itemPrefab: {fileID: 293112247698803356, guid: 499c5e3158a334101a069fa8a56dcb98, type: 3}
+    dropChance: 100
   lootPositionOffset: {x: 0, y: -1, z: 0}
   anim: {fileID: 0}
   enemyPatrol: {fileID: 0}
   healthSystem: {fileID: 0}
+  flameEffect: {fileID: 0}
   isFrozen: 0
   isOnFire: 0
+  isInvisible: 0
   isBoss: 1
 --- !u!114 &737987799981163073
 MonoBehaviour:

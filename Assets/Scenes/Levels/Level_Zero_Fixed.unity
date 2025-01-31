@@ -171545,6 +171545,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6273805593477899221, guid: fac2980baa124954b851147a365e2142, type: 3}
+      propertyPath: lootTable.Array.data[0].dropChance
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7923619934566443984, guid: fac2980baa124954b851147a365e2142, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -172444,9 +172448,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneToLoad: Scene_01
   loadingScreen: {fileID: 853339698}
-  isScene: 0
+  isScene: 1
   bossRoomEntrance: {fileID: 0}
   bossHealthBar: {fileID: 0}
+  bossHealthBarScript: {fileID: 0}
   vampireCountess: {fileID: 0}
   undeadExecutioner: {fileID: 0}
 --- !u!1 &2137156763

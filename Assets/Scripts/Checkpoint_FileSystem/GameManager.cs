@@ -270,6 +270,8 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log("StartNewGame: Values reset to default.");
+
+        //TimerSystem.Instance.StartTimer("Level_Zero_Fixed");
     }
 
     /// <summary>

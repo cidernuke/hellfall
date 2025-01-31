@@ -68,6 +68,8 @@ public class guide_Script : MonoBehaviour
         sequence = 0;
         isTitleAnimating = false;
 
+        
+
     }
 
     /// <summary>

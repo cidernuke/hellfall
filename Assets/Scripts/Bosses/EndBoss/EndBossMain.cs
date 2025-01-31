@@ -90,7 +90,7 @@ public class EndBossMain : MonoBehaviour
     {
         isCharging = true;
         chargeTimer = chargeDuration;
-        animator.SetTrigger("chargeAttack");
+        animator.SetTrigger("chargedAttack");
     }
 
     public void LookAtPlayer(Transform player)
@@ -165,7 +165,7 @@ public class EndBossMain : MonoBehaviour
     {
         isCharging = false;
         rb.velocity = Vector2.zero; // Stop the boss movement
-        animator.ResetTrigger("chargeAttack");
+        animator.ResetTrigger("chargedAttack");
         animator.SetTrigger("returnToMoving"); // Return to idle or other states
     }
 
@@ -283,5 +283,15 @@ public class EndBossMain : MonoBehaviour
     private void HitSound()
     {
         audioManager.PlaySFX(audioManager.endBoss_hit);
+    }
+
+    private void AttackSound()
+    {
+        audioManager.PlaySFX(audioManager.endBoss_attack);
+    }
+
+    private void AppearSound()
+    {
+        audioManager.PlaySFX(audioManager.endBoss_appear);
     }
 }

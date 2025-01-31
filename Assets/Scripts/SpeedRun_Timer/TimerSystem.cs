@@ -149,11 +149,11 @@ public class TimerSystem : MonoBehaviour
     private List<LeaderboardEntry> GetDefaultEntries()
     {
         List<LeaderboardEntry> defaultEntries = new List<LeaderboardEntry>();
-        defaultEntries.Add(new LeaderboardEntry(12.34f, "Markus"));
-        defaultEntries.Add(new LeaderboardEntry(14.10f, "Otis"));
-        defaultEntries.Add(new LeaderboardEntry(15.89f, "Marinus"));
-        defaultEntries.Add(new LeaderboardEntry(20.05f, "Lukas"));
-        defaultEntries.Add(new LeaderboardEntry(25.50f, "Christoph"));
+        defaultEntries.Add(new LeaderboardEntry(35.32f, "Markus"));
+        defaultEntries.Add(new LeaderboardEntry(39.10f, "Otis"));
+        defaultEntries.Add(new LeaderboardEntry(42.39f, "Marinus"));
+        defaultEntries.Add(new LeaderboardEntry(45.05f, "Lukas"));
+        defaultEntries.Add(new LeaderboardEntry(46.50f, "Christoph"));
         return defaultEntries;
     }
 

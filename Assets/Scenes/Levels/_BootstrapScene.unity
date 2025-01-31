@@ -511,6 +511,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2060588237}
     m_Modifications:
+    - target: {fileID: 3277158665192064771, guid: c8dd822283d79954fa0c24446a0f59b2, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4258908866803787385, guid: c8dd822283d79954fa0c24446a0f59b2, type: 3}
       propertyPath: m_Name
       value: UI Bottom right
@@ -1265,7 +1269,7 @@ PrefabInstance:
       objectReference: {fileID: 612249766}
     - target: {fileID: 6027865557405022282, guid: e3a09abbb0792d44bab7d773d9929df9, type: 3}
       propertyPath: soulShardCount
-      value: 2000
+      value: 3000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1320,7 +1324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cec7177fca08d64d86563bec816df55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: Scene_03
+  sceneToLoad: Menu
 --- !u!1001 &1322347938
 PrefabInstance:
   m_ObjectHideFlags: 0
