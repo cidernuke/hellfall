@@ -31,7 +31,7 @@ public class EnemyController : MonoBehaviour
     public HealthSystem healthSystem;
     private UndeadExecutioner undeadExecutioner;
 
-    private ParticleSystem flameEffect;
+    public ParticleSystem flameEffect;
 
     // Respawn variables
     private Vector3 initialPosition;
@@ -40,6 +40,7 @@ public class EnemyController : MonoBehaviour
     //Flag for special Attacks
     public bool isFrozen = false;
     public bool isOnFire = false;
+    public bool isInvisible = false;
 
     // Variables
     public bool isBoss = false;
@@ -273,7 +274,7 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     public void ApplyFireEffect(float duration)
     {
-        if (!isOnFire)
+        if (!isOnFire && !isInvisible)
         {
             StartCoroutine(HandleFireEffect(duration));
         }
@@ -292,6 +293,11 @@ public class EnemyController : MonoBehaviour
             flameEffect.Play();
         }
 
+        if(isInvisible == true)
+        {
+            flameEffect.Stop();
+        }
+
         yield return new WaitForSeconds(duration);
 
         // Disable the flame particle system
@@ -308,6 +314,10 @@ public class EnemyController : MonoBehaviour
     /// </summary>
     public IEnumerator DamageEffect()
     {
+        if(isFrozen == true)
+        {
+            yield break; //when enemy is frozen don't change colors
+        }
         // Save the initial color of the enemy
         Color initialColor = this.GetComponent<SpriteRenderer>().material.color;
 
