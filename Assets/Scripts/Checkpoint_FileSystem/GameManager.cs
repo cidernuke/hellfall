@@ -233,7 +233,7 @@ public class GameManager : MonoBehaviour
         healthSystem.currentHealth = healthSystem.startingHealth;
 
         //SoulShards to 0
-        soulShardSystem.SetSoulShardCount(0);
+        soulShardSystem.SetSoulShardCount(2000);
 
         //KeyCount to 0
         keySystem.SetKeyCount(0);
