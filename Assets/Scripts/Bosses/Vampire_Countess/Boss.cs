@@ -39,7 +39,7 @@ public class Boss : MonoBehaviour
             healthBar.SetHealth((int)healthSystem.currentHealth);
         }
 
-		if (gameObject.GetComponent<HealthSystem>().currentHealth == 10)
+		if ((gameObject.GetComponent<HealthSystem>().currentHealth <= gameObject.GetComponent<HealthSystem>().startingHealth / 2) && !isInSecondPhase)
 		{
 			isInSecondPhase = true;
 		}
