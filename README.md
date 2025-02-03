@@ -2,6 +2,9 @@
 # Project Report
 Link: https://gitlab.bht-berlin.de/s89917/hellfall/-/wikis/Project-Report
 
+# itch.io Page
+Link: https://diego0360.itch.io/hellfall
+
 # Git
 
 ## First time set-up
