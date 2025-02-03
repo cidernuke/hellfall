@@ -1,6 +1,6 @@
 
 # Project Report
-Link: https://app.clickup.com/9012367417/v/dc/8cjvm1t-112/8cjvm1t-4272
+Link: https://gitlab.bht-berlin.de/s89917/hellfall/-/wikis/Project-Report
 
 # Git
 
